@@ -155,7 +155,7 @@ class n0list(list):
         """
         Recursively compare self[i] with other[?] WITHOUT using order of elements.
         If self[i] (other[?] must be the same) is n0list/n0dict,
-        then goes deeper with n0list.vogue_compare(..)/n0dict.obvious_compare_dict(..)
+        then goes deeper with n0list.vogue_compare_list(..)/n0dict.obvious_compare_dict(..)
 
         :param n0list self: etalon list for compare.
         :param n0list other: list to compare with etalon
