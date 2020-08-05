@@ -1,57 +1,157 @@
 # 0.01 = 2020-07-25 = Initial version
-from __future__ import annotations  # Python 3.7+
+# 0.02 = 2020-07-26 = Enhancements
+# 0.03 = 2020-08-02 = Huge enhancements
+# 0.04 = 2020-08-05 = Prepared for upload to pypi.org
+from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 from collections import OrderedDict
-
+import random
+import inspect
+import os
+import sys
+from datetime import datetime, timedelta
+from pprint import pprint
+# ******************************************************************************
+# rnd(_till_not_included_random): generate random integer value [0.._till_not_included_random-1]
+# ******************************************************************************
+rnd = lambda _till_not_included_random: int(random.random()*int(_till_not_included_random))
+# ******************************************************************************
+# random_from(_from_list): provide random item from the _from_list[..]
+# ******************************************************************************
+random_from = lambda _from_list: _from_list[rnd(len(_from_list))]
+# ******************************************************************************
+# get_key_by_value(_dict, _value): provide (last) key which is assosiated with _value in _dict
+# ******************************************************************************
+get_key_by_value = lambda _dict, _value: {value:key for key, value in _dict.items()}[_value]
+# ******************************************************************************
+debug_levels={
+    "ALL":      10, # 10 = ALL->...->FATAL
+    "TRACE":    9,  #  9 = TRACE->DEBUG->INFO->WARN->ERROR->FATAL
+    "DEBUG":    7,  #  7 = DEBUG->INFO->WARN->ERROR->FATAL
+    "INFO":     5,  #  5 = INFO->WARN->ERROR->FATAL
+    "WARN":     3,  #  3 = WARN->ERROR->FATAL
+    "ERROR":    2,  #  2 = ERROR->FATAL
+    "FATAL":    1,  #  1 = FATAL only
+    "OFF":      0,  #  0 = OFF
+}
+debug_level = debug_levels["INFO"]
+# ******************************************************************************
+# n0print(text, level = -debug_levels["INFO"]):
+#   Print messages,
+#   depends of value in global variable debug_level.
+#   If n0print is called directly, value in level must be negative.
+#   n0print is called thru n0debug/n0debug_calc, value in level must be possitive.
+# ******************************************************************************
+def n0print(text, level = -debug_levels["INFO"]):
+    if level < 0:
+        level = -level
+        frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
+    else:
+        frameinfo = inspect.stack()[2]
+    if debug_level >= level:
+        sys.stdout.write(
+            "*** [%s] %s %s:%d: " % (
+                get_key_by_value(debug_levels, level),
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+                os.path.split(frameinfo.filename)[1], 
+                frameinfo.lineno
+                )
+            + (text if text else "") + "\n"
+        ) 
+# ******************************************************************************
+# n0debug(var_name, level = debug_levels["INFO"]):
+#   Print value of var with name var_name,
+#   depends of value in global variable debug_level.
+# ******************************************************************************
+n0debug = lambda var_name, level = debug_levels["INFO"]: n0print(
+    "(%s id=%s)%s = '%s'" % (
+        type(inspect.currentframe().f_back.f_locals[var_name]),
+        id(inspect.currentframe().f_back.f_locals[var_name]),
+        var_name,
+        str(inspect.currentframe().f_back.f_locals[var_name])
+    ) if var_name in inspect.currentframe().f_back.f_locals
+    else "%s is NOT FOUND" % var_name
+    , level = level
+)
+# ******************************************************************************
+# n0debug_calc(var_value, var_name = "", level = debug_levels["INFO"]):
+#   Print  calculated value (for example returned by function), 
+#   depends of value in global variable debug_level.
+# ******************************************************************************
+n0debug_calc = lambda var_value, var_name = "", level = debug_levels["INFO"]: n0print(
+    "(%s id=%s)%s = '%s'" % (type(var_value), id(var_value), var_name, str(var_value))
+    , level = level
+)
+# ******************************************************************************
+# notemptyitems(item): 
+#   Check item or recursively subitems of item.
+#   Return count of notempty item/subitems.
+# ******************************************************************************
+def notemptyitems(item):
+    not_empty_items_count = 0
+    if isinstance(item, (dict, OrderedDict, n0dict)):
+        for key in item:
+            not_empty_items_count += notemptyitems(item[key])
+    elif isinstance(item, (tuple, list, n0list)):
+        for itm in item:
+            not_empty_items_count += notemptyitems(itm)
+    else:
+        if item:
+            not_empty_items_count += 1
+    return not_empty_items_count
 # ******************************************************************************
 # ******************************************************************************
 # ******************************************************************************
 class n0list(list):
-    # ******************************************************************************
-    # ******************************************************************************
-    def obvious_compare_list(
-                self,
-                other: n0list,
-                self_name: str = "self",
-                other_name: str = "other",
-                prefix: str = "",
-                dummy1 = None, # For compatibility with the list of input attributes of vogue_compare_list(..)
-                dummy2 = None, # For compatibility with the list of input attributes of vogue_compare_list(..)
+    """
+    Class extended builtins.list(builtins.object) with additional methods:
+    .direct_compare_list()  = compare [i] <=> [i]
+    .compare_list()         = compare [i] <=> [?] WITHOUT using order
+    """
+    def direct_compare_list(
+        self,
+        other: n0list,
+        self_name: str = "self",
+        other_name: str = "other",
+        prefix: str = "",
+        dummy1 = None, # For compatibility with the list of input attributes of compare_list(..)
+        dummy2 = None, # For compatibility with the list of input attributes of compare_list(..)
     ) -> n0dict:
         """
         Recursively compare self[i] with other[i] strictly according to the order of elements.
         If self[i] (other[i] must be the same) is n0list/n0dict, then goes deeper 
-        with n0list.obvious_compare_list/n0dict.obvious_compare_dict(..)
+        with n0list.direct_compare_list/n0dict.direct_compare_dict(..)
 
         :param n0list self: etalon list for compare.
         :param n0list other: list to compare with etalon
         :param str self_name: <optional, default = "self"> dict/list format name before self
         :param str other_name: <optional, default = "other"> dict/list format name before other
         :param str prefix: <optional, default = ""> xpath format name before self/other
+        :param NoneType dummy1: For compatibility with the list of input attributes of compare_list(..)
+        :param NoneType dummy2: For compatibility with the list of input attributes of compare_list(..)
         :return:
                 n0dict({
-                    "messages"      :n0list([]), # messages generated for each case of not equality
-                    "notequal"      :n0list([]), # generated if elements with the same xpath and type are not equal
-                    "difftypes"     :n0list([]), # generated if elements with the same xpath have different types
-                    "selfunique"    :n0list([]), # generated if elements from self list don't exist in other list
-                    "otherunique"   :n0list([])  # generated if elements from other list don't exist in self list
+                    "messages"      : [], # generated for each case of not equality
+                    "notequal"      : [], # generated if elements with the same xpath and type are not equal
+                    "difftypes"     : [], # generated if elements with the same xpath have different types
+                    "selfnotfound"  : [], # generated if elements from other list don't exist in self list
+                    "othernotfound" : [], # generated if elements from self list don't exist in other list
                 })
                 if not returned["messages"]: self and other are totally equal.
         :rtype n0dict:
         """
         if not isinstance(other, n0list):
-            raise Exception("n0list.obvious_compare_list(): other (%s) must be n0list" % str(other))
+            raise Exception("n0list.direct_compare_list(): other (%s) must be n0list" % str(other))
         result = n0dict({
-            "messages": n0list([]),
-            "notequal": n0list([]),
-            "difftypes": n0list([]),
-            "selfunique": n0list([]),
-            "otherunique": n0list([])
+            "messages"      : [],
+            "notequal"      : [],
+            "difftypes"     : [],
+            "selfnotfound"  : [],
+            "othernotfound" : [],
         })
 
         for i,itm in enumerate(self):
             if i >= len(other):
-                # other is SHORT
-                result["selfunique"].append((prefix + "[" + str(i) + "]", self[i]))
+                # other list is SHORTER that self
                 result["messages"].append("List %s is longer %s: %s[%d]='%s' doesn't exist in %s" %
                                             (
                                                 self_name, other_name,
@@ -59,8 +159,9 @@ class n0list(list):
                                                 other_name
                                             )
                 )
+                result["othernotfound"].append((prefix + "[" + str(i) + "]", self[i]))
                 continue
-            ########## if i >= len(other):
+            # ######### if i >= len(other):
             if type(self[i]) == type(other[i]):
                 if isinstance(self[i], (str, int)):
                     if self[i] != other[i]:
@@ -73,7 +174,7 @@ class n0list(list):
                         )
                 elif isinstance(self[i], (list, tuple)):
                     result.update_extend(
-                        self[i].obvious_compare_list(
+                        self[i].direct_compare_list(
                             other[i],
                             self_name + "[" + str(i) + "]",
                             other_name + "[" + str(i) + "]",
@@ -82,12 +183,12 @@ class n0list(list):
                     )
                 elif isinstance(self[i], (n0dict, dict, OrderedDict)):
                     result.update_extend(
-                        n0dict(self[i]).obvious_compare_dict(
+                        n0dict(self[i]).direct_compare_dict(
                             n0dict(other[i]),
                             self_name + "[" + str(i) + "]",
                             other_name + "[" + str(i) + "]",
                             prefix + "[" + str(i) + "]",
-                            self.obvious_compare_list
+                            self.direct_compare_list
                         )
                     )
                 else:
@@ -107,7 +208,7 @@ class n0list(list):
                                                   other_name, i
                                               )
                     )
-            ########## if type(self[i]) == type(other[i]):
+            # ######### if type(self[i]) == type(other[i]):
             else:
                 result["difftypes"].append(
                     (
@@ -124,12 +225,11 @@ class n0list(list):
                                               other_name, i, type(other[i]), str(other[i]),
                                           )
                 )
-        ########## for i in enumerate(self)[0]:
+        # ######### for i in enumerate(self)[0]:
         if len(other) > len(self):
-            # self is SHORT
+            # self list is SHORTER that other
             for i,itm in enumerate(other[len(self):]):
                 i += len(self)
-                result["otherunique"].append((prefix + "[" + str(i) + "]", other[i]))
                 result["messages"].append("List %s is longer %s: %s[%d]='%s' doesn't exist in %s" %
                                           (
                                               other_name, self_name,
@@ -137,66 +237,67 @@ class n0list(list):
                                               self_name
                                           )
                 )
+                result["selfnotfound"].append((prefix + "[" + str(i) + "]", other[i]))
         return result
     # ******************************************************************************
     # ******************************************************************************
-    def vogue_compare_list(
-                self,
-                other: n0list,
-                self_name: str = "self",
-                other_name: str = "other",
-                prefix: str = "",
-    # Strictly recommended to init lists
-    # else in case of just only one attribute of element will be different
-    # both elements will be marked as not found (unique) inside the opposite list
-                list_elements_for_composite_key: tuple = (),  # None/empty means all
-                list_elements_for_compare: tuple = (),  # None/empty means all
+    def compare_list(
+        self,
+        other: n0list,
+        self_name: str = "self",
+        other_name: str = "other",
+        prefix: str = "",
+        # Strictly recommended to define list_elements_for_*
+        # else in case of just only one attribute of element will be different
+        # both elements will be marked as not found (unique) inside the opposite list
+        elements_for_composite_key: tuple = (),  # ()|None|empty mean all
+        elements_for_compare: tuple = (),  # ()|None|empty mean all
     ) -> n0dict:
         """
         Recursively compare self[i] with other[?] WITHOUT using order of elements.
         If self[i] (other[?] must be the same) is n0list/n0dict,
-        then goes deeper with n0list.vogue_compare_list(..)/n0dict.obvious_compare_dict(..)
+        then goes deeper with n0list.compare_list(..)/n0dict.direct_compare_dict(..)
 
         :param n0list self: etalon list for compare.
         :param n0list other: list to compare with etalon
         :param str self_name: optional: dict/list format name before self
         :param str other_name: dict/list format name before other
         :param str prefix: xpath before self/other
-        :param tuple list_elements_for_composite_key: ()/None/empty means all
-        :param tuple list_elements_for_compare: ()/None/empty means all
+        :param tuple elements_for_composite_key: ()|None|empty mean all
+        :param tuple elements_for_compare: ()|None|empty mean all
         :return:
                 n0dict({
-                    "messages"      :n0list([]), # messages generated for each case of not equality
-                    "notequal"      :n0list([]), # generated if elements with the same xpath and type are not equal
-                    "difftypes"     :n0list([]), # generated if elements with the same xpath have different types
-                    "selfunique"    :n0list([]), # generated if elements from self list don't exist in other list
-                    "otherunique"   :n0list([])  # generated if elements from other list don't exist in self list
+                    "messages"      : [], # generated for each case of not equality
+                    "notequal"      : [], # generated if elements with the same xpath and type are not equal
+                    "difftypes"     : [], # generated if elements with the same xpath have different types
+                    "selfnotfound"  : [], # generated if elements from other list don't exist in self list
+                    "othernotfound" : [], # generated if elements from self list don't exist in other list
                 })
                 if not returned["messages"]: self and other are totally equal.
         :rtype n0dict:
         """
         if not isinstance(other, n0list):
-            raise Exception("n0list.vogue_compare_list(): other (%s) must be n0list" % str(other))
+            raise Exception("n0list.compare_list(): other (%s) must be n0list" % str(other))
         result = n0dict({
-                        "messages": n0list([]),
-                        "notequal": n0list([]),
-                        "difftypes": n0list([]),
-                        "selfunique": n0list([]),
-                        "otherunique": n0list([])
+            "messages"      : [],
+            "notequal"      : [],
+            "difftypes"     : [],
+            "selfnotfound"  : [],
+            "othernotfound" : [],
         })
 
-        def get_composite_keys(input_list: n0list, list_elements_for_composite_key: tuple) -> list:
+        def get_composite_keys(input_list: n0list, elements_for_composite_key: tuple) -> list:
             composite_keys = []
             for i, itm in enumerate(input_list):
                 composite_key = ""
-                for path_to_element in list_elements_for_composite_key if list_elements_for_composite_key else input_list[i]:
+                for path_to_element in elements_for_composite_key if elements_for_composite_key else input_list[i]:
                     composite_key += path_to_element + "=" + str(input_list[i][path_to_element]) + ";"
                 composite_keys.append(composite_key)
             return composite_keys
             
 
-        self_not_exist_in_other = get_composite_keys(self, list_elements_for_composite_key)
-        other_not_exist_in_self = get_composite_keys(other, list_elements_for_composite_key)
+        self_not_exist_in_other = get_composite_keys(self, elements_for_composite_key)
+        other_not_exist_in_self = get_composite_keys(other, elements_for_composite_key)
 
         notmutable__self_not_exist_in_other = self_not_exist_in_other.copy()
         notmutable__other_not_exist_in_self = other_not_exist_in_self.copy()
@@ -207,8 +308,6 @@ class n0list(list):
                 if type(self[self_i]) == type(other[other_i]):
                     if isinstance(self[self_i], (str, int)):
                         if self[self_i] != other[other_i]:
-                            print(self_i)
-                            print(other_i)
                             if self_i == other_i:
                                 result["notequal"].append((prefix + "[" + str(self_i) + "]", (self[self_i], other[other_i])))
                             else:
@@ -221,7 +320,7 @@ class n0list(list):
                             )
                     elif isinstance(self[self_i], (list, tuple)):
                         result.update_extend(
-                            self.obvious_compare_list(
+                            self.direct_compare_list(
                                 self[self_i], other[other_i],
                                 self_name + "[" + str(self_i) + "]",
                                 other_name + "[" + str(other_i) + "]",
@@ -230,12 +329,12 @@ class n0list(list):
                         )
                     elif isinstance(self[self_i], (n0dict, dict, OrderedDict)):
                         result.update_extend(
-                            n0dict(self[self_i]).obvious_compare_dict(
+                            n0dict(self[self_i]).direct_compare_dict(
                                 n0dict(other[other_i]),
                                 self_name + "[" + str(self_i) + "]",
                                 other_name + "[" + str(other_i) + "]",
                                 prefix + "[" + str(self_i) + "]" + ("<=>[" + str(other_i) + "]" if self_i != other_i else ""),
-                                self.vogue_compare_list
+                                self.compare_list
                             )
                         )
                     else:
@@ -255,7 +354,7 @@ class n0list(list):
                                                       other_name, other_i
                                                   )
                         )
-                ########## if type(self[i]) == type(other[i]):
+                # ######### if type(self[i]) == type(other[i]):
                 else:
                     result["difftypes"].append(
                         (
@@ -272,86 +371,110 @@ class n0list(list):
                                                   other_name, other_i, type(other[other_i]), str(other[other_i]),
                                               )
                     )
-                ########## if type(self[i]) == type(other[i]):    
+                # ######### if type(self[i]) == type(other[i]):    
                 self_not_exist_in_other.remove(composite_key)
                 other_not_exist_in_self.remove(composite_key)
-            ########## if key in other_not_exist_in_self:
-        ########## for key in notmutable__self_not_exist_in_other:
+            # ######### if key in other_not_exist_in_self:
+        # ######### for key in notmutable__self_not_exist_in_other:
 
         if self_not_exist_in_other:
             for composite_key in self_not_exist_in_other:
                 self_i = notmutable__self_not_exist_in_other.index(composite_key)
-                result["selfunique"].append((prefix + "[" + str(self_i) + "]", self[self_i]))
                 result["messages"].append("Element %s[%d]='%s' doesn't exist in %s" %
                                             (
                                                 self_name, self_i, str(self[self_i]),
                                                 other_name
                                             )
                 )
+                result["othernotfound"].append((prefix + "[" + str(self_i) + "]", self[self_i]))
         if other_not_exist_in_self:
             for composite_key in other_not_exist_in_self:
                 other_i = notmutable__other_not_exist_in_self.index(composite_key)
-                result["otherunique"].append((prefix + "[" + str(other_i) + "]", other[other_i]))
                 result["messages"].append("Element %s[%d]='%s' doesn't exist in %s" %
                                           (
                                               other_name, other_i, str(other[other_i]),
                                               self_name
                                           )
                 )
+                result["selfnotfound"].append((prefix + "[" + str(self_i) + "]", other[other_i]))
                 
         return result
+    # ******************************************************************************
+    # ******************************************************************************
+    # def append(self, sigle_item):
+        # if isinstance(sigle_item, (list,n0list)):
+            # raise (TypeError, '(%s)%s must be scalar' % (type(sigle_item), sigle_item))
+        # super(n0list, self).append(sigle_item)  #append the item to itself (the list)
+        # return self
+    # ******************************************************************************
+    # ******************************************************************************
+    # def extend(self, other_list):
+        # if not isinstance(other_list, (list,n0list)):
+            # raise (TypeError, '(%s)%s must be list' % (type(sigle_item), sigle_item))
+        # super(n0list, self).extend(other_list)
+        # return self
 # ******************************************************************************
-# ******************************************************************************
-# ******************************************************************************
-
-
 class n0dict(OrderedDict):
     # ******************************************************************************
-    def update_extend(self, other: n0dict) -> n0dict:
-        if not isinstance(other, n0dict):
-            raise Exception("n0dict.update_extend(): other (%s) must be n0dict" % str(other))
-        self_keys = ",".join(sorted(self.keys()))
-        other_keys = ",".join(sorted(other.keys()))
-        if self_keys != other_keys:
-            raise Exception("update_extend(): Structure of self (%s) must be the same with other (%s)" % (self_keys,other_keys))
-        for key in self:
-            if not isinstance(self[key], n0list):
-                raise Exception("update_extend(): Element %s of self is %s, but must be n0list" % (key, type(self[key])))
-            if not isinstance(other[key], n0list):
-                raise Exception("update_extend(): Element %s of other is %s, but must be n0list" % (key, type(self[key])))
-            self[key].extend(other[key])
+    def update_extend(self, other):
+        if other is None:
+            return self
+        elif isinstance(other, (n0dict, OrderedDict, dict)):
+            for key in other:
+                if not key in self:
+                    self.update({key:other[key]})
+                else:
+                    if not isinstance(self[key],list):
+                        self[key] = list(self[key])
+                    if isinstance(other[key], (list, tuple)):
+                        self[key].extend(other[key])
+                    else:
+                        self[key].append(other[key])
+        elif isinstance(other, (str,int,float)):
+            key = list(self.items())[0][0] # [0]= first item, [0] = key
+            self[key].append(other)
+        elif isinstance(other, (list,n0list,tuple)):
+            key = list(self.items())[0][0] # [0]= first item, [0] = key
+            for itm in other:
+                if isinstance(itm, (list,tuple)):
+                    self[key].extend(itm)
+                else:
+                    self[key].append(itm)
+        else:
+            raise Exception("Unexpected type of other: " + str(type(other)))
         return self
     ################################################################################
     ################################################################################
-    def obvious_compare_dict(self,
+    ################################################################################
+    def direct_compare_dict(self,
                             other: n0dict,
                             self_name: str = "self",
                             other_name: str = "other",
                             prefix: str = "",
-                            one_of_list_compare = n0list.obvious_compare_list,
-                            # ONLY FOR VOGUE
+                            one_of_list_compare = n0list.direct_compare_list,
+                            # ONLY FOR COMPLEX COMPARE
                             # Strictly recommended to init lists
                             # else in case of just only one attribute of element will be different
                             # both elements will be marked as not found (unique) inside the opposite list
-                            list_elements_for_composite_key: tuple = (),  # None/empty means all
-                            list_elements_for_compare: tuple = (),  # None/empty means all
+                            elements_for_composite_key: tuple = (),  # ()|None|empty mean all
+                            elements_for_compare: tuple = (), # ()|None|empty mean all
     ) -> n0dict:
         if not isinstance(other, n0dict):
-            raise Exception("n0dict.obvious_compare_dict(): other (%s) must be n0dict" % str(other))
+            raise Exception("n0dict.direct_compare_dict(): other (%s) must be n0dict" % str(other))
         result = n0dict({
-            "messages": n0list([]),
-            "notequal": n0list([]),
-            "difftypes": n0list([]),
-            "selfunique": n0list([]),
-            "otherunique": n0list([])
+            "messages"      : [],
+            "notequal"      : [],
+            "difftypes"     : [],
+            "selfnotfound"  : [],
+            "othernotfound" : [],
         })
 
         self_not_exist_in_other = list(self.keys())
         other_not_exist_in_self = list(other.keys())
 
-        ##############################################################
+        # #############################################################
         # NEVER fetch data from the mutable list in the loop !!!
-        ##############################################################
+        # #############################################################
         for key in self:
             if key in other:
                 if type(self[key]) == type(other[key]):
@@ -371,13 +494,13 @@ class n0dict(OrderedDict):
                                                     self_name + "[\"" + key + "\"]",
                                                     other_name + "[\"" + key + "\"]",
                                                     prefix + "/" + str(key),
-                                                    list_elements_for_composite_key,
-                                                    list_elements_for_compare
+                                                    elements_for_composite_key,
+                                                    elements_for_compare
                                                 )
                         )
                     elif isinstance(self[key], (dict, OrderedDict)):
                         result.update_extend(
-                                                n0dict(self[key]).obvious_compare_dict(
+                                                n0dict(self[key]).direct_compare_dict(
                                                     n0dict(other[key]),
                                                     self_name+"[\""+key+"\"]",
                                                     other_name+"[\""+key+"\"]",
@@ -417,7 +540,6 @@ class n0dict(OrderedDict):
 
         if self_not_exist_in_other:
             for key in self_not_exist_in_other:
-                result["selfunique"].append((prefix + "/" + str(key), self[key]))
                 result["messages"].append("Element %s[\"%s\"]='%s' doesn't exist in %s" %
                                                                     (
                                                                         self_name,
@@ -426,9 +548,9 @@ class n0dict(OrderedDict):
                                                                         other_name
                                                                     )
                 )
+                result["othernotfound"].append((prefix + "/" + str(key), self[key]))
         if other_not_exist_in_self:
             for key in other_not_exist_in_self:
-                result["otherunique"].append((prefix + "/" + str(key), other[key]))
                 result["messages"].append("Element %s[\"%s\"]='%s' doesn't exist in %s" %
                                   (
                                       other_name,
@@ -437,25 +559,26 @@ class n0dict(OrderedDict):
                                       self_name
                                   )
                 )
+                result["selfnotfound"].append((prefix + "/" + str(key), other[key]))
         return result
     # ******************************************************************************
     # ******************************************************************************
-    def vogue_compare_dict(self,
+    def compare_dict(self,
                                 other: n0dict,
                                 self_name: str = "self",
                                 other_name: str = "other",
                                 prefix: str = "",
-                                # ONLY FOR VOGUE
+                                # ONLY FOR COMPLEX COMPARE
                                 # Strictly recommended to init lists
                                 # else in case of just only one attribute of element will be different
                                 # both elements will be marked as not found (unique) inside the opposite list
-                                list_elements_for_composite_key: tuple = (),  # None/empty means all
-                                list_elements_for_compare: tuple = (),  # None/empty means all
+                                elements_for_composite_key: tuple = (),  # None/empty means all
+                                elements_for_compare: tuple = (),  # None/empty means all
     ) -> n0dict:
-        return self.obvious_compare_dict(
+        return self.direct_compare_dict(
                     other,
                     self_name, other_name, prefix,
-                    n0list.vogue_compare_list, list_elements_for_composite_key, list_elements_for_compare
+                    n0list.compare_list, elements_for_composite_key, elements_for_compare
         )
     # ******************************************************************************
     # ******************************************************************************
@@ -557,7 +680,7 @@ class n0dict(OrderedDict):
                 self.__AddElem(  # This pass will create sub-nodes' name[s] if they[/it] do[es]n't exist ONLY.
                     *  # unpack tuple with "*" into list of arguments,
                     self.__FindElem(  # find element with path where:str, from the root (super(n0dict, self)),
-                        super(n0dict, self),
+                        self,
                         [itm for itm in where.split("/") if itm]  # Convert path where:str into list,
                                                                   # remove all empty separators ("//" or leading/trailing "/"),
                     )
@@ -572,6 +695,10 @@ class n0dict(OrderedDict):
         """
         Private function:
         return self[where1/where2/.../whereN]
+            AKA
+        return self[where1][where2]...[whereN]
+        
+        If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
         # found, not_found = self.__FindElem(super(n0dict, self)
         found, not_found = self.__FindElem(self,
@@ -581,6 +708,8 @@ class n0dict(OrderedDict):
         )
         if not_found:
             raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), where))
+        ## NEVER RECONVERT OBJECTS!!!
+        ## For example: return n0list(found) => dict["list"].append(newitem) => append will be applyed to NEW object!!!
         return found
     # ******************************************************************************
     # ******************************************************************************
@@ -588,6 +717,10 @@ class n0dict(OrderedDict):
         """
         Private function:
         self[where1/where2/.../whereN] = value
+            AKA
+        self[where1][where2]...[whereN] = value
+        
+        If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
         flagSet = False
         if where.startswith("="):
@@ -633,63 +766,81 @@ class n0dict(OrderedDict):
         """
         Public function: collect elements xpath starts from root
         """
-        # print(self.__xpath(super(n0dict, self), "/", mode))
         return self.__xpath( self, "/", mode )
     # ******************************************************************************
     # ******************************************************************************
-    def print_xpath(self, mode: int = None):
+    def formated_xpath(self, mode: int = None):
         """
         Public function: collect elements xpath starts from root and print with indents
         """
+        result = ""
         xpath_list = self.xpath()
         xpath_maxlen = max(len(itm[0]) for itm in xpath_list) + 2 # plus 2 chars '"]'
         for itm in xpath_list:
-            print(("['%-"+str(xpath_maxlen)+"s = %s") % (itm[0]+"']", '"'+itm[1]+'"' if itm[1] else "None"))
-    # ******************************************************************************
-    # ******************************************************************************
-    def isTheSame(self, xpath, other_n0dict, other_xpath,  transformation = lambda x: x):
-        validation_result = []
-        validation_result.extend(self.isExist(xpath))
-        validation_result.extend(other_n0dict.isExist(other_xpath))
-        validation_result = list(filter(None, validation_result))
-        if validation_result: 
-            # print("## validation_result="+str(validation_result))
-            return validation_result
-
-        try:
-            if transformation(self[xpath]) == transformation(other_n0dict[other_xpath]):
-                return []
-        except:
-            pass
-        return ["[%s]=='%s' != [%s]=='%s'" % (
-                    xpath,
-                    transformation(self[xpath]),
-                    other_xpath,
-                    transformation(other_n0dict[other_xpath])
-                    )
-               ]
+            result += ("['%-"+str(xpath_maxlen)+"s = %s\n") % (itm[0]+"']", '"'+itm[1]+'"' if itm[1] else "None")
+        return result
     # ******************************************************************************
     # ******************************************************************************
     def isExist(self, xpath):
+        """
+        Public function: return empty lists in dict, if self[xpath] exists
+        """
+        validation_results = n0dict({
+            "messages"      : [],
+            "notequal"      : [],
+            "difftypes"     : [],
+            "selfnotfound"  : [],
+            "othernotfound" : [],
+        })
+        # TODO: redo with 'in'
         try:
             if self[xpath]:
-                return []
+                return validation_results
         except:
             pass
-        return ["[%s] doesn't exist" % xpath]
+        validation_results["messages"].append("[%s] doesn't exist" % xpath)
+        validation_results["selfnotfound"].append((xpath, None))
+        return validation_results
     # ******************************************************************************
     # ******************************************************************************
     def isEqual(self, xpath, value):
-        validation_result = self.isExist(xpath)
-        if validation_result:
-            return validation_result
-
+        """
+        Public function: return empty lists in dict, if self[xpath] == value
+        """
+        validation_results = self.isExist(xpath)
+        if notemptyitems(validation_results):
+            return validation_results
         try:
             if self[xpath] == value:
                 return []
         except:
             pass
-        return ["[%s]=='%s' != '%s'" % (xpath, self[xpath], value)]
+        validation_results["messages"].append("[%s]=='%s' != '%s'" % (xpath, self[xpath], value))
+        validation_results["notequal"].append((xpath, (self[xpath], value)))
+        return validation_results
+    # ******************************************************************************
+    # ******************************************************************************
+    def isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation = lambda x: x):
+        """
+        Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
+        """
+        if not other_xpath: other_xpath = xpath
+        validation_results = self.isExist(xpath).update_extend(other_n0dict.isExist(other_xpath))
+        if notemptyitems(validation_results):
+            return validation_results
+        try:
+            if transformation(self[xpath]) == transformation(other_n0dict[other_xpath]):
+                return validation_results
+        except:
+            # n0print("EXCEPTION in 'if transformation(self[xpath]) == transformation(other_n0dict[other_xpath]):'")
+            pass
+        validation_results["messages"].append("[%s]=='%s' != [%s]=='%s'" % (
+                                                                xpath, transformation(self[xpath]),
+                                                                other_xpath, transformation(other_n0dict[other_xpath])
+                                                                )
+                                       )
+        validation_results["notequal"].append((xpath, (self[xpath], other_n0dict[other_xpath])))
+        return validation_results
     # ******************************************************************************
     # ******************************************************************************
 # ******************************************************************************

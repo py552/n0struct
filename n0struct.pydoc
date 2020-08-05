@@ -1,0 +1,455 @@
+Help on package n0struct:
+
+NAME
+    n0struct
+
+DESCRIPTION
+    # 0.01 = 2020-07-25 = Initial version
+    # 0.02 = 2020-07-26 = Enhancements
+    # 0.03 = 2020-08-02 = Huge enhancements
+    # 0.04 = 2020-08-05 = Prepared for upload to pypi.org
+
+PACKAGE CONTENTS
+    test (package)
+
+CLASSES
+    builtins.list(builtins.object)
+        n0list
+    collections.OrderedDict(builtins.dict)
+        n0dict
+    
+    class n0dict(collections.OrderedDict)
+     |  Dictionary that remembers insertion order
+     |  
+     |  Method resolution order:
+     |      n0dict
+     |      collections.OrderedDict
+     |      builtins.dict
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  AddElem(self, where: 'str', what: 'str' = None, value: 'str' = None)
+     |      Public function:
+     |      Convert path where:str into list, remove all empty separators ("//" or leading/trailing "/"),
+     |      find element with path where:str, from the root (super(n0dict, self)),
+     |      unpack tuple with "*" into list of arguments,
+     |      create sub-nodes' name[s] if they[/it] do[es]n't exist ONLY.
+     |      
+     |      If optional argument 'what' is provided, add sub-nodes. If sub-nodes exist, CONVERT THEM INTO LIST AND ADD NEW ITEM.
+     |      If optional argument 'value' is provided, put into destination path where+what.
+     |  
+     |  __getitem__(self, where: 'str')
+     |      Private function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
+     |  
+     |  __setitem__(self, where: 'str', value: 'str')
+     |      Private function:
+     |      self[where1/where2/.../whereN] = value
+     |          AKA
+     |      self[where1][where2]...[whereN] = value
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
+     |  
+     |  compare_dict(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', elements_for_composite_key: 'tuple' = (), elements_for_compare: 'tuple' = ()) -> 'n0dict'
+     |      # ******************************************************************************
+     |      # ******************************************************************************
+     |  
+     |  direct_compare_dict(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', one_of_list_compare=<function n0list.direct_compare_list at 0x000002D089B975E0>, elements_for_composite_key: 'tuple' = (), elements_for_compare: 'tuple' = ()) -> 'n0dict'
+     |      ################################################################################
+     |      ################################################################################
+     |      ################################################################################
+     |  
+     |  formated_xpath(self, mode: 'int' = None)
+     |      Public function: collect elements xpath starts from root and print with indents
+     |  
+     |  isEqual(self, xpath, value)
+     |      Public function: return empty lists in dict, if self[xpath] == value
+     |  
+     |  isExist(self, xpath)
+     |      Public function: return empty lists in dict, if self[xpath] exists
+     |  
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x000002D089B97E50>)
+     |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
+     |  
+     |  update_extend(self, other)
+     |      # ******************************************************************************
+     |  
+     |  xpath(self, mode: 'int' = None)
+     |      Public function: collect elements xpath starts from root
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from collections.OrderedDict:
+     |  
+     |  __delitem__(self, key, /)
+     |      Delete self[key].
+     |  
+     |  __eq__(self, value, /)
+     |      Return self==value.
+     |  
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |  
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __iter__(self, /)
+     |      Implement iter(self).
+     |  
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |  
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |  
+     |  __ne__(self, value, /)
+     |      Return self!=value.
+     |  
+     |  __reduce__(...)
+     |      Return state information for pickling
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __reversed__(...)
+     |      od.__reversed__() <==> reversed(od)
+     |  
+     |  __sizeof__(...)
+     |      D.__sizeof__() -> size of D in memory, in bytes
+     |  
+     |  clear(...)
+     |      od.clear() -> None.  Remove all items from od.
+     |  
+     |  copy(...)
+     |      od.copy() -> a shallow copy of od
+     |  
+     |  items(...)
+     |      D.items() -> a set-like object providing a view on D's items
+     |  
+     |  keys(...)
+     |      D.keys() -> a set-like object providing a view on D's keys
+     |  
+     |  move_to_end(self, /, key, last=True)
+     |      Move an existing element to the end (or beginning if last is false).
+     |      
+     |      Raise KeyError if the element does not exist.
+     |  
+     |  pop(...)
+     |      od.pop(k[,d]) -> v, remove specified key and return the corresponding
+     |      value.  If key is not found, d is returned if given, otherwise KeyError
+     |      is raised.
+     |  
+     |  popitem(self, /, last=True)
+     |      Remove and return a (key, value) pair from the dictionary.
+     |      
+     |      Pairs are returned in LIFO order if last is true or FIFO order if false.
+     |  
+     |  setdefault(self, /, key, default=None)
+     |      Insert key with a value of default if key is not in the dictionary.
+     |      
+     |      Return the value for key if key is in the dictionary, else default.
+     |  
+     |  update(...)
+     |      D.update([E, ]**F) -> None.  Update D from dict/iterable E and F.
+     |      If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
+     |      If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
+     |      In either case, this is followed by: for k in F:  D[k] = F[k]
+     |  
+     |  values(...)
+     |      D.values() -> an object providing a view on D's values
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from collections.OrderedDict:
+     |  
+     |  fromkeys(iterable, value=None) from builtins.type
+     |      Create a new ordered dictionary with keys from iterable and values set to value.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from collections.OrderedDict:
+     |  
+     |  __dict__
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from collections.OrderedDict:
+     |  
+     |  __hash__ = None
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.dict:
+     |  
+     |  __contains__(self, key, /)
+     |      True if the dictionary has the specified key, else False.
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __len__(self, /)
+     |      Return len(self).
+     |  
+     |  get(self, key, default=None, /)
+     |      Return the value for key if key is in the dictionary, else default.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Static methods inherited from builtins.dict:
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+    
+    class n0list(builtins.list)
+     |  n0list(iterable=(), /)
+     |  
+     |  Class extended builtins.list(builtins.object) with additional methods:
+     |  .direct_compare_list()  = compare [i] <=> [i]
+     |  .compare_list()         = compare [i] <=> [?] WITHOUT using order
+     |  
+     |  Method resolution order:
+     |      n0list
+     |      builtins.list
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  compare_list(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', elements_for_composite_key: 'tuple' = (), elements_for_compare: 'tuple' = ()) -> 'n0dict'
+     |      Recursively compare self[i] with other[?] WITHOUT using order of elements.
+     |      If self[i] (other[?] must be the same) is n0list/n0dict,
+     |      then goes deeper with n0list.compare_list(..)/n0dict.direct_compare_dict(..)
+     |      
+     |      :param n0list self: etalon list for compare.
+     |      :param n0list other: list to compare with etalon
+     |      :param str self_name: optional: dict/list format name before self
+     |      :param str other_name: dict/list format name before other
+     |      :param str prefix: xpath before self/other
+     |      :param tuple elements_for_composite_key: ()|None|empty mean all
+     |      :param tuple elements_for_compare: ()|None|empty mean all
+     |      :return:
+     |              n0dict({
+     |                  "messages"      : [], # generated for each case of not equality
+     |                  "notequal"      : [], # generated if elements with the same xpath and type are not equal
+     |                  "difftypes"     : [], # generated if elements with the same xpath have different types
+     |                  "selfnotfound"  : [], # generated if elements from other list don't exist in self list
+     |                  "othernotfound" : [], # generated if elements from self list don't exist in other list
+     |              })
+     |              if not returned["messages"]: self and other are totally equal.
+     |      :rtype n0dict:
+     |  
+     |  direct_compare_list(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', dummy1=None, dummy2=None) -> 'n0dict'
+     |      Recursively compare self[i] with other[i] strictly according to the order of elements.
+     |      If self[i] (other[i] must be the same) is n0list/n0dict, then goes deeper 
+     |      with n0list.direct_compare_list/n0dict.direct_compare_dict(..)
+     |      
+     |      :param n0list self: etalon list for compare.
+     |      :param n0list other: list to compare with etalon
+     |      :param str self_name: <optional, default = "self"> dict/list format name before self
+     |      :param str other_name: <optional, default = "other"> dict/list format name before other
+     |      :param str prefix: <optional, default = ""> xpath format name before self/other
+     |      :param NoneType dummy1: For compatibility with the list of input attributes of compare_list(..)
+     |      :param NoneType dummy2: For compatibility with the list of input attributes of compare_list(..)
+     |      :return:
+     |              n0dict({
+     |                  "messages"      : [], # generated for each case of not equality
+     |                  "notequal"      : [], # generated if elements with the same xpath and type are not equal
+     |                  "difftypes"     : [], # generated if elements with the same xpath have different types
+     |                  "selfnotfound"  : [], # generated if elements from other list don't exist in self list
+     |                  "othernotfound" : [], # generated if elements from self list don't exist in other list
+     |              })
+     |              if not returned["messages"]: self and other are totally equal.
+     |      :rtype n0dict:
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.list:
+     |  
+     |  __add__(self, value, /)
+     |      Return self+value.
+     |  
+     |  __contains__(self, key, /)
+     |      Return key in self.
+     |  
+     |  __delitem__(self, key, /)
+     |      Delete self[key].
+     |  
+     |  __eq__(self, value, /)
+     |      Return self==value.
+     |  
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __getitem__(...)
+     |      x.__getitem__(y) <==> x[y]
+     |  
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |  
+     |  __iadd__(self, value, /)
+     |      Implement self+=value.
+     |  
+     |  __imul__(self, value, /)
+     |      Implement self*=value.
+     |  
+     |  __init__(self, /, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __iter__(self, /)
+     |      Implement iter(self).
+     |  
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |  
+     |  __len__(self, /)
+     |      Return len(self).
+     |  
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |  
+     |  __mul__(self, value, /)
+     |      Return self*value.
+     |  
+     |  __ne__(self, value, /)
+     |      Return self!=value.
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __reversed__(self, /)
+     |      Return a reverse iterator over the list.
+     |  
+     |  __rmul__(self, value, /)
+     |      Return value*self.
+     |  
+     |  __setitem__(self, key, value, /)
+     |      Set self[key] to value.
+     |  
+     |  __sizeof__(self, /)
+     |      Return the size of the list in memory, in bytes.
+     |  
+     |  append(self, object, /)
+     |      Append object to the end of the list.
+     |  
+     |  clear(self, /)
+     |      Remove all items from list.
+     |  
+     |  copy(self, /)
+     |      Return a shallow copy of the list.
+     |  
+     |  count(self, value, /)
+     |      Return number of occurrences of value.
+     |  
+     |  extend(self, iterable, /)
+     |      Extend list by appending elements from the iterable.
+     |  
+     |  index(self, value, start=0, stop=9223372036854775807, /)
+     |      Return first index of value.
+     |      
+     |      Raises ValueError if the value is not present.
+     |  
+     |  insert(self, index, object, /)
+     |      Insert object before index.
+     |  
+     |  pop(self, index=-1, /)
+     |      Remove and return item at index (default last).
+     |      
+     |      Raises IndexError if list is empty or index is out of range.
+     |  
+     |  remove(self, value, /)
+     |      Remove first occurrence of value.
+     |      
+     |      Raises ValueError if the value is not present.
+     |  
+     |  reverse(self, /)
+     |      Reverse *IN PLACE*.
+     |  
+     |  sort(self, /, *, key=None, reverse=False)
+     |      Sort the list in ascending order and return None.
+     |      
+     |      The sort is in-place (i.e. the list itself is modified) and stable (i.e. the
+     |      order of two equal elements is maintained).
+     |      
+     |      If a key function is given, apply it once to each list item and sort them,
+     |      ascending or descending, according to their function values.
+     |      
+     |      The reverse flag can be set to sort in descending order.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Static methods inherited from builtins.list:
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from builtins.list:
+     |  
+     |  __hash__ = None
+
+FUNCTIONS
+    get_key_by_value lambda _dict, _value
+        # ******************************************************************************
+        # get_key_by_value(_dict, _value): provide (last) key which is assosiated with _value in _dict
+        # ******************************************************************************
+    
+    n0debug lambda var_name, level=5
+        # ******************************************************************************
+        # n0debug(var_name, level = debug_levels["INFO"]):
+        #   Print value of var with name var_name,
+        #   depends of value in global variable debug_level.
+        # ******************************************************************************
+    
+    n0debug_calc lambda var_value, var_name='', level=5
+        # ******************************************************************************
+        # n0debug_calc(var_value, var_name = "", level = debug_levels["INFO"]):
+        #   Print  calculated value (for example returned by function), 
+        #   depends of value in global variable debug_level.
+        # ******************************************************************************
+    
+    n0print(text, level=-5)
+        # ******************************************************************************
+        # n0print(text, level = -debug_levels["INFO"]):
+        #   Print messages,
+        #   depends of value in global variable debug_level.
+        #   If n0print is called directly, value in level must be negative.
+        #   n0print is called thru n0debug/n0debug_calc, value in level must be possitive.
+        # ******************************************************************************
+    
+    notemptyitems(item)
+        # ******************************************************************************
+        # notemptyitems(item): 
+        #   Check item or recursively subitems of item.
+        #   Return count of notempty item/subitems.
+        # ******************************************************************************
+    
+    random_from lambda _from_list
+        # ******************************************************************************
+        # random_from(_from_list): provide random item from the _from_list[..]
+        # ******************************************************************************
+    
+    rnd lambda _till_not_included_random
+        # ******************************************************************************
+        # rnd(_till_not_included_random): generate random integer value [0.._till_not_included_random-1]
+        # ******************************************************************************
+
+DATA
+    annotations = _Feature((3, 7, 0, 'beta', 1), (4, 0, 0, 'alpha', 0), 16...
+    debug_level = 5
+    debug_levels = {'ALL': 10, 'DEBUG': 7, 'ERROR': 2, 'FATAL': 1, 'INFO':...
+
+FILE
+    c:\repo\n0struct\n0struct\__init__.py
+
+
