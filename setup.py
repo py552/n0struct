@@ -40,6 +40,13 @@ print(_version)
 # _packages = setuptools.find_packages() + ["aaa"]
 # print(_packages)
 
+# from pip.req import parse_requirements
+# # parse_requirements() returns generator of pip.req.InstallRequirement objects
+# # reqs is a list of requirement e.g. ['django==1.5.1', 'mezzanine==1.4.6']
+# reqs = [str(ir.req) for ir in parse_requirements("requirements.txt")]
+with open("requirements.txt", "rt") as fIn:
+    reqs = fIn.readlines()
+
 setuptools.setup(
     name = "n0struct",
     version = _version,
@@ -63,5 +70,6 @@ setuptools.setup(
     ],
     test_suite = "tests",
     python_requires = ">=3.7",
-    zip_safe = False
+    install_requires = reqs,
+    zip_safe = False,
 )

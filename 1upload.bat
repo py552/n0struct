@@ -1,5 +1,5 @@
 @echo off
-::set TEST_MODE=TRUE
+set TEST_MODE=TRUE
 REM python -m pip install --upgrade pip
 REM python -m pip install --upgrade setuptools wheel
 REM python -m pip install twine
@@ -45,12 +45,16 @@ echo *** twine upload --username %USERNAME% --password XXX %test_upload% dist/*
 echo **********************************************************************
 python -m twine upload --username %USERNAME% --password %PASSWORD% %test_upload% dist/*
 call :clean
+
+echo Mission acomplished
 goto :eof
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :clean
 :: Safe version ::
 if "%fromdir%"=="" set "fromdir=%~dp0"
+echo Looking for "%fromdir%\*.pyc"
 for /f %%i in ('cmd.exe /c dir /s /b /a:-d "%fromdir%\*.pyc"') do if "%%~xi"==".pyc" (echo *** %%i&&cmd /c del %%i) else (echo SOMETHING WRONG: Try to remove '%%i'&&exit)
+echo Looking for "%fromdir%\__pycache__"
 for /f %%i in ('cmd.exe /c dir /s /b /a:d "%fromdir%\__pycache__"') do if "%%~ni"=="__pycache__" (echo *** %%i&&cmd /c rmdir %%i) else (echo SOMETHING WRONG: Try to remove '%%i'&&exit)
 
 set "tmp_dir=%fromdir%\.pytest_cache"

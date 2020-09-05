@@ -1,82 +1,330 @@
-******************************************************************************** 1 = Sorted list in dictionary = direct_compare_dict
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:124: ================================================================================
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:125: (<class 'n0struct.n0dict'> id=2171699236672)dict1 = '{
+    'C': [
+        {
+            'a': 1,
+            'b': 2,
+            'c': 3,
+            'value1': 1,
+            'value2': 4
+        },
+        {
+            'a': 4,
+            'b': 5,
+            'c': 6,
+            'value1': 2,
+            'value2': 5
+        },
+        {
+            'a': 7,
+            'b': 8,
+            'c': 9,
+            'value1': 3,
+            'value2': 6
+        }
+    ]
+}'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:126: ================================================================================
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:127: (<class 'n0struct.n0dict'> id=2171732640448)dict2 = '{
+    'C': [
+        {
+            'a': 1,
+            'b': 2,
+            'c': 3,
+            'value1': 1,
+            'value2': 4
+        },
+        {
+            'a': 4,
+            'b': 5,
+            'c': 6,
+            'value1': 2,
+            'value2': 99
+        },
+        {
+            'a': 7,
+            'b': 8,
+            'c': 9,
+            'value1': 3,
+            'value2': 6
+        }
+    ]
+}'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:128: ================================================================================
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:129: (<class 'n0struct.n0dict'> id=2171732640448)dict3 = '{
+    'C': [
+        {
+            'a': 1,
+            'b': 2,
+            'c': 3,
+            'value1': 1,
+            'value2': 4
+        },
+        {
+            'a': 4,
+            'b': 5,
+            'c': 6,
+            'value1': 2,
+            'value2': 99
+        },
+        {
+            'a': 7,
+            'b': 8,
+            'c': 9,
+            'value1': 3,
+            'value2': 6
+        }
+    ]
+}'
+******************************************************************************** 1 = Sorted list in dictionary = direct_compare
 *** messages
 Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 
 *** notequal
-('/C[1]/value2', (5, 99))
-*** difftypes
+('/C[1]/value2', [5, 99, 94.0])
 *** selfnotfound
 *** othernotfound
-******************************************************************************** 2 = Sorted list in dictionary = compare_dict
+*** difftypes
+******************************************************************************** 2 = Sorted list in dictionary = wise_compare
 *** messages
 Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 
 *** notequal
-('/C[1]/value2', (5, 99))
-*** difftypes
+('/C[1]/value2', [5, 99, 94.0])
 *** selfnotfound
 *** othernotfound
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:59: ================================================================================
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:60: (<class 'n0struct.n0dict'> id=2107084655552)differences1 = 'n0dict([('messages', ['Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 ']), ('notequal', [('/C[1]/value2', (5, 99))]), ('difftypes', []), ('selfnotfound', []), ('othernotfound', [])])'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:61: (<class 'int'> id=140730456544928)notemptyitems(differences1["messages"]) = '1'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:63: (<class 'int'> id=140730456544992)notemptyitems(differences1["notequal"]) = '3'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:69: ================================================================================
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:70: (<class 'n0struct.n0dict'> id=2107084655296)differences2 = 'n0dict([('messages', ['Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 ']), ('notequal', [('/C[1]/value2', (5, 99))]), ('difftypes', []), ('selfnotfound', []), ('othernotfound', [])])'
-******************************************************************************** 3 = Unsorted list in dictionary = direct_compare_dict
-*** messages
-Values are different: dict1["C"][0]["a"]=1 != dict2["C"][0]["a"]=7 
-Values are different: dict1["C"][0]["b"]=2 != dict2["C"][0]["b"]=8 
-Values are different: dict1["C"][0]["c"]=3 != dict2["C"][0]["c"]=9 
-Values are different: dict1["C"][0]["value1"]=1 != dict2["C"][0]["value1"]=3 
-Values are different: dict1["C"][0]["value2"]=4 != dict2["C"][0]["value2"]=6 
-Values are different: dict1["C"][1]["a"]=4 != dict2["C"][1]["a"]=1 
-Values are different: dict1["C"][1]["b"]=5 != dict2["C"][1]["b"]=2 
-Values are different: dict1["C"][1]["c"]=6 != dict2["C"][1]["c"]=3 
-Values are different: dict1["C"][1]["value1"]=2 != dict2["C"][1]["value1"]=1 
-Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=4 
-Values are different: dict1["C"][2]["a"]=7 != dict2["C"][2]["a"]=4 
-Values are different: dict1["C"][2]["b"]=8 != dict2["C"][2]["b"]=5 
-Values are different: dict1["C"][2]["c"]=9 != dict2["C"][2]["c"]=6 
-Values are different: dict1["C"][2]["value1"]=3 != dict2["C"][2]["value1"]=2 
-Values are different: dict1["C"][2]["value2"]=6 != dict2["C"][2]["value2"]=99 
-List dict2["C"] is longer dict1["C"]: dict2["C"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1["C"]
-*** notequal
-('/C[0]/a', (1, 7))
-('/C[0]/b', (2, 8))
-('/C[0]/c', (3, 9))
-('/C[0]/value1', (1, 3))
-('/C[0]/value2', (4, 6))
-('/C[1]/a', (4, 1))
-('/C[1]/b', (5, 2))
-('/C[1]/c', (6, 3))
-('/C[1]/value1', (2, 1))
-('/C[1]/value2', (5, 4))
-('/C[2]/a', (7, 4))
-('/C[2]/b', (8, 5))
-('/C[2]/c', (9, 6))
-('/C[2]/value1', (3, 2))
-('/C[2]/value2', (6, 99))
 *** difftypes
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:63: ================================================================================
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:64: (<class 'n0struct.n0dict'> id=2171732952384)differences1_direct_compare = {
+    'messages': ["Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 "],
+    'notequal': [
+        (
+            "/C[1]/value2",
+            [
+                5,
+                99,
+                94.0
+            ]
+        )
+    ],
+    'selfnotfound': [],
+    'othernotfound': [],
+    'difftypes': []
+}
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:65: (<class 'int'> id=140728374007456)notemptyitems(differences1_direct_compare["messages"]) = '1'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:67: (<class 'int'> id=140728374007552)notemptyitems(differences1_direct_compare["notequal"]) = '4'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:73: ================================================================================
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:74: (<class 'n0struct.n0dict'> id=2171732952512)differences2_wise_compare = {
+    'messages': ["Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 "],
+    'notequal': [
+        (
+            "/C[1]/value2",
+            [
+                5,
+                99,
+                94.0
+            ]
+        )
+    ],
+    'selfnotfound': [],
+    'othernotfound': [],
+    'difftypes': []
+}
+******************************************************************************** 3 = Unsorted list in dictionary = direct_compare
+*** messages
+Values are different: dict1["C"][0]["a"]=1 != dict3["C"][0]["a"]=7 
+Values are different: dict1["C"][0]["b"]=2 != dict3["C"][0]["b"]=8 
+Values are different: dict1["C"][0]["c"]=3 != dict3["C"][0]["c"]=9 
+Values are different: dict1["C"][0]["value1"]=1 != dict3["C"][0]["value1"]=3 
+Values are different: dict1["C"][0]["value2"]=4 != dict3["C"][0]["value2"]=6 
+Values are different: dict1["C"][1]["value2"]=5 != dict3["C"][1]["value2"]=99 
+Values are different: dict1["C"][2]["a"]=7 != dict3["C"][2]["a"]=1 
+Values are different: dict1["C"][2]["b"]=8 != dict3["C"][2]["b"]=2 
+Values are different: dict1["C"][2]["c"]=9 != dict3["C"][2]["c"]=3 
+Values are different: dict1["C"][2]["value1"]=3 != dict3["C"][2]["value1"]=1 
+Values are different: dict1["C"][2]["value2"]=6 != dict3["C"][2]["value2"]=4 
+List dict3["C"] is longer dict1["C"]: dict3["C"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1["C"]
+*** notequal
+('/C[0]/a', [1, 7, 6.0])
+('/C[0]/b', [2, 8, 6.0])
+('/C[0]/c', [3, 9, 6.0])
+('/C[0]/value1', [1, 3, 2.0])
+('/C[0]/value2', [4, 6, 2.0])
+('/C[1]/value2', [5, 99, 94.0])
+('/C[2]/a', [7, 1, -6.0])
+('/C[2]/b', [8, 2, -6.0])
+('/C[2]/c', [9, 3, -6.0])
+('/C[2]/value1', [3, 1, -2.0])
+('/C[2]/value2', [6, 4, -2.0])
 *** selfnotfound
 ('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
 *** othernotfound
-******************************************************************************** 4 = Unsorted list in dictionary = compare_dict
-*** messages
-Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][2]["value2"]=99 
-Element dict2["C"][1]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1["C"]
-*** notequal
-('/C[1]<=>[2]/value2', (5, 99))
 *** difftypes
+******************************************************************************** 4 = Unsorted list in dictionary = compare
+*** messages
+Values are different: dict1["C"][1]["value2"]=5 != dict3["C"][1]["value2"]=99 
+Element dict3["C"][2]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1["C"]
+*** notequal
+('/C[1]/value2', [5, 99, 94.0])
 *** selfnotfound
-('/C[2]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
+('/C[~2]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
 *** othernotfound
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:95: ================================================================================
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:96: (<class 'n0struct.n0dict'> id=2107084655296)differences1 = 'n0dict([('messages', ['Values are different: dict1["C"][0]["a"]=1 != dict2["C"][0]["a"]=7 ', 'Values are different: dict1["C"][0]["b"]=2 != dict2["C"][0]["b"]=8 ', 'Values are different: dict1["C"][0]["c"]=3 != dict2["C"][0]["c"]=9 ', 'Values are different: dict1["C"][0]["value1"]=1 != dict2["C"][0]["value1"]=3 ', 'Values are different: dict1["C"][0]["value2"]=4 != dict2["C"][0]["value2"]=6 ', 'Values are different: dict1["C"][1]["a"]=4 != dict2["C"][1]["a"]=1 ', 'Values are different: dict1["C"][1]["b"]=5 != dict2["C"][1]["b"]=2 ', 'Values are different: dict1["C"][1]["c"]=6 != dict2["C"][1]["c"]=3 ', 'Values are different: dict1["C"][1]["value1"]=2 != dict2["C"][1]["value1"]=1 ', 'Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=4 ', 'Values are different: dict1["C"][2]["a"]=7 != dict2["C"][2]["a"]=4 ', 'Values are different: dict1["C"][2]["b"]=8 != dict2["C"][2]["b"]=5 ', 'Values are different: dict1["C"][2]["c"]=9 != dict2["C"][2]["c"]=6 ', 'Values are different: dict1["C"][2]["value1"]=3 != dict2["C"][2]["value1"]=2 ', 'Values are different: dict1["C"][2]["value2"]=6 != dict2["C"][2]["value2"]=99 ', 'List dict2["C"] is longer dict1["C"]: dict2["C"][3]=\'{\'a\': 1, \'b\': 2, \'c\': 3, \'value1\': 1, \'value2\': 4}\' doesn\'t exist in dict1["C"]']), ('notequal', [('/C[0]/a', (1, 7)), ('/C[0]/b', (2, 8)), ('/C[0]/c', (3, 9)), ('/C[0]/value1', (1, 3)), ('/C[0]/value2', (4, 6)), ('/C[1]/a', (4, 1)), ('/C[1]/b', (5, 2)), ('/C[1]/c', (6, 3)), ('/C[1]/value1', (2, 1)), ('/C[1]/value2', (5, 4)), ('/C[2]/a', (7, 4)), ('/C[2]/b', (8, 5)), ('/C[2]/c', (9, 6)), ('/C[2]/value1', (3, 2)), ('/C[2]/value2', (6, 99))]), ('difftypes', []), ('selfnotfound', [('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})]), ('othernotfound', [])])'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:97: (<class 'int'> id=140730456545408)notemptyitems(differences1["messages"] = '16'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:99: (<class 'int'> id=140730456546336)differences1["notequal"] = '45'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:102: (<class 'int'> id=140730456545088)notemptyitems(differences1["selfnotfound"]) = '6'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:104: (<class 'int'> id=140730456544896)notemptyitems(differences1["othernotfound"]) = '0'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:107: ================================================================================
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:108: (<class 'n0struct.n0dict'> id=2107084655552)differences2 = 'n0dict([('messages', ['Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][2]["value2"]=99 ', 'Element dict2["C"][1]=\'{\'a\': 1, \'b\': 2, \'c\': 3, \'value1\': 1, \'value2\': 4}\' doesn\'t exist in dict1["C"]']), ('notequal', [('/C[1]<=>[2]/value2', (5, 99))]), ('difftypes', []), ('selfnotfound', [('/C[2]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})]), ('othernotfound', [])])'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:109: (<class 'int'> id=140730456544960)notemptyitems(differences2["messages"] = '2'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:111: (<class 'int'> id=140730456544992)differences2["notequal"] = '3'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:114: (<class 'int'> id=140730456545088)notemptyitems(differences2["selfnotfound"]) = '6'
-*** [INFO] 2020-08-05 08:14:11 test_n0struct.py:116: (<class 'int'> id=140730456544896)notemptyitems(differences2["othernotfound"]) = '0'
+*** difftypes
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:99: ================================================================================
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:100: (<class 'n0struct.n0dict'> id=2171732952512)differences1_direct_compare = {
+    'messages': [
+        "Values are different: dict1["C"][0]["a"]=1 != dict3["C"][0]["a"]=7 ",
+        "Values are different: dict1["C"][0]["b"]=2 != dict3["C"][0]["b"]=8 ",
+        "Values are different: dict1["C"][0]["c"]=3 != dict3["C"][0]["c"]=9 ",
+        "Values are different: dict1["C"][0]["value1"]=1 != dict3["C"][0]["value1"]=3 ",
+        "Values are different: dict1["C"][0]["value2"]=4 != dict3["C"][0]["value2"]=6 ",
+        "Values are different: dict1["C"][1]["value2"]=5 != dict3["C"][1]["value2"]=99 ",
+        "Values are different: dict1["C"][2]["a"]=7 != dict3["C"][2]["a"]=1 ",
+        "Values are different: dict1["C"][2]["b"]=8 != dict3["C"][2]["b"]=2 ",
+        "Values are different: dict1["C"][2]["c"]=9 != dict3["C"][2]["c"]=3 ",
+        "Values are different: dict1["C"][2]["value1"]=3 != dict3["C"][2]["value1"]=1 ",
+        "Values are different: dict1["C"][2]["value2"]=6 != dict3["C"][2]["value2"]=4 ",
+        "List dict3["C"] is longer dict1["C"]: dict3["C"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1["C"]"
+    ],
+    'notequal': [
+        (
+            "/C[0]/a",
+            [
+                1,
+                7,
+                6.0
+            ]
+        ),
+        (
+            "/C[0]/b",
+            [
+                2,
+                8,
+                6.0
+            ]
+        ),
+        (
+            "/C[0]/c",
+            [
+                3,
+                9,
+                6.0
+            ]
+        ),
+        (
+            "/C[0]/value1",
+            [
+                1,
+                3,
+                2.0
+            ]
+        ),
+        (
+            "/C[0]/value2",
+            [
+                4,
+                6,
+                2.0
+            ]
+        ),
+        (
+            "/C[1]/value2",
+            [
+                5,
+                99,
+                94.0
+            ]
+        ),
+        (
+            "/C[2]/a",
+            [
+                7,
+                1,
+                -6.0
+            ]
+        ),
+        (
+            "/C[2]/b",
+            [
+                8,
+                2,
+                -6.0
+            ]
+        ),
+        (
+            "/C[2]/c",
+            [
+                9,
+                3,
+                -6.0
+            ]
+        ),
+        (
+            "/C[2]/value1",
+            [
+                3,
+                1,
+                -2.0
+            ]
+        ),
+        (
+            "/C[2]/value2",
+            [
+                6,
+                4,
+                -2.0
+            ]
+        )
+    ],
+    'selfnotfound': [
+        (
+            "/C[3]",
+            {
+                'a': 1,
+                'b': 2,
+                'c': 3,
+                'value1': 1,
+                'value2': 4
+            }
+        )
+    ],
+    'othernotfound': [],
+    'difftypes': []
+}
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:101: (<class 'int'> id=140728374007808)notemptyitems(differences1_direct_compare["messages"] = '12'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:103: (<class 'int'> id=140728374008832)differences1_direct_compare["notequal"] = '44'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:106: (<class 'int'> id=140728374007616)notemptyitems(differences1_direct_compare["selfnotfound"]) = '6'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:108: (<class 'int'> id=140728374007424)notemptyitems(differences1_direct_compare["othernotfound"]) = '0'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:111: ================================================================================
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:112: (<class 'n0struct.n0dict'> id=2171732952384)differences2_wise_compare = {
+    'messages': [
+        "Values are different: dict1["C"][1]["value2"]=5 != dict3["C"][1]["value2"]=99 ",
+        "Element dict3["C"][2]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1["C"]"
+    ],
+    'notequal': [
+        (
+            "/C[1]/value2",
+            [
+                5,
+                99,
+                94.0
+            ]
+        )
+    ],
+    'selfnotfound': [
+        (
+            "/C[~2]",
+            {
+                'a': 1,
+                'b': 2,
+                'c': 3,
+                'value1': 1,
+                'value2': 4
+            }
+        )
+    ],
+    'othernotfound': [],
+    'difftypes': []
+}
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:113: (<class 'int'> id=140728374007488)notemptyitems(differences2_wise_compare["messages"] = '2'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:115: (<class 'int'> id=140728374007552)differences2_wise_compare["notequal"] = '4'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:118: (<class 'int'> id=140728374007616)notemptyitems(differences2_wise_compare["selfnotfound"]) = '6'
+*** [INFO] 2020-08-29 16:05:43 test_n0struct.py:120: (<class 'int'> id=140728374007424)notemptyitems(differences2_wise_compare["othernotfound"]) = '0'

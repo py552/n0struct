@@ -1,5 +1,5 @@
 @echo off
-::set TEST_MODE=TRUE
+set TEST_MODE=TRUE
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Determine directory/project name
 set "mydir=%~dp0"
@@ -29,6 +29,9 @@ python -m pip show %myprj%
 if not "%TEST_MODE%"=="" (
     set "test_dnload=-i https://test.pypi.org/simple/"
     set "test_upload=--repository testpypi"
+rem Because of not all required packages are in test repository,
+rem we need to install them from the main
+    python -m pip install --upgrade xmltodict
 )
 echo **********************************************************************
 echo *** pip install --upgrade %test_dnload% %myprj%
