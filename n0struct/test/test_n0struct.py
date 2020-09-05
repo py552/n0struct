@@ -4,10 +4,12 @@ mydir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, mydir)
 sys.path.insert(0, mydir+"/../")
 sys.path.insert(0, mydir+"/../../")
-import n0struct
-n0struct._DIFFTYPES = True  # For updating global variables using prefix is mandatory
-n0struct._DIFFVALUES = True
+# import n0struct
+# n0struct._DIFFTYPES = True  # For updating global variables using prefix is mandatory
+# n0struct._DIFFVALUES = True
 from n0struct import * # For using n0dict(), n0print(), n0debug without prefixes
+set__flag_compare_check_different_types(True)
+set__flag_compare_return_difference_of_values(True)
 
 # ******************************************************************************
 # Etalon list in dictionary

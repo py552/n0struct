@@ -11,6 +11,7 @@ DESCRIPTION
     # 0.05 = 2020-08-11 = Huge enhancements: unification of .*compare() .toJson(), .toXml(), n0dict(JSON/XML string)
     # 0.06
     # 0.07 = 2020-09-02 = transform added
+    # 0.08 = 2020-09-05 = refactoring
 
 PACKAGE CONTENTS
     test (package)
@@ -57,6 +58,9 @@ CLASSES
      |      
      |      * == convert from tuple into list of arguments
      |      ** == convert from mapping into list of named arguments
+     |      
+     |      :param args:
+     |      :param kw:
      |  
      |  __setitem__(self, where: 'str', value: 'str')
      |      Private function:
@@ -68,15 +72,15 @@ CLASSES
      |          the value will be rewritten
      |          If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
      |      else
-     |          the path will be created. if last element exists, then the element will be recofigured into array
-     |          if any whereN starts with '+', then the element will be recofigured into array
+     |          the path will be created. if last element exists, then the element will be reconfigured into array
+     |          if any whereN starts with '+', then the element will be reconfigured into array
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', contentity_check='contentity_check', one_of_list_compare=<function n0list.compare at 0x0000026BB287D820>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0000012890DC1160>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', contentity_check='contentity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000026BB287D700>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000012890DC10D0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # ******************************************************************************
@@ -87,22 +91,22 @@ CLASSES
      |  isExist(self, xpath)
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000026BB287E310>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000012890DC1C10>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
-     |  toJson(self, indent: 'int' = 4) -> 'str'
+     |  to_json(self, indent: 'int' = 4) -> 'str'
      |      Public function: export self into json result string
      |  
-     |  toXml(self, indent: 'int' = 4, encoding: 'str' = 'utf-8') -> 'str'
+     |  to_xml(self, indent: 'int' = 4, encoding: 'str' = 'utf-8') -> 'str'
      |      Public function: export self into xml result string
      |  
-     |  toXpath(self, mode: 'int' = None) -> 'str'
+     |  to_xpath(self, mode: 'int' = None) -> 'str'
      |      Public function: collect elements xpath starts from root and print with indents
      |  
      |  update_extend(self, other)
      |      # ******************************************************************************
      |  
-     |  xpath(self, mode: 'int' = None) -> 'list()'
+     |  xpath(self, mode: 'int' = None) -> 'list'
      |      Public function: collect elements xpath starts from root
      |  
      |  ----------------------------------------------------------------------
@@ -236,19 +240,20 @@ CLASSES
      |  
      |  Methods defined here:
      |  
-     |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', contentity_check='contentity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[?] WITHOUT using order of elements.
      |      If self[i] (other[?] must be the same) is n0list/n0dict,
      |      then goes deeper with n0list. compare(..)/n0dict.direct_compare(..)
      |      
-     |      :param n0list self: etalon list for compare.
-     |      :param n0list other: list to compare with etalon
-     |      :param str self_name: optional: dict/list format name before self
-     |      :param str other_name: dict/list format name before other
-     |      :param str prefix: xpath before self/other
-     |      :param tuple composite_key: ()|None|empty mean all
-     |      :param tuple compare_only: ()|None|empty mean all
-     |      :param tuple exclude: ()|None|empty mean nothing to exclude
+     |      :param other:
+     |      :param self_name:
+     |      :param other_name:
+     |      :param prefix:
+     |      :param continuity_check:
+     |      :param composite_key:
+     |      :param compare_only:
+     |      :param exclude:
+     |      :param transform:
      |      :return:
      |              n0dict({
      |                  "messages"      : [], # generated for each case of not equality
@@ -258,20 +263,23 @@ CLASSES
      |                  "difftypes"     : [], # generated if elements with the same xpath have different types
      |              })
      |              if not returned["messages"]: self and other are totally equal.
-     |      :rtype n0dict:
      |  
-     |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', contentity_check='contentity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
-     |      Recursively compare self[i] with other[i] strictly according to the order of elements.
+     |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |      Recursively compare self[i] with other[i]
+     |      strictly according to the order of elements.
      |      If self[i] (other[i] must be the same) is n0list/n0dict, then goes deeper
      |      with n0list.direct_compare/n0dict.direct_compare(..)
      |      
-     |      :param n0list self: etalon list for compare.
-     |      :param n0list other: list to compare with etalon
-     |      :param str self_name: <optional, default = "self"> dict/list format name before self
-     |      :param str other_name: <optional, default = "other"> dict/list format name before other
-     |      :param str prefix: <optional, default = ""> xpath format name before self/other
-     |      :param NoneType dummy1: For compatibility with the list of input attributes of compare(..)
-     |      :param NoneType dummy2: For compatibility with the list of input attributes of compare(..)
+     |      :param self: etalon list for compare.
+     |      :param other: list to compare with etalon
+     |      :param self_name: <default = "self"> dict/list name, used in result["messages"]
+     |      :param other_name: <default = "other"> dict/list name, used in result["messages"]
+     |      :param prefix: <default = ""> xpath prefix, used for full xpath generation
+     |      :param continuity_check: used for checking that below arguments are defined only with names
+     |      :param composite_key:  For compatibility with compare(..)
+     |      :param compare_only: For compatibility with compare(..)
+     |      :param exclude: ()|None|empty mean nothing to exclude
+     |      :param transform: ()|None|empty mean nothing to transform
      |      :return:
      |              n0dict({
      |                  "messages"      : [], # generated for each case of not equality
@@ -281,10 +289,6 @@ CLASSES
      |                  "difftypes"     : [], # generated if elements with the same xpath have different types
      |              })
      |              if not returned["messages"]: self and other are totally equal.
-     |      :rtype n0dict:
-     |  
-     |  get_composite_keys(self, input_list: 'n0list', elemets_for_composite_key: 'tuple') -> 'list'
-     |      serialization *||composite_key elements of input_list[]
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
@@ -423,44 +427,82 @@ CLASSES
      |  __hash__ = None
 
 FUNCTIONS
-    dateYYYYMMDD(day_delta=0, month_delta=0)
+    date_delta(day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'date'
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> date
     
-    date_delta(day_delta=0, month_delta=0)
-        # ******************************************************************************
-        # Today   = lambda daydiff=0: (datetime.today()+timedelta(days=daydiff)).strftime("%Y-%m-%d")
-        # Tomonth = lambda daydiff=0: (datetime.today()+timedelta(days=daydiff)).strftime("%y%d")
+    date_mmyy(day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> str MMYY
     
-    fromDDMMMYY(date_str: 'str')
+    date_yymm(day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> str YYMM
     
-    fromDDMMYYYY(date_str: 'str')
+    date_yyyymmdd(day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> str YYYY-MM-DD
     
-    fromYYYYMMDD(date_str: 'str')
+    from_ddmmmyy(date_str: 'str') -> 'typing.Union[date, str, None]'
+        :param date_str: DD-MMM-YY # 16-JUL-20
+        :return: str -> date
     
-    get_key_by_value lambda _dict, _value
-        # ******************************************************************************
-        # get_key_by_value(_dict, _value): provide (last) key which is assosiated with _value in _dict
-        # ******************************************************************************
+    from_ddmmyyyy(date_str: 'str') -> 'typing.Union[date, str, None]'
+        :param date_str: DD-MM-YYYY # 16-07-2020
+        :return: str -> date
     
-    monthMMYY(day_delta=0, month_delta=0)
+    from_yyyymmdd(date_str: 'str') -> 'typing.Union[date, str, None]'
+        :param date_str: YYYY-MM-DD # 2020-07-16
+        :return: str -> date
     
-    monthYYMM(day_delta=0, month_delta=0)
+    get__flag_compare_check_different_types()
     
-    n0debug(array_name, level=5)
-        # )
+    get__flag_compare_return_difference_of_values()
     
-    n0debug_calc lambda var_value, var_name='', level=5
-        # ******************************************************************************
-        # n0debug_calc(var_value, var_name = "", level = debug_levels["INFO"]):
-        #   Print  calculated value (for example returned by function),
-        #   depends of value in global variable debug_level.
-        # ******************************************************************************
+    get_composite_keys(input_list: 'n0list', elemets_for_composite_key: 'tuple') -> 'list'
+        serialization all or {elemets_for_composite_key} elements of {input_list[]}
     
-    n0debug_object(object_name, level=5)
-        # ******************************************************************************
+    get_key_by_value(dict_: 'dict', value_)
+        :param dict_:
+        :param value_:
+        :return: last key which is associated with value_ in dict_
     
-    n0pretty(item, indent=0)
+    n0debug(var_name: 'str', level: 'int' = 5)
+        Print value of the variable with name {var_name},
+        depends of value in global variable {__debug_level}.
+        
+        :param var_name:
+        :param level:
+        :return:
     
-    n0print(text, level=-5, end='\n')
+    n0debug_calc(var_value: 'str', var_name: 'str' = '', level: 'int' = 5)
+        Print  calculated value (for example returned by function),
+        depends of value in global variable __debug_level.
+        
+        :param var_value:
+        :param var_name:
+        :param level:
+        :return:
+    
+    n0debug_object(object_name: 'str', level: 'int' = 5)
+    
+    n0pretty(item, indent_: 'int' = 0)
+        :param item:
+        :param indent_:
+        :return:
+    
+    n0print(text: 'str', level: 'int' = 5, internal_call: 'bool' = False, end: 'str' = '\n')
+        if {level} <= {__debug_level} then print {text}{end}
+        
+        :param text:
+        :param level:
+        :param end:
+        :param internal_call:
+        :return: None
     
     notemptyitems(item)
         # ******************************************************************************
@@ -469,23 +511,27 @@ FUNCTIONS
         #   Return count of notempty item/subitems.
         # ******************************************************************************
     
-    random_from lambda _from_list
-        # ******************************************************************************
-        # random_from(_from_list): provide random item from the _from_list[..]
-        # ******************************************************************************
+    random_from(from_list: 'list')
+        :param from_list:
+        :return: from_list[rnd]
     
-    rnd lambda _till_not_included_random
-        # ******************************************************************************
-        # rnd(_till_not_included_random): generate random integer value [0.._till_not_included_random-1]
-        # ******************************************************************************
+    rnd(till_not_included: 'int') -> 'int'
+        :param till_not_included:
+        :return: int [0..till_not_included)
     
-    set_DIFFTYPES(value)
+    set__debug_level(value: 'int')
     
-    set_DIFFVALUES(value)
+    set__flag_compare_check_different_types(value)
+        if __flag_compare_check_different_types == True, then
+        validate type of attributes in .compare()/.direct_compare()
+        and return result["difftypes"]
     
-    set_debug_level(value)
+    set__flag_compare_return_difference_of_values(value)
+        if __flag_compare_return_difference_of_values == True, then
+        if values of attributes are different and are int,float,
+        return additional element in result["notequal"] with difference
     
-    to_date(date_str: 'str')
+    to_date(date_str: 'str') -> 'typing.Union[date, str]'
     
     xpath_match(xpath: 'str', xpath_list)
         # ******************************************************************************
@@ -496,10 +542,6 @@ FUNCTIONS
 
 DATA
     annotations = _Feature((3, 7, 0, 'beta', 1), (4, 0, 0, 'alpha', 0), 16...
-    debug_level = 5
-    debug_levels = {'ALLWAYS': 0, 'DEBUG': 7, 'ERROR': 2, 'FATAL': 1, 'INF...
-    indent_size = 4
-    prev_end = '\n'
 
 FILE
     c:\repo\n0struct\n0struct\__init__.py
