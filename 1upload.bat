@@ -1,5 +1,5 @@
 @echo off
-set TEST_MODE=TRUE
+::set TEST_MODE=TRUE
 REM python -m pip install --upgrade pip
 REM python -m pip install --upgrade setuptools wheel
 REM python -m pip install twine

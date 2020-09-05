@@ -1,5 +1,5 @@
 @echo off
-set TEST_MODE=TRUE
+::set TEST_MODE=TRUE
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Determine directory/project name
 set "mydir=%~dp0"

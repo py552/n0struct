@@ -1,20 +1,29 @@
 # 0.01 = 2020-07-25 = Initial version
 # 0.02 = 2020-07-26 = Enhancements
 # 0.03 = 2020-08-02 = Huge enhancements
-# 0.04 = 2020-08-05 = Prepared for upload to pypi.org as 0.1.0
+# 0.04 = 2020-08-05 = Prepared for upload to pypi.org
 # 0.05 = 2020-08-11 = Huge enhancements: unification of .*compare() .toJson(), .toXml(), n0dict(JSON/XML string)
-# 0.06 = 2020-08-29 = Accumulated changes, uploaded as 0.2.0
+# 0.06
+# 0.07 = 2020-09-02 = transform added
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 _DIFFTYPES = False
+def set_DIFFTYPES(value):
+    global _DIFFTYPES
+    _DIFFTYPES = value
+    return _DIFFTYPES
 _DIFFVALUES = False
+def set_DIFFVALUES(value):
+    global _DIFFVALUES
+    _DIFFVALUES = value
+    return _DIFFVALUES
 
 from collections import OrderedDict
 import random
 import inspect
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from pprint import pprint
 # import lxml
 import xmltodict
@@ -24,7 +33,6 @@ import json
 # Tomonth = lambda daydiff=0: (datetime.today()+timedelta(days=daydiff)).strftime("%y%d")
 def date_delta(day_delta=0, month_delta=0):
     Now = datetime.today() + timedelta(days=day_delta)
-    # Now = datetime( Now.year + month_delta // 12, month_delta % 12 + 1, Now.day)
     month_quotient, month_remainder = divmod(Now.month + month_delta - 1, 12)
     Now = datetime( Now.year + month_quotient, month_remainder + 1, Now.day)
     return Now
@@ -34,6 +42,33 @@ def monthYYMM(day_delta=0, month_delta=0):
     return date_delta(day_delta, month_delta).strftime("%y%m")
 def monthMMYY(day_delta=0, month_delta=0):
     return date_delta(day_delta, month_delta).strftime("%m%y")
+def fromDDMMMYY(date_str:str):
+    if not date_str: return date_str
+    return datetime.strptime(date_str, "%d-%b-%y").date()  # 16-JUL-20
+def fromYYYYMMDD(date_str:str):
+    if not date_str: return date_str
+    return datetime.strptime(date_str, "%Y-%m-%d").date()  # 2020-07-16
+def fromDDMMYYYY(date_str:str):
+    if not date_str: return date_str
+    return datetime.strptime(date_str, "%d-%m-%Y").date()  # 16-07-2020
+def to_date(date_str:str):
+    if not date_str: return date_str
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").date() # 2020-07-16
+    except ValueError as ex:
+        try:
+            return datetime.strptime(date_str, "%d-%b-%y").date() # 16-JUL-20
+        except ValueError as ex:
+            try:
+                return datetime.strptime(date_str, "%d-%m-%Y").date() # 16-07-2020
+            except ValueError as ex:
+                try:
+                    return datetime.strptime(date_str, "%d.%m.%Y").date() # 16.07.2020
+                except ValueError as ex:
+                    try:
+                        return datetime.strptime(date_str, "%m/%d/%Y").date() # 07/16/2020
+                    except ValueError as ex:
+                        return date_str
 # ******************************************************************************
 # rnd(_till_not_included_random): generate random integer value [0.._till_not_included_random-1]
 # ******************************************************************************
@@ -48,39 +83,49 @@ random_from = lambda _from_list: _from_list[rnd(len(_from_list))]
 get_key_by_value = lambda _dict, _value: {value:key for key, value in _dict.items()}[_value]
 # ******************************************************************************
 debug_levels={
-    "ALL":      10, # 10 = ALL->...->FATAL
-    "TRACE":    9,  #  9 = TRACE->DEBUG->INFO->WARN->ERROR->FATAL
-    "DEBUG":    7,  #  7 = DEBUG->INFO->WARN->ERROR->FATAL
-    "INFO":     5,  #  5 = INFO->WARN->ERROR->FATAL
-    "WARN":     3,  #  3 = WARN->ERROR->FATAL
-    "ERROR":    2,  #  2 = ERROR->FATAL
-    "FATAL":    1,  #  1 = FATAL only
-    "OFF":      0,  #  0 = OFF
+    "OTHER":    10, # 10 = OTHER->...->ALLWAYS
+    "TRACE":    9,  #  9 = TRACE->DEBUG->INFO->WARN->ERROR->FATAL->ALLWAYS
+    "DEBUG":    7,  #  7 = DEBUG->INFO->WARN->ERROR->FATAL->ALLWAYS
+    "INFO":     5,  #  5 = INFO->WARN->ERROR->FATAL->ALLWAYS
+    "WARN":     3,  #  3 = WARN->ERROR->FATAL->ALLWAYS
+    "ERROR":    2,  #  2 = ERROR->FATAL->ALLWAYS
+    "FATAL":    1,  #  1 = FATAL->ALLWAYS
+    "ALLWAYS":  0,  #  0 = ALLWAYS
 }
 debug_level = debug_levels["INFO"]
+def set_debug_level(value):
+    global debug_level
+    debug_level = value
+    return debug_level
 # ******************************************************************************
 # n0print(text, level = -debug_levels["INFO"]):
 #   Print messages,
 #   depends of value in global variable debug_level.
-#   If n0print is called directly, value in level must be negative.
+#   If n0print is called directly, value in level must be negative or ZERO.
 #   n0print is called thru n0debug/n0debug_calc, value in level must be possitive.
 # ******************************************************************************
-def n0print(text, level = -debug_levels["INFO"]):
-    if level < 0:
-        level = -level
-        frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
+prev_end = "\n"
+def n0print(text, level = -debug_levels["INFO"], end = "\n"):
+    global prev_end
+    if prev_end:
+        if level <= 0:
+            level = -level
+            frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
+        else:
+            frameinfo = inspect.stack()[2]
+        if debug_level >= level:
+            sys.stdout.write(
+                "***%s %s %s:%d: " % (
+                    (" [" + get_key_by_value(debug_levels, level) + "]") if level > 0 else "",
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    os.path.split(frameinfo.filename)[1],
+                    frameinfo.lineno
+                    )
+                + (text if text else "") + end
+            )
     else:
-        frameinfo = inspect.stack()[2]
-    if debug_level >= level:
-        sys.stdout.write(
-            "*** [%s] %s %s:%d: " % (
-                get_key_by_value(debug_levels, level),
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                os.path.split(frameinfo.filename)[1],
-                frameinfo.lineno
-                )
-            + (text if text else "") + "\n"
-        )
+        sys.stdout.write((text if text else "") + end)
+    prev_end = end
 # ******************************************************************************
 # n0debug(var_name, level = debug_levels["INFO"]):
 #   Print value of var with name var_name,
@@ -105,7 +150,7 @@ def n0debug(array_name, level = debug_levels["INFO"]):
 #   depends of value in global variable debug_level.
 # ******************************************************************************
 n0debug_calc = lambda var_value, var_name = "", level = debug_levels["INFO"]: n0print(
-    "(%s id=%s)%s = '%s'" % (type(var_value), id(var_value), var_name, n0pretty(var_value))
+    "(%s id=%s)%s = %s" % (type(var_value), id(var_value), var_name, n0pretty(var_value))
     , level = level
 )
 # ******************************************************************************
@@ -185,58 +230,57 @@ def notemptyitems(item):
     return not_empty_items_count
 # ******************************************************************************
 # xpath_match(xpath: str, xpath_list):
-#   Check that real xpath (or xpath like) is equal any of xpath_list[0..n]
+#   Check that real xpath (or xpath like) is equal any of xpath_list[0..n].
+#   Returns i+1
 # ******************************************************************************
 def xpath_match(xpath: str, xpath_list):
-    if isinstance(xpath_list, str):
-        xpath_list = (xpath_list,)
-    if not isinstance(xpath_list, (tuple, list)):
-        # n0debug("xpath_list")
-        raise Exception("xpath_match: unknow type = %s" % type(xpath_list))
+    if isinstance(xpath_list, str): xpath_list = (xpath_list,)
+    if not isinstance(xpath_list, (tuple, list)): raise Exception("xpath_match: unknow type = %s" % type(xpath_list))
+
     xpath_parts = xpath.split("/")
-    # n0debug("xpath_parts")
-    for xpath_itm in xpath_list:
+    for i, xpath_itm in enumerate(xpath_list):
         xpath_itm_parts = xpath_itm.split("/")
-        # n0debug("xpath_itm_parts")
-        for i, part in enumerate(reversed(xpath_itm_parts)):
+        for j, part in enumerate(reversed(xpath_itm_parts)):
             if not part:  # //
                 # n0print("MATCH: matched relative")
-                return True
+                return i+1
             # n0debug("part")
-            if i >= len(xpath_parts):
+            if j >= len(xpath_parts):
                 # n0print("not matched: too short")
                 break
-            # n0debug_calc(xpath_parts[-1-i].lower(), "xpath_parts[-1-i].lower()")
-            if part != "*" and part.lower() != xpath_parts[-1 - i].lower():  # /*/
+            if part != "*" and part.lower() != xpath_parts[-1 - j].lower():  # /*/
                 # n0print("not matched: not equal")
                 break
         else:
-            # n0print("MATCH: matchet full")
-            return True
+            # n0print("MATCH: matched full")
+            return i+1
         # n0print("Let's try new loop")
     # n0print("not matched: not matched with all from list")
-    return False
+    return 0
 # ******************************************************************************
 # ******************************************************************************
 # ******************************************************************************
 class n0list(list):
     """
     Class extended builtins.list(builtins.object) with additional methods:
-    .direct_compare()  = compare [i] <=> [i]
-    .compare()         = compare [i] <=> [?] WITHOUT using order
+    . direct_compare()  = compare [i] <=> [i]
+    . compare()         = compare [i] <=> [?] WITHOUT using order
     """
     # ******************************************************************************
-    # * n0list.direct_compare(..)
+    # * n0list. direct_compare(..): only n0dict. direct_compare/compare have one_of_list_compare
     # ******************************************************************************
     def direct_compare(
-        self,
-        other: n0list,
-        self_name: str = "self",
-        other_name: str = "other",
-        prefix: str = "",
-        dummy1 = None, # For compatibility with the list of input attributes of compare(..)
-        dummy2 = None, # For compatibility with the list of input attributes of compare(..)
-        dummy3 = None, # For compatibility with the list of input attributes of compare(..)
+            self,
+            other: n0list,
+            self_name: str = "self",
+            other_name: str = "other",
+            prefix: str = "",
+
+            contentity_check = "contentity_check", # After this argument, other MUST be defined ONLY with names
+            composite_key: tuple = (),  # For compatibility with the list of input attributes of compare(..)
+            compare_only: tuple = (),  # For compatibility with the list of input attributes of compare(..)
+            exclude: tuple = (), # ()|None|empty mean nothing to exclude
+            transform: tuple = (), # ()|None|empty mean nothing to transform
     ) -> n0dict:
         """
         Recursively compare self[i] with other[i] strictly according to the order of elements.
@@ -261,6 +305,8 @@ class n0list(list):
                 if not returned["messages"]: self and other are totally equal.
         :rtype n0dict:
         """
+        if contentity_check != "contentity_check": raise Exception("Incorrect order of arguments")
+
         if not isinstance(other, n0list):
             raise Exception("n0list.direct_compare(): other (%s) must be n0list" % str(other))
         result = n0dict({
@@ -271,8 +317,11 @@ class n0list(list):
         })
         if _DIFFTYPES:
             result.update({"difftypes": []})
-        
-        
+
+        # FIX ME: index in [] is not supported -- only node.
+        if xpath_match(prefix, exclude):
+            return result
+
         for i,itm in enumerate(self):
             if i >= len(other):
                 # other list is SHORTER that self
@@ -286,17 +335,45 @@ class n0list(list):
                 result["othernotfound"].append((prefix + "[" + str(i) + "]", self[i]))
                 continue
             # ######### if i >= len(other):
-            if type(self[i]) == type(other[i]):
-                if isinstance(self[i], (str, int)):
-                    if self[i] != other[i]:
+#--- TRANSFORM: START -------------------------------------
+            self_value = self[i]
+            other_value = other[i]
+            # n0debug("prefix", level = 5)
+            # n0debug("transform", level = 5)
+            # n0debug_calc([itm[0] for itm in transform],"transform", level = 5)
+            transform_i = xpath_match(prefix, [itm[0] for itm in transform])
+            if transform_i:
+                n0print("TRANSFORMED", level = 5)
+                n0debug("self_value", level = 5)
+                n0debug("other_value", level = 5)
+                transform_i -= 1
+                transform_self = transform[transform_i][1]
+                if len(transform[transform_i]) > 2:
+                    transform_other = transform[transform_i][2]
+                else:
+                    transform_other = transform_self
+                self_value = transform_self(self_value)
+                other_value = transform_other(other_value)
+                n0debug("self_value", level = 5)
+                n0debug("other_value", level = 5)
+#--- TRANSFORM: END ---------------------------------------
+            # if type(self[i]) == type(other[i]):
+            if type(self_value) == type(other_value):
+                # if isinstance(self[i], (str, int)):
+                if isinstance(self_value, (str, int, float, date)):
+                    # if self[i] != other[i]:
+                    if self_value != other_value:
                         # result["notequal"].append((prefix + "[" + str(i) + "]", (self[i], other[i], difference)))
-                        result["notequal"].append((prefix + "[" + str(i) + "]", [self[i], other[i]]))
+                        result["notequal"].append((prefix + "[" + str(i) + "]", [self[i], other[i]])) # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
+                        # result["notequal"].append((prefix + "[" + str(i) + "]", [self_value, other_value]))
                         if _DIFFVALUES:
-                            if self[i].translate(str.maketrans("+-.","000")).isnumeric() \
-                            and other[i].translate(str.maketrans("+-.","000")).isnumeric(): # Py3 dirty fix
-                                difference = round(float(other[i]) - float(self[i]), 7)
-                            else:
-                                difference = None
+                            difference = None
+                            if isinstance(self_value, str):
+                                if self_value.translate(str.maketrans("+-.","000")).isnumeric() \
+                                and other_value.translate(str.maketrans("+-.","000")).isnumeric(): # Py3 dirty fix
+                                    difference = round(float(other_value) - float(self_value), 7)
+                            if isinstance(self_value, (int, float)):
+                                difference = round(other_value - self_value, 7)
                             result["notequal"][-1][1].append(difference)
                         result["messages"].append("Values are different: %s[%d]='%s' != %s[\"%s\"]='%s' " %
                                                   (
@@ -310,7 +387,9 @@ class n0list(list):
                             other[i],
                             self_name + "[" + str(i) + "]",
                             other_name + "[" + str(i) + "]",
-                            prefix + "[" + str(i) + "]"
+                            prefix + "[" + str(i) + "]",
+                            composite_key = composite_key, compare_only = compare_only, # Not used in real, just for compartibility
+                            exclude = exclude, transform = transform,
                         )
                     )
                 elif isinstance(self[i], (n0dict, dict, OrderedDict)):
@@ -320,7 +399,9 @@ class n0list(list):
                             self_name + "[" + str(i) + "]",
                             other_name + "[" + str(i) + "]",
                             prefix + "[" + str(i) + "]",
-                            self.direct_compare
+                            one_of_list_compare = self.direct_compare,
+                            composite_key = composite_key, compare_only = compare_only, # Not used in real, just for compartibility
+                            exclude = exclude, transform = transform,
                         )
                     )
                 elif self[i] is None:
@@ -379,7 +460,7 @@ class n0list(list):
                                                   other_name, i, str(other[i])
                                               )
                     )
-                    
+
         # ######### for i in enumerate(self)[0]:
         if len(other) > len(self):
             # self list is SHORTER that other
@@ -395,25 +476,60 @@ class n0list(list):
                 result["selfnotfound"].append((prefix + "[" + str(i) + "]", other[i]))
         return result
     # ******************************************************************************
-    # * n0list.compare(..)
+    # ******************************************************************************
+    def get_composite_keys(self, input_list: n0list, elemets_for_composite_key: tuple) -> list:
+        """
+        serialization *||composite_key elements of input_list[]
+        """
+        if isinstance(elemets_for_composite_key, str):
+            elemets_for_composite_key = (elemets_for_composite_key,)
+
+        composite_keys_for_all_lines = []
+        for line in input_list:
+            if isinstance(line, (dict, n0dict)):
+                '''
+                composite_key = ""
+                for path_to_element in composite_key if composite_key else input_list[i]:
+                    composite_key += path_to_element + "=" + str(input_list[i][path_to_element]) + ";"
+                composite_keys.append(composite_key)
+                '''
+                created_composite_key = ""
+                if elemets_for_composite_key:
+                    for key in elemets_for_composite_key:
+                        if key in line:
+                            if created_composite_key: created_composite_key += ";"
+                            created_composite_key += key + "=" + str(line[key])
+                if not created_composite_key:
+                    for key in line:
+                        if created_composite_key: created_composite_key += ";"
+                        created_composite_key += key + "=" + str(line[key])
+            else:
+                raise Exception("Expected dict, but got unexpected type of element in input_list: %s" % type(line))
+            composite_keys_for_all_lines.append(created_composite_key)
+        return composite_keys_for_all_lines
+    # ******************************************************************************
+    # * n0list. compare(..)
     # ******************************************************************************
     def compare(
-        self,
-        other: n0list,
-        self_name: str = "self",
-        other_name: str = "other",
-        prefix: str = "",
-        # Strictly recommended to define list_elements_for_*
-        # else in case of just only one attribute of element will be different
-        # both elements will be marked as not found (unique) inside the opposite list
-        composite_key: tuple = (),  # ()|None|empty mean all
-        compare_only: tuple = (),  # ()|None|empty mean all
-        exclude: tuple = (), # ()|None|empty mean nothing to exclude
+            self,
+            other: n0list,
+            self_name: str = "self",
+            other_name: str = "other",
+            prefix: str = "",
+
+            contentity_check = "contentity_check", # After this argument, other MUST be defined only with names
+            # Strictly recommended to define composite_key+compare_only or composite_key
+            # else in case of just only one attribute of element will be different
+            # both elements will be marked as not found (unique) inside the opposite list
+            composite_key: tuple = (),  # ()|None|empty mean all
+            compare_only: tuple = (),  # ()|None|empty mean all
+            exclude: tuple = (), # ()|None|empty mean nothing to exclude
+            transform: tuple = (), # ()|None|empty mean nothing to transform
     ) -> n0dict:
         """
         Recursively compare self[i] with other[?] WITHOUT using order of elements.
         If self[i] (other[?] must be the same) is n0list/n0dict,
-        then goes deeper with n0list.compare(..)/n0dict.direct_compare(..)
+        then goes deeper with n0list. compare(..)/n0dict.direct_compare(..)
 
         :param n0list self: etalon list for compare.
         :param n0list other: list to compare with etalon
@@ -434,8 +550,10 @@ class n0list(list):
                 if not returned["messages"]: self and other are totally equal.
         :rtype n0dict:
         """
+        if contentity_check != "contentity_check": raise Exception("Incorrect order of arguments")
+
         if not isinstance(other, n0list):
-            raise Exception("n0list.compare(): other (%s) must be n0list" % str(other))
+            raise Exception("n0list. compare(): other (%s) must be n0list" % str(other))
         result = n0dict({
             "messages"      : [],
             "notequal"      : [],
@@ -444,66 +562,70 @@ class n0list(list):
         })
         if _DIFFTYPES:
             result.update({"difftypes": []})
-            
+
         # FIX ME: index in [] is not supported -- only node.
         if xpath_match(prefix, exclude):
             return result
 
-        # ******************************************************************************
-        def get_composite_keys(input_list: n0list, elemets_for_composite_key: tuple) -> list:
-            """
-            serialization *||composite_key elements of input_list[]
-            """
-            if isinstance(elemets_for_composite_key, str):
-                elemets_for_composite_key = (elemets_for_composite_key,)
-
-            composite_keys_for_all_lines = []
-            for line in input_list:
-                if isinstance(line, (dict, n0dict)):
-                    '''
-                    composite_key = ""
-                    for path_to_element in composite_key if composite_key else input_list[i]:
-                        composite_key += path_to_element + "=" + str(input_list[i][path_to_element]) + ";"
-                    composite_keys.append(composite_key)
-                    '''
-                    created_composite_key = ""
-                    if elemets_for_composite_key:
-                        for key in elemets_for_composite_key:
-                            if key in line:
-                                if created_composite_key: created_composite_key += ";"
-                                created_composite_key += key + "=" + str(line[key])
-                    if not created_composite_key:
-                        for key in line:
-                            if created_composite_key: created_composite_key += ";"
-                            created_composite_key += key + "=" + str(line[key])
-                else:
-                    raise Exception("Expected dict, but got unexpected type of element in input_list: %s" % type(line))
-                composite_keys_for_all_lines.append(created_composite_key)
-            return composite_keys_for_all_lines
-        # ******************************************************************************
-        self_not_exist_in_other = get_composite_keys(self, composite_key)
-        other_not_exist_in_self = get_composite_keys(other, composite_key)
+        self_not_exist_in_other = self.get_composite_keys(self, composite_key)
+        other_not_exist_in_self = self.get_composite_keys(other, composite_key)
 
         notmutable__self_not_exist_in_other = self_not_exist_in_other.copy()
         notmutable__other_not_exist_in_self = other_not_exist_in_self.copy()
         for self_i,composite_key in enumerate(notmutable__self_not_exist_in_other):
             if composite_key in other_not_exist_in_self:
                 other_i = notmutable__other_not_exist_in_self.index(composite_key)
-                if type(self[self_i]) == type(other[other_i]):
-                    if isinstance(self[self_i], (str, int)):
-                        if self[self_i] != other[other_i]:
+#--- TRANSFORM: START -------------------------------------
+                self_value = self[self_i]
+                other_value = other[other_i]
+                # n0debug("prefix", level = 5)
+                # n0debug("transform", level = 5)
+                # n0debug_calc([itm[0] for itm in transform],"transform", level = 5)
+                transform_i = xpath_match(prefix, [itm[0] for itm in transform])
+                if transform_i:
+                    n0print("TRANSFORMED", level = 5)
+                    n0debug("self_value", level = 5)
+                    n0debug("other_value", level = 5)
+                    transform_i -= 1
+                    transform_self = transform[transform_i][1]
+                    if len(transform[transform_i]) > 2:
+                        transform_other = transform[transform_i][2]
+                    else:
+                        transform_other = transform_self
+                    self_value = transform_self(self_value)
+                    other_value = transform_other(other_value)
+                    n0debug("self_value", level = 5)
+                    n0debug("other_value", level = 5)
+#--- TRANSFORM: END ---------------------------------------
+                # if type(self[self_i]) == type(other[other_i]):
+                if type(self_value) == type(other_value):
+                    # if isinstance(self[self_i], (str, int)):
+                    if isinstance(self_value, (str, int, float, date)):
+                        # if self[self_i] != other[other_i]:
+                        if self_value != other_value:
                             if self_i == other_i:
                                 # result["notequal"].append((prefix + "[" + str(self_i) + "]", (self[self_i], other[other_i], difference)))
-                                result["notequal"].append((prefix + "[" + str(self_i) + "]", [self[self_i], other[other_i]]))
+                                result["notequal"].append((prefix + "[" + str(self_i) + "]", [self[self_i], other[other_i]])) # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
+                                # result["notequal"].append((prefix + "[" + str(self_i) + "]", [self_value, other_value]))
                             else:
                                 # result["notequal"].append((prefix + "[" + str(self_i) + "]<=>[" + str(other_i) + "]", (self[self_i], other[other_i], difference)))
-                                result["notequal"].append((prefix + "[" + str(self_i) + "]<=>[" + str(other_i) + "]", [self[self_i], other[other_i]]))
+                                result["notequal"].append((prefix + "[" + str(self_i) + "]<=>[" + str(other_i) + "]", [self[self_i], other[other_i]])) # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
+                                # result["notequal"].append((prefix + "[" + str(self_i) + "]<=>[" + str(other_i) + "]", [self_value, other_value]))
+                            # if _DIFFVALUES:
+                                # if self[self_i].translate(str.maketrans("+-.","000")).isnumeric() \
+                                # and other[other_i].translate(str.maketrans("+-.","000")).isnumeric(): # Py3 dirty fix
+                                    # difference = round(float(other[other_i]) - float(self[self_i]), 7)
+                                # else:
+                                    # difference = None
+                                # result["notequal"][-1][1].append(difference)
                             if _DIFFVALUES:
-                                if self[self_i].translate(str.maketrans("+-.","000")).isnumeric() \
-                                and other[other_i].translate(str.maketrans("+-.","000")).isnumeric(): # Py3 dirty fix
-                                    difference = round(float(other[other_i]) - float(self[self_i]), 7)
-                                else:
-                                    difference = None
+                                difference = None
+                                if isinstance(self_value, str):
+                                    if self_value.translate(str.maketrans("+-.","000")).isnumeric() \
+                                    and other_value.translate(str.maketrans("+-.","000")).isnumeric(): # Py3 dirty fix
+                                        difference = round(float(other_value) - float(self_value), 7)
+                                if isinstance(self_value, (int, float)):
+                                    difference = round(other_value - self_value, 7)
                                 result["notequal"][-1][1].append(difference)
                             result["messages"].append("Values are different: %s[%d]='%s' != %s[\"%s\"]='%s' " %
                                                       (
@@ -512,22 +634,27 @@ class n0list(list):
                                                       )
                             )
                     elif isinstance(self[self_i], (list, tuple)):
+                        raise Exception("FIXME!!! method .compare() exists only in n0list, not in list or tuple")
                         result.update_extend(
-                            self.direct_compare(
+                            self.compare(
                                 self[self_i], other[other_i],
                                 self_name + "[" + str(self_i) + "]",
                                 other_name + "[" + str(other_i) + "]",
-                                prefix + "[" + str(self_i) + "]" + ("<=>[" + str(other_i) + "]" if self_i != other_i else "")
+                                prefix + "[" + str(self_i) + "]" + ("<=>[" + str(other_i) + "]" if self_i != other_i else ""),
+                                composite_key = composite_key, compare_only = compare_only,
+                                exclude = exclude, transform = transform,
                             )
                         )
                     elif isinstance(self[self_i], (n0dict, dict, OrderedDict)):
                         result.update_extend(
-                            n0dict(self[self_i]).direct_compare(
+                            n0dict(self[self_i]).compare(
                                 n0dict(other[other_i]),
                                 self_name + "[" + str(self_i) + "]",
                                 other_name + "[" + str(other_i) + "]",
                                 prefix + "[" + str(self_i) + "]" + ("<=>[" + str(other_i) + "]" if self_i != other_i else ""),
-                                self.compare
+                                one_of_list_compare = self.compare,
+                                composite_key = composite_key, compare_only = compare_only,
+                                exclude = exclude, transform = transform,
                             )
                         )
                     elif self[self_i] is None:
@@ -691,24 +818,30 @@ class n0dict(OrderedDict):
             raise Exception("Unexpected type of other: " + str(type(other)))
         return self
     # ******************************************************************************
-    # * n0dict.compare(..)
+    # * n0dict. compare(..)
     # ******************************************************************************
-    def compare(self,
-                other: n0dict,
-                self_name: str = "self",
-                other_name: str = "other",
-                prefix: str = "",
-                one_of_list_compare = n0list.compare,
-                # ONLY FOR COMPLEX COMPARE
-                # Strictly recommended to init lists
-                # else in case of just only one attribute of element will be different
-                # both elements will be marked as not found (unique) inside the opposite list
-                composite_key: tuple = (),  # ()|None|empty mean all
-                compare_only: tuple = (), # ()|None|empty mean all
-                exclude: tuple = (), # ()|None|empty mean nothing to exclude
+    def compare(
+            self,
+            other: n0dict,
+            self_name: str = "self",
+            other_name: str = "other",
+            prefix: str = "",
+
+            contentity_check = "contentity_check", # After this argument, other MUST be defined only with names
+            one_of_list_compare = n0list.compare,
+            # ONLY FOR COMPLEX COMPARE
+            # Strictly recommended to init lists
+            # else in case of just only one attribute of element will be different
+            # both elements will be marked as not found (unique) inside the opposite list
+            composite_key: tuple = (),  # ()|None|empty mean all
+            compare_only: tuple = (), # ()|None|empty mean all
+            exclude: tuple = (), # ()|None|empty mean nothing to exclude
+            transform: tuple = (), # ()|None|empty mean nothing to transform
     ) -> n0dict:
+        if contentity_check != "contentity_check": raise Exception("Incorrect order of arguments")
+
         if not isinstance(other, n0dict):
-            raise Exception("n0dict.compare(): other (%s) must be n0dict" % str(other))
+            raise Exception("n0dict. compare(): other (%s) must be n0dict" % str(other))
         result = n0dict({
             "messages"      : [],
             "notequal"      : [],
@@ -729,18 +862,52 @@ class n0dict(OrderedDict):
             if key in other:
                 fullxpath = prefix + "/" + key
                 if not xpath_match(fullxpath, exclude):
-                    if type(self[key]) == type(other[key]):
-                        if isinstance(self[key], (str, int, float)):
-                            if self[key] != other[key]:
+#--- TRANSFORM: START -------------------------------------
+                    self_value = self[key]
+                    other_value = other[key]
+                    # n0debug("fullxpath", level = 5)
+                    # n0debug("transform", level = 5)
+                    # n0debug_calc([itm[0] for itm in transform],"transform", level = 5)
+                    transform_i = xpath_match(fullxpath, [itm[0] for itm in transform])
+                    if transform_i:
+                        n0print("TRANSFORMED", level = 5)
+                        n0debug("self_value", level = 5)
+                        n0debug("other_value", level = 5)
+                        transform_i -= 1
+                        transform_self = transform[transform_i][1]
+                        if len(transform[transform_i]) > 2:
+                            transform_other = transform[transform_i][2]
+                        else:
+                            transform_other = transform_self
+                        self_value = transform_self(self_value)
+                        other_value = transform_other(other_value)
+                        n0debug("self_value", level = 5)
+                        n0debug("other_value", level = 5)
+#--- TRANSFORM: END ---------------------------------------
+                    # if type(self[key]) == type(other[key]):
+                    if type(self_value) == type(other_value):
+                        # if isinstance(self[key], (str, int, float)):
+                        if isinstance(self_value, (str, int, float, date)):
+                            # if self[key] != other[key]:
+                            if self_value != other_value:
                                 # result["notequal"].append((prefix + "/" + key, (self[key], other[key], difference)))
-                                result["notequal"].append((prefix + "/" + key, [self[key], other[key]]))
+                                result["notequal"].append((prefix + "/" + key, [self[key], other[key]])) # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
+                                # if _DIFFVALUES:
+                                    # if str(self[key]).translate(str.maketrans("+-.","000")).isnumeric() \
+                                    # and str(other[key]).translate(str.maketrans("+-.","000")).isnumeric(): # Py3 dirty fix
+                                        # difference = round(float(other[key]) - float(self[key]), 7)
+                                    # else:
+                                        # difference = None
+                                    # # n0debug_calc(result["notequal"][-1])
+                                    # result["notequal"][-1][1].append(difference)
                                 if _DIFFVALUES:
-                                    if str(self[key]).translate(str.maketrans("+-.","000")).isnumeric() \
-                                    and str(other[key]).translate(str.maketrans("+-.","000")).isnumeric(): # Py3 dirty fix
-                                        difference = round(float(other[key]) - float(self[key]), 7)
-                                    else:
-                                        difference = None
-                                    # n0debug_calc(result["notequal"][-1])
+                                    difference = None
+                                    if isinstance(self_value, str):
+                                        if self_value.translate(str.maketrans("+-.","000")).isnumeric() \
+                                        and other_value.translate(str.maketrans("+-.","000")).isnumeric(): # Py3 dirty fix
+                                            difference = round(float(other_value) - float(self_value), 7)
+                                    if isinstance(self_value, (int, float)):
+                                        difference = round(other_value - self_value, 7)
                                     result["notequal"][-1][1].append(difference)
                                 result["messages"].append("Values are different: %s[\"%s\"]=%s != %s[\"%s\"]=%s " % (
                                                                                     self_name, key, self[key],
@@ -755,9 +922,8 @@ class n0dict(OrderedDict):
                                                         self_name + "[\"" + key + "\"]",
                                                         other_name + "[\"" + key + "\"]",
                                                         prefix + "/" + str(key),
-                                                        composite_key,
-                                                        compare_only,
-                                                        exclude,
+                                                        composite_key = composite_key, compare_only = compare_only,
+                                                        exclude = exclude, transform = transform,
                                                     )
                             )
                         elif isinstance(self[key], (dict, OrderedDict)):
@@ -767,10 +933,9 @@ class n0dict(OrderedDict):
                                                         self_name+"[\""+key+"\"]",
                                                         other_name+"[\""+key+"\"]",
                                                         prefix+"/"+str(key),
-                                                        one_of_list_compare,
-                                                        composite_key,
-                                                        compare_only,
-                                                        exclude,
+                                                        one_of_list_compare = one_of_list_compare, # Only for n0dict. compare()
+                                                        composite_key = composite_key, compare_only = compare_only,
+                                                        exclude = exclude, transform = transform,
                                                     )
                             )
                         elif self[key] is None:
@@ -846,30 +1011,33 @@ class n0dict(OrderedDict):
                     result["selfnotfound"].append((prefix + "/" + str(key), other[key]))
         return result
     # ******************************************************************************
-    # * n0dict.direct_compare(..)
+    # * n0dict. direct_compare(..)
     # ******************************************************************************
     def direct_compare(self,
-                other: n0dict,
-                self_name: str = "self",
-                other_name: str = "other",
-                prefix: str = "",
-                one_of_list_compare = n0list.direct_compare,
-                # ONLY FOR COMPLEX COMPARE
-                # Strictly recommended to init lists
-                # else in case of just only one attribute of element will be different
-                # both elements will be marked as not found (unique) inside the opposite list
-                # dummy1 = None, # For compatibility with the list of input attributes of compare(..)
-                # dummy2 = None, # For compatibility with the list of input attributes of compare(..)
-                # dummy3 = None, # For compatibility with the list of input attributes of compare(..)
-                composite_key: tuple = (),  # None/empty means all
-                compare_only: tuple = (),  # None/empty means all
-                exclude: tuple = (), # ()|None|empty mean nothing to exclude
+            other: n0dict,
+            self_name: str = "self",
+            other_name: str = "other",
+            prefix: str = "",
+
+            contentity_check = "contentity_check", # After this argument, other MUST be defined only with names
+            one_of_list_compare = n0list.direct_compare,
+            # ONLY FOR COMPLEX COMPARE
+            # Strictly recommended to init lists
+            # else in case of just only one attribute of element will be different
+            # both elements will be marked as not found (unique) inside the opposite list
+            composite_key: tuple = (),  # None/empty means all
+            compare_only: tuple = (),  # None/empty means all
+            exclude: tuple = (), # ()|None|empty mean nothing to exclude
+            transform: tuple = (), # ()|None|empty mean nothing to transform
     ) -> n0dict:
+        if contentity_check != "contentity_check": raise Exception("Incorrect order of arguments")
+
         return self.compare(
                 other,
                 self_name, other_name, prefix,
-                one_of_list_compare,
-                composite_key, compare_only, exclude
+                one_of_list_compare = one_of_list_compare, # Only for n0dict. compare()
+                composite_key = composite_key, compare_only = compare_only,
+                exclude = exclude, transform = transform,
         )
     # ******************************************************************************
     # ******************************************************************************
@@ -1248,7 +1416,7 @@ class n0dict(OrderedDict):
         global _DIFFTYPES
         if _DIFFTYPES:
             validation_results.update({"difftypes": []})
-            
+
         # TODO: redo with 'in'
         try:
             if self[xpath]:

@@ -7,9 +7,10 @@ DESCRIPTION
     # 0.01 = 2020-07-25 = Initial version
     # 0.02 = 2020-07-26 = Enhancements
     # 0.03 = 2020-08-02 = Huge enhancements
-    # 0.04 = 2020-08-05 = Prepared for upload to pypi.org as 0.1.0
+    # 0.04 = 2020-08-05 = Prepared for upload to pypi.org
     # 0.05 = 2020-08-11 = Huge enhancements: unification of .*compare() .toJson(), .toXml(), n0dict(JSON/XML string)
-    # 0.06 = 2020-08-29 = Accumulated changes, uploaded as 0.2.0
+    # 0.06
+    # 0.07 = 2020-09-02 = transform added
 
 PACKAGE CONTENTS
     test (package)
@@ -70,14 +71,14 @@ CLASSES
      |          the path will be created. if last element exists, then the element will be recofigured into array
      |          if any whereN starts with '+', then the element will be recofigured into array
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', one_of_list_compare=<function n0list.compare at 0x0000016E417A3940>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', contentity_check='contentity_check', one_of_list_compare=<function n0list.compare at 0x0000026BB287D820>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
-     |      # * n0dict.compare(..)
+     |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', one_of_list_compare=<function n0list.direct_compare at 0x0000016E417A38B0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', contentity_check='contentity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000026BB287D700>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
-     |      # * n0dict.direct_compare(..)
+     |      # * n0dict. direct_compare(..)
      |      # ******************************************************************************
      |  
      |  isEqual(self, xpath, value)
@@ -86,7 +87,7 @@ CLASSES
      |  isExist(self, xpath)
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000016E417A6430>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000026BB287E310>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  toJson(self, indent: 'int' = 4) -> 'str'
@@ -225,8 +226,8 @@ CLASSES
      |  n0list(iterable=(), /)
      |  
      |  Class extended builtins.list(builtins.object) with additional methods:
-     |  .direct_compare()  = compare [i] <=> [i]
-     |  .compare()         = compare [i] <=> [?] WITHOUT using order
+     |  . direct_compare()  = compare [i] <=> [i]
+     |  . compare()         = compare [i] <=> [?] WITHOUT using order
      |  
      |  Method resolution order:
      |      n0list
@@ -235,10 +236,10 @@ CLASSES
      |  
      |  Methods defined here:
      |  
-     |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', contentity_check='contentity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[?] WITHOUT using order of elements.
      |      If self[i] (other[?] must be the same) is n0list/n0dict,
-     |      then goes deeper with n0list.compare(..)/n0dict.direct_compare(..)
+     |      then goes deeper with n0list. compare(..)/n0dict.direct_compare(..)
      |      
      |      :param n0list self: etalon list for compare.
      |      :param n0list other: list to compare with etalon
@@ -259,7 +260,7 @@ CLASSES
      |              if not returned["messages"]: self and other are totally equal.
      |      :rtype n0dict:
      |  
-     |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', dummy1=None, dummy2=None, dummy3=None) -> 'n0dict'
+     |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', contentity_check='contentity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[i] strictly according to the order of elements.
      |      If self[i] (other[i] must be the same) is n0list/n0dict, then goes deeper
      |      with n0list.direct_compare/n0dict.direct_compare(..)
@@ -281,6 +282,9 @@ CLASSES
      |              })
      |              if not returned["messages"]: self and other are totally equal.
      |      :rtype n0dict:
+     |  
+     |  get_composite_keys(self, input_list: 'n0list', elemets_for_composite_key: 'tuple') -> 'list'
+     |      serialization *||composite_key elements of input_list[]
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
@@ -426,6 +430,12 @@ FUNCTIONS
         # Today   = lambda daydiff=0: (datetime.today()+timedelta(days=daydiff)).strftime("%Y-%m-%d")
         # Tomonth = lambda daydiff=0: (datetime.today()+timedelta(days=daydiff)).strftime("%y%d")
     
+    fromDDMMMYY(date_str: 'str')
+    
+    fromDDMMYYYY(date_str: 'str')
+    
+    fromYYYYMMDD(date_str: 'str')
+    
     get_key_by_value lambda _dict, _value
         # ******************************************************************************
         # get_key_by_value(_dict, _value): provide (last) key which is assosiated with _value in _dict
@@ -450,14 +460,7 @@ FUNCTIONS
     
     n0pretty(item, indent=0)
     
-    n0print(text, level=-5)
-        # ******************************************************************************
-        # n0print(text, level = -debug_levels["INFO"]):
-        #   Print messages,
-        #   depends of value in global variable debug_level.
-        #   If n0print is called directly, value in level must be negative.
-        #   n0print is called thru n0debug/n0debug_calc, value in level must be possitive.
-        # ******************************************************************************
+    n0print(text, level=-5, end='\n')
     
     notemptyitems(item)
         # ******************************************************************************
@@ -476,17 +479,27 @@ FUNCTIONS
         # rnd(_till_not_included_random): generate random integer value [0.._till_not_included_random-1]
         # ******************************************************************************
     
+    set_DIFFTYPES(value)
+    
+    set_DIFFVALUES(value)
+    
+    set_debug_level(value)
+    
+    to_date(date_str: 'str')
+    
     xpath_match(xpath: 'str', xpath_list)
         # ******************************************************************************
         # xpath_match(xpath: str, xpath_list):
-        #   Check that real xpath (or xpath like) is equal any of xpath_list[0..n]
+        #   Check that real xpath (or xpath like) is equal any of xpath_list[0..n].
+        #   Returns i+1
         # ******************************************************************************
 
 DATA
     annotations = _Feature((3, 7, 0, 'beta', 1), (4, 0, 0, 'alpha', 0), 16...
     debug_level = 5
-    debug_levels = {'ALL': 10, 'DEBUG': 7, 'ERROR': 2, 'FATAL': 1, 'INFO':...
+    debug_levels = {'ALLWAYS': 0, 'DEBUG': 7, 'ERROR': 2, 'FATAL': 1, 'INF...
     indent_size = 4
+    prev_end = '\n'
 
 FILE
     c:\repo\n0struct\n0struct\__init__.py
