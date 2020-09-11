@@ -4,6 +4,6 @@ list/OrderedDict extensions allow to
 * direct/wise compare lists/dictionaries/tree-like structures
 * exclude from comparing subnodes
 * transform on the fly values in attributes during comparing
-* .toJson(): convert tree-like structure into string buffer for saving into JSON file
-* .toXml(): convert tree-like structure into string buffer for saving into XML file
-* .toXpath: convert tree-like structure into string buffer for saving into XPATH file
+* .to_json(): convert tree-like structure into string buffer for saving into JSON file
+* .to_xml(): convert tree-like structure into string buffer for saving into XML file
+* .to_xpath: convert tree-like structure into string buffer for saving into XPATH file

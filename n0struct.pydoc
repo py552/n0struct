@@ -12,6 +12,8 @@ DESCRIPTION
     # 0.06
     # 0.07 = 2020-09-02 = transform added
     # 0.08 = 2020-09-05 = refactoring
+    # 0.09 = lost
+    # 0.10 = rewritten date related functions
 
 PACKAGE CONTENTS
     test (package)
@@ -75,12 +77,12 @@ CLASSES
      |          the path will be created. if last element exists, then the element will be reconfigured into array
      |          if any whereN starts with '+', then the element will be reconfigured into array
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0000012890DC1160>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x00000249D31F2310>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000012890DC10D0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x00000249D31F2280>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # ******************************************************************************
@@ -91,7 +93,7 @@ CLASSES
      |  isExist(self, xpath)
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000012890DC1C10>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x00000249D31F2DC0>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  to_json(self, indent: 'int' = 4) -> 'str'
@@ -427,22 +429,37 @@ CLASSES
      |  __hash__ = None
 
 FUNCTIONS
-    date_delta(day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'date'
+    date_ddmmyyyy(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> str DD-MM-YYYY
+    
+    date_delta(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'date'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> date
     
-    date_mmyy(day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_iso(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> str ISO date format
+    
+    date_mmyy(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str MMYY
     
-    date_yymm(day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_now(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> str 20 characters YYYYMMDDHHMMSSFFFFFF
+    
+    date_yymm(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str YYMM
     
-    date_yyyymmdd(day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_yyyymmdd(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str YYYY-MM-DD

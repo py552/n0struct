@@ -6,6 +6,8 @@
 # 0.06
 # 0.07 = 2020-09-02 = transform added
 # 0.08 = 2020-09-05 = refactoring
+# 0.09 = lost
+# 0.10 = rewritten date related functions
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -61,43 +63,74 @@ def get__flag_compare_return_difference_of_values():
 
 # ********************************************************************
 # ********************************************************************
-def date_delta(day_delta: int = 0, month_delta: int = 0) -> date:
+def date_delta(now: date = None, day_delta: int = 0, month_delta: int = 0) -> date:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> date
     """
-    date_delta_ = datetime.today() + timedelta(days=day_delta)
+    date_delta_ = (now or datetime.today()) + timedelta(days=day_delta)
     month_quotient, month_remainder = divmod(date_delta_.month + month_delta - 1, 12)
     date_delta_ = datetime(date_delta_.year + month_quotient, month_remainder + 1, date_delta_.day)
     return date_delta_
 
-
-def date_yyyymmdd(day_delta: int = 0, month_delta: int = 0) -> str:
+def date_now(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+    """
+    :param day_delta:
+    :param month_delta:
+    :return: today + day_delta + month_delta -> str 20 characters YYYYMMDDHHMMSSFFFFFF
+    """
+    return date_delta(now, day_delta, month_delta).strftime("%Y%m%d%m%d%H%M%S%f")
+    
+def date_iso(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+    """
+    :param day_delta:
+    :param month_delta:
+    :return: today + day_delta + month_delta -> str ISO date format
+    """
+    return date_delta(now, day_delta, month_delta).isoformat(timespec='microseconds')
+    
+def date_yyyymmdd(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str YYYY-MM-DD
     """
-    return date_delta(day_delta, month_delta).strftime("%Y-%m-%d")
+    return date_delta(now, day_delta, month_delta).strftime("%Y-%m-%d")
+
+def date_ddmmyyyy(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+    """
+    :param day_delta:
+    :param month_delta:
+    :return: today + day_delta + month_delta -> str DD-MM-YYYY
+    """
+    return date_delta(now, day_delta, month_delta).strftime("%d-%m-%Y")
+
+def date_yyyymmdd(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+    """
+    :param day_delta:
+    :param month_delta:
+    :return: today + day_delta + month_delta -> str YYYY-MM-DD
+    """
+    return date_delta(now, day_delta, month_delta).strftime("%Y-%m-%d")
 
 
-def date_yymm(day_delta: int = 0, month_delta: int = 0) -> str:
+def date_yymm(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str YYMM
     """
-    return date_delta(day_delta, month_delta).strftime("%y%m")
+    return date_delta(now, day_delta, month_delta).strftime("%y%m")
 
 
-def date_mmyy(day_delta: int = 0, month_delta: int = 0) -> str:
+def date_mmyy(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str MMYY
     """
-    return date_delta(day_delta, month_delta).strftime("%m%y")
+    return date_delta(now, day_delta, month_delta).strftime("%m%y")
 
 
 def from_ddmmmyy(date_str: str) -> typing.Union[date, str, None]:
