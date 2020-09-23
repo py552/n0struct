@@ -8,6 +8,7 @@
 # 0.08 = 2020-09-05 = refactoring
 # 0.09 = lost
 # 0.10 = rewritten date related functions
+# 0.11 = 2020-09-17 fixed returning time by date_delta(..)
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -71,7 +72,10 @@ def date_delta(now: date = None, day_delta: int = 0, month_delta: int = 0) -> da
     """
     date_delta_ = (now or datetime.today()) + timedelta(days=day_delta)
     month_quotient, month_remainder = divmod(date_delta_.month + month_delta - 1, 12)
-    date_delta_ = datetime(date_delta_.year + month_quotient, month_remainder + 1, date_delta_.day)
+    date_delta_ = datetime  (
+                            date_delta_.year + month_quotient, month_remainder + 1, date_delta_.day,
+                            date_delta_.hour, date_delta_.minute,  date_delta_.second,  date_delta_.microsecond
+                            )
     return date_delta_
 
 def date_now(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
