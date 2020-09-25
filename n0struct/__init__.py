@@ -9,6 +9,7 @@
 # 0.09 = lost
 # 0.10 = rewritten date related functions
 # 0.11 = 2020-09-17 fixed returning time by date_delta(..)
+# 0.12 = 2020-09-24 added function to find keys in n0dict
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -968,6 +969,9 @@ class n0dict(OrderedDict):
                 elif args[0].strip()[0] == "{":
                     return super(n0dict, self).__init__(json.loads(args[0]))
                 raise Exception("n0dict(..): if you provide string, it should be XML or JSON")
+        # raise Exception("n0dict(..): Init as OrderedDict")
+        # n0debug_calc(len(args),"len(args)")
+        # n0debug_calc(args,"args")
         return super(n0dict, self).__init__(*args, **kw)
     # ******************************************************************************
     def update_extend(self, other):
@@ -1618,7 +1622,31 @@ class n0dict(OrderedDict):
         validation_results["messages"].append("[%s] doesn't exist" % xpath)
         validation_results["selfnotfound"].append((xpath, None))
         return validation_results
-
+    # ******************************************************************************
+    # ******************************************************************************
+    def has_all(self,tupple_of_keys):
+        for key in tupple_of_keys:
+            if key not in self:
+                return False
+            else:
+                if self[key] is None:
+                    return False
+                if isinstance(self[key],(str,tuple,list,set,frozenset,dict,OrderedDict,n0dict)) and len(self[key]) == 0:
+                    return False
+        return True
+    # ******************************************************************************
+    # ******************************************************************************
+    def has_any_of(self,tupple_of_keys):
+        for key in tupple_of_keys:
+            if key in self:
+                return True
+        return True
+    # ******************************************************************************
+    # ******************************************************************************
+    def nvl(self, key, default=None):
+        if key not in self: return default
+        if not key: return default
+        return self[key]
     # ******************************************************************************
     # ******************************************************************************
     def isEqual(self, xpath, value):
