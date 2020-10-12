@@ -10,6 +10,11 @@
 # 0.10 = rewritten date related functions
 # 0.11 = 2020-09-17 fixed returning time by date_delta(..)
 # 0.12 = 2020-09-24 added function to find keys in n0dict
+# 0.13 = 2020-10-11
+#        n0dict.nvl(..) now supports complicated path like A/B/C
+#        n0dict.__FindElem(..) previously supports modificators [i], [last()], [last()-X], [-X]
+#                              now additionally supports modificators [text()="XYZ"], [text()=="XYZ"], [text()!="XYZ"], /../
+#                              XYZ must be encoded with urlencode
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -21,6 +26,7 @@ import random
 from collections import OrderedDict
 import xmltodict
 import json
+import urllib
 
 # ********************************************************************
 # ********************************************************************
@@ -272,9 +278,9 @@ def n0print(
     global __prev_end
     if __prev_end == "\n":
         if internal_call:
-            frameinfo = inspect.stack()[2]
-        else:
             frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
+        else:
+            frameinfo = inspect.stack()[2]
 
         global __debug_level
         global __debug_levels
@@ -303,6 +309,19 @@ def n0debug(var_name: str, level: int = 5):  # __debug_levels.index("INFO")
     :param level:
     :return:
     """
+    if not isinstance(var_name,str):
+        frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
+        sys.stdout.write(
+            "*** %s:%d: incorrect call of n0debug(..): argument MUST BE string" % (
+                os.path.split(frameinfo.filename)[1],
+                frameinfo.lineno
+            )
+        )        
+        sys.exit(-1)
+    # print(inspect.currentframe().f_back.f_locals)
+    # print("~"*80)
+    # print(var_name)
+    # print(inspect.currentframe().f_back.f_locals.get(var_name))
     var_object = inspect.currentframe().f_back.f_locals[var_name]
     n0print(
         "(%s id=%s)%s = %s" % (
@@ -1209,38 +1228,97 @@ class n0dict(OrderedDict):
         )
 
     # ******************************************************************************
+    # * n0dict. __FindElem(..)
     # ******************************************************************************
-    def __FindElem(self, parent: n0dict, where_parts: list, value: str = None) -> tuple:
+    def __FindElem(self, parent: n0dict, where_parts: list, value: str = None, xpath: str = "", root = None) -> tuple:
         """
-        Private function: returns element/node by path where_parts:list in [0]
-        if path is not found, returns last found element/node in [0], and not found sub-elements in [1]
+        Private function: 
+            if path is found, returns 
+                [0] = element/node by path where_parts:list
+                [1] = None
+                [2] = xpath of found element/node
+            if path is NOT found, returns 
+                [0] = last found element/node
+                [1] = not found sub-elements
+                [2] = xpath of last found element/node
         """
         if parent is None:
             raise Exception("Why parent is None?")
-
+        if root is None:
+            root = parent
+            
         child_name = where_parts[0]
         child_index = None
         if "[" in child_name and child_name.endswith("]"):
             child_name, child_index = child_name.split("[", 2)
             child_index = child_index[:-1].strip().lower()
 
-        if child_name not in parent:
-            return parent, where_parts  # Return what was found, and what was not found
+        # n0print("#"*80)
+        # n0debug("where_parts")
+        # n0debug("child_name")
+        # n0debug("child_index")
+        # n0debug("parent")
+        # print("parent=")
+        # print(parent)
+        if isinstance(parent, (n0dict, OrderedDict, dict)):
+            # n0print("+1"*20)
+            if child_name not in parent:
+                # n0print("-"*50)
+                # return parent, where_parts  # Return what was found, and what was not found
+                return parent, where_parts, xpath  # Return what was found, and what was not found
+            else:
+                # n0print("*"*50)
+                child = parent.get(child_name)  # [] or None are possible results
+                # n0debug("child")
+        elif isinstance(parent, (n0list, tuple, list)):
+            # n0print("+2"*20)
+            for i,one_of_parent in enumerate(parent):
+                # n0print("##### Lets try: %s[%d]"%(xpath,i))
+                found, not_found, found_xpath = self.__FindElem(
+                                                            one_of_parent, 
+                                                            where_parts, 
+                                                            value, 
+                                                            "%s[%d]"%(xpath,i),
+                                                            root
+                                                            )  
+                if not not_found:
+                    return found, not_found, found_xpath
+            else:
+                return parent, where_parts, xpath  # Return what was found, and what was not found
         else:
-            child = parent.get(child_name)  # [] or None are possible results
+            if child_name == "..":
+                # n0print("Upper and upper")
+                parent_xpath = "/".join(xpath.split('/')[:-1])
+                # n0debug("parent_xpath")
+                # n0print("-------------8<----------------- #1")
+                parent = root[parent_xpath]
+                # n0print("------------->8----------------- #1")
+                # n0debug("parent")
+                # n0debug_calc("/".join(where_parts[1:]),"more_xpath")
+                return self.__FindElem(parent, where_parts[1:], value, parent_xpath, root)  # Upper and upper
+            # n0print("+3"*20)
+            # n0print("~"*50)
+            # n0print("Unknown type of parent %s" % type(parent))
+            # n0print("~"*50)
+            # n0debug("parent")
+            # n0debug("where_parts")
+            # sys.exit(-1)
+            
 
         if child_index:
+            # n0print("+4"*20)
             if isinstance(child, (list, tuple, n0list)):
+                # n0print("+5"*20)
                 if not child_index.translate(str.maketrans("+-.", "000")).isnumeric():
                     if child_index.startswith("last()"):
                         child_index = child_index[6:]
-                        if not child_index or child_index.translate(
-                                str.maketrans("+-.", "000")).isnumeric():  # Py3 dirty fix
+                        if not child_index or child_index.translate(str.maketrans("+-.", "000")).isnumeric():  # Py3 dirty fix
                             child_index = int(eval("-1" + child_index))  # FIX ME: Very dark and dirty :-(
                         else:
                             raise IndexError(
                                 "'Something strange with index 'last()%s' in '%s'" % (child_index, where_parts[0]))
                     else:
+                        print("'%s' in '%s' is not an index" % (child_index, where_parts[0]))
                         raise IndexError("'%s' in '%s' is not an index" % (child_index, where_parts[0]))
                 else:
                     child_index = int(eval(child_index))  # FIX ME: Very dark and dirty :-(
@@ -1256,20 +1334,65 @@ class n0dict(OrderedDict):
                             where_parts[0], child_index, len(child), child
                         )
                     )
+                # n0print("+7"*20)
                 child = child[child_index]
+                # n0debug("child")
+                # n0debug("where_parts")
             else:
-                if child_index == "last()":
-                    child = child
+                # n0print("+6"*20)
+                if child_index.startswith("text()"):
+                    child_text_compare = child_index[6:]
+                    if child_text_compare.startswith("=="):
+                        child_index_value = child_text_compare[2:].strip()
+                        child_text_compare = True
+                    elif child_text_compare.startswith("!="):
+                        child_index_value = child_text_compare[2:].strip()
+                        child_text_compare = False
+                    elif child_text_compare.startswith("="):
+                        child_index_value = child_text_compare[1:].strip()
+                        child_text_compare = True
+                    else:
+                        raise IndexError("Strange compare command in '%s' of (%s)'%s'==%s" % (child_index, type(child), xpath, child))
+                        
+                    if child_index_value[0] == child_index_value[-1] and child_index_value[0] in ("'",'"'):
+                        child_index_value = child_index_value[1:-1]
+                        
+                    child_value = urllib.parse.unquote(child).lower()
+                    child_index_value = urllib.parse.unquote(child_index_value)
+                    
+                    if (child_value == child_index_value) != child_text_compare:
+                        # n0print("Expected: %s %s %s" % (child_value, "==" if child_text_compare else "!=", child_index_value)) 
+                        return parent, where_parts, xpath
+                    # else:
+                        # n0print("+"*80) 
+                        # n0print("+"*80) 
+                        # n0print("As expected: %s %s %s" % (child_value, "==" if child_text_compare else "!=", child_index_value)) 
+                        # n0print("+"*80) 
+                        # n0print("+"*80) 
+                        
                 else:
-                    raise IndexError("'%s' is not list but %s" % (child, type(child)))
+                    raise IndexError("Strange index '%s' of (%s)'%s'==%s" % (child_index, type(child), xpath, child))
+                # if child_index == "last()":
+                    # child = child
+                # else:
+                    # raise IndexError("'%s' is not list but %s" % (child, type(child)))
 
+        # n0print("+8"*20)
         if len(where_parts) > 1:
-            return self.__FindElem(child, where_parts[1:], value)  # Deeper and deeper
+            # n0print("Deeper and deeper")
+            # n0debug_calc(where_parts[1:])
+            # n0debug_calc(xpath+"/"+where_parts[0])
+            return self.__FindElem(child, where_parts[1:], value, xpath+"/"+where_parts[0], root)  # Deeper and deeper
         elif len(where_parts) == 1:
             # if value and value != "change to n0dict()":
             if value:
                 parent.update({child_name: value})
-            return parent.get(child_name), None  # Parent element, nothing is left
+            # n0print("Returning...")
+            # n0debug("child_name")
+            # n0print(parent.get(child_name))
+            # n0print(xpath)
+            # return parent.get(child_name), None, xpath  # Parent element, nothing is left
+            return child, None, xpath  # Parent element, nothing is left
         else:
             raise Exception("FATAL: Unexpected behavior with empty path")
 
@@ -1344,13 +1467,40 @@ class n0dict(OrderedDict):
                         self,
                         [itm for itm in where.split("/") if itm]  # Convert path where:str into list,
                         # remove all empty separators ("//" or leading/trailing "/"),
-                    )
+                    )[0:1] # leave only 2 returned elements: where to inject and what to inject
                 ),
                 [itm for itm in what.split("/") if itm],  # Convert path what:str into list,
                 # remove all empty separators ("//" or leading/trailing "/"),
                 value  # If optional argument 'value' is provided, put into destination path where+what.
             )
 
+    # ******************************************************************************
+    # ******************************************************************************
+    def nvl(self, where: str, if_not_found = None):
+        """
+        Private function:
+        return self[where1/where2/.../whereN]
+            AKA
+        return self[where1][where2]...[whereN]
+
+        If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+        """
+        if not where:
+            return default
+        found, not_found, found_xpath = self.__FindElem(self,
+                                           [itm for itm in where.split("/") if itm]  # Convert path where:str into list,
+                                           # remove all empty separators
+                                           # ("//" or leading/trailing "/")
+                                           )
+        if not_found:
+            return if_not_found
+        # #####################################################################
+        # #####################################################################
+        # NEVER RECONVERT OBJECTS!!!
+        # For example: return n0list(found) => dict["list"].append(newitem) => append will be applyed to NEW object!!!
+        # #####################################################################
+        # #####################################################################
+        return found
     # ******************************************************************************
     # ******************************************************************************
     def __getitem__(self, where: str):
@@ -1363,13 +1513,14 @@ class n0dict(OrderedDict):
         If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
         # found, not_found = self.__FindElem(super(n0dict, self)
-        found, not_found = self.__FindElem(self,
+        found, not_found, found_xpath = self.__FindElem(self,
                                            [itm for itm in where.split("/") if itm]  # Convert path where:str into list,
                                            # remove all empty separators
                                            # ("//" or leading/trailing "/")
                                            )
         if not_found:
-            raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), where))
+            # raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), where))
+            raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), found_xpath))
         # #####################################################################
         # #####################################################################
         # NEVER RECONVERT OBJECTS!!!
@@ -1405,9 +1556,10 @@ class n0dict(OrderedDict):
             return super(n0dict, self).__setitem__(where, value)
         else:
             if flag_overwrite_attribute_value:
-                found, not_found = self.__FindElem(super(n0dict, self), where_parts, value)
+                found, not_found, found_xpath = self.__FindElem(super(n0dict, self), where_parts, value)
                 if not_found:
-                    raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), where))
+                    # raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), where))
+                    raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), found_xpath))
                 return found
             else:
                 # By default just the last element could be item in the array,
@@ -1643,10 +1795,6 @@ class n0dict(OrderedDict):
         return True
     # ******************************************************************************
     # ******************************************************************************
-    def nvl(self, key, default=None):
-        if key not in self: return default
-        if not key: return default
-        return self[key]
     # ******************************************************************************
     # ******************************************************************************
     def isEqual(self, xpath, value):
