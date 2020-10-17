@@ -15,6 +15,7 @@
 #        n0dict.__FindElem(..) previously supports modificators [i], [last()], [last()-X], [-X]
 #                              now additionally supports modificators [text()="XYZ"], [text()=="XYZ"], [text()!="XYZ"], /../
 #                              XYZ must be encoded with urlencode
+# 0.14 = 2020-10-17 n0print prints to stderr
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -280,12 +281,15 @@ def n0print(
         if internal_call:
             frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
         else:
-            frameinfo = inspect.stack()[2]
+            try:
+                frameinfo = inspect.stack()[2]
+            except:
+                frameinfo = inspect.stack()[1]
 
         global __debug_level
         global __debug_levels
         if level <= __debug_level:
-            sys.stdout.write(
+            sys.stderr.write(
                 "***%s %s %s:%d: " % (
                     (" [%s]" % __debug_levels[level]) if internal_call else "",
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -295,7 +299,7 @@ def n0print(
                 + (text if text else "") + end
             )
     else:
-        sys.stdout.write((text if text else "") + end)
+        sys.stderr.write((text if text else "") + end)
     __prev_end = end
 
 

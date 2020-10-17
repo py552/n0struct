@@ -14,6 +14,14 @@ DESCRIPTION
     # 0.08 = 2020-09-05 = refactoring
     # 0.09 = lost
     # 0.10 = rewritten date related functions
+    # 0.11 = 2020-09-17 fixed returning time by date_delta(..)
+    # 0.12 = 2020-09-24 added function to find keys in n0dict
+    # 0.13 = 2020-10-11
+    #        n0dict.nvl(..) now supports complicated path like A/B/C
+    #        n0dict.__FindElem(..) previously supports modificators [i], [last()], [last()-X], [-X]
+    #                              now additionally supports modificators [text()="XYZ"], [text()=="XYZ"], [text()!="XYZ"], /../
+    #                              XYZ must be encoded with urlencode
+    # 0.14 = 2020-10-17 n0print prints to stderr
 
 PACKAGE CONTENTS
     test (package)
@@ -77,14 +85,22 @@ CLASSES
      |          the path will be created. if last element exists, then the element will be reconfigured into array
      |          if any whereN starts with '+', then the element will be reconfigured into array
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x00000249D31F2310>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0000023327C223A0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x00000249D31F2280>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000023327C22310>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. direct_compare(..)
+     |      # ******************************************************************************
+     |  
+     |  has_all(self, tupple_of_keys)
+     |      # ******************************************************************************
+     |      # ******************************************************************************
+     |  
+     |  has_any_of(self, tupple_of_keys)
+     |      # ******************************************************************************
      |      # ******************************************************************************
      |  
      |  isEqual(self, xpath, value)
@@ -93,8 +109,16 @@ CLASSES
      |  isExist(self, xpath)
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x00000249D31F2DC0>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000023327C24040>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
+     |  
+     |  nvl(self, where: 'str', if_not_found=None)
+     |      Private function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
      |  
      |  to_json(self, indent: 'int' = 4) -> 'str'
      |      Public function: export self into json result string
