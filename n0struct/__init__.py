@@ -4,7 +4,7 @@
 # 0.04 = 2020-08-05 = Prepared for upload to pypi.org
 # 0.05 = 2020-08-11 = Huge enhancements: unification of .*compare() .toJson(), .toXml(), n0dict(JSON/XML string)
 # 0.06
-# 0.07 = 2020-09-02 = transform added
+# 0.07 = 2020-09-02 = .compare(transform=..) and .direct_compare(transform=..) added
 # 0.08 = 2020-09-05 = refactoring
 # 0.09 = lost
 # 0.10 = rewritten date related functions
@@ -16,6 +16,12 @@
 #                              now additionally supports modificators [text()="XYZ"], [text()=="XYZ"], [text()!="XYZ"], /../
 #                              XYZ must be encoded with urlencode
 # 0.14 = 2020-10-17 n0print prints to stderr
+# 0.15 = 2020-10-19 n0pretty(..): fix for json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes
+#                   strip_namespaces() is added
+# 0.16 = 2020-10-20 strip_namespaces() transformed into transform_structure()
+#                   n0dict.compare() is fixed to use compare_only=
+# 0.17 = 2020-10-22 n0print(..): optimization
+# 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -259,7 +265,6 @@ def set__debug_level(value: int):
     __debug_level = value
     return __debug_level
 
-
 # ********************************************************************
 def n0print(
         text: str,
@@ -278,7 +283,7 @@ def n0print(
     """
     global __prev_end
     if __prev_end == "\n":
-        if internal_call:
+        if internal_call == False:
             frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
         else:
             try:
@@ -291,7 +296,7 @@ def n0print(
         if level <= __debug_level:
             sys.stderr.write(
                 "***%s %s %s:%d: " % (
-                    (" [%s]" % __debug_levels[level]) if internal_call else "",
+                    (" [%s]" % __debug_levels[level]) if internal_call else " [ALWAYS]",
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     os.path.split(frameinfo.filename)[1],
                     frameinfo.lineno
@@ -334,9 +339,9 @@ def n0debug(var_name: str, level: int = 5):  # __debug_levels.index("INFO")
             var_name,
             n0pretty(var_object)
         ),
-        level=level
+        level = level,
+        internal_call = True,
     )
-
 
 def n0debug_calc(var_value: str, var_name: str = "", level: int = 5):  # __debug_levels.index("INFO")
     """
@@ -356,7 +361,8 @@ def n0debug_calc(var_value: str, var_name: str = "", level: int = 5):  # __debug
                 var_name,
                 n0pretty(var_value)
             ),
-            level=-level
+            level = level,
+            internal_call = True,
     )
 
 
@@ -381,7 +387,7 @@ def n0pretty(item, indent_: int = 0):
             if result:
                 result += "," + indent()
             if isinstance(item, dict):
-                result += "'" + sub_item + "': " + n0pretty(item[sub_item], indent_ + 1)
+                result += "\"" + sub_item + "\": " + n0pretty(item[sub_item], indent_ + 1)  # json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes
             else:
                 result += n0pretty(sub_item, indent_ + 1)
         if result and "\n" in result:
@@ -391,6 +397,8 @@ def n0pretty(item, indent_: int = 0):
         result += brackets[1]
     elif isinstance(item, str):
         result = '"' + item + '"'
+    elif item is None:
+        result = '"None"'  # json.decoder.JSONDecodeError: Expecting value
     else:
         result = str(item)
     return result
@@ -416,9 +424,65 @@ def n0debug_object(object_name: str, level: int = 5):  # __debug_levels.index("I
     for attrib_name in class_attribs:
         attrib = getattr(class_object, attrib_name)
         to_print += "=== (%s id=%s)%s = %s\n" % (type(attrib), id(attrib), attrib_name, n0pretty(attrib))
-    n0print(to_print, level=level)
+    n0print(to_print, level = level, internal_call = True)
 
-
+# ******************************************************************************
+strip_ns = lambda key: key.split(':',1)[1] if ':' in key else key
+currency_converter = {"682": "SAR"}
+keys_for_currency_convertion = {
+    "currency":         lambda value: currency_converter[value] if value in currency_converter else value,
+    "source_currency":  lambda value: currency_converter[value] if value in currency_converter else value,
+}
+def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
+    if key is not None: 
+        if exception is not None:
+            if key in exception:
+                return value
+        if key in transform_depends_of_key:
+            return transform_depends_of_key[key](value)
+    if isinstance(value, str):
+        value = value.strip()
+        if len(value) == 10 and value[2] == '/' and value[5] == '/':
+            return datetime.strptime(value, "%d/%m/%Y")  # EUROPEAN!!!
+        if len(value) == 10 and value[4] == '-' and value[7] == '-':
+            return datetime.strptime(value, "%Y-%m-%d")
+        if len(value) == 19 and value[4] == '-' and value[7] == '-' and value[10] == ' ' and value[13] == ':' and value[16] == ':':
+            return datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+        if value.translate(str.maketrans("+-.", "000")).isnumeric():
+            # if '.' in value:
+            #     return abs(float(value))
+            # else:
+            #     return abs(int(value))
+            return abs(float(value))
+        else:
+            return value.upper()
+    else:
+        return value
+# ******************************************************************************
+def transform_structure(in_structure, transform_key = strip_ns, transform_value = convert_to_native_format):
+    # n0debug("in_structure")
+    if isinstance(in_structure, (dict, OrderedDict, n0dict)):
+        # in_list = (in_structure,)
+        in_list = [in_structure]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
+    else:
+        in_list = in_structure
+    # n0debug("in_list")
+    if isinstance(in_list, (list, tuple, n0list)):
+        out_list = n0list()
+        for in_dict in in_list:
+            # n0debug("in_dict")
+            if not isinstance(in_dict, (dict, OrderedDict, n0dict)):
+                raise Exception("transform_structure(): expected to get dict/OrderedDict/n0dict as second level item")
+            out_list.append(n0dict())
+            for key_in in in_dict:
+                key_out = transform_key(key_in)
+                out_list[-1].update({key_out: transform_value(in_dict[key_in], key_out) if transform_value else in_dict[key_in]})
+    else:
+        raise Exception("transform_structure(): expected to get dict/OrderedDict/n0dict or list/tuple/n0list as argument")
+    if isinstance(in_structure, (dict, OrderedDict, n0dict)):
+        return out_list[0]
+    else:
+        return out_list
 # ******************************************************************************
 # notemptyitems(item):
 #   Check item or recursively subitems of item.
@@ -445,7 +509,8 @@ def notemptyitems(item):
 # ******************************************************************************
 def xpath_match(xpath: str, xpath_list):
     if isinstance(xpath_list, str):
-        xpath_list = (xpath_list,)
+        # xpath_list = (xpath_list,)
+        xpath_list = [xpath_list]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
     if not isinstance(xpath_list, (tuple, list)):
         raise Exception("xpath_match(..): unknown type of xpath_list = %s" % type(xpath_list))
 
@@ -476,7 +541,8 @@ def get_composite_keys(input_list: n0list, elemets_for_composite_key: tuple) -> 
     serialization all or {elemets_for_composite_key} elements of {input_list[]}
     """
     if isinstance(elemets_for_composite_key, str):
-        elemets_for_composite_key = (elemets_for_composite_key,)
+        # elemets_for_composite_key = (elemets_for_composite_key,)
+        elemets_for_composite_key = [elemets_for_composite_key]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
 
     composite_keys_for_all_lines = []
     for line in input_list:
@@ -851,10 +917,12 @@ class n0list(list):
                                 exclude=exclude, transform=transform,
                             )
                         )
-                    elif isinstance(self[self_i], (n0dict, dict, OrderedDict)):
+# 0.18 = Splitted logic, to avoid convertation of dict, OrderedDict into n0dict
+                    elif isinstance(self[self_i], (n0dict,)):
                         result.update_extend(
                             n0dict(self[self_i]).compare(
-                                n0dict(other[other_i]),
+                                # n0dict(other[other_i]),  # 0.18
+                                other[other_i],
                                 self_name + "[" + str(self_i) + "]",
                                 other_name + "[" + str(other_i) + "]",
                                 prefix + "[" + str(self_i) + "]" + (
@@ -864,6 +932,9 @@ class n0list(list):
                                 exclude=exclude, transform=transform,
                             )
                         )
+# 0.18 = Splitted logic, to avoid convertation of dict, OrderedDict into n0dict
+                    elif isinstance(self[self_i], (dict, OrderedDict)):  # Very important isinstance suppose that n0dict is the same like OrderedDict, because of it's parent class
+                        raise Exception("self[self_i] is %s, expected n0dict" % type(self[self_i]))
                     elif self[self_i] is None:
                         # type(self[self_i]) == type(other[other_i]) and self[self_i] is None
                         # So both are None
@@ -1059,13 +1130,19 @@ class n0dict(OrderedDict):
         if get__flag_compare_check_different_types():
             result.update({"difftypes": []})
 
+        self_keys = list(self.keys())
         self_not_exist_in_other = list(self.keys())
         other_not_exist_in_self = list(other.keys())
+        if compare_only:
+            # self_keys = compare_only if isinstance(compare_only, (list,tuple,)) else (compare_only,)
+            self_keys = compare_only if isinstance(compare_only, (list,tuple,)) else [compare_only] # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
+            self_not_exist_in_other = [key for key in self_not_exist_in_other if key in self_keys]
+            other_not_exist_in_self = [key for key in other_not_exist_in_self if key in self_keys]
 
         # #############################################################
         # NEVER fetch data from the mutable list in the loop !!!
         # #############################################################
-        for key in self:
+        for key in self_keys:
             if key in other:
                 fullxpath = prefix + "/" + key
                 if not xpath_match(fullxpath, exclude):
