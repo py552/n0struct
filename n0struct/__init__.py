@@ -22,6 +22,7 @@
 #                   n0dict.compare() is fixed to use compare_only=
 # 0.17 = 2020-10-22 n0print(..): optimization
 # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
+# 0.19 = 2020-10-24 fixed issue with autotests, recursive convertion is added into constructor
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -391,9 +392,11 @@ def n0pretty(item, indent_: int = 0):
             else:
                 result += n0pretty(sub_item, indent_ + 1)
         if result and "\n" in result:
-            result = brackets[0] + indent() + result + indent()
+            # result = brackets[0] + indent() + result + indent()
+            result = str(type(item)) + " " + brackets[0] + indent() + result + indent()
         else:
-            result = brackets[0] + result
+            # result = brackets[0] + result
+            result = str(type(item)) + " " + brackets[0] + result
         result += brackets[1]
     elif isinstance(item, str):
         result = '"' + item + '"'
@@ -508,6 +511,16 @@ def notemptyitems(item):
 #   Returns i+1
 # ******************************************************************************
 def xpath_match(xpath: str, xpath_list):
+    """
+
+    :param xpath:
+        xpath: str
+    :param xpath_list:
+        xpath_list: str or list|tuple
+    :return:
+         0 not matched any of xpath_list
+        >0 matched
+    """
     if isinstance(xpath_list, str):
         # xpath_list = (xpath_list,)
         xpath_list = [xpath_list]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
@@ -572,7 +585,27 @@ class n0list(list):
     . direct_compare()  = compare [i] <=> [i]
     . compare()         = compare [i] <=> [?] WITHOUT using order
     """
+    def __init__(self, *args, **kw):
+        """
+        args == tuple, kw == mapping(dictionary)
 
+        * == convert from tuple into list of arguments
+        ** == convert from mapping into list of named arguments
+
+        :param args:
+        :param kw:
+        """
+        if len(args) == 1 and isinstance(args[0], (list, tuple)):
+            for value in args[0]:
+                if isinstance(value, (dict, OrderedDict)):
+                    self.append(n0dict(value))
+                elif isinstance(value, (list, tuple)):
+                    self.append(n0list(value))
+                else:
+                    self.append(value)
+            # return super(n0list, self).__init__(self)
+        else:
+            return super(n0list, self).__init__(*args, **kw)
     # ******************************************************************************
     # * n0list. direct_compare(..): only n0dict. direct_compare/compare have one_of_list_compare
     # ******************************************************************************
@@ -647,6 +680,7 @@ class n0list(list):
                 continue
             # ######### if i >= len(other):
             # --- TRANSFORM: START -------------------------------------
+            # Transform self and other linked values with function transform[]()
             self_value = self[i]
             other_value = other[i]
             transform_i = xpath_match(prefix, [itm[0] for itm in transform])
@@ -851,6 +885,7 @@ class n0list(list):
             if composite_key in other_not_exist_in_self:
                 other_i = notmutable__other_not_exist_in_self.index(composite_key)
                 # --- TRANSFORM: START -------------------------------------
+                # Transform self and other linked values with function transform[]()
                 self_value = self[self_i]
                 other_value = other[other_i]
                 transform_i = xpath_match(prefix, [itm[0] for itm in transform])
@@ -1056,17 +1091,28 @@ class n0dict(OrderedDict):
         :param args:
         :param kw:
         """
-        if len(args):
+        if len(args) == 1:
             if isinstance(args[0], str):
                 if args[0].strip()[0] == "<":
                     return super(n0dict, self).__init__(xmltodict.parse(args[0]))
                 elif args[0].strip()[0] == "{":
                     return super(n0dict, self).__init__(json.loads(args[0]))
                 raise Exception("n0dict(..): if you provide string, it should be XML or JSON")
+            if isinstance(args[0], (dict, OrderedDict)):
+                for key in args[0]:
+                    value = args[0][key]
+                    if isinstance(value, (dict, OrderedDict)):
+                        self.update({key: n0dict(value)})
+                    elif isinstance(value, (list, tuple)):
+                        self.update({key: n0list(value)})
+                    else:
+                        self.update({key: value})
+                return super(n0dict, self).__init__(self)
         # raise Exception("n0dict(..): Init as OrderedDict")
         # n0debug_calc(len(args),"len(args)")
         # n0debug_calc(args,"args")
-        return super(n0dict, self).__init__(*args, **kw)
+        else:
+            return super(n0dict, self).__init__(*args, **kw)
     # ******************************************************************************
     def update_extend(self, other):
         if other is None:
@@ -1133,20 +1179,24 @@ class n0dict(OrderedDict):
         self_keys = list(self.keys())
         self_not_exist_in_other = list(self.keys())
         other_not_exist_in_self = list(other.keys())
+        '''        
         if compare_only:
             # self_keys = compare_only if isinstance(compare_only, (list,tuple,)) else (compare_only,)
             self_keys = compare_only if isinstance(compare_only, (list,tuple,)) else [compare_only] # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
             self_not_exist_in_other = [key for key in self_not_exist_in_other if key in self_keys]
             other_not_exist_in_self = [key for key in other_not_exist_in_self if key in self_keys]
+        '''
 
         # #############################################################
         # NEVER fetch data from the mutable list in the loop !!!
         # #############################################################
         for key in self_keys:
             if key in other:
-                fullxpath = prefix + "/" + key
+                # fullxpath = prefix + "/" + key
+                fullxpath = "%s/%s" % (prefix, key)
                 if not xpath_match(fullxpath, exclude):
                     # --- TRANSFORM: START -------------------------------------
+                    # Transform self and other linked values with function transform[]()
                     self_value = self[key]
                     other_value = other[key]
                     transform_i = xpath_match(fullxpath, [itm[0] for itm in transform])
@@ -1162,7 +1212,9 @@ class n0dict(OrderedDict):
                     # --- TRANSFORM: END ---------------------------------------
                     if type(self_value) == type(other_value):
                         if isinstance(self_value, (str, int, float, date)):
-                            if self_value != other_value:
+                            # if self_value != other_value:
+                            if self_value != other_value \
+                                and (not compare_only or xpath_match(fullxpath, compare_only)):
                                 # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
                                 result["notequal"].append(
                                     (
@@ -1217,39 +1269,41 @@ class n0dict(OrderedDict):
                         else:
                             raise Exception("Not expected type %s in %s[\"%s\"]" % (type(self[key]), key, self_name))
                     else:
-                        if get__flag_compare_check_different_types():
-                            result["difftypes"].append(
-                                (
-                                    prefix + "/" + str(key),
+                        if not compare_only or xpath_match(fullxpath, compare_only):
+                            if get__flag_compare_check_different_types():
+                                result["difftypes"].append(
                                     (
-                                        type(self[key]), self[key],
-                                        type(other[key]), other[key]
+                                        prefix + "/" + str(key),
+                                        (
+                                            type(self[key]), self[key],
+                                            type(other[key]), other[key]
+                                        )
                                     )
                                 )
-                            )
-                            result["messages"].append(
-                                "*Types are different: %s[\"%s\"]=(%s)%s != %s[\"%s\"]=(%s)%s" %
-                                (
-                                    self_name, key, type(self[key]), str(self[key]),
-                                    other_name, key, type(other[key]), str(other[key]),
+                                result["messages"].append(
+                                    "*Types are different: %s[\"%s\"]=(%s)%s != %s[\"%s\"]=(%s)%s" %
+                                    (
+                                        self_name, key, type(self[key]), str(self[key]),
+                                        other_name, key, type(other[key]), str(other[key]),
+                                    )
                                 )
-                            )
-                        else:
-                            result["notequal"].append((prefix + "/" + key, (self[key], other[key])))
-                            result["messages"].append(
-                                "Values are different: %s[\"%s\"]=%s != %s[\"%s\"]=%s " %
-                                (
-                                    self_name, key, self[key],
-                                    other_name, key, other[key]
+                            else:
+                                result["notequal"].append((prefix + "/" + key, (self[key], other[key])))
+                                result["messages"].append(
+                                    "Values are different: %s[\"%s\"]=%s != %s[\"%s\"]=%s " %
+                                    (
+                                        self_name, key, self[key],
+                                        other_name, key, other[key]
+                                    )
                                 )
-                            )
                 self_not_exist_in_other.remove(key)
                 other_not_exist_in_self.remove(key)
 
         if self_not_exist_in_other:
             for key in self_not_exist_in_other:
                 fullxpath = "%s/%s" % (prefix, key)
-                if not xpath_match(fullxpath, exclude):
+                if not xpath_match(fullxpath, exclude) \
+                   and (not compare_only or xpath_match(fullxpath, compare_only)):
                     result["messages"].append(
                         "Element %s[\"%s\"]='%s' doesn't exist in %s" %
                         (
@@ -1263,7 +1317,8 @@ class n0dict(OrderedDict):
         if other_not_exist_in_self:
             for key in other_not_exist_in_self:
                 fullxpath = "%s/%s" % (prefix, key)
-                if not xpath_match(fullxpath, exclude):
+                if not xpath_match(fullxpath, exclude) \
+                   and (not compare_only or xpath_match(fullxpath, compare_only)):
                     result["messages"].append(
                         "Element %s[\"%s\"]='%s' doesn't exist in %s" %
                         (
