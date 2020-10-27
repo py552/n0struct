@@ -23,6 +23,7 @@
 # 0.17 = 2020-10-22 n0print(..): optimization
 # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
 # 0.19 = 2020-10-24 fixed issue with autotests, recursive convertion is added into constructor
+# 0.20 = 2020-10-26 get_composite_keys(transform=..) is added, numeric checking is changed
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -76,7 +77,22 @@ def get__flag_compare_return_difference_of_values():
     global __flag_compare_return_difference_of_values
     return __flag_compare_return_difference_of_values
 
-
+# ********************************************************************
+# ********************************************************************
+def n0isnumeric(value: str):
+    # return value.translate(str.maketrans("+-.", "000")).isnumeric() # Py3 dirty fix
+    if isinstance(value, (int, float)):
+        return True
+    if not isinstance(value, str):
+        return False
+    value = value.strip()
+    if value.startswith('+') or value.startswith('-'):
+        value = value[1:].strip()
+    if len(value) > 10:
+        return False
+    if value.count('.') == 1:
+        value = value.replace('.','0')
+    return value.isnumeric()
 # ********************************************************************
 # ********************************************************************
 def date_delta(now: date = None, day_delta: int = 0, month_delta: int = 0) -> date:
@@ -451,7 +467,8 @@ def convert_to_native_format(value, key = None, exception = None, transform_depe
             return datetime.strptime(value, "%Y-%m-%d")
         if len(value) == 19 and value[4] == '-' and value[7] == '-' and value[10] == ' ' and value[13] == ':' and value[16] == ':':
             return datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
-        if value.translate(str.maketrans("+-.", "000")).isnumeric():
+        # if value.translate(str.maketrans("+-.", "000")).isnumeric():
+        if n0isnumeric(value):
             # if '.' in value:
             #     return abs(float(value))
             # else:
@@ -524,6 +541,8 @@ def xpath_match(xpath: str, xpath_list):
     if isinstance(xpath_list, str):
         # xpath_list = (xpath_list,)
         xpath_list = [xpath_list]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
+    if not xpath_list:
+        return None
     if not isinstance(xpath_list, (tuple, list)):
         raise Exception("xpath_match(..): unknown type of xpath_list = %s" % type(xpath_list))
 
@@ -549,7 +568,7 @@ def xpath_match(xpath: str, xpath_list):
     return 0
 
 
-def get_composite_keys(input_list: n0list, elemets_for_composite_key: tuple) -> list:
+def get_composite_keys(input_list: n0list, elemets_for_composite_key: tuple, prefix: str = None, transform: tuple = None) -> list:
     """
     serialization all or {elemets_for_composite_key} elements of {input_list[]}
     """
@@ -558,6 +577,12 @@ def get_composite_keys(input_list: n0list, elemets_for_composite_key: tuple) -> 
         elemets_for_composite_key = [elemets_for_composite_key]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
 
     composite_keys_for_all_lines = []
+    # n0debug("transform")
+    if transform:
+        attributes_to_transform = [itm[0] for itm in transform]
+    else:
+        attributes_to_transform = None
+    
     for line in input_list:
         if isinstance(line, (dict, n0dict)):
             created_composite_key = ""
@@ -566,12 +591,26 @@ def get_composite_keys(input_list: n0list, elemets_for_composite_key: tuple) -> 
                     if key in line:
                         if created_composite_key:
                             created_composite_key += ";"
-                        created_composite_key += key + "=" + str(line[key])
+                        fullxpath = "%s/%s" % (prefix, key)
+                        transform_i = xpath_match(fullxpath, attributes_to_transform)
+                        if transform_i:
+                            transform_i -= 1
+                            tranformed = transform[transform_i][1](line[key])
+                        else:
+                            tranformed = str(line[key])
+                        created_composite_key += key + "=" + tranformed
             if not created_composite_key:
                 for key in line:
                     if created_composite_key:
                         created_composite_key += ";"
-                    created_composite_key += key + "=" + str(line[key])
+                    fullxpath = "%s/%s" % (prefix, key)
+                    transform_i = xpath_match(fullxpath, attributes_to_transform)
+                    if transform_i:
+                        transform_i -= 1
+                        tranformed = transform[transform_i][1](line[key])
+                    else:
+                        tranformed = str(line[key])
+                    created_composite_key += key + "=" + tranformed
         else:
             raise Exception("get_composite_keys(..): expected dict, but got unexpected type"
                             " of element in input_list: %s" % type(line))
@@ -876,8 +915,8 @@ class n0list(list):
         if xpath_match(prefix, exclude):
             return result
 
-        self_not_exist_in_other = get_composite_keys(self, composite_key)
-        other_not_exist_in_self = get_composite_keys(other, composite_key)
+        self_not_exist_in_other = get_composite_keys(self, composite_key, prefix, transform)
+        other_not_exist_in_self = get_composite_keys(other, composite_key, prefix, transform)
 
         notmutable__self_not_exist_in_other = self_not_exist_in_other.copy()
         notmutable__other_not_exist_in_self = other_not_exist_in_self.copy()
@@ -1194,12 +1233,15 @@ class n0dict(OrderedDict):
             if key in other:
                 # fullxpath = prefix + "/" + key
                 fullxpath = "%s/%s" % (prefix, key)
+                # n0debug("fullxpath")
                 if not xpath_match(fullxpath, exclude):
                     # --- TRANSFORM: START -------------------------------------
                     # Transform self and other linked values with function transform[]()
                     self_value = self[key]
                     other_value = other[key]
+                    # n0debug("transform")
                     transform_i = xpath_match(fullxpath, [itm[0] for itm in transform])
+                    # n0debug("transform_i")
                     if transform_i:
                         transform_i -= 1
                         transform_self = transform[transform_i][1]
@@ -1440,15 +1482,16 @@ class n0dict(OrderedDict):
             # n0debug("where_parts")
             # sys.exit(-1)
             
-
         if child_index:
             # n0print("+4"*20)
             if isinstance(child, (list, tuple, n0list)):
                 # n0print("+5"*20)
-                if not child_index.translate(str.maketrans("+-.", "000")).isnumeric():
+                # if not child_index.translate(str.maketrans("+-.", "000")).isnumeric():
+                if not n0isnumeric(child_index):
                     if child_index.startswith("last()"):
                         child_index = child_index[6:]
-                        if not child_index or child_index.translate(str.maketrans("+-.", "000")).isnumeric():  # Py3 dirty fix
+                        # if not child_index or child_index.translate(str.maketrans("+-.", "000")).isnumeric():  # Py3 dirty fix
+                        if not child_index or n0isnumeric(child_index):
                             child_index = int(eval("-1" + child_index))  # FIX ME: Very dark and dirty :-(
                         else:
                             raise IndexError(
