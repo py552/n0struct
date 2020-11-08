@@ -23,7 +23,9 @@
 # 0.17 = 2020-10-22 n0print(..): optimization
 # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
 # 0.19 = 2020-10-24 fixed issue with autotests, recursive convertion is added into constructor
-# 0.20 = 2020-10-26 get_composite_keys(transform=..) is added, numeric checking is changed
+# 0.20 = 2020-10-26 get_composite_keys(transform=..) is added, numeric checking is fixed
+# 0.21 = 2020-11-09 fixed Exception: Why parent is None?
+#                   date_slash_ddmmyyyy() is added
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -132,6 +134,14 @@ def date_yyyymmdd(now: date = None, day_delta: int = 0, month_delta: int = 0) ->
     :return: today + day_delta + month_delta -> str YYYY-MM-DD
     """
     return date_delta(now, day_delta, month_delta).strftime("%Y-%m-%d")
+
+def date_slash_ddmmyyyy(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+    """
+    :param day_delta:
+    :param month_delta:
+    :return: today + day_delta + month_delta -> str DD/MM/YYYY
+    """
+    return date_delta(now, day_delta, month_delta).strftime("%d/%m/%Y")
 
 def date_ddmmyyyy(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -1469,7 +1479,10 @@ class n0dict(OrderedDict):
                 parent_xpath = "/".join(xpath.split('/')[:-1])
                 # n0debug("parent_xpath")
                 # n0print("-------------8<----------------- #1")
+                n0debug("parent_xpath")
+                n0debug("root")
                 parent = root[parent_xpath]
+                n0debug("parent")
                 # n0print("------------->8----------------- #1")
                 # n0debug("parent")
                 # n0debug_calc("/".join(where_parts[1:]),"more_xpath")
@@ -1482,6 +1495,7 @@ class n0dict(OrderedDict):
             # n0debug("where_parts")
             # sys.exit(-1)
             
+        child_index_ = child_index
         if child_index:
             # n0print("+4"*20)
             if isinstance(child, (list, tuple, n0list)):
@@ -1559,8 +1573,13 @@ class n0dict(OrderedDict):
         # n0print("+8"*20)
         if len(where_parts) > 1:
             # n0print("Deeper and deeper")
+            # n0debug("child_index_")
+            # n0debug("child_index")
+            # n0debug("child")
             # n0debug_calc(where_parts[1:])
             # n0debug_calc(xpath+"/"+where_parts[0])
+            if child is None:
+                return None, where_parts[1:], xpath+"/"+where_parts[0]
             return self.__FindElem(child, where_parts[1:], value, xpath+"/"+where_parts[0], root)  # Deeper and deeper
         elif len(where_parts) == 1:
             # if value and value != "change to n0dict()":
