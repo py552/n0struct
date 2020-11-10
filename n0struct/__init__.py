@@ -26,6 +26,7 @@
 # 0.20 = 2020-10-26 get_composite_keys(transform=..) is added, numeric checking is fixed
 # 0.21 = 2020-11-09 fixed Exception: Why parent is None?
 #                   date_slash_ddmmyyyy() is added
+# 0.22 = 2020-11-09 fixed date_now() -> str 20 characters YYYYMMDDHHMMSSFFFFFF
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -117,7 +118,7 @@ def date_now(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
     :param month_delta:
     :return: today + day_delta + month_delta -> str 20 characters YYYYMMDDHHMMSSFFFFFF
     """
-    return date_delta(now, day_delta, month_delta).strftime("%Y%m%d%m%d%H%M%S%f")
+    return date_delta(now, day_delta, month_delta).strftime("%Y%m%d%H%M%S%f")
     
 def date_iso(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
