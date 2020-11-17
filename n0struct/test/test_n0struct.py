@@ -67,19 +67,19 @@ def test_SortedLists():
     n0debug("differences1_direct_compare")
     n0debug_calc(notemptyitems(differences1_direct_compare["messages"]), 'notemptyitems(differences1_direct_compare["messages"])')
     assert notemptyitems(differences1_direct_compare["messages"]) == 1
-    n0debug_calc(notemptyitems(differences1_direct_compare["notequal"]), 'notemptyitems(differences1_direct_compare["notequal"])')
-    assert notemptyitems(differences1_direct_compare["notequal"]) == 4
+    n0debug_calc(notemptyitems(differences1_direct_compare["not_equal"]), 'notemptyitems(differences1_direct_compare["not_equal"])')
+    assert notemptyitems(differences1_direct_compare["not_equal"]) == 4
     assert notemptyitems(differences1_direct_compare["difftypes"]) == 0
-    assert notemptyitems(differences1_direct_compare["selfnotfound"]) == 0
-    assert notemptyitems(differences1_direct_compare["othernotfound"]) == 0
+    assert notemptyitems(differences1_direct_compare["other_unique"]) == 0
+    assert notemptyitems(differences1_direct_compare["self_unique"]) == 0
             
     n0print("="*80)
     n0debug("differences2_wise_compare")
     assert differences1_direct_compare["messages"]     == differences2_wise_compare["messages"]
-    assert differences1_direct_compare["notequal"]     == differences2_wise_compare["notequal"]
+    assert differences1_direct_compare["not_equal"]     == differences2_wise_compare["not_equal"]
     assert differences1_direct_compare["difftypes"]    == differences2_wise_compare["difftypes"]
-    assert differences1_direct_compare["selfnotfound"] == differences2_wise_compare["selfnotfound"]
-    assert differences1_direct_compare["othernotfound"]== differences2_wise_compare["othernotfound"]
+    assert differences1_direct_compare["other_unique"] == differences2_wise_compare["other_unique"]
+    assert differences1_direct_compare["self_unique"]== differences2_wise_compare["self_unique"]
 # ******************************************************************************
 def test_UnsortedLists():
     print("*"*80 + " 3 = Unsorted list in dictionary = direct_compare")
@@ -103,25 +103,25 @@ def test_UnsortedLists():
     n0debug("differences1_direct_compare")
     n0debug_calc(notemptyitems(differences1_direct_compare["messages"]), 'notemptyitems(differences1_direct_compare["messages"]')
     assert notemptyitems(differences1_direct_compare["messages"]) == 12
-    n0debug_calc(notemptyitems(differences1_direct_compare["notequal"]), 'differences1_direct_compare["notequal"]')
-    assert notemptyitems(differences1_direct_compare["notequal"]) == 44
+    n0debug_calc(notemptyitems(differences1_direct_compare["not_equal"]), 'differences1_direct_compare["not_equal"]')
+    assert notemptyitems(differences1_direct_compare["not_equal"]) == 44
     assert notemptyitems(differences1_direct_compare["difftypes"]) == 0
-    n0debug_calc(notemptyitems(differences1_direct_compare["selfnotfound"]), 'notemptyitems(differences1_direct_compare["selfnotfound"])')
-    assert notemptyitems(differences1_direct_compare["selfnotfound"]) == 6
-    n0debug_calc(notemptyitems(differences1_direct_compare["othernotfound"]), 'notemptyitems(differences1_direct_compare["othernotfound"])')
-    assert notemptyitems(differences1_direct_compare["othernotfound"]) == 0
+    n0debug_calc(notemptyitems(differences1_direct_compare["other_unique"]), 'notemptyitems(differences1_direct_compare["other_unique"])')
+    assert notemptyitems(differences1_direct_compare["other_unique"]) == 6
+    n0debug_calc(notemptyitems(differences1_direct_compare["self_unique"]), 'notemptyitems(differences1_direct_compare["self_unique"])')
+    assert notemptyitems(differences1_direct_compare["self_unique"]) == 0
 
     n0print("="*80)
     n0debug("differences2_wise_compare")
     n0debug_calc(notemptyitems(differences2_wise_compare["messages"]), 'notemptyitems(differences2_wise_compare["messages"]')
     assert notemptyitems(differences2_wise_compare["messages"]) == 2
-    n0debug_calc(notemptyitems(differences2_wise_compare["notequal"]), 'differences2_wise_compare["notequal"]')
-    assert notemptyitems(differences2_wise_compare["notequal"]) == 4
+    n0debug_calc(notemptyitems(differences2_wise_compare["not_equal"]), 'differences2_wise_compare["not_equal"]')
+    assert notemptyitems(differences2_wise_compare["not_equal"]) == 4
     assert notemptyitems(differences2_wise_compare["difftypes"]) == 0
-    n0debug_calc(notemptyitems(differences2_wise_compare["selfnotfound"]), 'notemptyitems(differences2_wise_compare["selfnotfound"])')
-    assert notemptyitems(differences2_wise_compare["selfnotfound"]) == 6
-    n0debug_calc(notemptyitems(differences2_wise_compare["othernotfound"]), 'notemptyitems(differences2_wise_compare["othernotfound"])')
-    assert notemptyitems(differences2_wise_compare["othernotfound"]) == 0
+    n0debug_calc(notemptyitems(differences2_wise_compare["other_unique"]), 'notemptyitems(differences2_wise_compare["other_unique"])')
+    assert notemptyitems(differences2_wise_compare["other_unique"]) == 6
+    n0debug_calc(notemptyitems(differences2_wise_compare["self_unique"]), 'notemptyitems(differences2_wise_compare["self_unique"])')
+    assert notemptyitems(differences2_wise_compare["self_unique"]) == 0
 # ******************************************************************************
 def main():
     n0print("="*80)

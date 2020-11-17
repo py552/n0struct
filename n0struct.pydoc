@@ -10,7 +10,7 @@ DESCRIPTION
     # 0.04 = 2020-08-05 = Prepared for upload to pypi.org
     # 0.05 = 2020-08-11 = Huge enhancements: unification of .*compare() .toJson(), .toXml(), n0dict(JSON/XML string)
     # 0.06
-    # 0.07 = 2020-09-02 = transform added
+    # 0.07 = 2020-09-02 = .compare(transform=..) and .direct_compare(transform=..) added
     # 0.08 = 2020-09-05 = refactoring
     # 0.09 = lost
     # 0.10 = rewritten date related functions
@@ -22,6 +22,22 @@ DESCRIPTION
     #                              now additionally supports modificators [text()="XYZ"], [text()=="XYZ"], [text()!="XYZ"], /../
     #                              XYZ must be encoded with urlencode
     # 0.14 = 2020-10-17 n0print prints to stderr
+    # 0.15 = 2020-10-19 n0pretty(..): fix for json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes
+    #                   strip_namespaces() is added
+    # 0.16 = 2020-10-20 strip_namespaces() transformed into transform_structure()
+    #                   n0dict.compare() is fixed to use compare_only=
+    # 0.17 = 2020-10-22 n0print(..): optimization
+    # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
+    # 0.19 = 2020-10-24 fixed issue with autotests, recursive convertion is added into constructor
+    # 0.20 = 2020-10-26 get_composite_keys(transform=..) is added, numeric checking is fixed
+    # 0.21 = 2020-11-09 fixed Exception: Why parent is None?
+    #                   date_slash_ddmmyyyy() is added
+    # 0.22 = 2020-11-09 fixed date_now() -> str 20 characters YYYYMMDDHHMMSSFFFFFF
+    # 0.23 = 2020-11-14 fixed n0list.compare()'s issue if more that one the same records are in the list
+    #                   *.compare() return ["othernotfound"] -> "self_unique"
+    #                   *.compare() return ["selfnotfound"]  -> "other_unique"
+    #                   *.compare() return ["notequal"]      -> "not_equal"
+    #                   get_composite_keys(..) -> generate_composite_keys(..)
 
 PACKAGE CONTENTS
     test (package)
@@ -85,12 +101,12 @@ CLASSES
      |          the path will be created. if last element exists, then the element will be reconfigured into array
      |          if any whereN starts with '+', then the element will be reconfigured into array
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0000023327C223A0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x000002F12FDB48B0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000023327C22310>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x000002F12FDB4820>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # ******************************************************************************
@@ -109,7 +125,7 @@ CLASSES
      |  isExist(self, xpath)
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000023327C24040>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x000002F12FDB7550>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  nvl(self, where: 'str', if_not_found=None)
@@ -253,11 +269,11 @@ CLASSES
      |      Create and return a new object.  See help(type) for accurate signature.
     
     class n0list(builtins.list)
-     |  n0list(iterable=(), /)
+     |  n0list(*args, **kw)
      |  
      |  Class extended builtins.list(builtins.object) with additional methods:
-     |  . direct_compare()  = compare [i] <=> [i]
-     |  . compare()         = compare [i] <=> [?] WITHOUT using order
+     |  . direct_compare()  = compare element self[i] with other[i] with the same indexes
+     |  . compare()         = compare element self[i] with any other[?] WITHOUT using sorting
      |  
      |  Method resolution order:
      |      n0list
@@ -265,6 +281,15 @@ CLASSES
      |      builtins.object
      |  
      |  Methods defined here:
+     |  
+     |  __init__(self, *args, **kw)
+     |      args == tuple, kw == mapping(dictionary)
+     |      
+     |      * == convert from tuple into list of arguments
+     |      ** == convert from mapping into list of named arguments
+     |      
+     |      :param args:
+     |      :param kw:
      |  
      |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[?] WITHOUT using order of elements.
@@ -279,13 +304,13 @@ CLASSES
      |      :param composite_key:
      |      :param compare_only:
      |      :param exclude:
-     |      :param transform:
+     |      :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
      |      :return:
      |              n0dict({
      |                  "messages"      : [], # generated for each case of not equality
-     |                  "notequal"      : [], # generated if elements with the same xpath and type are not equal
-     |                  "selfnotfound"  : [], # generated if elements from other list don't exist in self list
-     |                  "othernotfound" : [], # generated if elements from self list don't exist in other list
+     |                  "not_equal"      : [], # generated if elements with the same xpath and type are not equal
+     |                  "self_unique" : [], # generated if elements from self list don't exist in other list
+     |                  "other_unique"  : [], # generated if elements from other list don't exist in self list
      |                  "difftypes"     : [], # generated if elements with the same xpath have different types
      |              })
      |              if not returned["messages"]: self and other are totally equal.
@@ -305,13 +330,13 @@ CLASSES
      |      :param composite_key:  For compatibility with compare(..)
      |      :param compare_only: For compatibility with compare(..)
      |      :param exclude: ()|None|empty mean nothing to exclude
-     |      :param transform: ()|None|empty mean nothing to transform
+     |      :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
      |      :return:
      |              n0dict({
      |                  "messages"      : [], # generated for each case of not equality
-     |                  "notequal"      : [], # generated if elements with the same xpath and type are not equal
-     |                  "selfnotfound"  : [], # generated if elements from other list don't exist in self list
-     |                  "othernotfound" : [], # generated if elements from self list don't exist in other list
+     |                  "not_equal"      : [], # generated if elements with the same xpath and type are not equal
+     |                  "self_unique"   : [], # generated if elements from self list don't exist in other list
+     |                  "other_unique"  : [], # generated if elements from other list don't exist in self list
      |                  "difftypes"     : [], # generated if elements with the same xpath have different types
      |              })
      |              if not returned["messages"]: self and other are totally equal.
@@ -357,9 +382,6 @@ CLASSES
      |  
      |  __imul__(self, value, /)
      |      Implement self*=value.
-     |  
-     |  __init__(self, /, *args, **kwargs)
-     |      Initialize self.  See help(type(self)) for accurate signature.
      |  
      |  __iter__(self, /)
      |      Implement iter(self).
@@ -453,6 +475,8 @@ CLASSES
      |  __hash__ = None
 
 FUNCTIONS
+    convert_to_native_format(value, key=None, exception=None, transform_depends_of_key={'currency': <function <lambda> at 0x000002F12FDB4310>, 'source_currency': <function <lambda> at 0x000002F12FDB43A0>})
+    
     date_ddmmyyyy(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
@@ -478,6 +502,11 @@ FUNCTIONS
         :param month_delta:
         :return: today + day_delta + month_delta -> str 20 characters YYYYMMDDHHMMSSFFFFFF
     
+    date_slash_ddmmyyyy(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> str DD/MM/YYYY
+    
     date_yymm(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
@@ -500,12 +529,15 @@ FUNCTIONS
         :param date_str: YYYY-MM-DD # 2020-07-16
         :return: str -> date
     
+    generate_composite_keys(input_list: 'n0list', elemets_for_composite_key: 'tuple', prefix: 'str' = None, transform: 'tuple' = None) -> 'list'
+        serialization all or {elemets_for_composite_key} elements of {input_list[]}
+            :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
+        :return:
+            [[<composite_key>,[<index of entry>],...}
+    
     get__flag_compare_check_different_types()
     
     get__flag_compare_return_difference_of_values()
-    
-    get_composite_keys(input_list: 'n0list', elemets_for_composite_key: 'tuple') -> 'list'
-        serialization all or {elemets_for_composite_key} elements of {input_list[]}
     
     get_key_by_value(dict_: 'dict', value_)
         :param dict_:
@@ -530,6 +562,10 @@ FUNCTIONS
         :return:
     
     n0debug_object(object_name: 'str', level: 'int' = 5)
+    
+    n0isnumeric(value: 'str')
+        # ********************************************************************
+        # ********************************************************************
     
     n0pretty(item, indent_: 'int' = 0)
         :param item:
@@ -570,19 +606,29 @@ FUNCTIONS
     set__flag_compare_return_difference_of_values(value)
         if __flag_compare_return_difference_of_values == True, then
         if values of attributes are different and are int,float,
-        return additional element in result["notequal"] with difference
+        return additional element in result["not_equal"] with difference
+    
+    strip_ns lambda key
+        # ******************************************************************************
     
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
     
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x000002F12FDB4280>, transform_value=<function convert_to_native_format at 0x000002F12FDB4430>)
+        # ******************************************************************************
+    
     xpath_match(xpath: 'str', xpath_list)
-        # ******************************************************************************
-        # xpath_match(xpath: str, xpath_list):
-        #   Check that real xpath (or xpath like) is equal any of xpath_list[0..n].
-        #   Returns i+1
-        # ******************************************************************************
+        :param xpath:
+            xpath: str
+        :param xpath_list:
+            xpath_list: str or list|tuple
+        :return:
+             0 not matched any of xpath_list
+            >0 matched
 
 DATA
     annotations = _Feature((3, 7, 0, 'beta', 1), (4, 0, 0, 'alpha', 0), 16...
+    currency_converter = {'682': 'SAR'}
+    keys_for_currency_convertion = {'currency': <function <lambda>>, 'sour...
 
 FILE
     c:\repo\n0struct\n0struct\__init__.py
