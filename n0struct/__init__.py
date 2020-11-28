@@ -32,6 +32,7 @@
 #                   *.compare() return ["selfnotfound"]  -> "other_unique"
 #                   *.compare() return ["notequal"]      -> "not_equal"
 #                   get_composite_keys(..) -> generate_composite_keys(..)
+# 0.24 = 2020-11-20 added is_exist(..), rewritten to_json(..), AddElem(..)'s optimization started
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -399,15 +400,14 @@ def n0debug_calc(var_value: str, var_name: str = "", level: int = 5):  # __debug
     )
 
 
-def n0pretty(item, indent_: int = 0):
+def n0pretty(item, indent_: int = 0, show_type:bool = True):
     """
     :param item:
     :param indent_:
     :return:
     """
-
-    def indent():
-        return "\n" + (" " * (indent_ + 1) * 4)  # __indent_size = 4
+    def indent(indent__ = indent_):
+        return "\n" + (" " * (indent__ + 1) * 4)  # __indent_size = 4
 
     if isinstance(item, (list, tuple, dict, set, frozenset)):
         brackets = "[]"
@@ -420,20 +420,22 @@ def n0pretty(item, indent_: int = 0):
             if result:
                 result += "," + indent()
             if isinstance(item, dict):
-                result += "\"" + sub_item + "\": " + n0pretty(item[sub_item], indent_ + 1)  # json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes
+                result += "\"" + sub_item + "\": " + n0pretty(item[sub_item], indent_ + 1, show_type)  # json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes
             else:
                 result += n0pretty(sub_item, indent_ + 1)
-        if result and "\n" in result:
-            # result = brackets[0] + indent() + result + indent()
-            result = str(type(item)) + " " + brackets[0] + indent() + result + indent()
+        if show_type:
+            result_type = str(type(item)) + " " + brackets[0]
         else:
-            # result = brackets[0] + result
-            result = str(type(item)) + " " + brackets[0] + result
+            result_type = brackets[0]
+        if result and "\n" in result:
+            result = result_type + indent() + result + indent(indent_ - 1)
+        else:
+            result = result_type + result
         result += brackets[1]
     elif isinstance(item, str):
-        result = '"' + item + '"'
+        result = '"' + item.replace('"', '\\"') + '"'
     elif item is None:
-        result = '"None"'  # json.decoder.JSONDecodeError: Expecting value
+        result = '"N0ne"'  # json.decoder.JSONDecodeError: Expecting value
     else:
         result = str(item)
     return result
@@ -1682,6 +1684,32 @@ class n0dict(OrderedDict):
         If optional argument 'what' is provided, add sub-nodes. If sub-nodes exist, CONVERT THEM INTO LIST AND ADD NEW ITEM.
         If optional argument 'value' is provided, put into destination path where+what.
         """
+        
+        where_list = [itm for itm in where.split("/") if itm]   # Convert path where:str into list,
+                                                                # remove all empty separators ("//" or leading/trailing "/"),
+        
+        # Pass #1
+        tmp1 = self.__FindElem(  # find element with path where:str, from the root (super(n0dict, self)),
+                self,
+                where_list
+        )
+        
+        # Pass #2
+        tmp2 = self.__AddElem(  # This pass will create sub-nodes' name[s] if they[/it] do[es]n't exist ONLY.
+                *tmp1 # unpack tuple with "*" into list of arguments,
+        )
+        tmp2 = tmp2[0:1] # leave only 2 returned elements: where to inject and what to inject
+        
+        # Pass #3
+        tmp3 = self.__AddElem(  # This pass will convert single elements into lists IN CASE OF DUPLICATION NAMES
+                tmp2,
+                where_list,
+                value  # If optional argument 'value' is provided, put into destination path where+what.
+        )
+        
+        return tmp3
+        
+        '''
         return \
             self.__AddElem(  # This pass will convert single elements into lists IN CASE OF DUPLICATION NAMES
                 self.__AddElem(  # This pass will create sub-nodes' name[s] if they[/it] do[es]n't exist ONLY.
@@ -1696,6 +1724,7 @@ class n0dict(OrderedDict):
                 # remove all empty separators ("//" or leading/trailing "/"),
                 value  # If optional argument 'value' is provided, put into destination path where+what.
             )
+        '''
 
     # ******************************************************************************
     # ******************************************************************************
@@ -1950,32 +1979,39 @@ class n0dict(OrderedDict):
         """
         Public function: export self into json result string
         """
-        buffer = "{\n"
+        return n0pretty(self, show_type=False)
 
-        own_tagname = list(self.keys())[0]
-        buffer += " " * indent + "\"%s\":" % own_tagname
+        '''
+        buffer = "{"
+        for i in range(len(self.keys())):
+            own_tagname = list(self.keys())[i]
+            buffer += "\n" +" " * indent + "\"%s\":" % own_tagname
 
-        own_value = list(self.values())[0]
-        if len(self.values()) == 1 and isinstance(own_value, (str, int, float)):
-            buffer += " \"%s\"" % str(own_value)
-        elif isinstance(own_value, (list, tuple, n0list, dict, OrderedDict, n0dict)):
-            result = ""
-            for item in self.values():
-                result += self.__json(item, indent * 2, indent)
-            if isinstance(own_value, (dict, OrderedDict, n0dict)):
-                buffer += (" {\n%s\n" + " " * indent + "}") % result
+            own_value = list(self.values())[i]
+            if isinstance(own_value, (str)):
+                buffer += " \"%s\"" % own_value
+            elif isinstance(own_value, (int)):
+                buffer += " %d" % str(own_value)
+            elif isinstance(own_value, (float)):
+                buffer += " %f" % own_value
+            elif isinstance(own_value, (list, tuple, n0list, dict, OrderedDict, n0dict)):
+                result = ""
+                for item in own_value:
+                    result += self.__json(item, indent * 2, indent)
+                if isinstance(own_value, (dict, OrderedDict, n0dict)):
+                    buffer += (" {\n%s\n" + " " * indent + "}") % result
+                else:
+                    buffer += (" [\n%s\n" + " " * indent + "]") % result
             else:
-                buffer += (" [\n%s\n" + " " * indent + "]") % result
-        else:
-            raise Exception("Unknown type (%s) %s ==  %s" % (type(own_value), own_tagname, str(own_value)))
+                raise Exception("Unknown type (%s) %s ==  %s" % (type(own_value), own_tagname, str(own_value)))
 
         buffer += "\n}"
-
         return buffer
+        '''
 
     # ******************************************************************************
     # ******************************************************************************
-    def isExist(self, xpath):
+    def isExist(self, xpath) -> n0dict:
         """
         Public function: return empty lists in dict, if self[xpath] exists
         """
@@ -1997,6 +2033,17 @@ class n0dict(OrderedDict):
         validation_results["messages"].append("[%s] doesn't exist" % xpath)
         validation_results["other_unique"].append((xpath, None))
         return validation_results
+    # ******************************************************************************
+    def is_exist(self, xpath) -> bool:
+        """
+        Public function: return True, if self[xpath] exists
+        """
+        # TO DO: redo with 'in'
+        try:
+            if self[xpath]:
+                return True
+        except:
+            return False
     # ******************************************************************************
     # ******************************************************************************
     def has_all(self,tupple_of_keys):
