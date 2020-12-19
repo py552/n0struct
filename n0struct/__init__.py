@@ -44,7 +44,7 @@
 #                       n0dict. _find(..)
 #                       n0dict. _add(..)
 # 0.26 = 2020-12-15 rewritten n0dict. nvl()
-# 0.27 = 2020-12-16 
+# 0.27 = 2020-12-16
 #                   added:
 #                       n0dict. _get(..)
 #                   rewritten:
@@ -53,6 +53,12 @@
 #                       n0dict. _add()
 #                   fixed:
 #                       n0pretty()
+# 0.28 = 2020-12-17
+#                   renamed:
+#                       n0dict. nvl() -> get(..)
+#                   rewritten:
+#                       n0dict. __setitem__(..)
+#                       n0dict. _add()
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -533,12 +539,14 @@ def n0debug_object(object_name: str, level: int = 5):  # __debug_levels.index("I
 
 # ******************************************************************************
 strip_ns = lambda key: key.split(':',1)[1] if ':' in key else key
-currency_converter = {"682": "SAR"}
-keys_for_currency_convertion = {
-    "currency":         lambda value: currency_converter[value] if value in currency_converter else value,
-    "source_currency":  lambda value: currency_converter[value] if value in currency_converter else value,
-}
-def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
+# # Sample
+# currency_converter = {"682": "SAR"}
+# keys_for_currency_convertion = {
+    # "currency":         lambda value: currency_converter[value] if value in currency_converter else value,
+    # "source_currency":  lambda value: currency_converter[value] if value in currency_converter else value,
+# }
+# def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
+def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = None):
     if key is not None:
         if exception is not None:
             if key in exception:
@@ -1216,6 +1224,48 @@ class n0list(list):
     # raise (TypeError, '(%s)%s must be list' % (type(sigle_item), sigle_item))
     # super(n0list, self).extend(other_list)
     # return self
+    # ******************************************************************************
+    # ******************************************************************************
+    def _in(self, other_list, in_is_expected: bool):
+        if not isinstance(other_list, (list,tuple,n0list)):
+            other_list = [other_list]
+        for itm in self:
+            if (itm in other_list) == in_is_expected:
+                return True
+        return False
+    # ******************************************************************************
+    def any_are(self, other_list):
+        return self._in(other_list, True)
+    # ******************************************************************************
+    def any_are_not(self, other_list):
+        return not self._in(other_list, True)
+    # ******************************************************************************
+    def all_are(self, other_list):
+        return not self._in(other_list, False)
+    # ******************************************************************************
+    def all_are_not(self, other_list):
+        return self._in(other_list, False)
+    # ******************************************************************************
+    # ******************************************************************************
+    def _consists_of(self, other_list, in_is_expected: bool):
+        if not isinstance(other_list, (list,tuple,n0list)):
+            other_list = [other_list]
+        for itm in other_list:
+            if (itm in self) == in_is_expected:
+                return True
+        return False
+    # ******************************************************************************
+    def consists_of_any(self, other_list):
+        return self._consists_of(other_list, True)
+    # ******************************************************************************
+    def consists_of_all(self, other_list):
+        return not self._consists_of(other_list, False)
+    # ******************************************************************************
+    def not_consists_of_any(self, other_list):
+        return not self._consists_of(other_list, True)
+    # ******************************************************************************
+    # ******************************************************************************
+
 
 
 # ******************************************************************************
@@ -1323,13 +1373,6 @@ class n0dict(OrderedDict):
         self_keys = list(self.keys())
         self_not_exist_in_other = list(self.keys())
         other_not_exist_in_self = list(other.keys())
-        '''
-        if compare_only:
-            # self_keys = compare_only if isinstance(compare_only, (list,tuple,)) else (compare_only,)
-            self_keys = compare_only if isinstance(compare_only, (list,tuple,)) else [compare_only] # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
-            self_not_exist_in_other = [key for key in self_not_exist_in_other if key in self_keys]
-            other_not_exist_in_self = [key for key in other_not_exist_in_self if key in self_keys]
-        '''
 
         # #############################################################
         # NEVER fetch data from the mutable list in the loop !!!
@@ -1509,370 +1552,6 @@ class n0dict(OrderedDict):
             composite_key=composite_key, compare_only=compare_only,
             exclude=exclude, transform=transform,
         )
-    '''
-    # ******************************************************************************
-    # * n0dict. __FindElem(..)
-    # ******************************************************************************
-    def __FindElem(self, parent: n0dict, where_parts: list, value: str = None, xpath: str = "", root = None) -> tuple:
-        """
-        Private function:
-            if path is found, returns
-                [0] = element/node by path where_parts:list
-                [1] = None
-                [2] = xpath of found element/node
-            if path is NOT found, returns
-                [0] = last found element/node
-                [1] = not found sub-elements
-                [2] = xpath of last found element/node
-        """
-        if parent is None:
-            raise Exception("Why parent is None?")
-        if root is None:
-            root = parent
-
-        child_name = where_parts[0]
-        child_index = None
-        if "[" in child_name and child_name.endswith("]"):
-            child_name, child_index = child_name.split("[", 2)
-            child_index = child_index[:-1].strip().lower()
-
-        # n0print("#"*80)
-        # n0debug("where_parts")
-        # n0debug("child_name")
-        # n0debug("child_index")
-        # n0debug("parent")
-        # print("parent=")
-        # print(parent)
-        if isinstance(parent, (n0dict, OrderedDict, dict)):
-            # n0print("+1"*20)
-            if child_name not in parent:
-                # n0print("-"*50)
-                # return parent, where_parts  # Return what was found, and what was not found
-                return parent, where_parts, xpath  # Return what was found, and what was not found
-            else:
-                # n0print("*"*50)
-                child = parent.get(child_name)  # [] or None are possible results
-                # n0debug("child")
-        elif isinstance(parent, (n0list, tuple, list)):
-            # n0print("+2"*20)
-            for i,one_of_parent in enumerate(parent):
-                # n0print("##### Lets try: %s[%d]"%(xpath,i))
-                found, not_found, found_xpath = self.__FindElem(
-                                                            one_of_parent,
-                                                            where_parts,
-                                                            value,
-                                                            "%s[%d]"%(xpath,i),
-                                                            root
-                                                            )
-                if not not_found:
-                    return found, not_found, found_xpath
-            else:
-                return parent, where_parts, xpath  # Return what was found, and what was not found
-        else:
-            if child_name == "..":
-                # n0print("Upper and upper")
-                parent_xpath = "/".join(xpath.split('/')[:-1])
-                # n0debug("parent_xpath")
-                # n0print("-------------8<----------------- #1")
-                n0debug("parent_xpath")
-                n0debug("root")
-                parent = root[parent_xpath]
-                n0debug("parent")
-                # n0print("------------->8----------------- #1")
-                # n0debug("parent")
-                # n0debug_calc("/".join(where_parts[1:]),"more_xpath")
-                return self.__FindElem(parent, where_parts[1:], value, parent_xpath, root)  # Upper and upper
-            # n0print("+3"*20)
-            # n0print("~"*50)
-            # n0print("Unknown type of parent %s" % type(parent))
-            # n0print("~"*50)
-            # n0debug("parent")
-            # n0debug("where_parts")
-            # sys.exit(-1)
-
-        child_index_ = child_index
-        if child_index:
-            # n0print("+4"*20)
-            if isinstance(child, (list, tuple, n0list)):
-                # n0print("+5"*20)
-                # if not child_index.translate(str.maketrans("+-.", "000")).isnumeric():
-                if not n0isnumeric(child_index):
-                    if child_index.startswith("last()"):
-                        child_index = child_index[6:]
-                        # if not child_index or child_index.translate(str.maketrans("+-.", "000")).isnumeric():  # Py3 dirty fix
-                        if not child_index or n0isnumeric(child_index):
-                            child_index = int(eval("-1" + child_index))  # FIX ME: Very dark and dirty :-(
-                        else:
-                            raise IndexError(
-                                "'Something strange with index 'last()%s' in '%s'" % (child_index, where_parts[0]))
-                    else:
-                        print("'%s' in '%s' is not an index" % (child_index, where_parts[0]))
-                        raise IndexError("'%s' in '%s' is not an index" % (child_index, where_parts[0]))
-                else:
-                    child_index = int(eval(child_index))  # FIX ME: Very dark and dirty :-(
-                if child_index >= len(child):
-                    raise IndexError(
-                        "index of '%s' (%d) is beyond the length (%d) of %s" % (
-                            where_parts[0], child_index, len(child), child
-                        )
-                    )
-                if child_index < -len(child):
-                    raise IndexError(
-                        "index of '%s' (%d) is below the length (%d) of %s" % (
-                            where_parts[0], child_index, len(child), child
-                        )
-                    )
-                # n0print("+7"*20)
-                child = child[child_index]
-                # n0debug("child")
-                # n0debug("where_parts")
-            else:
-                # n0print("+6"*20)
-                if child_index.startswith("text()"):
-                    child_text_compare = child_index[6:]
-                    if child_text_compare.startswith("=="):
-                        child_index_value = child_text_compare[2:].strip()
-                        child_text_compare = True
-                    elif child_text_compare.startswith("!="):
-                        child_index_value = child_text_compare[2:].strip()
-                        child_text_compare = False
-                    elif child_text_compare.startswith("="):
-                        child_index_value = child_text_compare[1:].strip()
-                        child_text_compare = True
-                    else:
-                        raise IndexError("Strange compare command in '%s' of (%s)'%s'==%s" % (child_index, type(child), xpath, child))
-
-                    if child_index_value[0] == child_index_value[-1] and child_index_value[0] in ("'",'"'):
-                        child_index_value = child_index_value[1:-1]
-
-                    child_value = urllib.parse.unquote(child).lower()
-                    child_index_value = urllib.parse.unquote(child_index_value)
-
-                    if (child_value == child_index_value) != child_text_compare:
-                        # n0print("Expected: %s %s %s" % (child_value, "==" if child_text_compare else "!=", child_index_value))
-                        return parent, where_parts, xpath
-                    # else:
-                        # n0print("+"*80)
-                        # n0print("+"*80)
-                        # n0print("As expected: %s %s %s" % (child_value, "==" if child_text_compare else "!=", child_index_value))
-                        # n0print("+"*80)
-                        # n0print("+"*80)
-
-                else:
-                    raise IndexError("Strange index '%s' of (%s)'%s'==%s" % (child_index, type(child), xpath, child))
-                # if child_index == "last()":
-                    # child = child
-                # else:
-                    # raise IndexError("'%s' is not list but %s" % (child, type(child)))
-
-        # n0print("+8"*20)
-        if len(where_parts) > 1:
-            # n0print("Deeper and deeper")
-            # n0debug("child_index_")
-            # n0debug("child_index")
-            # n0debug("child")
-            # n0debug_calc(where_parts[1:])
-            # n0debug_calc(xpath+"/"+where_parts[0])
-            if child is None:
-                return None, where_parts[1:], xpath+"/"+where_parts[0]
-            return self.__FindElem(child, where_parts[1:], value, xpath+"/"+where_parts[0], root)  # Deeper and deeper
-        elif len(where_parts) == 1:
-            # if value and value != "change to n0dict()":
-            if value:
-                parent.update({child_name: value})
-            # n0print("Returning...")
-            # n0debug("child_name")
-            # n0print(parent.get(child_name))
-            # n0print(xpath)
-            # return parent.get(child_name), None, xpath  # Parent element, nothing is left
-            return child, None, xpath  # Parent element, nothing is left
-        else:
-            raise Exception("FATAL: Unexpected behavior with empty path")
-
-    # ******************************************************************************
-    # ******************************************************************************
-    def __AddElem(self, parent: OrderedDict, where_parts: list, default_value: str = "change to n0dict()") -> tuple:
-        """
-        Private function: create element by path where_parts:list and define it as default_value.
-        If any of elements exists, then such element will be converted into array,
-        and subpath will be continued from last element of such array
-        """
-        if default_value == "change to n0dict()":
-            default_value = n0dict()
-
-        if not where_parts or not len(where_parts):
-            return parent  # Created element
-
-        if len(where_parts) == 1:
-            current_value = default_value
-            if not default_value:
-                # current_value = n0dict()
-                pass
-        else:
-            current_value = n0dict()
-
-        if isinstance(parent, list):
-            parent = parent[-1]  # If list, then put to the last node
-        # NOT PREDICTED: What to do if will be requested to extend already existed element into node?
-        # print("--> " +  str(where_parts))
-        child = parent.get(where_parts[0])
-        if child:
-            # The element with the same name exists
-            if not isinstance(child, list):
-                child = [child]
-            child.append(current_value)
-            # parent[where_parts[0]] = child # Return back updated value
-            super(n0dict, parent).__setitem__(where_parts[0], child)
-
-            if len(where_parts) == 1:
-                return child, []
-
-            child = parent[where_parts[0]][-1]
-        else:
-            parent.update({where_parts[0]: current_value})
-            child = parent.get(where_parts[0])
-            if len(where_parts) == 1:
-                return child
-            if current_value is None:
-                return child
-
-        # print("==> " +  str(where_parts))
-        return self.__AddElem(child, where_parts[1:], default_value)  # Create next element
-
-    # ******************************************************************************
-    # ******************************************************************************
-    def AddElem(self, where: str, what: str = None, value: str = None):
-        """
-        Public function:
-        Convert path where:str into list, remove all empty separators ("//" or leading/trailing "/"),
-        find element with path where:str, from the root (super(n0dict, self)),
-        unpack tuple with "*" into list of arguments,
-        create sub-nodes' name[s] if they[/it] do[es]n't exist ONLY.
-
-        If optional argument 'what' is provided, add sub-nodes. If sub-nodes exist, CONVERT THEM INTO LIST AND ADD NEW ITEM.
-        If optional argument 'value' is provided, put into destination path where+what.
-        """
-
-        where_list = [itm for itm in where.split("/") if itm]   # Convert path where:str into list,
-                                                                # remove all empty separators ("//" or leading/trailing "/"),
-
-        # Pass #1
-        tmp1 = self.__FindElem(  # find element with path where:str, from the root (super(n0dict, self)),
-                self,
-                where_list
-        )
-
-        # Pass #2
-        tmp2 = self.__AddElem(  # This pass will create sub-nodes' name[s] if they[/it] do[es]n't exist ONLY.
-                *tmp1 # unpack tuple with "*" into list of arguments,
-        )
-        tmp2 = tmp2[0:1] # leave only 2 returned elements: where to inject and what to inject
-
-        # Pass #3
-        tmp3 = self.__AddElem(  # This pass will convert single elements into lists IN CASE OF DUPLICATION NAMES
-                tmp2,
-                where_list,
-                value  # If optional argument 'value' is provided, put into destination path where+what.
-        )
-
-        return tmp3
-
-        """
-        return \
-            self.__AddElem(  # This pass will convert single elements into lists IN CASE OF DUPLICATION NAMES
-                self.__AddElem(  # This pass will create sub-nodes' name[s] if they[/it] do[es]n't exist ONLY.
-                    *  # unpack tuple with "*" into list of arguments,
-                    self.__FindElem(  # find element with path where:str, from the root (super(n0dict, self)),
-                        self,
-                        [itm for itm in where.split("/") if itm]  # Convert path where:str into list,
-                        # remove all empty separators ("//" or leading/trailing "/"),
-                    )[0:1] # leave only 2 returned elements: where to inject and what to inject
-                ),
-                [itm for itm in what.split("/") if itm],  # Convert path what:str into list,
-                # remove all empty separators ("//" or leading/trailing "/"),
-                value  # If optional argument 'value' is provided, put into destination path where+what.
-            )
-        """
-    '''        
-        
-    # ******************************************************************************
-    # ******************************************************************************
-    '''    
-    def __getitem__(self, where: str):
-        """
-        Private function:
-        return self[where1/where2/.../whereN]
-            AKA
-        return self[where1][where2]...[whereN]
-
-        If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
-        """
-        # found, not_found = self.__FindElem(super(n0dict, self)
-        found, not_found, found_xpath = self.__FindElem(self,
-                                           [itm for itm in where.split("/") if itm]  # Convert path where:str into list,
-                                           # remove all empty separators
-                                           # ("//" or leading/trailing "/")
-                                           )
-        if not_found:
-            # raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), where))
-            raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), found_xpath))
-        # #####################################################################
-        # #####################################################################
-        # NEVER RECONVERT OBJECTS!!!
-        # For example: return n0list(found) => dict["list"].append(newitem) => append will be applyed to NEW object!!!
-        # #####################################################################
-        # #####################################################################
-        return found
-
-    # ******************************************************************************
-    # ******************************************************************************
-    def __setitem__(self, where: str, value: str):
-        """
-        Private function:
-        self[=?where1/where2/.../whereN] = value
-            AKA
-        self[where1][where2]...[whereN] = value
-
-        if 'where' starts with '=', then
-            the value will be rewritten
-            If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
-        else
-            the path will be created. if last element exists, then the element will be reconfigured into array
-            if any whereN starts with '+', then the element will be reconfigured into array
-
-        """
-        flag_overwrite_attribute_value = False
-        if where.startswith("="):
-            flag_overwrite_attribute_value = True
-            where = where[1:]
-        where_parts = [itm for itm in where.split("/") if itm]
-
-        if len(where_parts) == 1:
-            return super(n0dict, self).__setitem__(where, value)
-        else:
-            if flag_overwrite_attribute_value:
-                found, not_found, found_xpath = self.__FindElem(super(n0dict, self), where_parts, value)
-                if not_found:
-                    # raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), where))
-                    raise IndexError("'%s' is not found in path '%s'" % ("/".join(not_found), found_xpath))
-                return found
-            else:
-                # By default just the last element could be item in the array,
-                # but   if where_parts[i] will be ended with '[next()]',
-                #       then from this part it will be part of array
-                for i, where_part in enumerate(where_parts):
-                    tag = "[next()]"
-                    if where_part.lower().replace(" ", "").endswith(tag):
-                        where_part = where_part[:-len(tag)]
-                        where_parts[i] = where_part
-                        break
-                else:
-                    i -= len(where_parts)
-                where1 = "/".join(where_parts[:i])
-                where2 = "/".join(where_parts[i:])
-                return self.AddElem(where1, where2, value)
-
-    '''
     # ******************************************************************************
     # XPATH
     # ******************************************************************************
@@ -2007,8 +1686,6 @@ class n0dict(OrderedDict):
                 result += " " * indent + ("\"%s\": \"%s\"" % (key, value))
             elif isinstance(value, (n0dict, dict, OrderedDict)):
                 sub_result = self.__json(value, indent + inc_indent, inc_indent)
-                # if "\n" in sub_result: sub_result = "\n" + sub_result
-                # if sub_result: sub_result = "\n" + sub_result
                 if sub_result:
                     result += (" " * indent + "\"%s\": {\n%s\n" + " " * indent + "}") % (key, sub_result)
                 else:
@@ -2024,34 +1701,6 @@ class n0dict(OrderedDict):
         Public function: export self into json result string
         """
         return n0pretty(self, show_type=False)
-
-        '''
-        buffer = "{"
-        for i in range(len(self.keys())):
-            own_tagname = list(self.keys())[i]
-            buffer += "\n" +" " * indent + "\"%s\":" % own_tagname
-
-            own_value = list(self.values())[i]
-            if isinstance(own_value, (str)):
-                buffer += " \"%s\"" % own_value
-            elif isinstance(own_value, (int)):
-                buffer += " %d" % str(own_value)
-            elif isinstance(own_value, (float)):
-                buffer += " %f" % own_value
-            elif isinstance(own_value, (list, tuple, n0list, dict, OrderedDict, n0dict)):
-                result = ""
-                for item in own_value:
-                    result += self.__json(item, indent * 2, indent)
-                if isinstance(own_value, (dict, OrderedDict, n0dict)):
-                    buffer += (" {\n%s\n" + " " * indent + "}") % result
-                else:
-                    buffer += (" [\n%s\n" + " " * indent + "]") % result
-            else:
-                raise Exception("Unknown type (%s) %s ==  %s" % (type(own_value), own_tagname, str(own_value)))
-
-        buffer += "\n}"
-        return buffer
-        '''
 
     # ******************************************************************************
     # ******************************************************************************
@@ -2206,16 +1855,23 @@ class n0dict(OrderedDict):
             # Try to check all [*] items in the loop
             # ..................................................................
             if node_name == "*":
+                cur_values = n0list([])
+                fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 for next_node_name in parent_node:
                     cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                         cur_not_found_xpath_list = self._find([next_node_name] + new_xpath_list, parent_node, found_xpath_str)
                     if not cur_not_found_xpath_list:
-                        return cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, cur_not_found_xpath_list
+                        cur_values.append(cur_value)
+                        if not fst_found_xpath_str:
+                            fst_parent_node, fst_node_name_index, fst_value, fst_found_xpath_str = \
+                                cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str
+                if fst_found_xpath_str:
+                    return fst_parent_node, fst_node_name_index, cur_values, fst_found_xpath_str,   None
                 else:
-                    #--------------------------------
-                    # NOT FOUND in all [*] items 
-                    #--------------------------------
-                    return parent_node, None, None, xpath_found_str, xpath_list
+                    # #--------------------------------
+                    # # NOT FOUND in all [*] items
+                    # #--------------------------------
+                    return parent_node,     None,               None,       xpath_found_str,        xpath_list
             # ..................................................................
             # Check key in dictionary
             # ..................................................................
@@ -2244,16 +1900,11 @@ class n0dict(OrderedDict):
             # NOT FOUND: new element in n0list
             #--------------------------------
             if node_index == "new()":
-######################################################################################################            
-                # parent_node = self._find(xpath_found_str)
-                # return parent_node, xpath_found_str.split('/')[-1] + "[new()]", None, xpath_found_str, xpath_list[1:]
-######################################################################################################            
                 parent_node, node_name_index, cur_value, found_xpath_str, \
                     not_found_xpath_list = self._find(xpath_found_str)
-                # return parent_node, xpath_found_str.split('/')[-1], None, xpath_found_str, xpath_list
                 if not isinstance(parent_node[node_name_index], (list, tuple, n0list)):
                     parent_node[node_name_index] = n0list([parent_node[node_name_index]])
-                return parent_node[node_name_index],"[new()]", None, xpath_found_str, xpath_list[1:]
+                return parent_node[node_name_index], None, None, xpath_found_str, ["[new()]"] + xpath_list[1:]
             # ..................................................................
             # Try to check all [*] items in the loop
             # ..................................................................
@@ -2261,13 +1912,25 @@ class n0dict(OrderedDict):
                 if not isinstance(parent_node, (list, tuple, n0list)):
                     # Hidden list. Convert single item into list
                     parent_node = [parent_node]
+                cur_values = n0list([])
+                fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 for i,cur_node in enumerate(parent_node):
                     cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                         cur_not_found_xpath_list = self._find(["[%d]" % i] + xpath_list[1:], parent_node, xpath_found_str)
                     if not cur_not_found_xpath_list:
-                        return cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, cur_not_found_xpath_list
+                        cur_values.append(cur_value)
+                        if not fst_found_xpath_str:
+                            fst_parent_node, fst_node_name_index, fst_value, fst_found_xpath_str = \
+                                cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str
+                if fst_found_xpath_str:
+                    return fst_parent_node, fst_node_name_index, cur_values, fst_found_xpath_str,   None
                 else:
-                    return parent_node, None, None, xpath_found_str, xpath_list
+                    # #--------------------------------
+                    # # NOT FOUND in all [*] items
+                    # #--------------------------------
+                    return parent_node,     None,               None,       xpath_found_str,        xpath_list
+
+
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             # Conditions: parent is expected to be dictionary (or possible list)
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2283,7 +1946,7 @@ class n0dict(OrderedDict):
                         break
                 else:
                     raise Exception("Never must be happend!")
-                
+
                 if expected_node_name == "text()":
                     if ( expected_value.startswith('"') and expected_value.endswith('"') ) or \
                        ( expected_value.startswith("'") and expected_value.endswith("'") ):
@@ -2320,7 +1983,7 @@ class n0dict(OrderedDict):
                         )
                     if not expected_node_name in parent_node:
                         return parent_node, None, None, xpath_found_str, xpath_list
-                        
+
                     return self._find(["[text()=%s]" % expected_value, ".."] + xpath_list[1:], parent_node[expected_node_name], xpath_found_str + '/' + expected_node_name)
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             # Pure index
@@ -2336,14 +1999,14 @@ class n0dict(OrderedDict):
                 else:
                     len__parent_node = 1
                     parent_node = [parent_node]
-                
+
                 if node_index >= len__parent_node or node_index < -len__parent_node:
                     #--------------------------------
                     # NOT FOUND: Element in n0list
                     #--------------------------------
                     return parent_node, "[%s]" % node_index, None, xpath_found_str, xpath_list
                     # raise IndexError("If we are looking for element of list '%s[%s]', then parent node (%s)'%s' must be list" % (xpath_found_str, node_index, type(parent_node), str(parent_node)))
-                    
+
                 if len(xpath_list) == 1:
                     #================================
                     # FOUND: the last is n0list
@@ -2396,7 +2059,7 @@ class n0dict(OrderedDict):
         return self._get(xpath, raise_exception = True)
     # ******************************************************************************
     # ******************************************************************************
-    def nvl(self, xpath: str, if_not_found = None):
+    def get(self, xpath: str, if_not_found = None):
         """
         Private function:
         return self[where1/where2/.../whereN]
@@ -2423,82 +2086,105 @@ class n0dict(OrderedDict):
             ####################################################################
             # Parent is DICTIONARY
             ####################################################################
-            if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
-                raise IndexError("If we are looking for elem '%s' then parent (%s)'%s' must be dict/OrderedDict/n0dict" % (cur_node_name, type(parent_node), str(parent_node)))
-
             if cur_node_name:
+                if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
+                    raise IndexError("If we are looking for key '%s' then parent (%s)'%s' must be dictionary"
+                                     % (cur_node_name, type(parent_node), str(parent_node)))
                 parent_node = parent_node[cur_node_name]
             else:
                 # It could happen, then just to add key into dictionary
                 pass
 
-            if not next_node_name in parent_node:
-                # New node
-                if next_node_index:
-                    parent_node.update({next_node_name: n0list([])})
-                    next_node = parent_node[next_node_name]
-                    next_node_name_index = "[%s]" % next_node_index
+            if next_node_name:
+                if not next_node_name in parent_node:
+                    # New node
+                    if next_node_index:
+                        if next_node_index != "new()":
+                            raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
+                                            % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
+                        # parent_node.update({next_node_name: n0list([])})
+                        parent_node.update({next_node_name: n0list([None])})
+                        next_node = parent_node[next_node_name]
+                        # next_node_name_index = "[%s]" % next_node_index
+                        next_node_name_index = "[last()]"
+                    else:
+                        parent_node.update({next_node_name: n0dict({})})
+                        next_node = parent_node
+                        next_node_name_index = next_node_name
                 else:
-                    parent_node.update({next_node_name: n0dict({})})
-                    next_node = parent_node
-                    next_node_name_index = next_node_name
+                    # Node is EXISTED
+                    if next_node_index:
+                        parent_node.update({next_node_name: [parent_node[next_node_name]]})
+                        next_node = parent_node[next_node_name]
+                        next_node_name_index = "[%s]" % next_node_index
+                    else:
+                        raise IndexError("Nonsense! How to create already existed node '%s'?" % next_node_name)
             else:
-                # Node is EXISTED
-                if next_node_index:
-                    parent_node.update({next_node_name: [parent_node[next_node_name]]})
-                    next_node = parent_node[next_node_name]
-                    next_node_name_index = "[%s]" % next_node_index
-                else:
-                    raise IndexError("Nonsense! How to create already existed node '%s'?" % next_node_name)
+                if next_node_index != "new()":
+                    raise IndexError("Expect new() for adding index, but got '%s'" % next_node_index)
+                parent_node.append(None)
+                next_node = parent_node
+                next_node_name_index = "[last()]"
         else:
-            try:
-                cur_node_index = n0eval(cur_node_index)
-            except:
-                raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, cur_node_index))
             ####################################################################
             # Parent is LIST or should be a list
             ####################################################################
             if cur_node_index == "new()":
-                # n0debug("parent_node")
-                # new_node = parent_node[cur_node_name]
                 if not isinstance(parent_node[cur_node_name], (list, tuple, n0list)):
-                    parent_node.update({cur_node_name: [parent_node[cur_node_name]]})
+                    ####################################################################
+                    # Convert not LIST into the list
+                    ####################################################################
+                    if len(parent_node[cur_node_name]):
+                        parent_node.update({cur_node_name: n0list([parent_node[cur_node_name]])})
+                    else:
+                        parent_node.update({cur_node_name: n0list([])})
                     parent_node = parent_node[cur_node_name]
-                    next_node_name_index = ""
-                if len(xpath_list) > 1:
-                    parent_node.append()
-                    next_node_name_index = "[-1]"
-
-            '''
-            if not isinstance(next_node, (list, tuple, n0list)):
-                if not cur_node_index == "new()":
-                    raise IndexError("(%s) parent_node is not list/tuple/n0list but index '%s' is definded" % (type(parent_node), cur_node_index))
+                if next_node_name:
+                    if not next_node_index:
+                        # Next is pure dict
+                        parent_node.append(n0dict({next_node_name: n0dict({})}))
+                        next_node = parent_node[-1]
+                        next_node_name_index = next_node_name
+                    else:
+                        # Next is list under dict
+                        parent_node.append(n0dict({next_node_name: n0list([])}))
+                        next_node = parent_node[-1][next_node_name]
+                        # Expected to have 'new()' in next_node_index, else it will be failed at the next step
+                        next_node_name_index = "[%s]" % next_node_index
+                elif next_node_index:
+                    # List under list: [0][0] or [0]/[0]
+                    parent_node.append(n0list([]))
+                    next_node = parent_node[-1]
+                    # Expected to have 'new()' in next_node_index, else it will be failed at the next step
+                    next_node_name_index = "[%s]" % next_node_index
                 else:
-                    # Coverting into the n0list
-                    if not cur_node_name:
-                        raise IndexError("INTERNAL ERROR: Why name is empty, if index is new?")
-                    parent_node.update({cur_node_name: [parent_node[cur_node_name]]})
-                    parent_node = parent_node[cur_node_name]
-                    next_node_name = ""
-            '''
-
-            if next_node_name:
-                if not next_node_index:
-                    # Next is pure dict
-                    parent_node[cur_node_index] = {next_node_name: n0dict({})}
-                    next_node = parent_node[cur_node_index]
-                    next_node_name_index = next_node_name
-
-                else:
-                    # Next is list under dict
-                    parent_node[cur_node_index] = {next_node_name: []}
-                    next_node = parent_node[cur_node_index][next_node_name]
+                    raise Exception("Nonsence! Both next_node_name and next_node_index could NOT be empty")
+            if cur_node_index == "last()":
+                # Came from previous level: we create [None] and point to [last()] for exchange
+                if not isinstance(parent_node, (list, tuple, n0list)):
+                    raise Exception("Nonsence! if index '%s' is set then (%s)%s must be n0list"
+                                    % (cur_node_index, type(parent_node), str(parent_node)))
+                if next_node_name:
+                    if not next_node_index:
+                        # Next is pure dict
+                        parent_node[-1] = n0dict({next_node_name: n0dict({})})
+                        next_node = parent_node[-1]
+                        next_node_name_index = next_node_name
+                    else:
+                        # Next is list under dict
+                        parent_node[-1] = n0dict({next_node_name: n0list([])})
+                        next_node = parent_node[-1][next_node_name]
+                        # Expected to have 'new()' in next_node_index, else it will be failed at the next step
+                        next_node_name_index = "[%s]" % next_node_index
+                elif next_node_index:
+                    # List under list: [0][0] or [0]/[0]
+                    parent_node.append(n0list([]))
+                    next_node = parent_node[-1]
+                    # Expected to have 'new()' in next_node_index, else it will be failed at the next step
                     next_node_name_index = "[%s]" % next_node_index
             else:
-                # List under list: [0][0] or [0]/[0]
-                parent_node.append(n0dict({}))
-                next_node = parent_node
-                next_node_name_index = "[%s]" % next_node_index
+                raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
+                                % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
 
         if len(xpath_list) == 1:
             return next_node, next_node_name_index
@@ -2515,7 +2201,7 @@ class n0dict(OrderedDict):
 
         if xpath is exist, then the value will be overwritten
         if not exist, then the node will be created
-        
+
         could be used predicates:
             [<item>=<value>]
             [<item>='<value>']
@@ -2535,34 +2221,28 @@ class n0dict(OrderedDict):
         """
         if any(char in xpath for char in "/?[]"):
             if xpath.startswith('?'):
-                if new_value is None or (isinstance(new_value, str) and not new_value):
+                if new_value is None or (isinstance(new_value, str) and new_value == ""):
                     return None
                 xpath = xpath[1:]
-        
+
             parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath)
             if not_found_xpath_list:
                 parent_node, node_name_index = self._add(parent_node, node_name_index, not_found_xpath_list)
 
             node_name, node_index = split_name_index(node_name_index)
-            
             if isinstance(parent_node, (dict, OrderedDict, n0dict)):
                 if node_index:
                     raise Exception("How is it possible: index '%s' for dictionary (%s)'%s'?"% (node_index, type(parent_node), parent_node))
-                # if not node_name:
-                #     raise Exception("How is it possible: no key (index = '%s') for dict (%s)'%s'?" % (node_index, type(parent_node), parent_node))
                 parent_node.update({node_name_index: new_value})
             elif isinstance(parent_node, (list, tuple, n0list)):
                 if node_name:
                     raise Exception("How is it possible: key '%s' for list (%s)'%s'?" % (node_name, type(parent_node), parent_node))
-                if node_index == "new()":
-                    parent_node.append(new_value)
-                else:
-                    parent_node[n0eval(node_index)] = new_value
+                parent_node[n0eval(node_index)] = new_value
             else:
                 raise Exception("How is it possible: unknown type of parent node (%s) of '%s'" % (type(parent_node), parent_node))
         else:
             super(n0dict, self).__setitem__(xpath, new_value)
-            
+
         return new_value  # For speed
 # ******************************************************************************
 # ******************************************************************************
