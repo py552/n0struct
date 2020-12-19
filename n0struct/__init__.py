@@ -59,6 +59,9 @@
 #                   rewritten:
 #                       n0dict. __setitem__(..)
 #                       n0dict. _add()
+# 0.29 = 2020-12-18
+#                   added:
+#                       n0list. any_*()
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -742,7 +745,6 @@ class n0list(list):
                     self.append(n0list(value))
                 else:
                     self.append(value)
-            # return super(n0list, self).__init__(self)
         else:
             return super(n0list, self).__init__(*args, **kw)
     # ******************************************************************************
@@ -1234,16 +1236,16 @@ class n0list(list):
                 return True
         return False
     # ******************************************************************************
-    def any_are(self, other_list):
+    def any_in(self, other_list):
         return self._in(other_list, True)
     # ******************************************************************************
-    def any_are_not(self, other_list):
+    def any_not_in(self, other_list):
         return not self._in(other_list, True)
     # ******************************************************************************
-    def all_are(self, other_list):
+    def all_in(self, other_list):
         return not self._in(other_list, False)
     # ******************************************************************************
-    def all_are_not(self, other_list):
+    def all_not_in(self, other_list):
         return self._in(other_list, False)
     # ******************************************************************************
     # ******************************************************************************
@@ -1265,9 +1267,23 @@ class n0list(list):
         return not self._consists_of(other_list, True)
     # ******************************************************************************
     # ******************************************************************************
-
-
-
+    def _valid(self, validate, valid_is_expected: bool):
+        for itm in self:
+            if validate(itm) == valid_is_expected:
+                return True
+        return False
+    # ******************************************************************************
+    def any_valid(self, validate):
+        return self._consists_of(validate, True)
+    # ******************************************************************************
+    def any_not_valid(self, validate):
+        return self._consists_of(validate, False)
+    # ******************************************************************************
+    def all_valid(self, validate):
+        return not self._consists_of(validate, False)
+    # ******************************************************************************
+    def all_not_valid(self, validate):
+        return not self._consists_of(validate, True)
 # ******************************************************************************
 class n0dict(OrderedDict):
     # ******************************************************************************
@@ -1302,9 +1318,6 @@ class n0dict(OrderedDict):
                     else:
                         self.update({key: value})
                 return super(n0dict, self).__init__(self)
-        # raise Exception("n0dict(..): Init as OrderedDict")
-        # n0debug_calc(len(args),"len(args)")
-        # n0debug_calc(args,"args")
         else:
             return super(n0dict, self).__init__(*args, **kw)
     # ******************************************************************************
