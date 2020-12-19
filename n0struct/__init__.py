@@ -44,6 +44,15 @@
 #                       n0dict. _find(..)
 #                       n0dict. _add(..)
 # 0.26 = 2020-12-15 rewritten n0dict. nvl()
+# 0.27 = 2020-12-16 
+#                   added:
+#                       n0dict. _get(..)
+#                   rewritten:
+#                       n0dict. __getitem__(..)
+#                       n0dict. nvl()
+#                       n0dict. _add()
+#                   fixed:
+#                       n0pretty()
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -481,7 +490,7 @@ def n0pretty(item, indent_: int = 0, show_type:bool = True):
             if isinstance(item, dict):
                 result += "\"" + sub_item + "\": " + n0pretty(item[sub_item], indent_ + 1, show_type)  # json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes
             else:
-                result += n0pretty(sub_item, indent_ + 1)
+                result += n0pretty(sub_item, indent_ + 1, show_type)
         if show_type:
             result_type = str(type(item)) + " " + brackets[0]
         else:
@@ -1785,30 +1794,6 @@ class n0dict(OrderedDict):
             )
         """
     '''        
-    # ******************************************************************************
-    # ******************************************************************************
-    def nvl(self, xpath: str, if_not_found = None):
-        """
-        Private function:
-        return self[where1/where2/.../whereN]
-            AKA
-        return self[where1][where2]...[whereN]
-
-        If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
-        """
-        if not xpath:
-            return if_not_found
-        
-        if '/' in xpath or '[' in xpath:
-            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath)
-            if not not_found_xpath_list:
-                return cur_value or if_not_found
-            else:
-                return if_not_found
-        else:
-            if xpath in self:
-                return super(n0dict, self).__getitem__(xpath) or if_not_found
-            return if_not_found
         
     # ******************************************************************************
     # ******************************************************************************
@@ -2259,8 +2244,16 @@ class n0dict(OrderedDict):
             # NOT FOUND: new element in n0list
             #--------------------------------
             if node_index == "new()":
-                parent_node = self._find(xpath_found_str)
-                return parent_node, xpath_found_str.split('/')[-1] + "[new()]", None, xpath_found_str, xpath_list[1:]
+######################################################################################################            
+                # parent_node = self._find(xpath_found_str)
+                # return parent_node, xpath_found_str.split('/')[-1] + "[new()]", None, xpath_found_str, xpath_list[1:]
+######################################################################################################            
+                parent_node, node_name_index, cur_value, found_xpath_str, \
+                    not_found_xpath_list = self._find(xpath_found_str)
+                # return parent_node, xpath_found_str.split('/')[-1], None, xpath_found_str, xpath_list
+                if not isinstance(parent_node[node_name_index], (list, tuple, n0list)):
+                    parent_node[node_name_index] = n0list([parent_node[node_name_index]])
+                return parent_node[node_name_index],"[new()]", None, xpath_found_str, xpath_list[1:]
             # ..................................................................
             # Try to check all [*] items in the loop
             # ..................................................................
@@ -2279,27 +2272,41 @@ class n0dict(OrderedDict):
             # Conditions: parent is expected to be dictionary (or possible list)
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             elif '=' in node_index:
-                expected_node_name, expected_value = node_index.split('=',1)
-                expected_node_name = expected_node_name.strip()
-                expected_value = expected_value.strip()
+                separators = ("==","!=","=")
+                for separator in separators:
+                    if separator in node_index:
+                        expected_node_name, expected_value = node_index.split(separator,1)
+                        expected_node_name = expected_node_name.strip()
+                        expected_value = expected_value.strip()
+                        if separator == '=':
+                            separator = '=='
+                        break
+                else:
+                    raise Exception("Never must be happend!")
+                
                 if expected_node_name == "text()":
                     if ( expected_value.startswith('"') and expected_value.endswith('"') ) or \
                        ( expected_value.startswith("'") and expected_value.endswith("'") ):
                         expected_value = expected_value[1:-1]
+                    expected_value = urllib.parse.unquote(expected_value)
                     if isinstance(parent_node, int):
                         expected_value = int(expected_value)
                     if isinstance(parent_node, float):
                         expected_value = float(expected_value)
-                    if parent_node != expected_value:
-                        #--------------------------------
-                        # NOT FOUND: value is not expected
-                        #--------------------------------
-                        return parent_node, None, None, xpath_found_str, xpath_list
+                    if separator == '==':
+                        comparing_result = parent_node == expected_value
                     else:
+                        comparing_result = parent_node != expected_value
+                    if comparing_result:
                         # *******************************
                         # Deeper
                         # *******************************
                         return self._find(xpath_list[1:], parent_node, xpath_found_str)
+                    else:
+                        #--------------------------------
+                        # NOT FOUND: value is not expected
+                        #--------------------------------
+                        return parent_node, None, None, xpath_found_str, xpath_list
                 else:
                     if isinstance(parent_node, (list, tuple, n0list)) and len(parent_node):
                         # *******************************
@@ -2349,8 +2356,7 @@ class n0dict(OrderedDict):
                     return self._find(xpath_list[1:], parent_node[node_index], "%s[%s]" % (xpath_found_str, node_index))
     # **********************************************************************************************
     # **********************************************************************************************
-    # def _get(self, xpath: str, raise_exception = True, if_none = None):
-    def __getitem__(self, xpath: str, raise_exception = True, if_none = None):
+    def _get(self, xpath: str, raise_exception = True, if_not_found = None):
         """
         Private function:
         return self[where1/where2/.../whereN]
@@ -2367,31 +2373,61 @@ class n0dict(OrderedDict):
                 if raise_exception:
                     raise IndexError("not found '%s' in '%s'" % ('/'.join(not_found_xpath_list), found_xpath_str))
                 else:
-                    return cur_value or if_none
+                    return if_not_found
         else:
-            return super(n0dict, self).__getitem__(xpath)
+            try:
+                return super(n0dict, self).__getitem__(xpath)
+            except IndexError as ex:
+                if raise_exception:
+                    raise ex
+                else:
+                    return if_not_found
+    # ******************************************************************************
+    # ******************************************************************************
+    def __getitem__(self, xpath):
+        """
+        Private function:
+        return self[where1/where2/.../whereN]
+            AKA
+        return self[where1][where2]...[whereN]
+
+        If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
+        """
+        return self._get(xpath, raise_exception = True)
+    # ******************************************************************************
+    # ******************************************************************************
+    def nvl(self, xpath: str, if_not_found = None):
+        """
+        Private function:
+        return self[where1/where2/.../whereN]
+            AKA
+        return self[where1][where2]...[whereN]
+
+        If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+        """
+        return self._get(xpath, raise_exception = False, if_not_found = if_not_found)
     # **********************************************************************************************
     # **********************************************************************************************
     def _add(self, parent_node, node_name_index: str, xpath_list: list) -> str:
         if node_name_index:
-            # or node_name or node_index MUST be empty, both could NOT have values
-            node_name, node_index = split_name_index(node_name_index)
+            # or cur_node_name OR cur_node_index MUST have value, both could NOT have values
+            cur_node_name, cur_node_index = split_name_index(node_name_index)
         else:
-            # If BOTH are empty, just add new element into dictionary
-            node_name, node_index = None, None
+            # If BOTH are empty, just add new element into dictionary parent_node
+            cur_node_name, cur_node_index = None, None
 
         next_node_name, next_node_index = split_name_index(xpath_list[0])  # possible both could be NOT empty
 
-        # if not node_index is None:
-        if node_index is None:
+        # if not cur_node_index is None:
+        if cur_node_index is None:
             ####################################################################
             # Parent is DICTIONARY
             ####################################################################
             if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
-                raise IndexError("If we are looking for elem '%s' then parent (%s)'%s' must be dict/OrderedDict/n0dict" % (node_name, type(parent_node), str(parent_node)))
+                raise IndexError("If we are looking for elem '%s' then parent (%s)'%s' must be dict/OrderedDict/n0dict" % (cur_node_name, type(parent_node), str(parent_node)))
 
-            if node_name:
-                parent_node = parent_node[node_name]
+            if cur_node_name:
+                parent_node = parent_node[cur_node_name]
             else:
                 # It could happen, then just to add key into dictionary
                 pass
@@ -2399,72 +2435,75 @@ class n0dict(OrderedDict):
             if not next_node_name in parent_node:
                 # New node
                 if next_node_index:
-                    parent_node.update({next_node_name: []})
+                    parent_node.update({next_node_name: n0list([])})
                     next_node = parent_node[next_node_name]
-                    node_name_index = "[-1]"
+                    next_node_name_index = "[%s]" % next_node_index
                 else:
-                    parent_node.update({next_node_name: {}})
+                    parent_node.update({next_node_name: n0dict({})})
                     next_node = parent_node
-                    node_name_index = next_node_name
+                    next_node_name_index = next_node_name
             else:
                 # Node is EXISTED
                 if next_node_index:
                     parent_node.update({next_node_name: [parent_node[next_node_name]]})
                     next_node = parent_node[next_node_name]
-                    node_name_index = "[-1]"
+                    next_node_name_index = "[%s]" % next_node_index
                 else:
                     raise IndexError("Nonsense! How to create already existed node '%s'?" % next_node_name)
         else:
             try:
-                node_index = n0eval(node_index)
+                cur_node_index = n0eval(cur_node_index)
             except:
-                raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, node_index))
+                raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, cur_node_index))
             ####################################################################
             # Parent is LIST or should be a list
             ####################################################################
-            if node_index == "new()":
-                n0debug("parent_node")
-                new_node = parent_node[node_name]
-                if not isinstance(parent_node[node_name], (list, tuple, n0list)):
-                    parent_node.update({node_name: [parent_node[node_name]]})
-                    parent_node = parent_node[node_name]
-                    next_node_name = ""
+            if cur_node_index == "new()":
+                # n0debug("parent_node")
+                # new_node = parent_node[cur_node_name]
+                if not isinstance(parent_node[cur_node_name], (list, tuple, n0list)):
+                    parent_node.update({cur_node_name: [parent_node[cur_node_name]]})
+                    parent_node = parent_node[cur_node_name]
+                    next_node_name_index = ""
+                if len(xpath_list) > 1:
+                    parent_node.append()
+                    next_node_name_index = "[-1]"
 
             '''
             if not isinstance(next_node, (list, tuple, n0list)):
-                if not node_index == "new()":
-                    raise IndexError("(%s) parent_node is not list/tuple/n0list but index '%s' is definded" % (type(parent_node), node_index))
+                if not cur_node_index == "new()":
+                    raise IndexError("(%s) parent_node is not list/tuple/n0list but index '%s' is definded" % (type(parent_node), cur_node_index))
                 else:
                     # Coverting into the n0list
-                    if not node_name:
+                    if not cur_node_name:
                         raise IndexError("INTERNAL ERROR: Why name is empty, if index is new?")
-                    parent_node.update({node_name: [parent_node[node_name]]})
-                    parent_node = parent_node[node_name]
+                    parent_node.update({cur_node_name: [parent_node[cur_node_name]]})
+                    parent_node = parent_node[cur_node_name]
                     next_node_name = ""
             '''
 
             if next_node_name:
                 if not next_node_index:
                     # Next is pure dict
-                    parent_node[node_index] = {next_node_name: None}
-                    next_node = parent_node[node_index]
-                    node_name_index = next_node_name
+                    parent_node[cur_node_index] = {next_node_name: n0dict({})}
+                    next_node = parent_node[cur_node_index]
+                    next_node_name_index = next_node_name
 
                 else:
                     # Next is list under dict
-                    parent_node[node_index] = {next_node_name: []}
-                    next_node = parent_node[node_index][next_node_name]
-                    node_name_index = "[-1]"
+                    parent_node[cur_node_index] = {next_node_name: []}
+                    next_node = parent_node[cur_node_index][next_node_name]
+                    next_node_name_index = "[%s]" % next_node_index
             else:
                 # List under list: [0][0] or [0]/[0]
-                parent_node.append(None)
+                parent_node.append(n0dict({}))
                 next_node = parent_node
-                node_name_index = "[-1]"
+                next_node_name_index = "[%s]" % next_node_index
 
         if len(xpath_list) == 1:
-            return next_node, node_name_index
+            return next_node, next_node_name_index
         else:
-            return self._add(next_node, node_name_index, xpath_list[1:])
+            return self._add(next_node, next_node_name_index, xpath_list[1:])
     # **********************************************************************************************
     # **********************************************************************************************
     def __setitem__(self, xpath: str, new_value):
@@ -2494,33 +2533,37 @@ class n0dict(OrderedDict):
         or commands for creating (convertion into list) new node
             [new()]
         """
-        if '/' in xpath or '[' in xpath:
+        if any(char in xpath for char in "/?[]"):
+            if xpath.startswith('?'):
+                if new_value is None or (isinstance(new_value, str) and not new_value):
+                    return None
+                xpath = xpath[1:]
+        
             parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath)
             if not_found_xpath_list:
                 parent_node, node_name_index = self._add(parent_node, node_name_index, not_found_xpath_list)
-            if isinstance(node_name_index, int):
-                parent_node[node_name_index] = new_value
-            else:
+
+            node_name, node_index = split_name_index(node_name_index)
+            
+            if isinstance(parent_node, (dict, OrderedDict, n0dict)):
+                if node_index:
+                    raise Exception("How is it possible: index '%s' for dictionary (%s)'%s'?"% (node_index, type(parent_node), parent_node))
+                # if not node_name:
+                #     raise Exception("How is it possible: no key (index = '%s') for dict (%s)'%s'?" % (node_index, type(parent_node), parent_node))
                 parent_node.update({node_name_index: new_value})
-            # return parent_node[node_name_index]
+            elif isinstance(parent_node, (list, tuple, n0list)):
+                if node_name:
+                    raise Exception("How is it possible: key '%s' for list (%s)'%s'?" % (node_name, type(parent_node), parent_node))
+                if node_index == "new()":
+                    parent_node.append(new_value)
+                else:
+                    parent_node[n0eval(node_index)] = new_value
+            else:
+                raise Exception("How is it possible: unknown type of parent node (%s) of '%s'" % (type(parent_node), parent_node))
         else:
             super(n0dict, self).__setitem__(xpath, new_value)
-
+            
         return new_value  # For speed
-    # ------------------------------------------------------------------------------
-    def __IAND__(self, xpath: str, new_value):
-        """
-        Private function:
-        self[where1/where2/.../whereN] &= value
-            AKA
-        self[where1][where2]...[whereN] &= value
-
-        Similar to __setitem__(..) except if value is '' or None, then nothing will do
-        """
-        if new_value is None or (isinstance(new_value, str) and new_value.isempty()):
-            return None
-        self.__setitem__(xpath, new_value)
-    # ------------------------------------------------------------------------------
 # ******************************************************************************
 # ******************************************************************************
 # ******************************************************************************
