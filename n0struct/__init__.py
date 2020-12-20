@@ -66,6 +66,10 @@
 #                   added:
 #                       n0list. __contains__()  # something in n0list()
 #                       n0dict. valid()
+# 0.31 = 2020-12-20
+#                   rewritten:
+#                       n0dict. _find(..)
+#                       split_name_index(..)
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -184,8 +188,34 @@ def split_name_index(node_name: str) -> tuple:
             node_name, node_index = node_name[:-1].split('[', 1)
             node_name = node_name.strip()
             node_index = node_index.strip()
-            if isinstance(node_index, str) and node_index == "":
-                node_index = None
+            if isinstance(node_index, str):
+                if node_index == "":
+                    node_index = None
+                elif '=' in node_index:
+                    separators = ("==","!=","=")
+                    for separator in separators:
+                        if separator in node_index:
+                            expected_node_name, expected_value = node_index.split(separator,1)
+                            expected_node_name = expected_node_name.strip()
+                            expected_value = expected_value.strip()
+                            if separator == '=':
+                                separator = '=='
+                            break
+                    else:
+                        raise Exception("Never must be happend!")
+
+                    if isinstance(expected_value, str):
+                        if expected_value.lower() == "true()":
+                            expected_value = True
+                        elif expected_value.lower() == "false()":
+                            expected_value = False
+                        elif (expected_value.startswith('"') and expected_value.endswith('"')) or \
+                                (expected_value.startswith("'") and expected_value.endswith("'")):
+                            expected_value = expected_value[1:-1]
+                            expected_value = urllib.parse.unquote(expected_value)
+                    
+                    node_index = expected_node_name, separator, expected_value
+                
     return node_name, node_index
 # ********************************************************************
 # ********************************************************************
@@ -1822,7 +1852,8 @@ class n0dict(OrderedDict):
         if not isinstance(xpath_list, (list, tuple)):
             raise IndexError("xpath (%s)'%s' must be list or string" % (type(xpath_list), str(xpath_list)))
         if not xpath_list:
-            raise IndexError("too much '..' in xpath")
+            return self._find(xpath_found_str)
+            # raise IndexError("too much '..' in xpath")
         if not parent_node:
             parent_node = self
 
@@ -1842,10 +1873,19 @@ class n0dict(OrderedDict):
                     )
                 cur_node_name, cur_node_index = split_name_index(cur_node_name_index)
                 if cur_node_name:
-                    cur_parent_node = cur_parent_node[cur_node_name]
+                    nxt_parent_node = cur_parent_node[cur_node_name]
                 else:
-                    cur_parent_node = cur_parent_node[n0eval(cur_node_index)]
-                return self._find((["[%s]" % node_index] if node_index else []) + xpath_list[1:], cur_parent_node, cur_found_xpath_str)
+                    nxt_parent_node = cur_parent_node[n0eval(cur_node_index)]
+                if node_index or len(xpath_list) > 1:
+                    if node_index:
+                        return self._find(["[%s]" % node_index] + xpath_list[1:], nxt_parent_node, cur_found_xpath_str)
+                    else:
+                        return self._find(                        xpath_list[1:], nxt_parent_node, cur_found_xpath_str)
+                else:
+                    # ================================
+                    # FOUND: the last is n0dict
+                    # ================================
+                    return cur_parent_node, cur_node_name_index, nxt_parent_node, xpath_found_str + '/' + cur_node_name_index, None
             # ..................................................................
             # Try to parse as list
             # ..................................................................
@@ -1886,7 +1926,13 @@ class n0dict(OrderedDict):
                 #--------------------------------
                 # NOT FOUND: Node name in n0dict
                 #--------------------------------
-                return parent_node, None, None, xpath_found_str, xpath_list
+                # Expected not found [text()='']/../
+                if isinstance(node_index, tuple) and \
+                   node_index[0] == "text()" and node_index[1] == "==" and node_index[2] == "" and \
+                   len(xpath_list) >= 2 and xpath_list[1] == '..':
+                    return self._find(xpath_list[2:], parent_node, xpath_found_str)
+                else:
+                    return parent_node, None, None, xpath_found_str, xpath_list
             if len(xpath_list) == 1 and node_index is None:
                 #================================
                 # FOUND: the last is n0dict
@@ -1898,7 +1944,7 @@ class n0dict(OrderedDict):
             if node_index is None:
                 return self._find(                        xpath_list[1:], parent_node[node_name], xpath_found_str + '/' + node_name)
             else:
-                return self._find(["[%s]" % node_index] + xpath_list[1:], parent_node[node_name], xpath_found_str + '/' + node_name)
+                return self._find(["[%s%s'%s']" % (node_index[0],node_index[1],node_index[2]) if isinstance(node_index,tuple) else "[%s]" % node_index] + xpath_list[1:], parent_node[node_name], xpath_found_str + '/' + node_name)
         # ##########################################################################################
         # Index in n0list (node_index is not None)
         # ##########################################################################################
@@ -1941,32 +1987,17 @@ class n0dict(OrderedDict):
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             # Conditions: parent is expected to be dictionary (or possible list)
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            elif '=' in node_index:
-                separators = ("==","!=","=")
-                for separator in separators:
-                    if separator in node_index:
-                        expected_node_name, expected_value = node_index.split(separator,1)
-                        expected_node_name = expected_node_name.strip()
-                        expected_value = expected_value.strip()
-                        if separator == '=':
-                            separator = '=='
-                        break
-                else:
-                    raise Exception("Never must be happend!")
-
-                if expected_node_name == "text()":
-                    if ( expected_value.startswith('"') and expected_value.endswith('"') ) or \
-                       ( expected_value.startswith("'") and expected_value.endswith("'") ):
-                        expected_value = expected_value[1:-1]
-                    expected_value = urllib.parse.unquote(expected_value)
+            # elif '=' in node_index:
+            elif isinstance(node_index, tuple):
+                if node_index[0] == 'text()':
                     if isinstance(parent_node, int):
-                        expected_value = int(expected_value)
-                    if isinstance(parent_node, float):
-                        expected_value = float(expected_value)
-                    if separator == '==':
-                        comparing_result = parent_node == expected_value
+                        node_index[2] = int(node_index[2])
+                    elif isinstance(parent_node, float):
+                        node_index[2] = float(node_index[2])
+                    if node_index[1] == '==':
+                        comparing_result = parent_node == node_index[2]  # expected_value
                     else:
-                        comparing_result = parent_node != expected_value
+                        comparing_result = parent_node != node_index[2]  # expected_value
                     if comparing_result:
                         # *******************************
                         # Deeper
@@ -2047,7 +2078,8 @@ class n0dict(OrderedDict):
         else:
             try:
                 return super(n0dict, self).__getitem__(xpath)
-            except IndexError as ex:
+            # except IndexError as ex:
+            except KeyError as ex:
                 if raise_exception:
                     raise ex
                 else:
@@ -2312,7 +2344,7 @@ class n0dict(OrderedDict):
             if msg is None:
                 return False
             else:
-                return msg % (node_xpath, str(node_value))
+                return msg.format(node_xpath, str(node_value))
         else:
             if msg is None:
                 return True
