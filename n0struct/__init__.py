@@ -62,6 +62,10 @@
 # 0.29 = 2020-12-18
 #                   added:
 #                       n0list. any_*()
+# 0.30 = 2020-12-20
+#                   added:
+#                       n0list. __contains__()  # something in n0list()
+#                       n0dict. valid()
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -143,9 +147,13 @@ def n0eval(_str: str) -> Union(int,str):
                 if itm.strip()
         ]
 
+    if not isinstance(_str, str):
+        return _str
+    
     _str = _str.replace(" ","").lower()
     if not _str:
-        raise ValueError("Could not convert empty/null string into index")
+        return _str
+        # raise ValueError("Could not convert empty/null string into index")
 
     first_split = my_split(_str, '+')
     second_split = []
@@ -1234,7 +1242,8 @@ class n0list(list):
         for itm in self:
             if (itm in other_list) == in_is_expected:
                 return True
-        return False
+        else:
+            return False
     # ******************************************************************************
     def any_in(self, other_list):
         return self._in(other_list, True)
@@ -1253,9 +1262,10 @@ class n0list(list):
         if not isinstance(other_list, (list,tuple,n0list)):
             other_list = [other_list]
         for itm in other_list:
-            if (itm in self) == in_is_expected:
+            if super(n0list, self).__contains__(itm) == in_is_expected:
                 return True
-        return False
+        else:
+            return False
     # ******************************************************************************
     def consists_of_any(self, other_list):
         return self._consists_of(other_list, True)
@@ -1263,27 +1273,11 @@ class n0list(list):
     def consists_of_all(self, other_list):
         return not self._consists_of(other_list, False)
     # ******************************************************************************
+    def __contains__(self, other_list):  # otherlist in n0list([a])
+        return self.consists_of_all(other_list)
+    # ******************************************************************************
     def not_consists_of_any(self, other_list):
         return not self._consists_of(other_list, True)
-    # ******************************************************************************
-    # ******************************************************************************
-    def _valid(self, validate, valid_is_expected: bool):
-        for itm in self:
-            if validate(itm) == valid_is_expected:
-                return True
-        return False
-    # ******************************************************************************
-    def any_valid(self, validate):
-        return self._consists_of(validate, True)
-    # ******************************************************************************
-    def any_not_valid(self, validate):
-        return self._consists_of(validate, False)
-    # ******************************************************************************
-    def all_valid(self, validate):
-        return not self._consists_of(validate, False)
-    # ******************************************************************************
-    def all_not_valid(self, validate):
-        return not self._consists_of(validate, True)
 # ******************************************************************************
 class n0dict(OrderedDict):
     # ******************************************************************************
@@ -2257,6 +2251,73 @@ class n0dict(OrderedDict):
             super(n0dict, self).__setitem__(xpath, new_value)
 
         return new_value  # For speed
+    # ******************************************************************************
+    # ******************************************************************************
+    def _valid(self, validate, valid_is_expected: bool):
+        for itm in self:
+            if validate(itm) == valid_is_expected:
+                return True
+        return False
+    # ******************************************************************************
+    def any_valid(self, validate):
+        return self._consists_of(validate, True)
+    # ******************************************************************************
+    def any_not_valid(self, validate):
+        return self._consists_of(validate, False)
+    # ******************************************************************************
+    def all_valid(self, validate):
+        return not self._consists_of(validate, False)
+    # ******************************************************************************
+    def all_not_valid(self, validate):
+        return not self._consists_of(validate, True)
+    # ******************************************************************************
+    def valid(self, node_xpath:str, validate, expected_result_for_error: bool = False, msg:str = None):
+        """
+        :param node_xpath:
+            xpath to the node inside self
+        :param validate:
+            list/scalar/function = validation 
+        :param expected_result_for_error:
+            By default expected that if result of validation is True, then self[node_xpath] is not valid (return False)
+        :param msg:
+            if None => return result as bool True(validation)/False
+        :return:
+        
+        Examples:
+            xml.valid('node/subnode', ["",None], True, "ERROR")
+                If xml['node/subnode'] is equal "" or None (result of comparising is True), then return ERROR, else ""
+            xml.valid('node/subnode', ["",None], True)
+                If xml['node/subnode'] is equal "" or None (result of comparising is True), then return False (not valid), else True
+            xml.valid('node/subnode', "", True)
+                If xml['node/subnode'] is equal "" (result of comparising is True), then return False (not valid), else True
+            xml.valid('node/subnode', [1,2], False, "ERROR")
+                If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return ERROR, else ""
+            xml.valid('node/subnode', [1,2], False)
+                If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
+            xml.valid('node/subnode', [1,2])
+                If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
+        """
+        try:
+            node_value = self.get(node_xpath)
+            if callable(validate):
+                validate_result = validate(node_value)
+            elif isinstance(validate, (list, tuple, n0list)):
+                validate_result = node_value in validate
+            else:
+                validate_result = node_value == validate
+        except:
+            validate_result = False
+
+        if validate_result == expected_result_for_error:
+            if msg is None:
+                return False
+            else:
+                return msg % (node_xpath, str(node_value))
+        else:
+            if msg is None:
+                return True
+            else:
+                return ""
 # ******************************************************************************
 # ******************************************************************************
 # ******************************************************************************
