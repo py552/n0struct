@@ -70,6 +70,14 @@
 #                   rewritten:
 #                       n0dict. _find(..)
 #                       split_name_index(..)
+# 0.32 = 2020-12-21
+#                   fixed:
+#                       n0dict. _find(..): if not parent_node: => if parent_node is None:
+#                                          because of parent_node could be '' as allowed value
+# 0.33 = 2020-12-22
+#                   enhanced:
+#                       n0dict. _find(..): parent_node become mandatory argument
+#                       n0dict. _get(..): support leading '?' in xpath
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -1839,7 +1847,7 @@ class n0dict(OrderedDict):
         return validation_results
     # **********************************************************************************************
     # **********************************************************************************************
-    def _find(self, xpath_list: list, parent_node = None, xpath_found_str: str = "/") -> list:
+    def _find(self, xpath_list: list, parent_node, xpath_found_str: str = "/") -> list:
         """
         [0] = parent node: n0dict/n0list
         [1] = node_name_index: str (or key or index)
@@ -1852,10 +1860,10 @@ class n0dict(OrderedDict):
         if not isinstance(xpath_list, (list, tuple)):
             raise IndexError("xpath (%s)'%s' must be list or string" % (type(xpath_list), str(xpath_list)))
         if not xpath_list:
-            return self._find(xpath_found_str)
+            return self._find(xpath_found_str, self)
             # raise IndexError("too much '..' in xpath")
-        if not parent_node:
-            parent_node = self
+        # if parent_node is None:
+            # parent_node = self
 
         node_name, node_index = split_name_index(xpath_list[0])
         # ##########################################################################################
@@ -1869,7 +1877,8 @@ class n0dict(OrderedDict):
                 cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                     cur_not_found_xpath_list = self._find(
                         # '..' is already not included into xpath_found_str, so just remove only last node
-                        [itm for itm in xpath_found_str.split('/') if itm][:-1]
+                        [itm for itm in xpath_found_str.split('/') if itm][:-1],
+                        self
                     )
                 cur_node_name, cur_node_index = split_name_index(cur_node_name_index)
                 if cur_node_name:
@@ -1954,7 +1963,7 @@ class n0dict(OrderedDict):
             #--------------------------------
             if node_index == "new()":
                 parent_node, node_name_index, cur_value, found_xpath_str, \
-                    not_found_xpath_list = self._find(xpath_found_str)
+                    not_found_xpath_list = self._find(xpath_found_str, self)
                 if not isinstance(parent_node[node_name_index], (list, tuple, n0list)):
                     parent_node[node_name_index] = n0list([parent_node[node_name_index]])
                 return parent_node[node_name_index], None, None, xpath_found_str, ["[new()]"] + xpath_list[1:]
@@ -2066,8 +2075,12 @@ class n0dict(OrderedDict):
 
         If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
-        if '/' in xpath or '[' in xpath:
-            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath)
+        if xpath.startswith('?'):
+            xpath = xpath[1:]
+            raise_exception = False
+            if_not_found = ''
+        if any(char in xpath for char in "/["):
+            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath, self)
             if not not_found_xpath_list:
                 return cur_value
             else:
@@ -2238,6 +2251,7 @@ class n0dict(OrderedDict):
             AKA
         self[where1][where2]...[whereN] = value
 
+        if xpath will be started with ?, the nothing will be done if new_value is None or empty
         if xpath is exist, then the value will be overwritten
         if not exist, then the node will be created
 
@@ -2258,13 +2272,13 @@ class n0dict(OrderedDict):
         or commands for creating (convertion into list) new node
             [new()]
         """
-        if any(char in xpath for char in "/?[]"):
-            if xpath.startswith('?'):
-                if new_value is None or (isinstance(new_value, str) and new_value == ""):
-                    return None
-                xpath = xpath[1:]
-
-            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath)
+        if xpath.startswith('?'):
+            if new_value is None or (isinstance(new_value, str) and new_value == ""):
+                return None
+            xpath = xpath[1:]
+            
+        if any(char in xpath for char in "/["):
+            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath, self)
             if not_found_xpath_list:
                 parent_node, node_name_index = self._add(parent_node, node_name_index, not_found_xpath_list)
 
