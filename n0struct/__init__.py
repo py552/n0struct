@@ -78,6 +78,10 @@
 #                   enhanced:
 #                       n0dict. _find(..): parent_node become mandatory argument
 #                       n0dict. _get(..): support leading '?' in xpath
+# 0.34 = 2020-12-24
+#                   enhanced:
+#                       n0list. __init__(..): option recursively:bool = True was added
+#                       n0dict. __init__(..): option recursively:bool = True was added
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -781,18 +785,28 @@ class n0list(list):
         ** == convert from mapping into list of named arguments
 
         :param args:
-        :param kw:
+        :param kw: 
+            recursively = None/False/0 => don't convert subnodes into n0list/n0dict
         """
-        if len(args) == 1 and isinstance(args[0], (list, tuple)):
-            for value in args[0]:
-                if isinstance(value, (dict, OrderedDict)):
-                    self.append(n0dict(value))
-                elif isinstance(value, (list, tuple)):
-                    self.append(n0list(value))
-                else:
-                    self.append(value)
-        else:
+        len__args = len(args)
+        if not len__args:
             return super(n0list, self).__init__(*args, **kw)
+        if len__args == 1:
+            _recursively = kw.get("recursively") or False
+            if isinstance(args[0], (list, tuple, n0list)):
+                for value in args[0]:
+                    if _recursively:
+                        if isinstance(value, (dict, OrderedDict)):
+                            value =n0dict(value, recursively = _recursively)
+                        elif isinstance(value, (list, tuple)):
+                            value =n0list(value, recursively = _recursively)
+                    self.append(value)
+            else:
+                self.append(args[0])
+# TypeError: __init__() should return None, not 'n0list'
+            # return super(n0list, self).__init__(self)
+            return None
+        raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple/n0list)")
     # ******************************************************************************
     # * n0list. direct_compare(..): only n0dict. direct_compare/compare have one_of_list_compare
     # ******************************************************************************
@@ -1319,9 +1333,6 @@ class n0list(list):
 # ******************************************************************************
 class n0dict(OrderedDict):
     # ******************************************************************************
-    # def lxml2dict(self, element):
-    # return element.tag, \
-    # OrderedDict(map(self.lxml2dict, element)) or element.text
     # ******************************************************************************
     def __init__(self, *args, **kw):
         """
@@ -1331,27 +1342,40 @@ class n0dict(OrderedDict):
         ** == convert from mapping into list of named arguments
 
         :param args:
-        :param kw:
+        :param kw: 
+            recursively = None/False/0 => don't convert subnodes into n0list/n0dict
         """
-        if len(args) == 1:
+        len__args = len(args)
+        if not len__args:
+            return super(n0dict, self).__init__(*args, **kw)
+        if len__args == 1:
+            _recursively = kw.get("recursively") or False
             if isinstance(args[0], str):
+                if _recursively:
+                    _constructor = self.__init__
+                else:
+                    _constructor = super(n0dict, self).__init__
                 if args[0].strip()[0] == "<":
-                    return super(n0dict, self).__init__(xmltodict.parse(args[0]))
+                    return _constructor(xmltodict.parse(args[0]), **kw)
                 elif args[0].strip()[0] == "{":
-                    return super(n0dict, self).__init__(json.loads(args[0]))
-                raise Exception("n0dict(..): if you provide string, it should be XML or JSON")
-            if isinstance(args[0], (dict, OrderedDict)):
+                    return _constructor(json.loads(args[0]), **kw)
+                # else:
+                    # raise Exception("n0dict(..): if you provide string, it should be XML or JSON")
+            elif isinstance(args[0], (dict, OrderedDict, n0dict)):
                 for key in args[0]:
                     value = args[0][key]
-                    if isinstance(value, (dict, OrderedDict)):
-                        self.update({key: n0dict(value)})
-                    elif isinstance(value, (list, tuple)):
-                        self.update({key: n0list(value)})
-                    else:
-                        self.update({key: value})
-                return super(n0dict, self).__init__(self)
-        else:
-            return super(n0dict, self).__init__(*args, **kw)
+                    if _recursively:
+                        if isinstance(value, (dict, OrderedDict)):
+                            value =n0dict(value, recursively = _recursively)
+                        elif isinstance(value, (list, tuple)):
+                            value =n0list(value, recursively = _recursively)
+                    self.update({key: value})
+                # return super(n0dict, self).__init__(self)
+                return None
+            # else:
+                # raise Exception("n0dict.__init__(..): you should provide string (XML or JSON) or dict/OrderedDict/n0dict")
+        # else:
+        raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/OrderedDict/n0dict)")
     # ******************************************************************************
     def update_extend(self, other):
         if other is None:
@@ -1648,33 +1672,42 @@ class n0dict(OrderedDict):
         Private function: recursively export OrderedDict into xml result string
         """
         result = ""
-        for key, value in parent.items():
-            if result:
-                result += "\n"
-            if isinstance(value, list):
-                for i, subitm in enumerate(value):
+        if parent:
+            if isinstance(parent, (OrderedDict, n0dict)):
+                for key, value in parent.items():
+                    if result:
+                        result += "\n"
+                    if isinstance(value, list):
+                        for i, subitm in enumerate(value):
+                            if i:
+                                result += "\n"
+                            sub_result = self.__xml(subitm, indent + inc_indent, inc_indent)
+                            if sub_result:
+                                result += (" " * indent + "<%s>\n%s\n" + " " * indent + "</%s>") % (key, sub_result, key)
+                            else:
+                                result += " " * indent + "<%s/>" % key
+                    elif isinstance(value, str):
+                        result += " " * indent + ("<%s>%s</%s>" % (key, value, key))
+                    elif isinstance(value, (n0dict, dict, OrderedDict)):
+                        sub_result = self.__xml(value, indent + inc_indent, inc_indent)
+                        # if "\n" in sub_result: sub_result = "\n" + sub_result
+                        if sub_result:
+                            sub_result = "\n" + sub_result
+                        if sub_result:
+                            result += (" " * indent + "<%s>%s\n" + " " * indent + "</%s>") % (key, sub_result, key)
+                        else:
+                            result += " " * indent + "<%s/>" % key
+                    elif value is None:
+                        result += " " * indent + "<%s/>" % key
+                    else:
+                        raise Exception("__xml(..): Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
+            elif isinstance(parent, (n0list)):
+                for i, itm in enumerate(parent):
                     if i:
                         result += "\n"
-                    sub_result = self.__xml(subitm, indent + inc_indent, inc_indent)
-                    if sub_result:
-                        result += (" " * indent + "<%s>\n%s\n" + " " * indent + "</%s>") % (key, sub_result, key)
-                    else:
-                        result += " " * indent + "<%s/>" % key
-            elif isinstance(value, str):
-                result += " " * indent + ("<%s>%s</%s>" % (key, value, key))
-            elif isinstance(value, (n0dict, dict, OrderedDict)):
-                sub_result = self.__xml(value, indent + inc_indent, inc_indent)
-                # if "\n" in sub_result: sub_result = "\n" + sub_result
-                if sub_result:
-                    sub_result = "\n" + sub_result
-                if sub_result:
-                    result += (" " * indent + "<%s>%s\n" + " " * indent + "</%s>") % (key, sub_result, key)
-                else:
-                    result += " " * indent + "<%s/>" % key
-            elif value is None:
-                result += " " * indent + "<%s/>" % key
+                    result += self.__xml(itm, indent + inc_indent, inc_indent)
             else:
-                raise Exception("__xml(..): Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
+                raise Exception("__xml(..): Unknown type (%s) ==  %s" % (type(parent), str(parent)))
         return result
 
     def to_xml(self, indent: int = 4, encoding: str = "utf-8") -> str:
@@ -1911,7 +1944,8 @@ class n0dict(OrderedDict):
             # Try to check all [*] items in the loop
             # ..................................................................
             if node_name == "*":
-                cur_values = n0list([])
+                # cur_values = n0list([])
+                cur_values = n0list()
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 for next_node_name in parent_node:
                     cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
@@ -1974,7 +2008,8 @@ class n0dict(OrderedDict):
                 if not isinstance(parent_node, (list, tuple, n0list)):
                     # Hidden list. Convert single item into list
                     parent_node = [parent_node]
-                cur_values = n0list([])
+                # cur_values = n0list([])
+                cur_values = n0list()
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 for i,cur_node in enumerate(parent_node):
                     cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
@@ -2154,8 +2189,8 @@ class n0dict(OrderedDict):
                         if next_node_index != "new()":
                             raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
                                             % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
-                        # parent_node.update({next_node_name: n0list([])})
-                        parent_node.update({next_node_name: n0list([None])})
+                        # item[0] == None, will be reused at the next step with last()
+                        parent_node.update({next_node_name: n0list([None])}) 
                         next_node = parent_node[next_node_name]
                         # next_node_name_index = "[%s]" % next_node_index
                         next_node_name_index = "[last()]"
@@ -2189,7 +2224,8 @@ class n0dict(OrderedDict):
                     if len(parent_node[cur_node_name]):
                         parent_node.update({cur_node_name: n0list([parent_node[cur_node_name]])})
                     else:
-                        parent_node.update({cur_node_name: n0list([])})
+                        # parent_node.update({cur_node_name: n0list([])})
+                        parent_node.update({cur_node_name: n0list()})
                     parent_node = parent_node[cur_node_name]
                 if next_node_name:
                     if not next_node_index:
@@ -2199,7 +2235,8 @@ class n0dict(OrderedDict):
                         next_node_name_index = next_node_name
                     else:
                         # Next is list under dict
-                        parent_node.append(n0dict({next_node_name: n0list([])}))
+                        # parent_node.append(n0dict({next_node_name: n0list([])}))
+                        parent_node.append(n0dict({next_node_name: n0list()}))
                         next_node = parent_node[-1][next_node_name]
                         # Expected to have 'new()' in next_node_index, else it will be failed at the next step
                         next_node_name_index = "[%s]" % next_node_index
@@ -2224,7 +2261,8 @@ class n0dict(OrderedDict):
                         next_node_name_index = next_node_name
                     else:
                         # Next is list under dict
-                        parent_node[-1] = n0dict({next_node_name: n0list([])})
+                        # parent_node[-1] = n0dict({next_node_name: n0list([])})
+                        parent_node[-1] = n0dict({next_node_name: n0list()})
                         next_node = parent_node[-1][next_node_name]
                         # Expected to have 'new()' in next_node_index, else it will be failed at the next step
                         next_node_name_index = "[%s]" % next_node_index
