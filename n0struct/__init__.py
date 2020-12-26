@@ -82,6 +82,10 @@
 #                   enhanced:
 #                       n0list. __init__(..): option recursively:bool = True was added
 #                       n0dict. __init__(..): option recursively:bool = True was added
+# 0.35 = 2020-12-26
+#                   enhanced:
+#                       n0dict. __xml(..): nodes int, float support added
+#                       n0dict. to_xml(..): multi-root support added
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -1672,23 +1676,31 @@ class n0dict(OrderedDict):
         Private function: recursively export OrderedDict into xml result string
         """
         result = ""
-        if parent:
-            if isinstance(parent, (OrderedDict, n0dict)):
+        if not parent is None:
+            if isinstance(parent, (dict, OrderedDict, n0dict)):
+                if not len(parent.items()):
+                    return None
                 for key, value in parent.items():
                     if result:
                         result += "\n"
-                    if isinstance(value, list):
+                    if isinstance(value, (list, tuple, n0list)):
                         for i, subitm in enumerate(value):
                             if i:
                                 result += "\n"
                             sub_result = self.__xml(subitm, indent + inc_indent, inc_indent)
-                            if sub_result:
-                                result += (" " * indent + "<%s>\n%s\n" + " " * indent + "</%s>") % (key, sub_result, key)
+                            if not sub_result:
+                                if isinstance(sub_result, str):
+                                    result += " " * indent + "<%s></%s>" % (key,key)
+                                else:
+                                    result += " " * indent + "<%s/>" % key
                             else:
-                                result += " " * indent + "<%s/>" % key
-                    elif isinstance(value, str):
-                        result += " " * indent + ("<%s>%s</%s>" % (key, value, key))
-                    elif isinstance(value, (n0dict, dict, OrderedDict)):
+                                if '>' in sub_result:
+                                    result += (" " * indent + "<%s>\n%s\n" + " " * indent + "</%s>") % (key, sub_result, key)
+                                else:
+                                    result += (" " * indent + "<%s>%s</%s>") % (key, sub_result, key)
+                    elif isinstance(value, (str, int, float)):
+                        result += " " * indent + ("<%s>%s</%s>" % (key, str(value), key))
+                    elif isinstance(value, (dict, OrderedDict, n0dict)):
                         sub_result = self.__xml(value, indent + inc_indent, inc_indent)
                         # if "\n" in sub_result: sub_result = "\n" + sub_result
                         if sub_result:
@@ -1701,36 +1713,47 @@ class n0dict(OrderedDict):
                         result += " " * indent + "<%s/>" % key
                     else:
                         raise Exception("__xml(..): Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
-            elif isinstance(parent, (n0list)):
+            elif isinstance(parent, (list, tuple, n0list)):
+                if not len(parent):
+                    return None
                 for i, itm in enumerate(parent):
                     if i:
                         result += "\n"
                     result += self.__xml(itm, indent + inc_indent, inc_indent)
+            elif isinstance(parent, (str, int, float)):
+                result += str(parent)
             else:
                 raise Exception("__xml(..): Unknown type (%s) ==  %s" % (type(parent), str(parent)))
-        return result
+            return result
+        else:
+            return None
 
     def to_xml(self, indent: int = 4, encoding: str = "utf-8") -> str:
         """
         Public function: export self into xml result string
         """
-        buffer = ""
+        result = ""
         if encoding:
-            buffer = "<?xml version=\"1.0\" encoding=\"%s\"?>\n" % encoding
+            result = "<?xml version=\"1.0\" encoding=\"%s\"?>\n" % encoding
 
-        if len(self.keys()):
-            own_tagname = list(self.keys())[0]
-            buffer += "<%s>" % own_tagname
-
-            own_value = list(self.values())[0]
-            if len(self.values()) == 1 and isinstance(own_value, (str, int, float)):
-                buffer += str(own_value)
+        for key in self:
+            value = self[key]
+            if isinstance(value, (list, tuple, n0list)):
+                for i, subitm in enumerate(value):
+                    result += "<%s>" % key
+                    sub_result = self.__xml(subitm, indent, indent)
+                    if '<' in sub_result:
+                        sub_result = '\n' + sub_result + '\n'
+                    result += sub_result + "<%s>\n" % key
             else:
-                for item in self.values():
-                    buffer += "\n" + self.__xml(item, indent, indent) + "\n"
-            buffer += "</%s>\n" % own_tagname
-
-        return buffer
+                result += "<%s>" % key
+                if isinstance(value, (str, int, float)):
+                    # buffer += "<%s>%s</%s>\n" % (key, str(value), key)
+                    result += "%s" % str(value)
+                else:
+                    result += "\n" + self.__xml(value, indent, indent) + "\n"
+                result += "</%s>\n" % key
+        return result
 
     # ******************************************************************************
     # JSON
@@ -2061,12 +2084,12 @@ class n0dict(OrderedDict):
 
                     if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
                         raise IndexError("If key '%s' is set then (%s)'%s' must be n0dict at '%s'" %
-                            (expected_node_name, type(parent_node), str(parent_node), xpath_found_str)
+                            (node_index[0], type(parent_node), str(parent_node), xpath_found_str)
                         )
-                    if not expected_node_name in parent_node:
+                    if not node_index[0] in parent_node:
                         return parent_node, None, None, xpath_found_str, xpath_list
 
-                    return self._find(["[text()=%s]" % expected_value, ".."] + xpath_list[1:], parent_node[expected_node_name], xpath_found_str + '/' + expected_node_name)
+                    return self._find(["[text()=%s]" % node_index[2], ".."] + xpath_list[1:], parent_node[node_index[0]], xpath_found_str + '/' + node_index[0])
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             # Pure index
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

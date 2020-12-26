@@ -54,3 +54,95 @@ Element dict3["C"][3]='n0dict([('a', 1), ('b', 2), ('c', 3), ('value1', 1), ('va
 *** other_unique
 ('/C[3]', n0dict([('a', 1), ('b', 2), ('c', 3), ('value1', 1), ('value2', 4)]))
 *** difftypes
+{
+    "C": [
+        {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "value1": 1,
+            "value2": 4
+        },
+        {
+            "a": 4,
+            "b": 5,
+            "c": 6,
+            "value1": 2,
+            "value2": 5
+        },
+        {
+            "a": 7,
+            "b": 8,
+            "c": 9,
+            "value1": 3,
+            "value2": 6
+        }
+    ],
+    "moreone": {
+        "node": [
+            {"value": {}},
+            {"value": "N0ne"},
+            {"value": ""},
+            {
+                "value": 2,
+                "code": "two"
+            },
+            {
+                "value": 4,
+                "code": "four"
+            }
+        ]
+    }
+}
+<?xml version="1.0" encoding="utf-8"?>
+<C>
+    <a>1</a>
+    <b>2</b>
+    <c>3</c>
+    <value1>1</value1>
+    <value2>4</value2>
+<C>
+<C>
+    <a>4</a>
+    <b>5</b>
+    <c>6</c>
+    <value1>2</value1>
+    <value2>5</value2>
+<C>
+<C>
+    <a>7</a>
+    <b>8</b>
+    <c>9</c>
+    <value1>3</value1>
+    <value2>6</value2>
+<C>
+<moreone>
+    <node>
+        <value/>
+    </node>
+    <node>
+        <value/>
+    </node>
+    <node>
+        <value></value>
+    </node>
+    <node>
+        <value>2</value>
+        <code>two</code>
+    </node>
+    <node>
+        <value>4</value>
+        <code>four</code>
+    </node>
+</moreone>
+
+[n0dict([('value', n0dict())]), n0dict([('value', None)]), n0dict([('value', '')]), n0dict([('value', 2), ('code', 'two')]), n0dict([('value', 4), ('code', 'four')])]
+n0dict([('node', [n0dict([('value', n0dict())]), n0dict([('value', None)]), n0dict([('value', '')]), n0dict([('value', 2), ('code', 'two')]), n0dict([('value', 4), ('code', 'four')])])])
+[4]
+[2]
+[6]
+[6]
+7
+7
+None
+None

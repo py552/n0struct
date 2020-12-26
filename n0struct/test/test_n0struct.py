@@ -21,7 +21,6 @@ dict1 = n0dict({
         {"a": 7, "b": 8, "c": 9, "value1": 3, "value2": 6},
     ],
 }, recursively=True)
-n0debug("dict1")
 # ******************************************************************************
 # Sorted list in dictionary
 # ******************************************************************************
@@ -45,7 +44,6 @@ dict3 = n0dict({
 }, recursively=True)
 # ******************************************************************************
 def test_SortedLists():
-
     print("*"*80 + " 1 = Sorted list in dictionary = direct_compare")
     differences1_direct_compare = dict1.direct_compare(dict2, "dict1", "dict2")
     for key in differences1_direct_compare:
@@ -133,6 +131,65 @@ def main():
     
     test_SortedLists()
     test_UnsortedLists()
+    
+    dict1["moreone/node[new()]/value"] = n0dict()
+    dict1["moreone/node[new()]/value"] = None
+    dict1["moreone/node[new()]/value"] = ""
+    dict1["moreone/node[new()]/value"] = 1
+    dict1["moreone/node[last()]/value"] = 2
+    dict1["moreone/node[last()]/code"] = "two"
+    dict1["moreone/node[new()]/value"] = 3
+    dict1["moreone/node[-1]/value"] = 4
+    dict1["moreone/node[-1]/code"] = "four"
+
+    assert isinstance(dict1["moreone/node[0]/value"],n0dict) == True
+    assert (dict1["moreone/node[1]/value"] is None) == True
+    assert isinstance(dict1["moreone/node[2]/value"],str) == True
+    assert (not dict1["moreone/node[2]/value"]) == True
+    assert dict1["moreone/node[3]/value"] == 2
+    assert dict1["moreone/node[4]/value"] == 4
+
+    print(dict1.to_json())
+    print(dict1.to_xml())
+
+    print(dict1["moreone/node"])
+
+    assert len(dict1["moreone/node"]) == 5
+    assert len(dict1["moreone/node[*]"]) == 5
+
+    print(dict1["moreone"])
+    assert len(dict1["moreone"]) == 1
+
+    print(dict1["moreone/node/code[text()='four']/../value"])
+    assert dict1["moreone/node/code[text()='four']/../value"][0] == 4
+    assert dict1["moreone/node/code[text()='four']/../value"] == [4]
+
+
+    print(dict1["moreone/node/code[text()='two']/../value"])
+    assert dict1["moreone/node/code[text()='two']/../value"] == [2]
+
+    dict1["moreone/node/code[text()='two']/../value"] = 6
+    print(dict1["moreone/node/code[text()='two']/../value"])
+    assert dict1["moreone/node/code[text()='two']/../value"] == [6]
+    assert dict1["moreone/node/code[text()=two]/../value"] == [6]
+    assert dict1['moreone/node/code[text()="two"]/../value'] == [6]
+    
+    print(dict1["moreone/node[code='two']/value"])
+    assert dict1["moreone/node[code='two']/value"] == [6]
+
+    dict1["moretwo/node/code"] = "seven"
+    dict1["moretwo/node/value"] = 7
+    print(dict1["moretwo/node/code[text()='seven']/../value"])
+    assert dict1["moretwo/node/code[text()='seven']/../value"] == 7
+    
+    print(dict1["moretwo/node[code='seven']/value"])
+    assert dict1["moretwo/node[code='seven']/value"] == 7
+    
+    print(dict1.get("moretwo/node/code[text()='eight']/../value"))
+    assert dict1.get("moretwo/node/code[text()='eight']/../value") is None
+    
+    print(dict1["?moretwo/node/code[text()='eight']/../value"] or None)
+    assert (dict1["?moretwo/node/code[text()='eight']/../value"] or None) is None
 
 if __name__ == '__main__':
     main()
