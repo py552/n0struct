@@ -86,7 +86,8 @@
 #                   enhanced:
 #                       n0dict. __xml(..): nodes int, float support added
 #                       n0dict. to_xml(..): multi-root support added
-
+#                   enhanced version of xmltodict0121 was incapsulated till changes will be merged with main branch of xmltodic
+#                   xmltodict0121 enhancement: automaticaly creation n0dict/n0list structure during XML import
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -96,7 +97,7 @@ import typing
 from datetime import datetime, timedelta, date
 import random
 from collections import OrderedDict
-import xmltodict
+from .xmltodict0121 import *
 import json
 import urllib
 from typing import Union
@@ -797,7 +798,7 @@ class n0list(list):
             return super(n0list, self).__init__(*args, **kw)
         if len__args == 1:
             _recursively = kw.get("recursively") or False
-            if isinstance(args[0], (list, tuple, n0list)):
+            if isinstance(args[0], (list, tuple)):
                 for value in args[0]:
                     if _recursively:
                         if isinstance(value, (dict, OrderedDict)):
@@ -1335,7 +1336,12 @@ class n0list(list):
     def not_consists_of_any(self, other_list):
         return not self._consists_of(other_list, True)
 # ******************************************************************************
-class n0dict(OrderedDict):
+# class n0dict(OrderedDict):
+class n0dict(dict):
+    """
+    https://github.com/martinblech/xmltodict/issues/252
+    For Python >= 3.6, dictionary are Sorted by insertion order, so avoid the use of OrderedDict for those python versions.
+    """
     # ******************************************************************************
     # ******************************************************************************
     def __init__(self, *args, **kw):
@@ -1355,13 +1361,17 @@ class n0dict(OrderedDict):
         if len__args == 1:
             _recursively = kw.get("recursively") or False
             if isinstance(args[0], str):
-                if _recursively:
-                    _constructor = self.__init__
-                else:
-                    _constructor = super(n0dict, self).__init__
                 if args[0].strip()[0] == "<":
-                    return _constructor(xmltodict.parse(args[0]), **kw)
+                    # https://github.com/martinblech/xmltodict/issues/252
+                    # The main function parse has a dict_constructor keyword argument useful for this purpose.
+                    kw.update({"dict_constructor": n0dict, "list_constructor": n0list})
+                    return super(n0dict, self).__init__(xmltodict.parse(args[0]), **kw)
+                    # return _constructor(xmltodict.parse(args[0]), **kw)
                 elif args[0].strip()[0] == "{":
+                    if _recursively:
+                        _constructor = self.__init__
+                    else:
+                        _constructor = super(n0dict, self).__init__
                     return _constructor(json.loads(args[0]), **kw)
                 # else:
                     # raise Exception("n0dict(..): if you provide string, it should be XML or JSON")

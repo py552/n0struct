@@ -39,6 +39,59 @@ DESCRIPTION
     #                   *.compare() return ["notequal"]      -> "not_equal"
     #                   get_composite_keys(..) -> generate_composite_keys(..)
     # 0.24 = 2020-11-20 added is_exist(..), rewritten to_json(..), AddElem(..)'s optimization started
+    # 0.25 = 2020-11-20 removed:
+    #                       n0dict. __FindElem(..)
+    #                       n0dict. __AddElem(..)
+    #                       n0dict. AddElem(..)
+    #                   rewritten:
+    #                       n0dict. __getitem__(..)
+    #                       n0dict. __setitem__(..)
+    #                   added:
+    #                       n0dict. _find(..)
+    #                       n0dict. _add(..)
+    # 0.26 = 2020-12-15 rewritten n0dict. nvl()
+    # 0.27 = 2020-12-16
+    #                   added:
+    #                       n0dict. _get(..)
+    #                   rewritten:
+    #                       n0dict. __getitem__(..)
+    #                       n0dict. nvl()
+    #                       n0dict. _add()
+    #                   fixed:
+    #                       n0pretty()
+    # 0.28 = 2020-12-17
+    #                   renamed:
+    #                       n0dict. nvl() -> get(..)
+    #                   rewritten:
+    #                       n0dict. __setitem__(..)
+    #                       n0dict. _add()
+    # 0.29 = 2020-12-18
+    #                   added:
+    #                       n0list. any_*()
+    # 0.30 = 2020-12-20
+    #                   added:
+    #                       n0list. __contains__()  # something in n0list()
+    #                       n0dict. valid()
+    # 0.31 = 2020-12-20
+    #                   rewritten:
+    #                       n0dict. _find(..)
+    #                       split_name_index(..)
+    # 0.32 = 2020-12-21
+    #                   fixed:
+    #                       n0dict. _find(..): if not parent_node: => if parent_node is None:
+    #                                          because of parent_node could be '' as allowed value
+    # 0.33 = 2020-12-22
+    #                   enhanced:
+    #                       n0dict. _find(..): parent_node become mandatory argument
+    #                       n0dict. _get(..): support leading '?' in xpath
+    # 0.34 = 2020-12-24
+    #                   enhanced:
+    #                       n0list. __init__(..): option recursively:bool = True was added
+    #                       n0dict. __init__(..): option recursively:bool = True was added
+    # 0.35 = 2020-12-26
+    #                   enhanced:
+    #                       n0dict. __xml(..): nodes int, float support added
+    #                       n0dict. to_xml(..): multi-root support added
 
 PACKAGE CONTENTS
     test (package)
@@ -62,17 +115,7 @@ CLASSES
      |  
      |  Methods defined here:
      |  
-     |  AddElem(self, where: 'str', what: 'str' = None, value: 'str' = None)
-     |      Public function:
-     |      Convert path where:str into list, remove all empty separators ("//" or leading/trailing "/"),
-     |      find element with path where:str, from the root (super(n0dict, self)),
-     |      unpack tuple with "*" into list of arguments,
-     |      create sub-nodes' name[s] if they[/it] do[es]n't exist ONLY.
-     |      
-     |      If optional argument 'what' is provided, add sub-nodes. If sub-nodes exist, CONVERT THEM INTO LIST AND ADD NEW ITEM.
-     |      If optional argument 'value' is provided, put into destination path where+what.
-     |  
-     |  __getitem__(self, where: 'str')
+     |  __getitem__(self, xpath)
      |      Private function:
      |      return self[where1/where2/.../whereN]
      |          AKA
@@ -87,30 +130,65 @@ CLASSES
      |      ** == convert from mapping into list of named arguments
      |      
      |      :param args:
-     |      :param kw:
+     |      :param kw: 
+     |          recursively = None/False/0 => don't convert subnodes into n0list/n0dict
      |  
-     |  __setitem__(self, where: 'str', value: 'str')
+     |  __setitem__(self, xpath: 'str', new_value)
      |      Private function:
-     |      self[=?where1/where2/.../whereN] = value
+     |      self[where1/where2/.../whereN] = value
      |          AKA
      |      self[where1][where2]...[whereN] = value
      |      
-     |      if 'where' starts with '=', then
-     |          the value will be rewritten
-     |          If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
-     |      else
-     |          the path will be created. if last element exists, then the element will be reconfigured into array
-     |          if any whereN starts with '+', then the element will be reconfigured into array
+     |      if xpath will be started with ?, the nothing will be done if new_value is None or empty
+     |      if xpath is exist, then the value will be overwritten
+     |      if not exist, then the node will be created
+     |      
+     |      could be used predicates:
+     |          [<item>=<value>]
+     |          [<item>='<value>']
+     |      or indexes
+     |          [0]
+     |          [1]
+     |          [2]
+     |          [-1]
+     |          [-2]
+     |          [-3]
+     |      or functions
+     |          [last()]
+     |          [last()-1]
+     |          [last()-2]
+     |      or commands for creating (convertion into list) new node
+     |          [new()]
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0000027D559338B0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  all_not_valid(self, validate)
+     |      # ******************************************************************************
+     |  
+     |  all_valid(self, validate)
+     |      # ******************************************************************************
+     |  
+     |  any_not_valid(self, validate)
+     |      # ******************************************************************************
+     |  
+     |  any_valid(self, validate)
+     |      # ******************************************************************************
+     |  
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x00000223CC618820>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000027D55933820>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x00000223CC618790>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # ******************************************************************************
+     |  
+     |  get(self, xpath: 'str', if_not_found=None)
+     |      Private function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
      |  
      |  has_all(self, tupple_of_keys)
      |      # ******************************************************************************
@@ -126,19 +204,11 @@ CLASSES
      |  isExist(self, xpath) -> 'n0dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000027D559385E0>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x00000223CC61B790>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  is_exist(self, xpath) -> 'bool'
      |      Public function: return True, if self[xpath] exists
-     |  
-     |  nvl(self, where: 'str', if_not_found=None)
-     |      Private function:
-     |      return self[where1/where2/.../whereN]
-     |          AKA
-     |      return self[where1][where2]...[whereN]
-     |      
-     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
      |  
      |  to_json(self, indent: 'int' = 4) -> 'str'
      |      Public function: export self into json result string
@@ -151,6 +221,31 @@ CLASSES
      |  
      |  update_extend(self, other)
      |      # ******************************************************************************
+     |  
+     |  valid(self, node_xpath: 'str', validate, expected_result_for_error: 'bool' = False, msg: 'str' = None)
+     |      :param node_xpath:
+     |          xpath to the node inside self
+     |      :param validate:
+     |          list/scalar/function = validation 
+     |      :param expected_result_for_error:
+     |          By default expected that if result of validation is True, then self[node_xpath] is not valid (return False)
+     |      :param msg:
+     |          if None => return result as bool True(validation)/False
+     |      :return:
+     |      
+     |      Examples:
+     |          xml.valid('node/subnode', ["",None], True, "ERROR")
+     |              If xml['node/subnode'] is equal "" or None (result of comparising is True), then return ERROR, else ""
+     |          xml.valid('node/subnode', ["",None], True)
+     |              If xml['node/subnode'] is equal "" or None (result of comparising is True), then return False (not valid), else True
+     |          xml.valid('node/subnode', "", True)
+     |              If xml['node/subnode'] is equal "" (result of comparising is True), then return False (not valid), else True
+     |          xml.valid('node/subnode', [1,2], False, "ERROR")
+     |              If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return ERROR, else ""
+     |          xml.valid('node/subnode', [1,2], False)
+     |              If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
+     |          xml.valid('node/subnode', [1,2])
+     |              If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
      |  
      |  xpath(self, mode: 'int' = None) -> 'list'
      |      Public function: collect elements xpath starts from root
@@ -263,9 +358,6 @@ CLASSES
      |  __len__(self, /)
      |      Return len(self).
      |  
-     |  get(self, key, default=None, /)
-     |      Return the value for key if key is in the dictionary, else default.
-     |  
      |  ----------------------------------------------------------------------
      |  Static methods inherited from builtins.dict:
      |  
@@ -286,6 +378,9 @@ CLASSES
      |  
      |  Methods defined here:
      |  
+     |  __contains__(self, other_list)
+     |      Return key in self.
+     |  
      |  __init__(self, *args, **kw)
      |      args == tuple, kw == mapping(dictionary)
      |      
@@ -293,7 +388,20 @@ CLASSES
      |      ** == convert from mapping into list of named arguments
      |      
      |      :param args:
-     |      :param kw:
+     |      :param kw: 
+     |          recursively = None/False/0 => don't convert subnodes into n0list/n0dict
+     |  
+     |  all_in(self, other_list)
+     |      # ******************************************************************************
+     |  
+     |  all_not_in(self, other_list)
+     |      # ******************************************************************************
+     |  
+     |  any_in(self, other_list)
+     |      # ******************************************************************************
+     |  
+     |  any_not_in(self, other_list)
+     |      # ******************************************************************************
      |  
      |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[?] WITHOUT using order of elements.
@@ -318,6 +426,12 @@ CLASSES
      |                  "difftypes"     : [], # generated if elements with the same xpath have different types
      |              })
      |              if not returned["messages"]: self and other are totally equal.
+     |  
+     |  consists_of_all(self, other_list)
+     |      # ******************************************************************************
+     |  
+     |  consists_of_any(self, other_list)
+     |      # ******************************************************************************
      |  
      |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[i]
@@ -345,6 +459,9 @@ CLASSES
      |              })
      |              if not returned["messages"]: self and other are totally equal.
      |  
+     |  not_consists_of_any(self, other_list)
+     |      # ******************************************************************************
+     |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
      |  
@@ -359,9 +476,6 @@ CLASSES
      |  
      |  __add__(self, value, /)
      |      Return self+value.
-     |  
-     |  __contains__(self, key, /)
-     |      Return key in self.
      |  
      |  __delitem__(self, key, /)
      |      Delete self[key].
@@ -479,7 +593,9 @@ CLASSES
      |  __hash__ = None
 
 FUNCTIONS
-    convert_to_native_format(value, key=None, exception=None, transform_depends_of_key={'currency': <function <lambda> at 0x0000027D55933310>, 'source_currency': <function <lambda> at 0x0000027D559333A0>})
+    convert_to_native_format(value, key=None, exception=None, transform_depends_of_key=None)
+        # }
+        # def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
     
     date_ddmmyyyy(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
@@ -567,6 +683,10 @@ FUNCTIONS
     
     n0debug_object(object_name: 'str', level: 'int' = 5)
     
+    n0eval(_str: 'str') -> 'Union(int, str)'
+        # ********************************************************************
+        # ********************************************************************
+    
     n0isnumeric(value: 'str')
         # ********************************************************************
         # ********************************************************************
@@ -612,12 +732,16 @@ FUNCTIONS
         if values of attributes are different and are int,float,
         return additional element in result["not_equal"] with difference
     
+    split_name_index(node_name: 'str') -> 'tuple'
+        # ********************************************************************
+        # ********************************************************************
+    
     strip_ns lambda key
         # ******************************************************************************
     
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x0000027D55933280>, transform_value=<function convert_to_native_format at 0x0000027D55933430>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x00000223CC618310>, transform_value=<function convert_to_native_format at 0x00000223CC6183A0>)
         # ******************************************************************************
     
     xpath_match(xpath: 'str', xpath_list)
@@ -630,9 +754,8 @@ FUNCTIONS
             >0 matched
 
 DATA
+    Union = typing.Union
     annotations = _Feature((3, 7, 0, 'beta', 1), (4, 0, 0, 'alpha', 0), 16...
-    currency_converter = {'682': 'SAR'}
-    keys_for_currency_convertion = {'currency': <function <lambda>>, 'sour...
 
 FILE
     c:\repo\n0struct\n0struct\__init__.py
