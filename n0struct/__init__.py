@@ -88,6 +88,15 @@
 #                       n0dict. to_xml(..): multi-root support added
 #                   enhanced version of xmltodict0121 was incapsulated till changes will be merged with main branch of xmltodic
 #                   xmltodict0121 enhancement: automaticaly creation n0dict/n0list structure during XML import
+# 0.35 = 2020-12-27
+#                   xmltodict0121 was removed -- using strandard fuctionality of json and xmltodict: just only dict to n0dict will be automatic converted
+#                   during loading xml/json and automatic conversion list into n0list use named parameter recursively=True in the costructor:
+#                   my_n0dict = n0dict(json_txt, recursively=True)
+#                   enhanced:
+#                       n0dict. __init__(..)
+#                       n0list. __init__(..)
+#                       n0dict. __path(..)
+#                       test_n0struct.py
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -97,10 +106,13 @@ import typing
 from datetime import datetime, timedelta, date
 import random
 from collections import OrderedDict
-from .xmltodict0121 import *
+import xmltodict
+# from .xmltodict0121 import *
 import json
+# from .json2010 import *
 import urllib
 from typing import Union
+import n0struct
 
 # ********************************************************************
 # ********************************************************************
@@ -432,6 +444,11 @@ def set__debug_level(value: int):
     return __debug_level
 
 # ********************************************************************
+__debug_output = sys.stderr.write
+def set__debug_output(value: function):
+    global __debug_output
+    __debug_output = value
+    return __debug_output
 def n0print(
         text: str,
         level: int = 5,  # __debug_levels.index("INFO")
@@ -460,7 +477,7 @@ def n0print(
         global __debug_level
         global __debug_levels
         if level <= __debug_level:
-            sys.stderr.write(
+            __debug_output(
                 "***%s %s %s:%d: " % (
                     (" [%s]" % __debug_levels[level]) if internal_call else " [ALWAYS]",
                     datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -470,7 +487,7 @@ def n0print(
                 + (text if text else "") + end
             )
     else:
-        sys.stderr.write((text if text else "") + end)
+        __debug_output((text if text else "") + end)
     __prev_end = end
 
 
@@ -796,21 +813,24 @@ class n0list(list):
         len__args = len(args)
         if not len__args:
             return super(n0list, self).__init__(*args, **kw)
-        if len__args == 1:
-            _recursively = kw.get("recursively") or False
-            if isinstance(args[0], (list, tuple)):
-                for value in args[0]:
-                    if _recursively:
-                        if isinstance(value, (dict, OrderedDict)):
-                            value =n0dict(value, recursively = _recursively)
-                        elif isinstance(value, (list, tuple)):
-                            value =n0list(value, recursively = _recursively)
-                    self.append(value)
+        elif isinstance(args, tuple):
+            if len__args == 1:
+                from_tuple = args[0]
             else:
-                self.append(args[0])
+                from_tuple = args
+            _recursively = kw.get("recursively") or False
+            for value in from_tuple:
+                if _recursively:
+                    if isinstance(value, (dict, OrderedDict)):
+                        value = n0dict(value, recursively = _recursively)
+                    elif isinstance(value, (list, tuple)):
+                        value = n0list(value, recursively = _recursively)
+                self.append(value)
 # TypeError: __init__() should return None, not 'n0list'
             # return super(n0list, self).__init__(self)
             return None
+        # n0debug("args")
+        # n0debug("kw")
         raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple/n0list)")
     # ******************************************************************************
     # * n0list. direct_compare(..): only n0dict. direct_compare/compare have one_of_list_compare
@@ -1360,36 +1380,57 @@ class n0dict(dict):
             return super(n0dict, self).__init__(*args, **kw)
         if len__args == 1:
             _recursively = kw.get("recursively") or False
+            if _recursively:
+                _constructor = self.__init__
+            else:
+                _constructor = super(n0dict, self).__init__
             if isinstance(args[0], str):
                 if args[0].strip()[0] == "<":
                     # https://github.com/martinblech/xmltodict/issues/252
                     # The main function parse has a dict_constructor keyword argument useful for this purpose.
-                    kw.update({"dict_constructor": n0dict, "list_constructor": n0list})
-                    return super(n0dict, self).__init__(xmltodict.parse(args[0]), **kw)
-                    # return _constructor(xmltodict.parse(args[0]), **kw)
+                    return _constructor(
+                        xmltodict.parse(args[0], dict_constructor = n0dict),
+                        **kw
+                    )
+                    # return super(n0dict, self).__init__(
+                    #     xmltodict0121.parse(args[0], dict_constructor = n0dict, list_constructor = n0list),
+                    #     **kw
+                    # )
                 elif args[0].strip()[0] == "{":
-                    if _recursively:
-                        _constructor = self.__init__
-                    else:
-                        _constructor = super(n0dict, self).__init__
-                    return _constructor(json.loads(args[0]), **kw)
-                # else:
-                    # raise Exception("n0dict(..): if you provide string, it should be XML or JSON")
+                    return _constructor(
+                        json.loads(args[0], object_pairs_hook=n0struct.n0dict),
+                        **kw
+                    )
+                    # return _constructor(
+                        # json_lite.loads(args[0], object_pairs_hook=n0struct.n0dict),
+                        # **kw
+                    # )
             elif isinstance(args[0], (dict, OrderedDict, n0dict)):
                 for key in args[0]:
                     value = args[0][key]
                     if _recursively:
                         if isinstance(value, (dict, OrderedDict)):
-                            value =n0dict(value, recursively = _recursively)
+                            value = n0dict(value, recursively = _recursively)
                         elif isinstance(value, (list, tuple)):
-                            value =n0list(value, recursively = _recursively)
+                            value = n0list(value, recursively = _recursively)
                     self.update({key: value})
-                # return super(n0dict, self).__init__(self)
                 return None
-            # else:
-                # raise Exception("n0dict.__init__(..): you should provide string (XML or JSON) or dict/OrderedDict/n0dict")
-        # else:
-        raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/OrderedDict/n0dict)")
+            elif isinstance(args[0], zip):
+                for key, value in args[0]:
+                    self.update({key: value})
+                return None
+            elif isinstance(args[0], (list, tuple)):
+                # [key1, value1, key2, value2, ..., keyN, valueN]
+                if (len(args[0]) % 2) == 0 and all(isinstance(itm, str) for itm in args[0][0::2]):
+                    for key, value in zip(args[0][0::2],args[0][1::2]):
+                        self.update({key: value})
+                    return None
+                # [(key1, value1), (key2, value2), ..., (keyN, valueN)]
+                if all(isinstance(itm, tuple) and len(itm) == 2 and isinstance(itm[0], str) for itm in args[0]):
+                    for pair in args[0]:
+                        self.update({pair[0]: pair[1]})
+                    return None
+        raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/OrderedDict/n0dict/zip or paired tuple/list)")
     # ******************************************************************************
     def update_extend(self, other):
         if other is None:
@@ -1638,23 +1679,21 @@ class n0dict(dict):
     # ******************************************************************************
     # XPATH
     # ******************************************************************************
-    def __xpath(self, parent: OrderedDict, path: str = None, mode: int = None) -> list:
+    def __xpath(self, value, path: str = None, mode: int = None) -> list:
         """
         Private function: recursively collect elements xpath starts from parent
         """
         result = []
-        for key, value in parent.items():
-            if isinstance(value, list):
-                for i, subitm in enumerate(value):
-                    result += self.__xpath(subitm, "%s/%s[%d]" % (path, key, i), mode)
-            elif isinstance(value, str):
-                result.append(("%s/%s" % (path, key), value))
-            elif isinstance(value, (n0dict, dict, OrderedDict)):
+        if isinstance(value, (list, tuple, n0list)):
+            for i, subitm in enumerate(value):
+                result += self.__xpath(subitm, "%s[%d]" % (path, i), mode)
+        elif isinstance(value, (dict, OrderedDict, n0dict)):
+            for key, value in value.items():
                 result += self.__xpath(value, "%s/%s" % (path, key), mode)
-            elif value is None:
-                result.append(("%s/%s" % (path, key), None))
-            else:
-                raise Exception("%s/%s ==  %s" % (path, key, value))
+        elif isinstance(value, (str, int, float)) or value is None:
+            result.append((path, value))
+        else:
+            raise Exception("Not expected type (%s) %s/%s == %s" % (type(value), path, key, str(value)))
         return result
 
     def xpath(self, mode: int = None) -> list:  # list[(xpath, value)]
@@ -1674,19 +1713,21 @@ class n0dict(dict):
             result += ("['%-" + str(xpath_maxlen) + "s = %s\n") % \
                         (
                             itm[0] + "']",  # Don't move to the main
-                            ('"' + itm[1] + '"') if itm[1] else "None"
+                            ('"' + str(itm[1]) + '"') if itm[1] else "None"
                         )
         return result
 
     # ******************************************************************************
     # XML
     # ******************************************************************************
-    def __xml(self, parent: OrderedDict, indent: int, inc_indent: int) -> str:
+    def __xml(self, parent: n0dict, indent: int, inc_indent: int) -> str:
         """
         Private function: recursively export OrderedDict into xml result string
         """
         result = ""
         if not parent is None:
+            # type_parent = type(parent)
+            # type_parent_str = str(type_parent)
             if isinstance(parent, (dict, OrderedDict, n0dict)):
                 if not len(parent.items()):
                     return None
@@ -1733,7 +1774,9 @@ class n0dict(dict):
             elif isinstance(parent, (str, int, float)):
                 result += str(parent)
             else:
+                print("Exception")
                 raise Exception("__xml(..): Unknown type (%s) ==  %s" % (type(parent), str(parent)))
+
             return result
         else:
             return None
@@ -1756,13 +1799,16 @@ class n0dict(dict):
                         sub_result = '\n' + sub_result + '\n'
                     result += sub_result + "<%s>\n" % key
             else:
-                result += "<%s>" % key
-                if isinstance(value, (str, int, float)):
-                    # buffer += "<%s>%s</%s>\n" % (key, str(value), key)
-                    result += "%s" % str(value)
+                if value is None:
+                    result += "</%s>" % key
                 else:
-                    result += "\n" + self.__xml(value, indent, indent) + "\n"
-                result += "</%s>\n" % key
+                    result += "<%s>" % key
+                    if isinstance(value, (str, int, float)):
+                        # buffer += "<%s>%s</%s>\n" % (key, str(value), key)
+                        result += "%s" % str(value)
+                    else:
+                        result += "\n" + self.__xml(value, indent, indent) + "\n"
+                    result += "</%s>\n" % key
         return result
 
     # ******************************************************************************
@@ -1926,7 +1972,13 @@ class n0dict(dict):
         if not isinstance(xpath_list, (list, tuple)):
             raise IndexError("xpath (%s)'%s' must be list or string" % (type(xpath_list), str(xpath_list)))
         if not xpath_list:
-            return self._find(xpath_found_str, self)
+            if xpath_found_str == '/':
+                #================================
+                # FOUND: root
+                #================================
+                return parent_node, None, parent_node, xpath_found_str, None
+            else:
+                return self._find(xpath_found_str, self)
             # raise IndexError("too much '..' in xpath")
         # if parent_node is None:
             # parent_node = self

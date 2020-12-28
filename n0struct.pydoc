@@ -92,24 +92,35 @@ DESCRIPTION
     #                   enhanced:
     #                       n0dict. __xml(..): nodes int, float support added
     #                       n0dict. to_xml(..): multi-root support added
+    #                   enhanced version of xmltodict0121 was incapsulated till changes will be merged with main branch of xmltodic
+    #                   xmltodict0121 enhancement: automaticaly creation n0dict/n0list structure during XML import
+    # 0.35 = 2020-12-27
+    #                   xmltodict0121 was removed -- using strandard fuctionality of json and xmltodict: just only dict to n0dict will be automatic converted
+    #                   during loading xml/json and automatic conversion list into n0list use named parameter recursively=True in the costructor:
+    #                   my_n0dict = n0dict(json_txt, recursively=True)
+    #                   enhanced:
+    #                       n0dict. __init__(..)
+    #                       n0list. __init__(..)
+    #                       n0dict. __path(..)
+    #                       test_n0struct.py
 
 PACKAGE CONTENTS
     test (package)
 
 CLASSES
+    builtins.dict(builtins.object)
+        n0dict
     builtins.list(builtins.object)
         n0list
-    collections.OrderedDict(builtins.dict)
-        n0dict
     
-    class n0dict(collections.OrderedDict)
+    class n0dict(builtins.dict)
      |  n0dict(*args, **kw)
      |  
-     |  Dictionary that remembers insertion order
+     |  https://github.com/martinblech/xmltodict/issues/252
+     |  For Python >= 3.6, dictionary are Sorted by insertion order, so avoid the use of OrderedDict for those python versions.
      |  
      |  Method resolution order:
      |      n0dict
-     |      collections.OrderedDict
      |      builtins.dict
      |      builtins.object
      |  
@@ -172,12 +183,12 @@ CLASSES
      |  any_valid(self, validate)
      |      # ******************************************************************************
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x00000223CC618820>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x000001D88327CDC0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x00000223CC618790>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x000001D88327CD30>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # ******************************************************************************
@@ -204,7 +215,7 @@ CLASSES
      |  isExist(self, xpath) -> 'n0dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x00000223CC61B790>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x000001D883281D30>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  is_exist(self, xpath) -> 'bool'
@@ -251,7 +262,19 @@ CLASSES
      |      Public function: collect elements xpath starts from root
      |  
      |  ----------------------------------------------------------------------
-     |  Methods inherited from collections.OrderedDict:
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.dict:
+     |  
+     |  __contains__(self, key, /)
+     |      True if the dictionary has the specified key, else False.
      |  
      |  __delitem__(self, key, /)
      |      Delete self[key].
@@ -262,6 +285,9 @@ CLASSES
      |  __ge__(self, value, /)
      |      Return self>=value.
      |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
      |  __gt__(self, value, /)
      |      Return self>value.
      |  
@@ -271,29 +297,29 @@ CLASSES
      |  __le__(self, value, /)
      |      Return self<=value.
      |  
+     |  __len__(self, /)
+     |      Return len(self).
+     |  
      |  __lt__(self, value, /)
      |      Return self<value.
      |  
      |  __ne__(self, value, /)
      |      Return self!=value.
      |  
-     |  __reduce__(...)
-     |      Return state information for pickling
-     |  
      |  __repr__(self, /)
      |      Return repr(self).
      |  
-     |  __reversed__(...)
-     |      od.__reversed__() <==> reversed(od)
+     |  __reversed__(self, /)
+     |      Return a reverse iterator over the dict keys.
      |  
      |  __sizeof__(...)
      |      D.__sizeof__() -> size of D in memory, in bytes
      |  
      |  clear(...)
-     |      od.clear() -> None.  Remove all items from od.
+     |      D.clear() -> None.  Remove all items from D.
      |  
      |  copy(...)
-     |      od.copy() -> a shallow copy of od
+     |      D.copy() -> a shallow copy of D
      |  
      |  items(...)
      |      D.items() -> a set-like object providing a view on D's items
@@ -301,22 +327,17 @@ CLASSES
      |  keys(...)
      |      D.keys() -> a set-like object providing a view on D's keys
      |  
-     |  move_to_end(self, /, key, last=True)
-     |      Move an existing element to the end (or beginning if last is false).
-     |      
-     |      Raise KeyError if the element does not exist.
-     |  
      |  pop(...)
-     |      od.pop(k[,d]) -> v, remove specified key and return the corresponding
-     |      value.  If key is not found, d is returned if given, otherwise KeyError
-     |      is raised.
+     |      D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
+     |      If key is not found, d is returned if given, otherwise KeyError is raised
      |  
-     |  popitem(self, /, last=True)
-     |      Remove and return a (key, value) pair from the dictionary.
+     |  popitem(self, /)
+     |      Remove and return a (key, value) pair as a 2-tuple.
      |      
-     |      Pairs are returned in LIFO order if last is true or FIFO order if false.
+     |      Pairs are returned in LIFO (last-in, first-out) order.
+     |      Raises KeyError if the dict is empty.
      |  
-     |  setdefault(self, /, key, default=None)
+     |  setdefault(self, key, default=None, /)
      |      Insert key with a value of default if key is not in the dictionary.
      |      
      |      Return the value for key if key is in the dictionary, else default.
@@ -331,38 +352,21 @@ CLASSES
      |      D.values() -> an object providing a view on D's values
      |  
      |  ----------------------------------------------------------------------
-     |  Class methods inherited from collections.OrderedDict:
+     |  Class methods inherited from builtins.dict:
      |  
-     |  fromkeys(iterable, value=None) from builtins.type
-     |      Create a new ordered dictionary with keys from iterable and values set to value.
-     |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors inherited from collections.OrderedDict:
-     |  
-     |  __dict__
-     |  
-     |  ----------------------------------------------------------------------
-     |  Data and other attributes inherited from collections.OrderedDict:
-     |  
-     |  __hash__ = None
-     |  
-     |  ----------------------------------------------------------------------
-     |  Methods inherited from builtins.dict:
-     |  
-     |  __contains__(self, key, /)
-     |      True if the dictionary has the specified key, else False.
-     |  
-     |  __getattribute__(self, name, /)
-     |      Return getattr(self, name).
-     |  
-     |  __len__(self, /)
-     |      Return len(self).
+     |  fromkeys(iterable, value=None, /) from builtins.type
+     |      Create a new dictionary with keys from iterable and values set to value.
      |  
      |  ----------------------------------------------------------------------
      |  Static methods inherited from builtins.dict:
      |  
      |  __new__(*args, **kwargs) from builtins.type
      |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from builtins.dict:
+     |  
+     |  __hash__ = None
     
     class n0list(builtins.list)
      |  n0list(*args, **kw)
@@ -722,6 +726,8 @@ FUNCTIONS
     
     set__debug_level(value: 'int')
     
+    set__debug_output(value: 'function')
+    
     set__flag_compare_check_different_types(value)
         if __flag_compare_check_different_types == True, then
         validate type of attributes in .compare()/.direct_compare()
@@ -741,7 +747,7 @@ FUNCTIONS
     
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x00000223CC618310>, transform_value=<function convert_to_native_format at 0x00000223CC6183A0>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x000001D88327C8B0>, transform_value=<function convert_to_native_format at 0x000001D88327C940>)
         # ******************************************************************************
     
     xpath_match(xpath: 'str', xpath_list)

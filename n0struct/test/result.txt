@@ -27,7 +27,7 @@ Values are different: dict1["C"][2]["b"]=8 != dict3["C"][2]["b"]=2
 Values are different: dict1["C"][2]["c"]=9 != dict3["C"][2]["c"]=3 
 Values are different: dict1["C"][2]["value1"]=3 != dict3["C"][2]["value1"]=1 
 Values are different: dict1["C"][2]["value2"]=6 != dict3["C"][2]["value2"]=4 
-List dict3["C"] is longer dict1["C"]: dict3["C"][3]='n0dict([('a', 1), ('b', 2), ('c', 3), ('value1', 1), ('value2', 4)])' doesn't exist in dict1["C"]
+List dict3["C"] is longer dict1["C"]: dict3["C"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1["C"]
 *** not_equal
 ('/C[0]/a', [1, 7, 6.0])
 ('/C[0]/b', [2, 8, 6.0])
@@ -42,17 +42,17 @@ List dict3["C"] is longer dict1["C"]: dict3["C"][3]='n0dict([('a', 1), ('b', 2),
 ('/C[2]/value2', [6, 4, -2.0])
 *** self_unique
 *** other_unique
-('/C[3]', n0dict([('a', 1), ('b', 2), ('c', 3), ('value1', 1), ('value2', 4)]))
+('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
 *** difftypes
 ******************************************************************************** 4 = Unsorted list in dictionary = compare
 *** messages
 Values are different: dict1["C"][1]["value2"]=5 != dict3["C"][1]["value2"]=99 
-Element dict3["C"][3]='n0dict([('a', 1), ('b', 2), ('c', 3), ('value1', 1), ('value2', 4)])' doesn't exist in dict1["C"]
+Element dict3["C"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1["C"]
 *** not_equal
 ('/C[1]/value2', [5, 99, 94.0])
 *** self_unique
 *** other_unique
-('/C[3]', n0dict([('a', 1), ('b', 2), ('c', 3), ('value1', 1), ('value2', 4)]))
+('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
 *** difftypes
 {
     "C": [
@@ -136,8 +136,8 @@ Element dict3["C"][3]='n0dict([('a', 1), ('b', 2), ('c', 3), ('value1', 1), ('va
     </node>
 </moreone>
 
-[n0dict([('value', n0dict())]), n0dict([('value', None)]), n0dict([('value', '')]), n0dict([('value', 2), ('code', 'two')]), n0dict([('value', 4), ('code', 'four')])]
-n0dict([('node', [n0dict([('value', n0dict())]), n0dict([('value', None)]), n0dict([('value', '')]), n0dict([('value', 2), ('code', 'two')]), n0dict([('value', 4), ('code', 'four')])])])
+[{'value': {}}, {'value': None}, {'value': ''}, {'value': 2, 'code': 'two'}, {'value': 4, 'code': 'four'}]
+{'node': [{'value': {}}, {'value': None}, {'value': ''}, {'value': 2, 'code': 'two'}, {'value': 4, 'code': 'four'}]}
 [4]
 [2]
 [6]
@@ -146,3 +146,84 @@ n0dict([('node', [n0dict([('value', n0dict())]), n0dict([('value', None)]), n0di
 7
 None
 None
+*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:223: (<class 'n0struct.n0dict'> id=2986074054304)dict4 = <class 'n0struct.n0dict'> {
+    "root": <class 'n0struct.n0dict'> {
+        "a": 1.0,
+        "b": <class 'n0struct.n0dict'> {
+            "c": 2,
+            "d": <class 'n0struct.n0dict'> {
+                "e": <class 'n0struct.n0dict'> {"f": 3},
+                "g": <class 'list'> [
+                    "4",
+                    <class 'n0struct.n0dict'> {"h": 5}
+                ],
+                "i": <class 'list'> [<class 'n0struct.n0dict'> {"j": 6}]
+            }
+        },
+        "k": <class 'list'> [
+            7,
+            8
+        ]
+    }
+}
+*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:242: (<class 'n0struct.n0dict'> id=2986074054464)dict5 = <class 'n0struct.n0dict'> {
+    "root": <class 'n0struct.n0dict'> {
+        "a": 1.0,
+        "b": <class 'n0struct.n0dict'> {
+            "c": 2,
+            "d": <class 'n0struct.n0dict'> {
+                "e": <class 'n0struct.n0dict'> {"f": 3},
+                "g": <class 'n0struct.n0list'> [
+                    "4",
+                    <class 'n0struct.n0dict'> {"h": 5}
+                ],
+                "i": <class 'n0struct.n0list'> [<class 'n0struct.n0dict'> {"j": 6}]
+            }
+        },
+        "k": <class 'n0struct.n0list'> [
+            7,
+            8
+        ]
+    }
+}
+*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:285: (<class 'n0struct.n0dict'> id=2986074054544)dict6 = <class 'n0struct.n0dict'> {
+    "root": <class 'n0struct.n0dict'> {
+        "a": "1",
+        "b": <class 'n0struct.n0dict'> {
+            "c": "2",
+            "d": <class 'n0struct.n0dict'> {
+                "e": <class 'n0struct.n0dict'> {"f": "3"},
+                "g": <class 'list'> [
+                    "4",
+                    <class 'n0struct.n0dict'> {"h": "5"}
+                ],
+                "i": <class 'n0struct.n0dict'> {"j": "6"}
+            }
+        },
+        "k": <class 'list'> [
+            "7",
+            "8"
+        ]
+    }
+}
+*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:304: (<class 'n0struct.n0dict'> id=2986074089008)dict7 = <class 'n0struct.n0dict'> {
+    "root": <class 'n0struct.n0dict'> {
+        "a": "1",
+        "b": <class 'n0struct.n0dict'> {
+            "c": "2",
+            "d": <class 'n0struct.n0dict'> {
+                "e": <class 'n0struct.n0dict'> {"f": "3"},
+                "g": <class 'n0struct.n0list'> [
+                    "4",
+                    <class 'n0struct.n0dict'> {"h": "5"}
+                ],
+                "i": <class 'n0struct.n0dict'> {"j": "6"}
+            }
+        },
+        "k": <class 'n0struct.n0list'> [
+            "7",
+            "8"
+        ]
+    }
+}
+*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:324: (<class 'n0struct.n0dict'> id=2986074089648)dict8 = <class 'n0struct.n0dict'> {"root": "N0ne"}

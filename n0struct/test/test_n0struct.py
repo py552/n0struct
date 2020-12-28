@@ -190,6 +190,140 @@ def main():
     
     print(dict1["?moretwo/node/code[text()='eight']/../value"] or None)
     assert (dict1["?moretwo/node/code[text()='eight']/../value"] or None) is None
+    
+    set__debug_output(sys.stdout.write)
+    
+    str4 = """
+    {
+        "root": {
+            "a": 1.0,
+            "b": {
+                "c": 2,
+                "d": {
+                    "e": {
+                        "f": 3
+                    },
+                    "g": [
+                        "4",
+                        {"h": 5}
+                    ],
+                    "i": [
+                        {"j": 6}
+                    ]
+                }
+            },
+            "k": [
+                7,
+                8
+            ]
+        }
+    }
+    """
+    dict4 = n0dict(str4)
+    n0debug("dict4")
+    assert isinstance(dict4["root"], n0dict) == True
+    assert isinstance(dict4["root/a"], float) == True # XML supports only str, for JSON float
+    assert isinstance(dict4["root/b"], n0dict) == True
+    assert isinstance(dict4["root/b/d"], n0dict) == True
+    assert isinstance(dict4["root/b/d/e"], n0dict) == True
+    assert isinstance(dict4["root/b/d/g"], list) == True # For recursively=False
+    assert isinstance(dict4["root/b/d/g[0]"], str) == True
+    assert isinstance(dict4["root/b/d/g[1]"], n0dict) == True
+    assert isinstance(dict4["root/b/d/g[1]/h"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict4["root/b/d/i"], list) == True # For JSON list
+    assert isinstance(dict4["root/b/d/i[0]"], n0dict) == True
+    assert isinstance(dict4["root/b/d/i[0]/j"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict4["root/k"], list) == True # For recursively=False
+    assert isinstance(dict4["root/k[0]"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict4["root/k[1]"], int) == True # XML supports only str, for JSON int
+    dict4.to_json(); dict4.to_xml(); dict4.to_xpath()
+
+    dict5 = n0dict(str4, recursively=True)
+    n0debug("dict5")
+    assert isinstance(dict5["root"], n0dict) == True
+    assert isinstance(dict5["root/a"], float) == True # XML supports only str, for JSON float
+    assert isinstance(dict5["root/b"], n0dict) == True
+    assert isinstance(dict5["root/b/d"], n0dict) == True
+    assert isinstance(dict5["root/b/d/e"], n0dict) == True
+    assert isinstance(dict5["root/b/d/g"], n0list) == True # For recursively=True
+    assert isinstance(dict5["root/b/d/g[0]"], str) == True
+    assert isinstance(dict5["root/b/d/g[1]"], n0dict) == True
+    assert isinstance(dict5["root/b/d/g[1]/h"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict5["root/b/d/i"], n0list) == True # For JSON list
+    assert isinstance(dict5["root/b/d/i[0]"], n0dict) == True
+    assert isinstance(dict5["root/b/d/i[0]/j"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict5["root/k"], n0list) == True # For recursively=True
+    assert isinstance(dict5["root/k[0]"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict5["root/k[1]"], int) == True # XML supports only str, for JSON int
+    dict5.to_json(); dict5.to_xml(); dict5.to_xpath()
+    
+    str6 = """
+    <root>
+        <a>1</a>
+        <b>
+            <c>2</c>
+            <d>
+                <e>
+                    <f>3</f>
+                </e>
+                <g>
+                    4
+                </g>
+                <g>
+                    <h>5</h>
+                </g>
+                <i>
+                    <j>6</j>
+                </i>
+            </d>
+        </b>
+        <k>7</k>
+        <k>8</k>
+    </root>
+    """
+    dict6 = n0dict(str6)
+    n0debug("dict6")
+    assert isinstance(dict6["root"], n0dict) == True
+    assert isinstance(dict6["root/a"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict6["root/b"], n0dict) == True
+    assert isinstance(dict6["root/b/d"], n0dict) == True
+    assert isinstance(dict6["root/b/d/e"], n0dict) == True
+    assert isinstance(dict6["root/b/d/g"], list) == True # For recursively=False
+    assert isinstance(dict6["root/b/d/g[0]"], str) == True
+    assert isinstance(dict6["root/b/d/g[1]"], n0dict) == True
+    assert isinstance(dict6["root/b/d/g[1]/h"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict6["root/b/d/i"], n0dict) == True # For JSON list
+    assert isinstance(dict6["root/b/d/i[0]"], n0dict) == True
+    assert isinstance(dict6["root/b/d/i[0]/j"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict6["root/k"], list) == True # For recursively=False
+    assert isinstance(dict6["root/k[0]"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict6["root/k[1]"], str) == True # XML supports only str, for JSON int
+    dict6.to_json(); dict6.to_xml(); dict6.to_xpath()
+
+    dict7 = n0dict(str6, recursively=True)
+    n0debug("dict7")
+    assert isinstance(dict7["root"], n0dict) == True
+    assert isinstance(dict7["root/a"], str) == True # XML supports only str
+    assert isinstance(dict7["root/b"], n0dict) == True
+    assert isinstance(dict7["root/b/d"], n0dict) == True
+    assert isinstance(dict7["root/b/d/e"], n0dict) == True
+    assert isinstance(dict7["root/b/d/g"], n0list) == True
+    assert isinstance(dict7["root/b/d/g[0]"], str) == True
+    assert isinstance(dict7["root/b/d/g[1]"], n0dict) == True
+    assert isinstance(dict7["root/b/d/g[1]/h"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict7["root/b/d/i"], n0dict) == True # For JSON list
+    assert isinstance(dict7["root/b/d/i[0]"], n0dict) == True
+    assert isinstance(dict7["root/b/d/i[0]/j"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict7["root/k"], n0list) == True
+    assert isinstance(dict7["root/k[0]"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict7["root/k[1]"], str) == True # XML supports only str, for JSON int
+    dict7.to_json(); dict7.to_xml(); dict7.to_xpath()
+
+    str8 = "<root/>"
+    dict8 = n0dict(str8)
+    n0debug("dict8")
+    assert (dict8["root"] is None) == True
+    dict8.to_json(); dict8.to_xml(); dict8.to_xpath()
 
 if __name__ == '__main__':
     main()
