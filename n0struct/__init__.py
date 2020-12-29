@@ -88,7 +88,7 @@
 #                       n0dict. to_xml(..): multi-root support added
 #                   enhanced version of xmltodict0121 was incapsulated till changes will be merged with main branch of xmltodic
 #                   xmltodict0121 enhancement: automaticaly creation n0dict/n0list structure during XML import
-# 0.35 = 2020-12-27
+# 0.36 = 2020-12-27
 #                   xmltodict0121 was removed -- using strandard fuctionality of json and xmltodict: just only dict to n0dict will be automatic converted
 #                   during loading xml/json and automatic conversion list into n0list use named parameter recursively=True in the costructor:
 #                   my_n0dict = n0dict(json_txt, recursively=True)
@@ -97,6 +97,9 @@
 #                       n0list. __init__(..)
 #                       n0dict. __path(..)
 #                       test_n0struct.py
+# 0.37 = 2020-12-28
+#                   fixed:
+#                       n0dict. __xml(..)
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -1730,7 +1733,8 @@ class n0dict(dict):
             # type_parent_str = str(type_parent)
             if isinstance(parent, (dict, OrderedDict, n0dict)):
                 if not len(parent.items()):
-                    return None
+                    # return None
+                    return ""
                 for key, value in parent.items():
                     if result:
                         result += "\n"
@@ -1779,7 +1783,8 @@ class n0dict(dict):
 
             return result
         else:
-            return None
+            # return None
+            return ""
 
     def to_xml(self, indent: int = 4, encoding: str = "utf-8") -> str:
         """
@@ -1792,12 +1797,15 @@ class n0dict(dict):
         for key in self:
             value = self[key]
             if isinstance(value, (list, tuple, n0list)):
-                for i, subitm in enumerate(value):
-                    result += "<%s>" % key
-                    sub_result = self.__xml(subitm, indent, indent)
-                    if '<' in sub_result:
-                        sub_result = '\n' + sub_result + '\n'
-                    result += sub_result + "<%s>\n" % key
+                if len(value):
+                    for i, subitm in enumerate(value):
+                        result += "<%s>" % key
+                        sub_result = self.__xml(subitm, indent, indent)
+                        if '<' in sub_result:
+                            sub_result = '\n' + sub_result + '\n'
+                        result += sub_result + "</%s>\n" % key
+                else:
+                    result += "<%s/>\n" % key
             else:
                 if value is None:
                     result += "</%s>" % key

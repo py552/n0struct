@@ -94,7 +94,7 @@ DESCRIPTION
     #                       n0dict. to_xml(..): multi-root support added
     #                   enhanced version of xmltodict0121 was incapsulated till changes will be merged with main branch of xmltodic
     #                   xmltodict0121 enhancement: automaticaly creation n0dict/n0list structure during XML import
-    # 0.35 = 2020-12-27
+    # 0.36 = 2020-12-27
     #                   xmltodict0121 was removed -- using strandard fuctionality of json and xmltodict: just only dict to n0dict will be automatic converted
     #                   during loading xml/json and automatic conversion list into n0list use named parameter recursively=True in the costructor:
     #                   my_n0dict = n0dict(json_txt, recursively=True)
@@ -103,6 +103,9 @@ DESCRIPTION
     #                       n0list. __init__(..)
     #                       n0dict. __path(..)
     #                       test_n0struct.py
+    # 0.37 = 2020-12-28
+    #                   fixed:
+    #                       n0dict. __xml(..)
 
 PACKAGE CONTENTS
     test (package)
@@ -183,12 +186,12 @@ CLASSES
      |  any_valid(self, validate)
      |      # ******************************************************************************
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x000001D88327CDC0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x000002C521E1DDC0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x000001D88327CD30>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x000002C521E1DD30>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # ******************************************************************************
@@ -215,7 +218,7 @@ CLASSES
      |  isExist(self, xpath) -> 'n0dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x000001D883281D30>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x000002C521E21D30>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  is_exist(self, xpath) -> 'bool'
@@ -747,7 +750,7 @@ FUNCTIONS
     
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x000001D88327C8B0>, transform_value=<function convert_to_native_format at 0x000001D88327C940>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x000002C521E1D8B0>, transform_value=<function convert_to_native_format at 0x000002C521E1D940>)
         # ******************************************************************************
     
     xpath_match(xpath: 'str', xpath_list)
