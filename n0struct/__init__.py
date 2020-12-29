@@ -100,6 +100,32 @@
 # 0.37 = 2020-12-28
 #                   fixed:
 #                       n0dict. __xml(..)
+# 0.38 = 2020-12-29
+#                   enhanced:
+#                       n0dict. __init__(..): option force_n0dict == None|!None was added, used ONLY for JSON text convertion
+#                           force_n0dict == False/0/None => create [] (ordinary dict) nodes during JSON text convertion (json.loads)
+#                           force_n0dict == True/1/any => create n0dict() nodes during JSON text convertion (json.loads)
+#                           recursively == True => convert all list/dict nodes created during JSON text convertion (json.loads) into n0list/n0dict
+#
+#                       Performance results of some real code with JSON convertion:
+#                           JSON_struct = n0dict(JSON_txt, recursively=True) => n0dict/n0list:
+#                               36.889860 MB memory is used, 2.566520 seconds are taken for execution
+#                           JSON_struct = n0dict(JSON_txt, recursively=False) => dict/list => JSON_subnode = n0dict(JSON_struct["node/subnode"]):
+#                               36.945560 MB memory is used, 2.546720 seconds are taken for execution
+#                           JSON_struct = n0dict(JSON_txt, force_n0dict=True) => n0dict/list:
+#                               36.995180 MB memory is used, 2.576020 seconds are taken for execution
+#
+#                       Results are VERY strange, but they are true:
+#                           Minimum memory usage: load as list/dict, and after convert all of them into n0list/n0dict inside constructor
+#                           Maximum speed: load as list/dict, and after convert just requiered nodes into n0dict
+#                       *** BEFORE MAKING DECISION MAKE YOUR OWN PERFORMACE TESTING ***
+#
+#                       Same for XML:
+#                           XML_struct = n0dict(XML_txt, recursively=True) => n0dict/n0list:
+#                           XML_struct = n0dict(XML_txt, recursively=False) => n0dict/list
+#                           XML_struct = n0dict(XML_txt, force_n0dict=True) => 
+#                               force_n0dict is ignored -- the same like n0dict(XML_txt, recursively=False) => n0dict/list
+
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -1383,38 +1409,30 @@ class n0dict(dict):
             return super(n0dict, self).__init__(*args, **kw)
         if len__args == 1:
             _recursively = kw.get("recursively") or False
-            if _recursively:
-                _constructor = self.__init__
-            else:
-                _constructor = super(n0dict, self).__init__
             if isinstance(args[0], str):
+                if _recursively:
+                    _constructor = self.__init__
+                else:
+                    _constructor = super(n0dict, self).__init__
                 if args[0].strip()[0] == "<":
                     # https://github.com/martinblech/xmltodict/issues/252
-                    # The main function parse has a dict_constructor keyword argument useful for this purpose.
+                    # The main function parse has a force_n0dict keyword argument useful for this purpose.
                     return _constructor(
-                        xmltodict.parse(args[0], dict_constructor = n0dict),
+                        xmltodict.parse(args[0], force_n0dict = n0dict),
                         **kw
                     )
-                    # return super(n0dict, self).__init__(
-                    #     xmltodict0121.parse(args[0], dict_constructor = n0dict, list_constructor = n0list),
-                    #     **kw
-                    # )
                 elif args[0].strip()[0] == "{":
                     return _constructor(
-                        json.loads(args[0], object_pairs_hook=n0struct.n0dict),
+                        json.loads(args[0], object_pairs_hook = n0dict if kw.get("force_n0dict") else None),
                         **kw
                     )
-                    # return _constructor(
-                        # json_lite.loads(args[0], object_pairs_hook=n0struct.n0dict),
-                        # **kw
-                    # )
             elif isinstance(args[0], (dict, OrderedDict, n0dict)):
                 for key in args[0]:
                     value = args[0][key]
                     if _recursively:
-                        if isinstance(value, (dict, OrderedDict)):
+                        if isinstance(value, (dict, OrderedDict, n0dict)):
                             value = n0dict(value, recursively = _recursively)
-                        elif isinstance(value, (list, tuple)):
+                        elif isinstance(value, (list, tuple, n0list)):
                             value = n0list(value, recursively = _recursively)
                     self.update({key: value})
                 return None

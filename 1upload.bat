@@ -13,6 +13,8 @@ echo **********************************************************************
 python -m pytest
 if not "%errorlevel%"=="0" echo ERROR with autotests!&&exit 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+call generate_pydoc.bat
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Determine directory/project name
 set "mydir=%~dp0"
 set "mydir=%mydir:~0,-1%"
