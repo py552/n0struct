@@ -1,3 +1,240 @@
+*** [ALWAYS] 2021-01-04 13:39:44 test_n0struct.py:125: ================================================================================
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:126: (<class 'n0struct.n0dict'> id=1679769644864)dict1 = <class 'n0struct.n0dict'> {
+    "C": <class 'n0struct.n0list'> [
+        <class 'n0struct.n0dict'> {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "value1": 1,
+            "value2": 4
+        },
+        <class 'n0struct.n0dict'> {
+            "a": 4,
+            "b": 5,
+            "c": 6,
+            "value1": 2,
+            "value2": 5
+        },
+        <class 'n0struct.n0dict'> {
+            "a": 7,
+            "b": 8,
+            "c": 9,
+            "value1": 3,
+            "value2": 6
+        }
+    ]
+}
+*** [ALWAYS] 2021-01-04 13:39:44 test_n0struct.py:127: ================================================================================
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:128: (<class 'n0struct.n0dict'> id=1679769644944)dict2 = <class 'n0struct.n0dict'> {
+    "C": <class 'n0struct.n0list'> [
+        <class 'n0struct.n0dict'> {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "value1": 1,
+            "value2": 4
+        },
+        <class 'n0struct.n0dict'> {
+            "a": 4,
+            "b": 5,
+            "c": 6,
+            "value1": 2,
+            "value2": 99
+        },
+        <class 'n0struct.n0dict'> {
+            "a": 7,
+            "b": 8,
+            "c": 9,
+            "value1": 3,
+            "value2": 6
+        }
+    ]
+}
+*** [ALWAYS] 2021-01-04 13:39:44 test_n0struct.py:129: ================================================================================
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:130: (<class 'n0struct.n0dict'> id=1679769644944)dict3 = <class 'n0struct.n0dict'> {
+    "C": <class 'n0struct.n0list'> [
+        <class 'n0struct.n0dict'> {
+            "a": 1,
+            "b": 2,
+            "c": 3,
+            "value1": 1,
+            "value2": 4
+        },
+        <class 'n0struct.n0dict'> {
+            "a": 4,
+            "b": 5,
+            "c": 6,
+            "value1": 2,
+            "value2": 99
+        },
+        <class 'n0struct.n0dict'> {
+            "a": 7,
+            "b": 8,
+            "c": 9,
+            "value1": 3,
+            "value2": 6
+        }
+    ]
+}
+*** [ALWAYS] 2021-01-04 13:39:44 test_n0struct.py:64: ================================================================================
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:65: (<class 'n0struct.n0dict'> id=1679803472528)differences1_direct_compare = <class 'n0struct.n0dict'> {
+    "messages": <class 'list'> ["Values are different: dict1[\"C\"][1][\"value2\"]=5 != dict2[\"C\"][1][\"value2\"]=99 "],
+    "not_equal": <class 'list'> [
+        <class 'tuple'> (
+            "/C[1]/value2",
+            <class 'list'> [
+                5,
+                99,
+                94.0
+            ]
+        )
+    ],
+    "self_unique": <class 'list'> [],
+    "other_unique": <class 'list'> [],
+    "difftypes": <class 'list'> []
+}
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:66: (<class 'int'> id=140711084365472)notemptyitems(differences1_direct_compare["messages"]) = 1
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:68: (<class 'int'> id=140711084365568)notemptyitems(differences1_direct_compare["not_equal"]) = 4
+*** [ALWAYS] 2021-01-04 13:39:44 test_n0struct.py:74: ================================================================================
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:75: (<class 'n0struct.n0dict'> id=1679803472608)differences2_wise_compare = <class 'n0struct.n0dict'> {
+    "messages": <class 'list'> ["Values are different: dict1[\"C\"][1][\"value2\"]=5 != dict2[\"C\"][1][\"value2\"]=99 "],
+    "not_equal": <class 'list'> [
+        <class 'tuple'> (
+            "/C[1]/value2",
+            <class 'list'> [
+                5,
+                99,
+                94.0
+            ]
+        )
+    ],
+    "self_unique": <class 'list'> [],
+    "other_unique": <class 'list'> [],
+    "difftypes": <class 'list'> []
+}
+*** [ALWAYS] 2021-01-04 13:39:44 test_n0struct.py:100: ================================================================================
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:101: (<class 'n0struct.n0dict'> id=1679803472608)differences1_direct_compare = <class 'n0struct.n0dict'> {
+    "messages": <class 'list'> [
+        "Values are different: dict1[\"C\"][0][\"a\"]=1 != dict3[\"C\"][0][\"a\"]=7 ",
+        "Values are different: dict1[\"C\"][0][\"b\"]=2 != dict3[\"C\"][0][\"b\"]=8 ",
+        "Values are different: dict1[\"C\"][0][\"c\"]=3 != dict3[\"C\"][0][\"c\"]=9 ",
+        "Values are different: dict1[\"C\"][0][\"value1\"]=1 != dict3[\"C\"][0][\"value1\"]=3 ",
+        "Values are different: dict1[\"C\"][0][\"value2\"]=4 != dict3[\"C\"][0][\"value2\"]=6 ",
+        "Values are different: dict1[\"C\"][1][\"value2\"]=5 != dict3[\"C\"][1][\"value2\"]=99 ",
+        "Values are different: dict1[\"C\"][2][\"a\"]=7 != dict3[\"C\"][2][\"a\"]=1 ",
+        "Values are different: dict1[\"C\"][2][\"b\"]=8 != dict3[\"C\"][2][\"b\"]=2 ",
+        "Values are different: dict1[\"C\"][2][\"c\"]=9 != dict3[\"C\"][2][\"c\"]=3 ",
+        "Values are different: dict1[\"C\"][2][\"value1\"]=3 != dict3[\"C\"][2][\"value1\"]=1 ",
+        "Values are different: dict1[\"C\"][2][\"value2\"]=6 != dict3[\"C\"][2][\"value2\"]=4 ",
+        "List dict3[\"C\"] is longer dict1[\"C\"]: dict3[\"C\"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1[\"C\"]"
+    ],
+    "not_equal": <class 'list'> [
+        <class 'tuple'> (
+            "/C[0]/a",
+            <class 'list'> [
+                1,
+                7,
+                6.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[0]/b",
+            <class 'list'> [
+                2,
+                8,
+                6.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[0]/c",
+            <class 'list'> [
+                3,
+                9,
+                6.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[0]/value1",
+            <class 'list'> [
+                1,
+                3,
+                2.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[0]/value2",
+            <class 'list'> [
+                4,
+                6,
+                2.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[1]/value2",
+            <class 'list'> [
+                5,
+                99,
+                94.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[2]/a",
+            <class 'list'> [
+                7,
+                1,
+                -6.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[2]/b",
+            <class 'list'> [
+                8,
+                2,
+                -6.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[2]/c",
+            <class 'list'> [
+                9,
+                3,
+                -6.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[2]/value1",
+            <class 'list'> [
+                3,
+                1,
+                -2.0
+            ]
+        ),
+        <class 'tuple'> (
+            "/C[2]/value2",
+            <class 'list'> [
+                6,
+                4,
+                -2.0
+            ]
+        )
+    ],
+    "self_unique": <class 'list'> [],
+    "other_unique": <class 'list'> [
+        <class 'tuple'> (
+            "/C[3]",
+            <class 'n0struct.n0dict'> {
+                "a": 1,
+                "b": 2,
+                "c": 3,
+                "value1": 1,
+                "value2": 4
+            }
+        )
+    ],
+    "difftypes": <class 'list'> []
+}
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:102: (<class 'int'> id=140711084365824)notemptyitems(differences1_direct_compare["messages"] = 12
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:104: (<class 'int'> id=140711084366848)differences1_direct_compare["not_equal"] = 44
 ******************************************************************************** 1 = Sorted list in dictionary = direct_compare
 *** messages
 Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 
@@ -101,21 +338,21 @@ Element dict3["C"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn
     <c>3</c>
     <value1>1</value1>
     <value2>4</value2>
-<C>
+</C>
 <C>
     <a>4</a>
     <b>5</b>
     <c>6</c>
     <value1>2</value1>
     <value2>5</value2>
-<C>
+</C>
 <C>
     <a>7</a>
     <b>8</b>
     <c>9</c>
     <value1>3</value1>
     <value2>6</value2>
-<C>
+</C>
 <moreone>
     <node>
         <value/>
@@ -146,7 +383,27 @@ Element dict3["C"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn
 7
 None
 None
-*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:223: (<class 'n0struct.n0dict'> id=2986074054304)dict4 = <class 'n0struct.n0dict'> {
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:223: (<class 'n0struct.n0dict'> id=1679803473808)dict_from_json_default = <class 'n0struct.n0dict'> {
+    "root": <class 'dict'> {
+        "a": 1.0,
+        "b": <class 'dict'> {
+            "c": 2,
+            "d": <class 'dict'> {
+                "e": <class 'dict'> {"f": 3},
+                "g": <class 'list'> [
+                    "4",
+                    <class 'dict'> {"h": 5}
+                ],
+                "i": <class 'list'> [<class 'dict'> {"j": 6}]
+            }
+        },
+        "k": <class 'list'> [
+            7,
+            8
+        ]
+    }
+}
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:243: (<class 'n0struct.n0dict'> id=1679803473568)dict_from_json_force_n0dict = <class 'n0struct.n0dict'> {
     "root": <class 'n0struct.n0dict'> {
         "a": 1.0,
         "b": <class 'n0struct.n0dict'> {
@@ -166,7 +423,7 @@ None
         ]
     }
 }
-*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:242: (<class 'n0struct.n0dict'> id=2986074054464)dict5 = <class 'n0struct.n0dict'> {
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:263: (<class 'n0struct.n0dict'> id=1679803503296)dict_from_json_recursevely = <class 'n0struct.n0dict'> {
     "root": <class 'n0struct.n0dict'> {
         "a": 1.0,
         "b": <class 'n0struct.n0dict'> {
@@ -186,7 +443,27 @@ None
         ]
     }
 }
-*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:285: (<class 'n0struct.n0dict'> id=2986074054544)dict6 = <class 'n0struct.n0dict'> {
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:283: (<class 'n0struct.n0dict'> id=1679803504096)dict_from_json_recursevely_force_n0dict = <class 'n0struct.n0dict'> {
+    "root": <class 'n0struct.n0dict'> {
+        "a": 1.0,
+        "b": <class 'n0struct.n0dict'> {
+            "c": 2,
+            "d": <class 'n0struct.n0dict'> {
+                "e": <class 'n0struct.n0dict'> {"f": 3},
+                "g": <class 'n0struct.n0list'> [
+                    "4",
+                    <class 'n0struct.n0dict'> {"h": 5}
+                ],
+                "i": <class 'n0struct.n0list'> [<class 'n0struct.n0dict'> {"j": 6}]
+            }
+        },
+        "k": <class 'n0struct.n0list'> [
+            7,
+            8
+        ]
+    }
+}
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:327: (<class 'n0struct.n0dict'> id=1679803503056)dict_from_xml_default = <class 'n0struct.n0dict'> {
     "root": <class 'n0struct.n0dict'> {
         "a": "1",
         "b": <class 'n0struct.n0dict'> {
@@ -206,7 +483,64 @@ None
         ]
     }
 }
-*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:304: (<class 'n0struct.n0dict'> id=2986074089008)dict7 = <class 'n0struct.n0dict'> {
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:348: (<class 'n0struct.n0dict'> id=1679803505456)dict_from_xml_force_n0dict = <class 'n0struct.n0dict'> {
+    "root": <class 'n0struct.n0dict'> {
+        "a": "1",
+        "b": <class 'n0struct.n0dict'> {
+            "c": "2",
+            "d": <class 'n0struct.n0dict'> {
+                "e": <class 'n0struct.n0dict'> {"f": "3"},
+                "g": <class 'list'> [
+                    "4",
+                    <class 'n0struct.n0dict'> {"h": "5"}
+                ],
+                "i": <class 'n0struct.n0dict'> {"j": "6"}
+            }
+        },
+        "k": <class 'list'> [
+            "7",
+            "8"
+        ]
+    }
+}
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:107: (<class 'int'> id=140711084365632)notemptyitems(differences1_direct_compare["other_unique"]) = 6
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:109: (<class 'int'> id=140711084365440)notemptyitems(differences1_direct_compare["self_unique"]) = 0
+*** [ALWAYS] 2021-01-04 13:39:44 test_n0struct.py:112: ================================================================================
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:113: (<class 'n0struct.n0dict'> id=1679803472848)differences2_wise_compare = <class 'n0struct.n0dict'> {
+    "messages": <class 'list'> [
+        "Values are different: dict1[\"C\"][1][\"value2\"]=5 != dict3[\"C\"][1][\"value2\"]=99 ",
+        "Element dict3[\"C\"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1[\"C\"]"
+    ],
+    "not_equal": <class 'list'> [
+        <class 'tuple'> (
+            "/C[1]/value2",
+            <class 'list'> [
+                5,
+                99,
+                94.0
+            ]
+        )
+    ],
+    "self_unique": <class 'list'> [],
+    "other_unique": <class 'list'> [
+        <class 'tuple'> (
+            "/C[3]",
+            <class 'n0struct.n0dict'> {
+                "a": 1,
+                "b": 2,
+                "c": 3,
+                "value1": 1,
+                "value2": 4
+            }
+        )
+    ],
+    "difftypes": <class 'list'> []
+}
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:114: (<class 'int'> id=140711084365504)notemptyitems(differences2_wise_compare["messages"] = 2
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:116: (<class 'int'> id=140711084365568)differences2_wise_compare["not_equal"] = 4
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:119: (<class 'int'> id=140711084365632)notemptyitems(differences2_wise_compare["other_unique"]) = 6
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:121: (<class 'int'> id=140711084365440)notemptyitems(differences2_wise_compare["self_unique"]) = 0
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:368: (<class 'n0struct.n0dict'> id=1679803472768)dict_from_xml_recursevely = <class 'n0struct.n0dict'> {
     "root": <class 'n0struct.n0dict'> {
         "a": "1",
         "b": <class 'n0struct.n0dict'> {
@@ -226,4 +560,24 @@ None
         ]
     }
 }
-*** [INFO] 2020-12-28 09:48:56 test_n0struct.py:324: (<class 'n0struct.n0dict'> id=2986074089648)dict8 = <class 'n0struct.n0dict'> {"root": "N0ne"}
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:388: (<class 'n0struct.n0dict'> id=1679803472688)dict_from_xml_recursevely_force_n0dict = <class 'n0struct.n0dict'> {
+    "root": <class 'n0struct.n0dict'> {
+        "a": "1",
+        "b": <class 'n0struct.n0dict'> {
+            "c": "2",
+            "d": <class 'n0struct.n0dict'> {
+                "e": <class 'n0struct.n0dict'> {"f": "3"},
+                "g": <class 'n0struct.n0list'> [
+                    "4",
+                    <class 'n0struct.n0dict'> {"h": "5"}
+                ],
+                "i": <class 'n0struct.n0dict'> {"j": "6"}
+            }
+        },
+        "k": <class 'n0struct.n0list'> [
+            "7",
+            "8"
+        ]
+    }
+}
+*** [INFO] 2021-01-04 13:39:44 test_n0struct.py:409: (<class 'n0struct.n0dict'> id=1679803472368)dict_from_xml_empty = <class 'n0struct.n0dict'> {"root": "N0ne"}

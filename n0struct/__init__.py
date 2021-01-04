@@ -125,6 +125,9 @@
 #                           XML_struct = n0dict(XML_txt, recursively=False) => n0dict/list
 #                           XML_struct = n0dict(XML_txt, force_n0dict=True) => 
 #                               force_n0dict is ignored -- the same like n0dict(XML_txt, recursively=False) => n0dict/list
+# 0.39 = 2021-01-04
+#                   fixed:
+#                       n0dict. __init__(..): xmltodict.parse(args[0], dict_constuctor = n0dict),
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -1404,26 +1407,29 @@ class n0dict(dict):
         :param kw: 
             recursively = None/False/0 => don't convert subnodes into n0list/n0dict
         """
+        _object_pairs_hook = n0dict if kw.pop("force_n0dict", None) else None
         len__args = len(args)
         if not len__args:
             return super(n0dict, self).__init__(*args, **kw)
         if len__args == 1:
-            _recursively = kw.get("recursively") or False
+            # Not kw.pop()! Because of "recursively" will be provided deeper into _constructor(..)
+            _recursively = kw.get("recursively", False) or False 
             if isinstance(args[0], str):
                 if _recursively:
                     _constructor = self.__init__
                 else:
                     _constructor = super(n0dict, self).__init__
+                    
                 if args[0].strip()[0] == "<":
                     # https://github.com/martinblech/xmltodict/issues/252
                     # The main function parse has a force_n0dict keyword argument useful for this purpose.
                     return _constructor(
-                        xmltodict.parse(args[0], force_n0dict = n0dict),
+                        xmltodict.parse(args[0], dict_constructor = n0dict),
                         **kw
                     )
                 elif args[0].strip()[0] == "{":
                     return _constructor(
-                        json.loads(args[0], object_pairs_hook = n0dict if kw.get("force_n0dict") else None),
+                        json.loads(args[0], object_pairs_hook = _object_pairs_hook),
                         **kw
                     )
             elif isinstance(args[0], (dict, OrderedDict, n0dict)):
