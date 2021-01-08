@@ -123,11 +123,20 @@
 #                       Same for XML:
 #                           XML_struct = n0dict(XML_txt, recursively=True) => n0dict/n0list:
 #                           XML_struct = n0dict(XML_txt, recursively=False) => n0dict/list
-#                           XML_struct = n0dict(XML_txt, force_n0dict=True) => 
+#                           XML_struct = n0dict(XML_txt, force_n0dict=True) =>
 #                               force_n0dict is ignored -- the same like n0dict(XML_txt, recursively=False) => n0dict/list
 # 0.39 = 2021-01-04
 #                   fixed:
 #                       n0dict. __init__(..): xmltodict.parse(args[0], dict_constuctor = n0dict),
+# 0.40 = 2021-01-08
+#                   enhanced:
+#                       def n0pretty(item, indent_: int = 0, show_type:bool = True):
+#                   added:
+#                       n0dict. first(..)
+#                       n0list. __getitem__(..)
+#                       n0list. _get(..)
+#                       n0list. get(..)
+#                       n0list. first(..)
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -214,7 +223,7 @@ def n0eval(_str: str) -> Union(int,str):
 
     if not isinstance(_str, str):
         return _str
-    
+
     _str = _str.replace(" ","").lower()
     if not _str:
         return _str
@@ -274,9 +283,9 @@ def split_name_index(node_name: str) -> tuple:
                                 (expected_value.startswith("'") and expected_value.endswith("'")):
                             expected_value = expected_value[1:-1]
                             expected_value = urllib.parse.unquote(expected_value)
-                    
+
                     node_index = expected_node_name, separator, expected_value
-                
+
     return node_name, node_index
 # ********************************************************************
 # ********************************************************************
@@ -605,7 +614,7 @@ def n0pretty(item, indent_: int = 0, show_type:bool = True):
             else:
                 result += n0pretty(sub_item, indent_ + 1, show_type)
         if show_type:
-            result_type = str(type(item)) + " " + brackets[0]
+            result_type = str(type(item)) + ("%s%d%s " % (brackets[0], len(item), brackets[1])) + brackets[0]
         else:
             result_type = brackets[0]
         if result and "\n" in result:
@@ -839,7 +848,7 @@ class n0list(list):
         ** == convert from mapping into list of named arguments
 
         :param args:
-        :param kw: 
+        :param kw:
             recursively = None/False/0 => don't convert subnodes into n0list/n0dict
         """
         len__args = len(args)
@@ -864,6 +873,191 @@ class n0list(list):
         # n0debug("args")
         # n0debug("kw")
         raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple/n0list)")
+    # ******************************************************************************
+    # n0list. _find() 
+    # ******************************************************************************
+    def _find(self, xpath_list: list, parent_node, return_lists, xpath_found_str: str = "/") -> list:
+        """
+        [0] = parent node: n0dict/n0list
+        [1] = node_name_index: str (or key or index)
+        [2] = cur_value = None if not_found_xpath_list not is None
+        [3] = found_xpath_str: str = "" if nothing found
+        [4] = not_found_xpath_list: list = None if initial xpath_list is found
+        """
+        if isinstance(xpath_list, str):
+            xpath_list = [itm.strip() for itm in xpath_list.replace("][","]/[").split('/') if itm]
+        if not isinstance(xpath_list, (list, tuple)):
+            raise IndexError("xpath (%s)'%s' must be list or string" % (type(xpath_list), str(xpath_list)))
+        if not xpath_list:
+            if xpath_found_str == '/':
+                #================================
+                # FOUND: root
+                #================================
+                return parent_node, None, parent_node, xpath_found_str, None
+            else:
+                return self._find(xpath_found_str, self, return_lists)
+        node_name, node_index = split_name_index(xpath_list[0])
+        if node_name:
+            #--------------------------------
+            # NOT FOUND: Node name in list
+            #--------------------------------
+            return parent_node, None, None, xpath_found_str, xpath_list
+        # ##########################################################################################
+        # Index in n0list (node_index is not None)
+        # ##########################################################################################
+        else:
+            # ..................................................................
+            # Try to check all [*] items in the loop
+            # ..................................................................
+            if node_index == "*":
+                cur_values = n0list()
+                fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
+                # n0debug("parent_node")
+                for i,next_parent_node in enumerate(parent_node):
+                    # n0debug("i")
+                    # n0debug("next_parent_node")
+                    # n0debug_calc(["[%d]" % i] + xpath_list[1:])
+                    # n0debug("return_lists")
+                    # n0debug("xpath_found_str")
+                
+                    if isinstance(next_parent_node, n0dict):
+                        cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
+                            cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists)
+                            # cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index))
+                    elif isinstance(next_parent_node, n0list):
+                        cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
+                            cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists)
+                            # cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index))
+                    else:
+                        raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
+                        
+                    # cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
+                        # cur_not_found_xpath_list = self._find(["[%d]" % i] + xpath_list[1:], parent_node, return_lists, xpath_found_str)
+                        
+                    if not cur_not_found_xpath_list:
+                        cur_values.append(cur_value)
+                        if not fst_found_xpath_str:
+                            fst_parent_node, fst_node_name_index, fst_value, fst_found_xpath_str = \
+                                cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str
+                if not return_lists and len(cur_values) == 1:
+                    cur_values = cur_values[0]
+                if fst_found_xpath_str:
+                    return fst_parent_node, fst_node_name_index, cur_values, fst_found_xpath_str,   None
+                else:
+                    return parent_node,     None,               None,       xpath_found_str,        xpath_list
+            else:
+                try:
+                    node_index = n0eval(node_index)
+                except:
+                    raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, node_index))
+
+                if isinstance(parent_node, (list, tuple, n0list)):
+                    len__parent_node = len(parent_node)
+                else:
+                    len__parent_node = 1
+                    parent_node = [parent_node]
+
+                if node_index >= len__parent_node or node_index < -len__parent_node:
+                    #--------------------------------
+                    # NOT FOUND: Element in n0list
+                    #--------------------------------
+                    return parent_node, "[%s]" % node_index, None, xpath_found_str, xpath_list
+                if len(xpath_list) == 1:
+                    #================================
+                    # FOUND: the last is n0list
+                    #================================
+                    return parent_node, "[%s]" % node_index, parent_node[node_index], xpath_found_str, None
+                else:
+                    #*******************************
+                    # Deeper: any type under n0dict
+                    #*******************************
+                    next_parent_node =  parent_node[node_index]
+                    if isinstance(next_parent_node, n0dict):
+                        return n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index))
+                    if isinstance(next_parent_node, n0list):
+                        return self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index))
+                    else:
+                        raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
+    # ******************************************************************************
+    # n0list. _get() 
+    # ******************************************************************************
+    def _get(self, xpath: str, raise_exception = True, if_not_found = None, return_lists = True):
+        """
+        Private function:
+        return self[where1/where2/.../whereN]
+            AKA
+        return self[where1][where2]...[whereN]
+
+        If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
+        """
+        if not xpath:
+            return if_not_found
+        if xpath.startswith('?'):
+            xpath = xpath[1:]
+            raise_exception = False
+            if_not_found = ''
+        if any(char in xpath for char in "/["):
+            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath, self, return_lists)
+            if not not_found_xpath_list:
+                return cur_value
+            else:
+                if raise_exception:
+                    raise IndexError("not found '%s' in '%s'" % ('/'.join(not_found_xpath_list), found_xpath_str))
+                else:
+                    return if_not_found
+        else:
+            try:
+                return super(n0list, self).__getitem__(n0eval(xpath))
+            except IndexError as ex:
+                if raise_exception:
+                    raise ex
+                else:
+                    return if_not_found
+    # ******************************************************************************
+    # n0list. get() 
+    # ******************************************************************************
+    def get(self, xpath: str, if_not_found = None):
+        """
+        Public function:
+        return self[where1/where2/.../whereN]
+            AKA
+        return self[where1][where2]...[whereN]
+
+        If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+        """
+        return self._get(xpath, raise_exception = False, if_not_found = if_not_found)
+    # ******************************************************************************
+    # n0list. first() 
+    # ******************************************************************************
+    def first(self, xpath: str, if_not_found = None):
+        """
+        Public function:
+        return self[where1/where2/.../whereN]
+            AKA
+        return self[where1][where2]...[whereN]
+
+        If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+        If self[where1/where2/.../whereN] is list, thet the first element will be returned
+        """
+        result = self._get(xpath, raise_exception = False, if_not_found = if_not_found, return_lists = False)
+        if isinstance(result, (list, tuple, n0list)) and len(result) == 1:
+            result = result[0]
+        return result
+    # ******************************************************************************
+    # ******************************************************************************
+    def __getitem__(self, xpath):
+        """
+        Private function:
+        return self[where1/where2/.../whereN]
+            AKA
+        return self[where1][where2]...[whereN]
+
+        If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
+        """
+        if isinstance(xpath, str):
+            return self._get(xpath, raise_exception = True)
+        else:
+            return super(n0list, self).__getitem__(xpath)
     # ******************************************************************************
     # * n0list. direct_compare(..): only n0dict. direct_compare/compare have one_of_list_compare
     # ******************************************************************************
@@ -1404,7 +1598,7 @@ class n0dict(dict):
         ** == convert from mapping into list of named arguments
 
         :param args:
-        :param kw: 
+        :param kw:
             recursively = None/False/0 => don't convert subnodes into n0list/n0dict
         """
         _object_pairs_hook = n0dict if kw.pop("force_n0dict", None) else None
@@ -1413,13 +1607,13 @@ class n0dict(dict):
             return super(n0dict, self).__init__(*args, **kw)
         if len__args == 1:
             # Not kw.pop()! Because of "recursively" will be provided deeper into _constructor(..)
-            _recursively = kw.get("recursively", False) or False 
+            _recursively = kw.get("recursively", False) or False
             if isinstance(args[0], str):
                 if _recursively:
                     _constructor = self.__init__
                 else:
                     _constructor = super(n0dict, self).__init__
-                    
+
                 if args[0].strip()[0] == "<":
                     # https://github.com/martinblech/xmltodict/issues/252
                     # The main function parse has a force_n0dict keyword argument useful for this purpose.
@@ -1990,8 +2184,9 @@ class n0dict(dict):
         validation_results["not_equal"].append((xpath, (self[xpath], other_n0dict[other_xpath])))
         return validation_results
     # **********************************************************************************************
+    # n0dict _find
     # **********************************************************************************************
-    def _find(self, xpath_list: list, parent_node, xpath_found_str: str = "/") -> list:
+    def _find(self, xpath_list: list, parent_node, return_lists, xpath_found_str: str = "/") -> list:
         """
         [0] = parent node: n0dict/n0list
         [1] = node_name_index: str (or key or index)
@@ -2010,7 +2205,7 @@ class n0dict(dict):
                 #================================
                 return parent_node, None, parent_node, xpath_found_str, None
             else:
-                return self._find(xpath_found_str, self)
+                return self._find(xpath_found_str, self, return_lists)
             # raise IndexError("too much '..' in xpath")
         # if parent_node is None:
             # parent_node = self
@@ -2028,18 +2223,27 @@ class n0dict(dict):
                     cur_not_found_xpath_list = self._find(
                         # '..' is already not included into xpath_found_str, so just remove only last node
                         [itm for itm in xpath_found_str.split('/') if itm][:-1],
-                        self
+                        self,
+                        return_lists
                     )
-                cur_node_name, cur_node_index = split_name_index(cur_node_name_index)
-                if cur_node_name:
-                    nxt_parent_node = cur_parent_node[cur_node_name]
+                if cur_node_name_index:
+                    cur_node_name, cur_node_index = split_name_index(cur_node_name_index)
+                    if cur_node_name:
+                        nxt_parent_node = cur_parent_node[cur_node_name]
+                    else:
+                        # n0debug("cur_node_name_index")
+                        # n0debug("cur_node_name")
+                        # n0debug("cur_node_index")
+                        # n0debug("cur_parent_node")
+                        nxt_parent_node = cur_parent_node[n0eval(cur_node_index)]
                 else:
-                    nxt_parent_node = cur_parent_node[n0eval(cur_node_index)]
+                    nxt_parent_node = cur_parent_node
+
                 if node_index or len(xpath_list) > 1:
                     if node_index:
-                        return self._find(["[%s]" % node_index] + xpath_list[1:], nxt_parent_node, cur_found_xpath_str)
+                        return self._find(["[%s]" % node_index] + xpath_list[1:], nxt_parent_node, return_lists, cur_found_xpath_str)
                     else:
-                        return self._find(                        xpath_list[1:], nxt_parent_node, cur_found_xpath_str)
+                        return self._find(                        xpath_list[1:], nxt_parent_node, return_lists, cur_found_xpath_str)
                 else:
                     # ================================
                     # FOUND: the last is n0dict
@@ -2052,7 +2256,7 @@ class n0dict(dict):
                 # *******************************
                 # Indulge #1 for incorrect syntax -- [*] was skipped for list in xpath
                 # *******************************
-                return self._find(["[*]"] + xpath_list, parent_node, xpath_found_str)
+                return self._find(["[*]"] + xpath_list, parent_node, return_lists, xpath_found_str)
             if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
                 raise IndexError("If key '%s' is set then (%s)'%s' must be n0dict at '%s'" %
                     (node_name, type(parent_node), str(parent_node), xpath_found_str)
@@ -2066,12 +2270,14 @@ class n0dict(dict):
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 for next_node_name in parent_node:
                     cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
-                        cur_not_found_xpath_list = self._find([next_node_name] + new_xpath_list, parent_node, found_xpath_str)
+                        cur_not_found_xpath_list = self._find([next_node_name] + new_xpath_list, return_lists, parent_node, found_xpath_str)
                     if not cur_not_found_xpath_list:
                         cur_values.append(cur_value)
                         if not fst_found_xpath_str:
                             fst_parent_node, fst_node_name_index, fst_value, fst_found_xpath_str = \
                                 cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str
+                if not return_lists and len(cur_values) == 1:
+                    cur_values = cur_values[0]
                 if fst_found_xpath_str:
                     return fst_parent_node, fst_node_name_index, cur_values, fst_found_xpath_str,   None
                 else:
@@ -2090,7 +2296,7 @@ class n0dict(dict):
                 if isinstance(node_index, tuple) and \
                    node_index[0] == "text()" and node_index[1] == "==" and node_index[2] == "" and \
                    len(xpath_list) >= 2 and xpath_list[1] == '..':
-                    return self._find(xpath_list[2:], parent_node, xpath_found_str)
+                    return self._find(xpath_list[2:], parent_node, return_lists, xpath_found_str)
                 else:
                     return parent_node, None, None, xpath_found_str, xpath_list
             if len(xpath_list) == 1 and node_index is None:
@@ -2102,9 +2308,23 @@ class n0dict(dict):
             # Deeper
             #*******************************
             if node_index is None:
-                return self._find(                        xpath_list[1:], parent_node[node_name], xpath_found_str + '/' + node_name)
+                return self._find(
+                                    xpath_list[1:],
+                                    parent_node[node_name],
+                                    return_lists,
+                                    xpath_found_str + '/' + node_name
+                )
             else:
-                return self._find(["[%s%s'%s']" % (node_index[0],node_index[1],node_index[2]) if isinstance(node_index,tuple) else "[%s]" % node_index] + xpath_list[1:], parent_node[node_name], xpath_found_str + '/' + node_name)
+                return self._find(
+                                    [
+                                        "[%s%s'%s']" % (node_index[0], node_index[1], node_index[2]) \
+                                        if isinstance(node_index,tuple) else \
+                                        "[%s]" % node_index
+                                    ] + xpath_list[1:],
+                                    parent_node[node_name],
+                                    return_lists,
+                                    xpath_found_str + '/' + node_name
+                )
         # ##########################################################################################
         # Index in n0list (node_index is not None)
         # ##########################################################################################
@@ -2114,7 +2334,7 @@ class n0dict(dict):
             #--------------------------------
             if node_index == "new()":
                 parent_node, node_name_index, cur_value, found_xpath_str, \
-                    not_found_xpath_list = self._find(xpath_found_str, self)
+                    not_found_xpath_list = self._find(xpath_found_str, self, return_lists)
                 if not isinstance(parent_node[node_name_index], (list, tuple, n0list)):
                     parent_node[node_name_index] = n0list([parent_node[node_name_index]])
                 return parent_node[node_name_index], None, None, xpath_found_str, ["[new()]"] + xpath_list[1:]
@@ -2130,12 +2350,14 @@ class n0dict(dict):
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 for i,cur_node in enumerate(parent_node):
                     cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
-                        cur_not_found_xpath_list = self._find(["[%d]" % i] + xpath_list[1:], parent_node, xpath_found_str)
+                        cur_not_found_xpath_list = self._find(["[%d]" % i] + xpath_list[1:], parent_node, return_lists, xpath_found_str)
                     if not cur_not_found_xpath_list:
                         cur_values.append(cur_value)
                         if not fst_found_xpath_str:
                             fst_parent_node, fst_node_name_index, fst_value, fst_found_xpath_str = \
                                 cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str
+                if not return_lists and len(cur_values) == 1:
+                    cur_values = cur_values[0]
                 if fst_found_xpath_str:
                     return fst_parent_node, fst_node_name_index, cur_values, fst_found_xpath_str,   None
                 else:
@@ -2163,7 +2385,7 @@ class n0dict(dict):
                         # *******************************
                         # Deeper
                         # *******************************
-                        return self._find(xpath_list[1:], parent_node, xpath_found_str)
+                        return self._find(xpath_list[1:], parent_node, return_lists, xpath_found_str)
                     else:
                         #--------------------------------
                         # NOT FOUND: value is not expected
@@ -2174,7 +2396,7 @@ class n0dict(dict):
                         # *******************************
                         # Not correct: indulge #2 in incorrect syntax -- [*] was skipped for list in xpath
                         # *******************************
-                        return self._find(["[*]"] + xpath_list, parent_node, xpath_found_str)
+                        return self._find(["[*]"] + xpath_list, parent_node, return_lists, xpath_found_str)
 
                     if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
                         raise IndexError("If key '%s' is set then (%s)'%s' must be n0dict at '%s'" %
@@ -2183,7 +2405,12 @@ class n0dict(dict):
                     if not node_index[0] in parent_node:
                         return parent_node, None, None, xpath_found_str, xpath_list
 
-                    return self._find(["[text()=%s]" % node_index[2], ".."] + xpath_list[1:], parent_node[node_index[0]], xpath_found_str + '/' + node_index[0])
+                    return self._find(
+                                        ["[text()=%s]" % node_index[2], ".."] + xpath_list[1:],
+                                        parent_node[node_index[0]],
+                                        return_lists,
+                                        xpath_found_str + '/' + node_index[0]
+                    )
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             # Pure index
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2215,10 +2442,10 @@ class n0dict(dict):
                     #*******************************
                     # Deeper: any type under n0dict
                     #*******************************
-                    return self._find(xpath_list[1:], parent_node[node_index], "%s[%s]" % (xpath_found_str, node_index))
+                    return self._find(xpath_list[1:], parent_node[node_index], return_lists, "%s[%s]" % (xpath_found_str, node_index))
     # **********************************************************************************************
     # **********************************************************************************************
-    def _get(self, xpath: str, raise_exception = True, if_not_found = None):
+    def _get(self, xpath: str, raise_exception = True, if_not_found = None, return_lists = True):
         """
         Private function:
         return self[where1/where2/.../whereN]
@@ -2232,7 +2459,7 @@ class n0dict(dict):
             raise_exception = False
             if_not_found = ''
         if any(char in xpath for char in "/["):
-            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath, self)
+            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath, self, return_lists)
             if not not_found_xpath_list:
                 return cur_value
             else:
@@ -2275,6 +2502,22 @@ class n0dict(dict):
         return self._get(xpath, raise_exception = False, if_not_found = if_not_found)
     # **********************************************************************************************
     # **********************************************************************************************
+    def first(self, xpath: str, if_not_found = None):
+        """
+        Private function:
+        return self[where1/where2/.../whereN]
+            AKA
+        return self[where1][where2]...[whereN]
+
+        If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+        If self[where1/where2/.../whereN] is list, thet the first element will be returned
+        """
+        result = self._get(xpath, raise_exception = False, if_not_found = if_not_found, return_lists = False)
+        if isinstance(result, (list, tuple, n0list)) and len(result) == 1:
+            result = result[0]
+        return result
+    # **********************************************************************************************
+    # **********************************************************************************************
     def _add(self, parent_node, node_name_index: str, xpath_list: list) -> str:
         if node_name_index:
             # or cur_node_name OR cur_node_index MUST have value, both could NOT have values
@@ -2307,7 +2550,7 @@ class n0dict(dict):
                             raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
                                             % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
                         # item[0] == None, will be reused at the next step with last()
-                        parent_node.update({next_node_name: n0list([None])}) 
+                        parent_node.update({next_node_name: n0list([None])})
                         next_node = parent_node[next_node_name]
                         # next_node_name_index = "[%s]" % next_node_index
                         next_node_name_index = "[last()]"
@@ -2431,9 +2674,9 @@ class n0dict(dict):
             if new_value is None or (isinstance(new_value, str) and new_value == ""):
                 return None
             xpath = xpath[1:]
-            
+
         if any(char in xpath for char in "/["):
-            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath, self)
+            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = self._find(xpath, self, return_lists = True)
             if not_found_xpath_list:
                 parent_node, node_name_index = self._add(parent_node, node_name_index, not_found_xpath_list)
 
@@ -2477,13 +2720,13 @@ class n0dict(dict):
         :param node_xpath:
             xpath to the node inside self
         :param validate:
-            list/scalar/function = validation 
+            list/scalar/function = validation
         :param expected_result_for_error:
             By default expected that if result of validation is True, then self[node_xpath] is not valid (return False)
         :param msg:
             if None => return result as bool True(validation)/False
         :return:
-        
+
         Examples:
             xml.valid('node/subnode', ["",None], True, "ERROR")
                 If xml['node/subnode'] is equal "" or None (result of comparising is True), then return ERROR, else ""

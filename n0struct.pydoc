@@ -129,11 +129,20 @@ DESCRIPTION
     #                       Same for XML:
     #                           XML_struct = n0dict(XML_txt, recursively=True) => n0dict/n0list:
     #                           XML_struct = n0dict(XML_txt, recursively=False) => n0dict/list
-    #                           XML_struct = n0dict(XML_txt, force_n0dict=True) => 
+    #                           XML_struct = n0dict(XML_txt, force_n0dict=True) =>
     #                               force_n0dict is ignored -- the same like n0dict(XML_txt, recursively=False) => n0dict/list
     # 0.39 = 2021-01-03
     #                   fixed:
     #                       n0dict. __init__(..): xmltodict.parse(args[0], dict_constuctor = n0dict),
+    # 0.40 = 2021-01-08
+    #                   enhanced:
+    #                       def n0pretty(item, indent_: int = 0, show_type:bool = True):
+    #                   added:
+    #                       n0dict. first(..)
+    #                       n0list. __getitem__(..)
+    #                       n0list. _get(..)
+    #                       n0list. get(..)
+    #                       n0list. first(..)
 
 PACKAGE CONTENTS
     test (package)
@@ -172,7 +181,7 @@ CLASSES
      |      ** == convert from mapping into list of named arguments
      |      
      |      :param args:
-     |      :param kw: 
+     |      :param kw:
      |          recursively = None/False/0 => don't convert subnodes into n0list/n0dict
      |  
      |  __setitem__(self, xpath: 'str', new_value)
@@ -214,15 +223,24 @@ CLASSES
      |  any_valid(self, validate)
      |      # ******************************************************************************
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x000001C398BB9790>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0000025CA89251F0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x000001C398BB9700>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000025CA8925160>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # ******************************************************************************
+     |  
+     |  first(self, xpath: 'str', if_not_found=None)
+     |      Private function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+     |      If self[where1/where2/.../whereN] is list, thet the first element will be returned
      |  
      |  get(self, xpath: 'str', if_not_found=None)
      |      Private function:
@@ -246,7 +264,7 @@ CLASSES
      |  isExist(self, xpath) -> 'n0dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x000001C398BBB700>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000025CA8927160>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  is_exist(self, xpath) -> 'bool'
@@ -268,7 +286,7 @@ CLASSES
      |      :param node_xpath:
      |          xpath to the node inside self
      |      :param validate:
-     |          list/scalar/function = validation 
+     |          list/scalar/function = validation
      |      :param expected_result_for_error:
      |          By default expected that if result of validation is True, then self[node_xpath] is not valid (return False)
      |      :param msg:
@@ -416,6 +434,14 @@ CLASSES
      |  __contains__(self, other_list)
      |      Return key in self.
      |  
+     |  __getitem__(self, xpath)
+     |      Private function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
+     |  
      |  __init__(self, *args, **kw)
      |      args == tuple, kw == mapping(dictionary)
      |      
@@ -423,7 +449,7 @@ CLASSES
      |      ** == convert from mapping into list of named arguments
      |      
      |      :param args:
-     |      :param kw: 
+     |      :param kw:
      |          recursively = None/False/0 => don't convert subnodes into n0list/n0dict
      |  
      |  all_in(self, other_list)
@@ -494,6 +520,23 @@ CLASSES
      |              })
      |              if not returned["messages"]: self and other are totally equal.
      |  
+     |  first(self, xpath: 'str', if_not_found=None)
+     |      Public function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+     |      If self[where1/where2/.../whereN] is list, thet the first element will be returned
+     |  
+     |  get(self, xpath: 'str', if_not_found=None)
+     |      Public function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+     |  
      |  not_consists_of_any(self, other_list)
      |      # ******************************************************************************
      |  
@@ -523,9 +566,6 @@ CLASSES
      |  
      |  __getattribute__(self, name, /)
      |      Return getattr(self, name).
-     |  
-     |  __getitem__(...)
-     |      x.__getitem__(y) <==> x[y]
      |  
      |  __gt__(self, value, /)
      |      Return self>value.
@@ -778,7 +818,7 @@ FUNCTIONS
     
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x000001C398BB9280>, transform_value=<function convert_to_native_format at 0x000001C398BB9310>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x0000025CA89229D0>, transform_value=<function convert_to_native_format at 0x0000025CA8922A60>)
         # ******************************************************************************
     
     xpath_match(xpath: 'str', xpath_list)
