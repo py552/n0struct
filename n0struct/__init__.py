@@ -137,6 +137,12 @@
 #                       n0list. _get(..)
 #                       n0list. get(..)
 #                       n0list. first(..)
+# 0.41 = 2021-01-09
+#                   enhanced:
+#                       Added predicate attrib[contains(text(),"TEXT")] or attrib[text()~~"TEXT"] or [attrib~~"TEXT"]
+#                           xml.first('/repository/instanceInfo/instanceInfoProperty/@value[contains(text(),"PRE")]/../@value'))
+#                           xml.first('/repository/instanceInfo/instanceInfoProperty/@value[text()~~"PRE"]/../@value'))
+#                           xml.first('/repository/instanceInfo/instanceInfoProperty/[@value~~"PRE"]/@value'))
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -261,8 +267,13 @@ def split_name_index(node_name: str) -> tuple:
             if isinstance(node_index, str):
                 if node_index == "":
                     node_index = None
-                elif '=' in node_index:
-                    separators = ("==","!=","=")
+                
+                if node_index.lower().startswith('contains') and node_index.endswith(')'):
+                    node_index_part1, node_index_part2 = node_index[8:-1].strip().split('(',1)[1].split(',',1)
+                    if node_index_part1.lower().startswith('text'):
+                        node_index = "text()~~" + node_index_part2
+                if '=' in node_index or '~' in node_index:
+                    separators = ("==","!=","~~","!~","~","=")
                     for separator in separators:
                         if separator in node_index:
                             expected_node_name, expected_value = node_index.split(separator,1)
@@ -270,6 +281,8 @@ def split_name_index(node_name: str) -> tuple:
                             expected_value = expected_value.strip()
                             if separator == '=':
                                 separator = '=='
+                            if separator == '~':
+                                separator = '~~'
                             break
                     else:
                         raise Exception("Never must be happend!")
@@ -2294,7 +2307,7 @@ class n0dict(dict):
                 #--------------------------------
                 # Expected not found [text()='']/../
                 if isinstance(node_index, tuple) and \
-                   node_index[0] == "text()" and node_index[1] == "==" and node_index[2] == "" and \
+                   node_index[0] == "text()" and node_index[1][1] in "=~" and node_index[2] == "" and \
                    len(xpath_list) >= 2 and xpath_list[1] == '..':
                     return self._find(xpath_list[2:], parent_node, return_lists, xpath_found_str)
                 else:
@@ -2377,10 +2390,19 @@ class n0dict(dict):
                         node_index[2] = int(node_index[2])
                     elif isinstance(parent_node, float):
                         node_index[2] = float(node_index[2])
-                    if node_index[1] == '==':
+                        
+                    if node_index[1][1] == '=':
                         comparing_result = parent_node == node_index[2]  # expected_value
+                    elif node_index[1][1] == '~':
+                        comparing_result = node_index[2] in parent_node  # expected_value
                     else:
-                        comparing_result = parent_node != node_index[2]  # expected_value
+                        raise Exception ("Unknown comparing command in %s" % node_index)
+                        
+                    if node_index[1][0] == '!':
+                        comparing_result = not comparing_result
+                    elif node_index[1][0] != '=' and node_index[1][0] != '~':
+                        raise Exception ("Unknown comparing command in %s" % node_index)
+                        
                     if comparing_result:
                         # *******************************
                         # Deeper
@@ -2406,7 +2428,7 @@ class n0dict(dict):
                         return parent_node, None, None, xpath_found_str, xpath_list
 
                     return self._find(
-                                        ["[text()=%s]" % node_index[2], ".."] + xpath_list[1:],
+                                        ["[text()%s%s]" % (node_index[1], node_index[2]), ".."] + xpath_list[1:],
                                         parent_node[node_index[0]],
                                         return_lists,
                                         xpath_found_str + '/' + node_index[0]
