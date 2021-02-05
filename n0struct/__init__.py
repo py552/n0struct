@@ -838,7 +838,7 @@ def generate_composite_keys(input_list: n0list, elemets_for_composite_key: tuple
                         tranformed = str(line[key])
                     created_composite_key += key + "=" + tranformed
         else:
-            raise Exception("generate_composite_keys(..): expected element dict inside list, but got %s" % type(line))
+            raise Exception("generate_composite_keys(..): expected element dict inside list, but got (%s)%s" % (type(line), line))
         # if created_composite_key in composite_keys_for_all_lines:
             # composite_keys_for_all_lines[created_composite_key].append(line_i])
         # else:
@@ -1718,7 +1718,7 @@ class n0dict(dict):
         if continuity_check != "continuity_check":
             raise Exception("n0dict. compare(..): incorrect order of arguments")
         if not isinstance(other, n0dict):
-            raise Exception("n0dict. compare(..): other (%s) must be n0dict" % str(other))
+            raise Exception("n0dict. compare(..): other ((%s)%s) must be n0dict" % (type(other), str(other)))
         result = n0dict({
             "messages": [],
             "not_equal": [],
