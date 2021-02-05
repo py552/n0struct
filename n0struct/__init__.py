@@ -603,14 +603,14 @@ def n0debug_calc(var_value: str, var_name: str = "", level: int = 5):  # __debug
     )
 
 
-def n0pretty(item, indent_: int = 0, show_type:bool = True):
+def n0pretty(item, indent_: int = 0, show_type:bool = True, __indent_size: int = 4):
     """
     :param item:
     :param indent_:
     :return:
     """
     def indent(indent__ = indent_):
-        return "\n" + (" " * (indent__ + 1) * 4)  # __indent_size = 4
+        return "\n" + (" " * (indent__ + 1) * __indent_size) if __indent_size else ""
 
     if isinstance(item, (list, tuple, dict, set, frozenset)):
         brackets = "[]"
@@ -623,9 +623,9 @@ def n0pretty(item, indent_: int = 0, show_type:bool = True):
             if result:
                 result += "," + indent()
             if isinstance(item, dict):
-                result += "\"" + sub_item + "\": " + n0pretty(item[sub_item], indent_ + 1, show_type)  # json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes
+                result += "\"" + sub_item + "\":" + (" " if __indent_size else "") + n0pretty(item[sub_item], indent_ + 1, show_type, __indent_size)  # json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes
             else:
-                result += n0pretty(sub_item, indent_ + 1, show_type)
+                result += n0pretty(sub_item, indent_ + 1, show_type, __indent_size)
         if show_type:
             result_type = str(type(item)) + ("%s%d%s " % (brackets[0], len(item), brackets[1])) + brackets[0]
         else:
@@ -2096,7 +2096,7 @@ class n0dict(dict):
         """
         Public function: export self into json result string
         """
-        return n0pretty(self, show_type=False)
+        return n0pretty(self, show_type=False, __indent_size = indent)
 
     # ******************************************************************************
     # ******************************************************************************
