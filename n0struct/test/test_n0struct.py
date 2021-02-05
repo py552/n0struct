@@ -10,6 +10,7 @@ sys.path.insert(0, mydir+"/../../")
 from n0struct import * # For using n0dict(), n0print(), n0debug without prefixes
 set__flag_compare_check_different_types(True)
 set__flag_compare_return_difference_of_values(True)
+init_logger()
 
 # ******************************************************************************
 # Etalon list in dictionary
@@ -44,27 +45,27 @@ dict3 = n0dict({
 }, recursively=True)
 # ******************************************************************************
 def test_SortedLists():
-    print("*"*80 + " 1 = Sorted list in dictionary = direct_compare")
+    n0print("*"*80 + " 1 = Sorted list in dictionary = direct_compare")
     differences1_direct_compare = dict1.direct_compare(dict2, "dict1", "dict2")
     for key in differences1_direct_compare:
-        print("*"*3 + " " + key)
+        n0print("*"*3 + " " + key)
         for itm in differences1_direct_compare[key]:
-            print(itm)
+            n0print(itm)
             
-    print("*"*80 + " 2 = Sorted list in dictionary = wise_compare")
+    n0print("*"*80 + " 2 = Sorted list in dictionary = wise_compare")
     differences2_wise_compare = dict1.compare(dict2, "dict1", "dict2",
         composite_key = ("a", "b", "c"),
         compare_only = ("value1", "value2")
     )
     for key in differences2_wise_compare:
-        print("*"*3 + " " + key)
+        n0print("*"*3 + " " + key)
         for itm in differences2_wise_compare[key]:
-            print(itm)
+            n0print(itm)
             
     n0print("="*80)
     n0debug("differences1_direct_compare")
-    n0debug_calc(notemptyitems(differences1_direct_compare["messages"]), 'notemptyitems(differences1_direct_compare["messages"])')
-    assert notemptyitems(differences1_direct_compare["messages"]) == 1
+    n0debug_calc(notemptyitems(differences1_direct_compare["differences"]), 'notemptyitems(differences1_direct_compare["differences"])')
+    assert notemptyitems(differences1_direct_compare["differences"]) == 1
     n0debug_calc(notemptyitems(differences1_direct_compare["not_equal"]), 'notemptyitems(differences1_direct_compare["not_equal"])')
     assert notemptyitems(differences1_direct_compare["not_equal"]) == 4
     assert notemptyitems(differences1_direct_compare["difftypes"]) == 0
@@ -73,34 +74,34 @@ def test_SortedLists():
             
     n0print("="*80)
     n0debug("differences2_wise_compare")
-    assert differences1_direct_compare["messages"]     == differences2_wise_compare["messages"]
+    assert differences1_direct_compare["differences"]     == differences2_wise_compare["differences"]
     assert differences1_direct_compare["not_equal"]     == differences2_wise_compare["not_equal"]
     assert differences1_direct_compare["difftypes"]    == differences2_wise_compare["difftypes"]
     assert differences1_direct_compare["other_unique"] == differences2_wise_compare["other_unique"]
     assert differences1_direct_compare["self_unique"]== differences2_wise_compare["self_unique"]
 # ******************************************************************************
 def test_UnsortedLists():
-    print("*"*80 + " 3 = Unsorted list in dictionary = direct_compare")
+    n0print("*"*80 + " 3 = Unsorted list in dictionary = direct_compare")
     differences1_direct_compare = dict1.direct_compare(dict3, "dict1", "dict3")
     for key in differences1_direct_compare:
-        print("*"*3 + " " + key)
+        n0print("*"*3 + " " + key)
         for itm in differences1_direct_compare[key]:
-            print(itm)
+            n0print(itm)
     
-    print("*"*80 + " 4 = Unsorted list in dictionary = compare")
+    n0print("*"*80 + " 4 = Unsorted list in dictionary = compare")
     differences2_wise_compare = dict1.compare(dict3, "dict1", "dict3",
         composite_key = ("a", "b", "c"),
         compare_only = ("value1", "value2")
     )
     for key in differences2_wise_compare:
-        print("*"*3 + " " + key)
+        n0print("*"*3 + " " + key)
         for itm in differences2_wise_compare[key]:
-            print(itm)
+            n0print(itm)
             
     n0print("="*80)
     n0debug("differences1_direct_compare")
-    n0debug_calc(notemptyitems(differences1_direct_compare["messages"]), 'notemptyitems(differences1_direct_compare["messages"]')
-    assert notemptyitems(differences1_direct_compare["messages"]) == 12
+    n0debug_calc(notemptyitems(differences1_direct_compare["differences"]), 'notemptyitems(differences1_direct_compare["differences"]')
+    assert notemptyitems(differences1_direct_compare["differences"]) == 12
     n0debug_calc(notemptyitems(differences1_direct_compare["not_equal"]), 'differences1_direct_compare["not_equal"]')
     assert notemptyitems(differences1_direct_compare["not_equal"]) == 44
     assert notemptyitems(differences1_direct_compare["difftypes"]) == 0
@@ -111,8 +112,8 @@ def test_UnsortedLists():
 
     n0print("="*80)
     n0debug("differences2_wise_compare")
-    n0debug_calc(notemptyitems(differences2_wise_compare["messages"]), 'notemptyitems(differences2_wise_compare["messages"]')
-    assert notemptyitems(differences2_wise_compare["messages"]) == 2
+    n0debug_calc(notemptyitems(differences2_wise_compare["differences"]), 'notemptyitems(differences2_wise_compare["differences"]')
+    assert notemptyitems(differences2_wise_compare["differences"]) == 2
     n0debug_calc(notemptyitems(differences2_wise_compare["not_equal"]), 'differences2_wise_compare["not_equal"]')
     assert notemptyitems(differences2_wise_compare["not_equal"]) == 4
     assert notemptyitems(differences2_wise_compare["difftypes"]) == 0
@@ -131,9 +132,13 @@ def main():
     
     test_SortedLists()
     test_UnsortedLists()
-    
+
+    n0debug_calc(dict1,'dict1')
     dict1["moreone/node[new()]/value"] = n0dict()
+    n0debug_calc(dict1,'dict1')
     dict1["moreone/node[new()]/value"] = None
+    n0debug_calc(dict1,'dict1')  # Defect: new() has not converted single n0dict node into node[]
+    
     dict1["moreone/node[new()]/value"] = ""
     dict1["moreone/node[new()]/value"] = 1
     dict1["moreone/node[last()]/value"] = 2
@@ -149,46 +154,46 @@ def main():
     assert dict1["moreone/node[3]/value"] == 2
     assert dict1["moreone/node[4]/value"] == 4
 
-    print(dict1.to_json())
-    print(dict1.to_xml())
+    n0print(dict1.to_json())
+    n0print(dict1.to_xml())
 
-    print(dict1["moreone/node"])
+    n0print(dict1["moreone/node"])
 
     assert len(dict1["moreone/node"]) == 5
     assert len(dict1["moreone/node[*]"]) == 5
 
-    print(dict1["moreone"])
+    n0print(dict1["moreone"])
     assert len(dict1["moreone"]) == 1
 
-    print(dict1["moreone/node/code[text()='four']/../value"])
+    n0print(dict1["moreone/node/code[text()='four']/../value"])
     assert dict1["moreone/node/code[text()='four']/../value"][0] == 4
     assert dict1["moreone/node/code[text()='four']/../value"] == [4]
 
 
-    print(dict1["moreone/node/code[text()='two']/../value"])
+    n0print(dict1["moreone/node/code[text()='two']/../value"])
     assert dict1["moreone/node/code[text()='two']/../value"] == [2]
 
     dict1["moreone/node/code[text()='two']/../value"] = 6
-    print(dict1["moreone/node/code[text()='two']/../value"])
+    n0print(dict1["moreone/node/code[text()='two']/../value"])
     assert dict1["moreone/node/code[text()='two']/../value"] == [6]
     assert dict1["moreone/node/code[text()=two]/../value"] == [6]
     assert dict1['moreone/node/code[text()="two"]/../value'] == [6]
     
-    print(dict1["moreone/node[code='two']/value"])
+    n0print(dict1["moreone/node[code='two']/value"])
     assert dict1["moreone/node[code='two']/value"] == [6]
 
     dict1["moretwo/node/code"] = "seven"
     dict1["moretwo/node/value"] = 7
-    print(dict1["moretwo/node/code[text()='seven']/../value"])
+    n0print(dict1["moretwo/node/code[text()='seven']/../value"])
     assert dict1["moretwo/node/code[text()='seven']/../value"] == 7
     
-    print(dict1["moretwo/node[code='seven']/value"])
+    n0print(dict1["moretwo/node[code='seven']/value"])
     assert dict1["moretwo/node[code='seven']/value"] == 7
     
-    print(dict1.get("moretwo/node/code[text()='eight']/../value"))
+    n0print(dict1.get("moretwo/node/code[text()='eight']/../value"))
     assert dict1.get("moretwo/node/code[text()='eight']/../value") is None
     
-    print(dict1["?moretwo/node/code[text()='eight']/../value"] or None)
+    n0print(dict1["?moretwo/node/code[text()='eight']/../value"] or None)
     assert (dict1["?moretwo/node/code[text()='eight']/../value"] or None) is None
     
     set__debug_output(sys.stdout.write)

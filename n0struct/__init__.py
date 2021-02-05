@@ -143,13 +143,31 @@
 #                           xml.first('/repository/instanceInfo/instanceInfoProperty/@value[contains(text(),"PRE")]/../@value'))
 #                           xml.first('/repository/instanceInfo/instanceInfoProperty/@value[text()~~"PRE"]/../@value'))
 #                           xml.first('/repository/instanceInfo/instanceInfoProperty/[@value~~"PRE"]/@value'))
+# 0.42 = 2021-01-22
+#                   enhanced:
+#                       n0debug(..)
+#                       mypy optimization
+# 0.43 = 2021-01-28
+#                   enhanced:
+#                       mypy optimization
+#                       compare()["messages"] -> compare()["differences"]
+#                       compare(exclude=) -> compare(exclude_xpaths=)
+#                   added:
+#                       def load_file(file_name: str) -> list:
+#                       def save_file(file_name: str, lines: typing.Any):
+#                       def load_serialized(...):
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
 import os
 import inspect
+
 import typing
+# from typing import Any, Union, Dict, Tuple, List, Set, FrozenSet, NewType, Sequence
+# from mypy_extensions import (Arg, DefaultArg, NamedArg, DefaultNamedArg, VarArg, KwArg)
+from mypy_extensions import Arg
+
 from datetime import datetime, timedelta, date
 import random
 from collections import OrderedDict
@@ -157,16 +175,18 @@ import xmltodict
 # from .xmltodict0121 import *
 import json
 # from .json2010 import *
-import urllib
-from typing import Union
+# import urllib # expected_value = urllib.parse.unquote(expected_value) # mypy: error: Module has no attribute "parse"
+from urllib.parse import unquote as urllib__parse__unquote
+# from contextlib import suppress
+import contextlib
+from loguru import logger
+from logging import StreamHandler
+# ********************************************************************
 import n0struct
-
 # ********************************************************************
 # ********************************************************************
 __flag_compare_check_different_types = False
-
-
-def set__flag_compare_check_different_types(value):
+def set__flag_compare_check_different_types(value: bool):
     """
     if __flag_compare_check_different_types == True, then
     validate type of attributes in .compare()/.direct_compare()
@@ -175,18 +195,12 @@ def set__flag_compare_check_different_types(value):
     global __flag_compare_check_different_types
     __flag_compare_check_different_types = value
     return __flag_compare_check_different_types
-
-
-def get__flag_compare_check_different_types():
+def get__flag_compare_check_different_types() -> bool:
     global __flag_compare_check_different_types
     return __flag_compare_check_different_types
-
-
 # ********************************************************************
 __flag_compare_return_difference_of_values = False
-
-
-def set__flag_compare_return_difference_of_values(value):
+def set__flag_compare_return_difference_of_values(value: bool):
     """
     if __flag_compare_return_difference_of_values == True, then
     if values of attributes are different and are int,float,
@@ -194,16 +208,12 @@ def set__flag_compare_return_difference_of_values(value):
     """
     global __flag_compare_return_difference_of_values
     __flag_compare_return_difference_of_values = value
-    return __flag_compare_return_difference_of_values
-
-
-def get__flag_compare_return_difference_of_values():
+def get__flag_compare_return_difference_of_values() -> bool:
     global __flag_compare_return_difference_of_values
     return __flag_compare_return_difference_of_values
-
 # ********************************************************************
 # ********************************************************************
-def n0isnumeric(value: str):
+def n0isnumeric(value: str) -> bool:
     # return value.translate(str.maketrans("+-.", "000")).isnumeric() # Py3 dirty fix
     if isinstance(value, (int, float)):
         return True
@@ -219,8 +229,8 @@ def n0isnumeric(value: str):
     return value.isnumeric()
 # ********************************************************************
 # ********************************************************************
-def n0eval(_str: str) -> Union(int,str):
-    def my_split(_str: str, _separator: str) -> list:
+def n0eval(_str: str) -> typing.Union[int, float, typing.Any]:
+    def my_split(_str: str, _separator: str) -> typing.List:
         return [
                 (_separator if _separator != '+' and i else "") + itm.strip()
                 for i, itm in enumerate(_str.split(_separator))
@@ -249,7 +259,10 @@ def n0eval(_str: str) -> Union(int,str):
             item = -1
         else:
             try:
-                item = int(item)
+                if '.' in item:
+                    item = float(item)
+                else:
+                    item = int(item)
             except Exception:
                 return _str
         result += item
@@ -257,52 +270,58 @@ def n0eval(_str: str) -> Union(int,str):
     return result
 # ********************************************************************
 # ********************************************************************
-def split_name_index(node_name: str) -> tuple:
-    node_index = None
+def split_name_index(node_name: str) -> typing.Tuple[
+                                                        # typing.Any,
+                                                        str,
+                                                        typing.Union[
+                                                            str, 
+                                                            typing.Tuple[str, str, typing.Union[str, bool]]
+                                                        ]
+                                                    ]:
+    node_index_tuple = None
     if isinstance(node_name, str):
         if '[' in node_name and node_name.endswith(']'):
-            node_name, node_index = node_name[:-1].split('[', 1)
+            node_name, node_index_str = node_name[:-1].split('[', 1)
             node_name = node_name.strip()
-            node_index = node_index.strip()
-            if isinstance(node_index, str):
-                if node_index == "":
-                    node_index = None
-                
-                if node_index.lower().startswith('contains') and node_index.endswith(')'):
-                    node_index_part1, node_index_part2 = node_index[8:-1].strip().split('(',1)[1].split(',',1)
-                    if node_index_part1.lower().startswith('text'):
-                        node_index = "text()~~" + node_index_part2
-                if '=' in node_index or '~' in node_index:
-                    separators = ("==","!=","~~","!~","~","=")
-                    for separator in separators:
-                        if separator in node_index:
-                            expected_node_name, expected_value = node_index.split(separator,1)
-                            expected_node_name = expected_node_name.strip()
-                            expected_value = expected_value.strip()
-                            if separator == '=':
-                                separator = '=='
-                            if separator == '~':
-                                separator = '~~'
-                            break
-                    else:
-                        raise Exception("Never must be happend!")
+            node_index_str = node_index_str.strip()
+            if isinstance(node_index_str, str):
+                if node_index_str != "":
+                    if node_index_str.lower().startswith('contains') and node_index_str.endswith(')'):
+                        node_index_part1, node_index_part2 = node_index_str[8:-1].strip().split('(',1)[1].split(',',1)
+                        if node_index_part1.lower().startswith('text'):
+                            node_index_str = "text()~~" + node_index_part2
+                    if '=' in node_index_str or '~' in node_index_str:
+                        separators = ("==","!=","~~","!~","~","=")
+                        for separator in separators:
+                            if separator in node_index_str:
+                                expected_node_name, expected_value = node_index_str.split(separator,1)
+                                expected_node_name = expected_node_name.strip()
+                                expected_value = expected_value.strip()
+                                if separator == '=':
+                                    separator = '=='
+                                if separator == '~':
+                                    separator = '~~'
+                                break
+                        else:
+                            raise Exception("Never must be happend!")
 
-                    if isinstance(expected_value, str):
+                        expected_value_bool = False  # Default value, in real None was used, but mypy raised error
                         if expected_value.lower() == "true()":
-                            expected_value = True
+                            expected_value = ""
+                            expected_value_bool = True
                         elif expected_value.lower() == "false()":
-                            expected_value = False
+                            expected_value = ""
+                            expected_value_bool = False
                         elif (expected_value.startswith('"') and expected_value.endswith('"')) or \
                                 (expected_value.startswith("'") and expected_value.endswith("'")):
                             expected_value = expected_value[1:-1]
-                            expected_value = urllib.parse.unquote(expected_value)
-
-                    node_index = expected_node_name, separator, expected_value
-
-    return node_name, node_index
+                            # expected_value = urllib.parse.unquote(expected_value) # mypy: error: Module has no attribute "parse"
+                            expected_value = urllib__parse__unquote(expected_value)
+                        node_index_tuple = (expected_node_name, separator, expected_value or expected_value_bool)
+    return node_name, (node_index_tuple if node_index_tuple is None else node_index_str)
 # ********************************************************************
 # ********************************************************************
-def date_delta(now: date = None, day_delta: int = 0, month_delta: int = 0) -> date:
+def date_delta(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> datetime:
     """
     :param day_delta:
     :param month_delta:
@@ -315,74 +334,63 @@ def date_delta(now: date = None, day_delta: int = 0, month_delta: int = 0) -> da
                             date_delta_.hour, date_delta_.minute,  date_delta_.second,  date_delta_.microsecond
                             )
     return date_delta_
-
-def date_now(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+# ********************************************************************
+def date_now(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str 20 characters YYYYMMDDHHMMSSFFFFFF
     """
     return date_delta(now, day_delta, month_delta).strftime("%Y%m%d%H%M%S%f")
-
-def date_iso(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+# ********************************************************************
+def date_iso(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str ISO date format
     """
     return date_delta(now, day_delta, month_delta).isoformat(timespec='microseconds')
-
-def date_yyyymmdd(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+# ********************************************************************
+def date_yyyymmdd(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str YYYY-MM-DD
     """
     return date_delta(now, day_delta, month_delta).strftime("%Y-%m-%d")
-
-def date_slash_ddmmyyyy(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+# ********************************************************************
+def date_slash_ddmmyyyy(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str DD/MM/YYYY
     """
     return date_delta(now, day_delta, month_delta).strftime("%d/%m/%Y")
-
-def date_ddmmyyyy(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+# ********************************************************************
+def date_ddmmyyyy(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str DD-MM-YYYY
     """
     return date_delta(now, day_delta, month_delta).strftime("%d-%m-%Y")
-
-def date_yyyymmdd(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
-    """
-    :param day_delta:
-    :param month_delta:
-    :return: today + day_delta + month_delta -> str YYYY-MM-DD
-    """
-    return date_delta(now, day_delta, month_delta).strftime("%Y-%m-%d")
-
-
-def date_yymm(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+# ********************************************************************
+def date_yymm(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str YYMM
     """
     return date_delta(now, day_delta, month_delta).strftime("%y%m")
-
-
-def date_mmyy(now: date = None, day_delta: int = 0, month_delta: int = 0) -> str:
+# ********************************************************************
+def date_mmyy(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str MMYY
     """
     return date_delta(now, day_delta, month_delta).strftime("%m%y")
-
-
+# ********************************************************************
 def from_ddmmmyy(date_str: str) -> typing.Union[date, str, None]:
     """
     :param date_str: DD-MMM-YY # 16-JUL-20
@@ -392,8 +400,7 @@ def from_ddmmmyy(date_str: str) -> typing.Union[date, str, None]:
         return datetime.strptime(date_str, "%d-%b-%y").date()  # 16-JUL-20
     except (ValueError, TypeError):
         return date_str
-
-
+# ********************************************************************
 def from_yyyymmdd(date_str: str) -> typing.Union[date, str, None]:
     """
     :param date_str: YYYY-MM-DD # 2020-07-16
@@ -403,8 +410,7 @@ def from_yyyymmdd(date_str: str) -> typing.Union[date, str, None]:
         return datetime.strptime(date_str, "%Y-%m-%d").date()  # 2020-07-16
     except (ValueError, TypeError):
         return date_str
-
-
+# ********************************************************************
 def from_ddmmyyyy(date_str: str) -> typing.Union[date, str, None]:
     """
     :param date_str: DD-MM-YYYY # 16-07-2020
@@ -414,8 +420,7 @@ def from_ddmmyyyy(date_str: str) -> typing.Union[date, str, None]:
         return datetime.strptime(date_str, "%d-%m-%Y").date()  # 16-07-2020
     except (ValueError, TypeError):
         return date_str
-
-
+# ********************************************************************
 def to_date(date_str: str) -> typing.Union[date, str]:
     try:
         return datetime.strptime(date_str, "%Y-%m-%d").date()  # 2020-07-16
@@ -433,8 +438,62 @@ def to_date(date_str: str) -> typing.Union[date, str]:
                         return datetime.strptime(date_str, "%m/%d/%Y").date()  # 07/16/2020
                     except (ValueError, TypeError):
                         return date_str
-
-
+# ********************************************************************
+# ********************************************************************
+def load_file(file_name: str) -> list:
+    with open(file_name, 'rt') as inFile:
+        return [line.strip() for line in inFile.read().split("\n") if line.strip()]
+# ********************************************************************
+def save_file(file_name: str, lines: typing.Any):
+    if isinstance(lines, (list, tuple)):
+        buffer = "\n".join(lines)
+    elif isinstance(lines, (str)):
+        buffer = lines
+    else:
+        buffer = str(lines)
+    with open(file_name, 'wt') as outFile:
+        outFile.write(buffer)
+# ********************************************************************
+def load_serialized(file_name: str,
+                    # /,  # When everybody migrates to py3.8, then we will make it much beautiful
+                    equal_tag: str = "=", 
+                    separator_tag: str = ";", 
+                    comment_tags: typing.Union[tuple, list] = ("#", "//"), 
+                    remove_startswith: str = "", 
+                    remove_endswith: str = ""
+                    ) -> n0list:
+                    
+    result = n0list()
+    # result = n0dict({"root": n0list()})
+    
+    for line in load_file(file_name):
+        line = line.strip()
+        if any(line.startswith(comment_tag) for comment_tag in comment_tags):
+            continue
+        if line.startswith(remove_startswith):
+            line = line[len(remove_startswith):]
+        if line.startswith(remove_startswith):
+            line = line[len(remove_startswith):]
+            
+        pairs = line.split(separator_tag)
+        if len(pairs):
+            result.append(n0dict())
+            # result["root"].append(n0dict())
+            for pair in pairs:
+                if equal_tag in pair:
+                    tag, value = pair.split(equal_tag, 1)
+                    value = value.strip()
+                    if (value.startswith('"') and value.endswith('"')) or \
+                       (value.startswith("'") and value.endswith("'")):
+                        value = value[1:-1]
+                    else:
+                        value = n0eval(value)
+                else:
+                    tag = pair
+                    value = None
+                result[-1].update({tag.strip(): value})
+                # result["root"][-1].update({tag.strip(): value})
+    return result
 # ********************************************************************
 # ********************************************************************
 def rnd(till_not_included: int) -> int:
@@ -443,71 +502,86 @@ def rnd(till_not_included: int) -> int:
     :return: int [0..till_not_included)
     """
     return int(random.random() * till_not_included)
-
-
-def random_from(from_list: list):
+# ********************************************************************
+def random_from(from_list: list) -> typing.Any:
     """
     :param from_list:
     :return: from_list[rnd]
     """
     return from_list[rnd(len(from_list))]
-
-
-def get_key_by_value(dict_: dict, value_):
+# ********************************************************************
+def get_key_by_value(dict_: dict, value_: typing.Any):
     """
     :param dict_:
     :param value_:
     :return: last key which is associated with value_ in dict_
     """
     return {value: key for key, value in dict_.items()}[value_]
-
-
 # ********************************************************************
-# __debug_levels = {
-# "ALLWAYS":  0,  # 0  = Show in any cases
-# "FATAL":    1,  # 1  = Show if __debug_level >= 1
-# "ERROR":    2,  # 2  = Show if __debug_level >= 2
-# "WARN":     3,  # 3  = Show if __debug_level >= 3
-# "WARN2":    4,  # 4  = Show if __debug_level >= 4
-# "INFO":     5,  # 5  = Show if __debug_level >= 5
-# "DEBUG":    6,  # 6  = Show if __debug_level >= 6
-# "NOTE":     7,  # 7  = Show if __debug_level >= 7
-# "TRACE":    8,  # 8  = Show if __debug_level >= 8
-# "OTHER":    9,  # 9  = Show if __debug_level >= 9
-# }
-# __debug_level = __debug_levels["INFO"]
-__debug_levels = (
-    "ALLWAYS",  # 0  = Show in any cases
-    "FATAL",  # 1  = Show if __debug_level >= 1
-    "ERROR",  # 2  = Show if __debug_level >= 2
-    "WARN",  # 3  = Show if __debug_level >= 3
-    "WARN2",  # 4  = Show if __debug_level >= 4
-    "INFO",  # 5  = Show if __debug_level >= 5
-    "DEBUG",  # 6  = Show if __debug_level >= 6
-    "NOTE",  # 7  = Show if __debug_level >= 7
-    "TRACE",  # 8  = Show if __debug_level >= 8
-    "OTHER",  # 9  = Show if __debug_level >= 9
-)
-__debug_level = 5  # __debug_levels.index("INFO")
-__prev_end = "\n"
+# __prev_end = "\n"
+__debug_showobjectid = True
+__main_log_filename = None
+def init_logger(
+        debug_level: str = "TRACE", 
+        debug_output = sys.stderr, 
+        debug_timeformat: str = "YYYY-MM-DD HH:mm:ss.SSS",
+        debug_showobjectid = True,
+        log_file_name: str = None,
+    ):
+    logger.level("DEBUG", color="<white>")
+    
+    global __main_log_filename
+    if not __main_log_filename:
+        # print(f"{__main_log_filename=}")
+        # for i,itm in enumerate(inspect.stack()):
+            # print("%d = (%s)%s" % (i, type(itm.filename), itm.filename))
+        __main_log_filename = os.path.splitext(os.path.split(inspect.stack()[-1].filename)[1])[0]
+    # print(f"{__main_log_filename=}")
+    if __main_log_filename == "<string>":
+        return
+    
+    # print("f_back=%s" % str(inspect.getframeinfo(inspect.currentframe().f_back)))
+    # print("f_back2=%s" % str(inspect.getframeinfo(inspect.currentframe().f_back.f_back)))
+    # print("stack()[3]=%s" % str(inspect.stack()[3]))
+    # print("stack()[2]=%s" % str(inspect.stack()[2]))
+    # print("stack()[1]=%s" % str(inspect.stack()[1]))
+    # print("stack()[0]=%s" % str(inspect.stack()[0]))
+    
+    global __debug_showobjectid
+    __debug_showobjectid = debug_showobjectid
+    
+    # try:
+        # frameinfo = inspect.stack()[3]
+        # print(frameinfo)
+    # except:
+        # try:
+            # frameinfo = inspect.stack()[2]
+            # print(frameinfo)
+        # except:
+            # frameinfo = inspect.stack()[1]
+            # print(frameinfo)
+            
+    # n0debug_calc(inspect.getframeinfo(inspect.currentframe().f_back))
 
-
-def set__debug_level(value: int):
-    global __debug_level
-    __debug_level = value
-    return __debug_level
-
+    
+    # format = "<green>{time:" + debug_timeformat + "}</green>| <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+    # format = "<green>{time:" + debug_timeformat + "}</green>| <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+    format = "<green>{time:" + debug_timeformat + "}</green>|<level>{level: <8}</level>|<cyan>{file}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan>|<level>{message}</level>"
+    
+    
+    
+    logger.configure(
+        handlers=[
+            dict(sink=debug_output or sys.stderr, level=debug_level, format=format),
+            dict(sink=log_file_name or __main_log_filename + "_{time}.log", enqueue=True, level=debug_level, format=format),
+        ],
+    )
 # ********************************************************************
-__debug_output = sys.stderr.write
-def set__debug_output(value: function):
-    global __debug_output
-    __debug_output = value
-    return __debug_output
 def n0print(
         text: str,
-        level: int = 5,  # __debug_levels.index("INFO")
-        internal_call: bool = False,
-        end: str = "\n"
+        level: str = "INFO",
+        internal_call: int = 0,
+        # end: str = "\n"
 ):
     """
     if {level} <= {__debug_level} then print {text}{end}
@@ -518,35 +592,68 @@ def n0print(
     :param internal_call:
     :return: None
     """
-    global __prev_end
-    if __prev_end == "\n":
-        if internal_call == False:
-            frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
-        else:
+    # global __prev_end
+    # if __prev_end == "\n":
+    if 1:
+        if internal_call:  # Called from n0debug|n0debug_calc|n0debug_object
             try:
-                frameinfo = inspect.stack()[2]
+                frameinfo = inspect.stack()[3]
             except:
-                frameinfo = inspect.stack()[1]
-
-        global __debug_level
-        global __debug_levels
-        if level <= __debug_level:
-            __debug_output(
-                "***%s %s %s:%d: " % (
-                    (" [%s]" % __debug_levels[level]) if internal_call else " [ALWAYS]",
-                    datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    os.path.split(frameinfo.filename)[1],
+                try:
+                    frameinfo = inspect.stack()[2]
+                except:
+                    frameinfo = inspect.stack()[1]
+        else:
+            frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
+        # global __debug_level
+        # global __debug_levels
+        # if level <= __debug_level:
+            # __debug_output(
+                # "***%s %s %s:%d: " % (
+                    # (" [%s]" % __debug_levels[level]) if internal_call else " [ALWAYS]",
+                    # datetime.now().strftime(__debug_timeformat),
+                    # os.path.split(frameinfo.filename)[1],
+                    # frameinfo.lineno
+                # )
+                # + (text if text else "") + end
+            # )
+            # if (src_filename:=os.path.split(frameinfo.filename)[1:2]): src_filename=src_filename[0]
+        '''
+            logger.log(level, 
+                # "%s:" % str(frameinfo) +
+                "%s:%s:%d:" % (
+                    n0list(os.path.split(frameinfo.filename)).get(1,""),
+                    frameinfo.function,
                     frameinfo.lineno
                 )
-                + (text if text else "") + end
+                + (text if text else "")
+                # + (text if text else "") + end
+                ,
+                name = n0list(os.path.split(frameinfo.filename)).get(1,""),
+                function = frameinfo.function,
+                line = frameinfo.lineno,
             )
-    else:
-        __debug_output((text if text else "") + end)
-    __prev_end = end
-
-
+        '''
+        if 1:
+            logger.opt(depth=1+internal_call).log(level, 
+                # # "%s:" % str(frameinfo) +
+                # "%s:%s:%d:" % (
+                    # n0list(os.path.split(frameinfo.filename)).get(1,""),
+                    # frameinfo.function,
+                    # frameinfo.lineno
+                # ) +
+                (text if text else "")
+                # + (text if text else "") + end
+                # ,
+                # name = n0list(os.path.split(frameinfo.filename)).get(1,""),
+                # function = frameinfo.function,
+                # line = frameinfo.lineno,
+            )
+    # else:
+        # __debug_output((text if text else "") + end)
+    # __prev_end = end
 # ********************************************************************
-def n0debug(var_name: str, level: int = 5):  # __debug_levels.index("INFO")
+def n0debug(var_name: str, level: str = "DEBUG"):
     """
     Print value of the variable with name {var_name},
     depends of value in global variable {__debug_level}.
@@ -556,54 +663,42 @@ def n0debug(var_name: str, level: int = 5):  # __debug_levels.index("INFO")
     :return:
     """
     if not isinstance(var_name,str):
-        frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
-        sys.stdout.write(
-            "*** %s:%d: incorrect call of n0debug(..): argument MUST BE string" % (
-                os.path.split(frameinfo.filename)[1],
-                frameinfo.lineno
-            )
-        )
-        sys.exit(-1)
+        raise Exception("incorrect call of n0debug(..): argument MUST BE string")
+
+    __f_locals = inspect.currentframe().f_back.f_locals
+    if not var_name in __f_locals:
+        raise Exception("impossible to find object '%s'" % var_name)
+    var_object = __f_locals.get(var_name)
+
     # print(inspect.currentframe().f_back.f_locals)
     # print("~"*80)
     # print(var_name)
     # print(inspect.currentframe().f_back.f_locals.get(var_name))
-    var_object = inspect.currentframe().f_back.f_locals[var_name]
-    n0print(
-        "(%s id=%s)%s = %s" % (
-            type(var_object),
-            id(var_object),
-            var_name,
-            n0pretty(var_object)
-        ),
-        level = level,
-        internal_call = True,
-    )
-
-def n0debug_calc(var_value: str, var_name: str = "", level: int = 5):  # __debug_levels.index("INFO")
+    # var_object = inspect.currentframe().f_back.f_locals[var_name]
+    n0debug_calc(var_object, var_name, level = level, internal_call = 1)
+# ********************************************************************
+def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_call: int = 0):
     """
     Print  calculated value (for example returned by function),
     depends of value in global variable __debug_level.
 
-    :param var_value:
+    :param var_object:
     :param var_name:
     :param level:
     :return:
     """
     n0print(
-            "(%s id=%s)%s = %s" %
-            (
-                type(var_value),
-                id(var_value),
-                var_name,
-                n0pretty(var_value)
-            ),
-            level = level,
-            internal_call = True,
+        "(%s%s)%s == %s" % (
+            type(var_object),
+            (" id=%s" % id(var_object)) if __debug_showobjectid else "",
+            var_name,
+            n0pretty(var_object)
+        ),
+        level = level,
+        internal_call = internal_call + 1,
     )
-
-
-def n0pretty(item, indent_: int = 0, show_type:bool = True):
+# ********************************************************************
+def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = True):
     """
     :param item:
     :param indent_:
@@ -642,9 +737,8 @@ def n0pretty(item, indent_: int = 0, show_type:bool = True):
     else:
         result = str(item)
     return result
-
-
-def n0debug_object(object_name: str, level: int = 5):  # __debug_levels.index("INFO")
+# ******************************************************************************
+def n0debug_object(object_name: str, level: str = "DEBUG"):
     class_object = inspect.currentframe().f_back.f_locals[object_name]
     class_attribs_methods = set(dir(class_object)) - set(dir(object))
     class_attribs = set()
@@ -665,7 +759,6 @@ def n0debug_object(object_name: str, level: int = 5):  # __debug_levels.index("I
         attrib = getattr(class_object, attrib_name)
         to_print += "=== (%s id=%s)%s = %s\n" % (type(attrib), id(attrib), attrib_name, n0pretty(attrib))
     n0print(to_print, level = level, internal_call = True)
-
 # ******************************************************************************
 strip_ns = lambda key: key.split(':',1)[1] if ':' in key else key
 # # Sample
@@ -750,9 +843,8 @@ def notemptyitems(item):
 #   Check that real xpath (or xpath like) is equal any of xpath_list[0..n].
 #   Returns i+1
 # ******************************************************************************
-def xpath_match(xpath: str, xpath_list):
+def xpath_match(xpath: str, xpath_list: typing.Union[str, list, tuple]) -> int:
     """
-
     :param xpath:
         xpath: str
     :param xpath_list:
@@ -764,8 +856,6 @@ def xpath_match(xpath: str, xpath_list):
     if isinstance(xpath_list, str):
         # xpath_list = (xpath_list,)
         xpath_list = [xpath_list]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
-    if not xpath_list:
-        return None
     if not isinstance(xpath_list, (tuple, list)):
         raise Exception("xpath_match(..): unknown type of xpath_list = %s" % type(xpath_list))
 
@@ -791,29 +881,32 @@ def xpath_match(xpath: str, xpath_list):
     return 0
 
 
-def generate_composite_keys(input_list: n0list, elemets_for_composite_key: tuple, prefix: str = None, transform: tuple = None) -> list:
+def generate_composite_keys(
+                            input_list: n0list,
+                            elements_for_composite_key: tuple,
+                            prefix: str = None,
+                            transform: typing.List[typing.Tuple[str, typing.Callable[[str], str]]] = []
+                            ) -> list:
     """
-    serialization all or {elemets_for_composite_key} elements of {input_list[]}
-        :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
+    serialization all or {elements_for_composite_key} elements of {input_list[]}
+    :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
     :return:
         [[<composite_key>,[<index of entry>],...}
     """
-    if isinstance(elemets_for_composite_key, str):
-        # elemets_for_composite_key = (elemets_for_composite_key,)
-        elemets_for_composite_key = [elemets_for_composite_key]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
+    if isinstance(elements_for_composite_key, str):
+        elements_for_composite_key = [elements_for_composite_key]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
 
     composite_keys_for_all_lines = []
-    # n0debug("transform")
     if transform:
         attributes_to_transform = [itm[0] for itm in transform]
     else:
-        attributes_to_transform = None
+        attributes_to_transform = []
 
     for line_i, line in enumerate(input_list):
         if isinstance(line, (dict, OrderedDict, n0dict)):
             created_composite_key = ""
-            if elemets_for_composite_key:
-                for key in elemets_for_composite_key:
+            if elements_for_composite_key:
+                for key in elements_for_composite_key:
                     if key in line:
                         if created_composite_key:
                             created_composite_key += ";"
@@ -825,6 +918,7 @@ def generate_composite_keys(input_list: n0list, elemets_for_composite_key: tuple
                         else:
                             tranformed = str(line[key])
                         created_composite_key += key + "=" + tranformed
+            '''
             if not created_composite_key:
                 for key in line:
                     if created_composite_key:
@@ -837,12 +931,10 @@ def generate_composite_keys(input_list: n0list, elemets_for_composite_key: tuple
                     else:
                         tranformed = str(line[key])
                     created_composite_key += key + "=" + tranformed
+            '''
         else:
             raise Exception("generate_composite_keys(..): expected element dict inside list, but got %s" % type(line))
-        # if created_composite_key in composite_keys_for_all_lines:
-            # composite_keys_for_all_lines[created_composite_key].append(line_i])
-        # else:
-            # composite_keys_for_all_lines.update({created_composite_key:[line_i]})
+            
         composite_keys_for_all_lines.append((created_composite_key, line_i))
     return composite_keys_for_all_lines
 
@@ -887,9 +979,20 @@ class n0list(list):
         # n0debug("kw")
         raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple/n0list)")
     # ******************************************************************************
-    # n0list. _find() 
+    # n0list. _find()
     # ******************************************************************************
-    def _find(self, xpath_list: list, parent_node, return_lists, xpath_found_str: str = "/") -> list:
+    def _find(self, 
+            xpath_list: typing.Union[str, list], 
+            parent_node, 
+            return_lists, 
+            xpath_found_str: str = "/") \
+        ->  typing.Tuple[
+                typing.Union[n0dict, n0list, None],
+                typing.Union[str, int, None],
+                typing.Union[typing.Any, None],
+                str,
+                typing.Union[list, None]
+            ]:
         """
         [0] = parent node: n0dict/n0list
         [1] = node_name_index: str (or key or index)
@@ -919,10 +1022,15 @@ class n0list(list):
         # Index in n0list (node_index is not None)
         # ##########################################################################################
         else:
+            if isinstance(node_index, str):
+                node_index_str = node_index
+            else:
+                raise Exception("Impossible to have complex index for lists")
+            
             # ..................................................................
             # Try to check all [*] items in the loop
             # ..................................................................
-            if node_index == "*":
+            if node_index_str == "*":
                 cur_values = n0list()
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 # n0debug("parent_node")
@@ -932,21 +1040,21 @@ class n0list(list):
                     # n0debug_calc(["[%d]" % i] + xpath_list[1:])
                     # n0debug("return_lists")
                     # n0debug("xpath_found_str")
-                
+
                     if isinstance(next_parent_node, n0dict):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                             cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists)
-                            # cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index))
+                            # cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index_str))
                     elif isinstance(next_parent_node, n0list):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                             cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists)
-                            # cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index))
+                            # cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index_str))
                     else:
                         raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
-                        
+
                     # cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                         # cur_not_found_xpath_list = self._find(["[%d]" % i] + xpath_list[1:], parent_node, return_lists, xpath_found_str)
-                        
+
                     if not cur_not_found_xpath_list:
                         cur_values.append(cur_value)
                         if not fst_found_xpath_str:
@@ -960,9 +1068,9 @@ class n0list(list):
                     return parent_node,     None,               None,       xpath_found_str,        xpath_list
             else:
                 try:
-                    node_index = n0eval(node_index)
+                    node_index_int = n0eval(node_index_str)
                 except:
-                    raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, node_index))
+                    raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, node_index_str))
 
                 if isinstance(parent_node, (list, tuple, n0list)):
                     len__parent_node = len(parent_node)
@@ -970,29 +1078,29 @@ class n0list(list):
                     len__parent_node = 1
                     parent_node = [parent_node]
 
-                if node_index >= len__parent_node or node_index < -len__parent_node:
+                if node_index_int >= len__parent_node or node_index_int < -len__parent_node:
                     #--------------------------------
                     # NOT FOUND: Element in n0list
                     #--------------------------------
-                    return parent_node, "[%s]" % node_index, None, xpath_found_str, xpath_list
+                    return parent_node, "[%s]" % str(node_index_int), None, xpath_found_str, xpath_list
                 if len(xpath_list) == 1:
                     #================================
                     # FOUND: the last is n0list
                     #================================
-                    return parent_node, "[%s]" % node_index, parent_node[node_index], xpath_found_str, None
+                    return parent_node, "[%s]" % str(node_index_int), parent_node[node_index_int], xpath_found_str, None
                 else:
                     #*******************************
                     # Deeper: any type under n0dict
                     #*******************************
-                    next_parent_node =  parent_node[node_index]
+                    next_parent_node =  parent_node[node_index_int]
                     if isinstance(next_parent_node, n0dict):
-                        return n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index))
+                        return n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
                     if isinstance(next_parent_node, n0list):
-                        return self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index))
+                        return self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
                     else:
                         raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
     # ******************************************************************************
-    # n0list. _get() 
+    # n0list. _get()
     # ******************************************************************************
     def _get(self, xpath: str, raise_exception = True, if_not_found = None, return_lists = True):
         """
@@ -1003,8 +1111,14 @@ class n0list(list):
 
         If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
-        if not xpath:
+        if isinstance(xpath, int):
+            if len(self) >= xpath:
+                return self[xpath]
+            else:
+                return if_not_found
+        elif not isinstance(xpath, str) or not xpath:
             return if_not_found
+
         if xpath.startswith('?'):
             xpath = xpath[1:]
             raise_exception = False
@@ -1027,7 +1141,7 @@ class n0list(list):
                 else:
                     return if_not_found
     # ******************************************************************************
-    # n0list. get() 
+    # n0list. get()
     # ******************************************************************************
     def get(self, xpath: str, if_not_found = None):
         """
@@ -1040,7 +1154,7 @@ class n0list(list):
         """
         return self._get(xpath, raise_exception = False, if_not_found = if_not_found)
     # ******************************************************************************
-    # n0list. first() 
+    # n0list. first()
     # ******************************************************************************
     def first(self, xpath: str, if_not_found = None):
         """
@@ -1083,7 +1197,7 @@ class n0list(list):
             continuity_check: str = "continuity_check",  # After this argument, other MUST be defined ONLY with names
             composite_key: tuple = (),
             compare_only: tuple = (),
-            exclude: tuple = (),
+            exclude_xpaths: tuple = (),
             transform: tuple = (),
     ) -> n0dict:
         """
@@ -1094,23 +1208,23 @@ class n0list(list):
 
         :param self: etalon list for compare.
         :param other: list to compare with etalon
-        :param self_name: <default = "self"> dict/list name, used in result["messages"]
-        :param other_name: <default = "other"> dict/list name, used in result["messages"]
+        :param self_name: <default = "self"> dict/list name, used in result["differences"]
+        :param other_name: <default = "other"> dict/list name, used in result["differences"]
         :param prefix: <default = ""> xpath prefix, used for full xpath generation
         :param continuity_check: used for checking that below arguments are defined only with names
         :param composite_key:  For compatibility with compare(..)
         :param compare_only: For compatibility with compare(..)
-        :param exclude: ()|None|empty mean nothing to exclude
+        :param exclude_xpaths: ()|None|empty mean nothing to exclude
         :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
         :return:
                 n0dict({
-                    "messages"      : [], # generated for each case of not equality
-                    "not_equal"      : [], # generated if elements with the same xpath and type are not equal
-                    "self_unique"   : [], # generated if elements from self list don't exist in other list
-                    "other_unique"  : [], # generated if elements from other list don't exist in self list
-                    "difftypes"     : [], # generated if elements with the same xpath have different types
+                    "differences":  [], # generated for each case of not equality
+                    "not_equal":    [], # generated if elements with the same xpath and type are not equal
+                    "self_unique":  [], # generated if elements from self list don't exist in other list
+                    "other_unique": [], # generated if elements from other list don't exist in self list
+                    "difftypes":    [], # generated if elements with the same xpath have different types
                 })
-                if not returned["messages"]: self and other are totally equal.
+                if not returned["differences"]: self and other are totally equal.
         """
         if continuity_check != "continuity_check":
             raise Exception("Incorrect order of arguments")
@@ -1118,22 +1232,22 @@ class n0list(list):
             raise Exception("n0list.direct_compare(): other (%s) must be n0list" % str(other))
 
         result = n0dict({
-            "messages": [],
-            "not_equal": [],
-            "self_unique": [],
+            "differences":  [],
+            "not_equal":    [],
+            "self_unique":  [],
             "other_unique": [],
         })
         if get__flag_compare_check_different_types():
             result.update({"difftypes": []})
 
         # FIX ME: index in [] is not supported -- only node.
-        if xpath_match(prefix, exclude):
+        if xpath_match(prefix, exclude_xpaths):
             return result
 
         for i, itm in enumerate(self):
             if i >= len(other):
                 # other list is SHORTER that self
-                result["messages"].append(
+                result["differences"].append(
                     "List %s is longer %s: %s[%d]='%s' doesn't exist in %s" %
                     (
                         self_name, other_name,
@@ -1160,7 +1274,7 @@ class n0list(list):
                 other_value = transform_other(other_value)
             # --- TRANSFORM: END ---------------------------------------
             if type(self_value) == type(other_value):
-                if isinstance(self_value, (str, int, float, date)):
+                if isinstance(self_value, (str, int, float)):
                     if self_value != other_value:
                         # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
                         result["not_equal"].append(
@@ -1173,12 +1287,14 @@ class n0list(list):
                             )
                         )
                         if get__flag_compare_return_difference_of_values():
-                            try:
-                                difference = round(float(other_value) - float(self_value), 7)
-                            except ValueError:  # self_value or other_value could not be converted to float
-                                difference = None
+                            difference = None
+                            with contextlib.suppress(ValueError):  # self_value or other_value could not be converted to float
+                                if isinstance(self_value, (date, datetime)):
+                                    difference = datetime.fromtimestamp(float(other_value.timestamp()) - float(self_value.timestamp()))
+                                else:
+                                    difference = round(float(other_value) - float(self_value), 7)
                             result["not_equal"][-1][1].append(difference)
-                        result["messages"].append(
+                        result["differences"].append(
                             "Values are different: %s[%d]='%s' != %s[\"%s\"]='%s' " %
                             (
                                 self_name, i, str(self[i]),
@@ -1194,7 +1310,7 @@ class n0list(list):
                             "%s[%i]" % (prefix, i),
                             # Not used in real, just for compatibility with compare(..)
                             composite_key=composite_key, compare_only=compare_only,
-                            exclude=exclude, transform=transform,
+                            exclude_xpaths=exclude_xpaths, transform=transform,
                         )
                     )
                 elif isinstance(self[i], (n0dict, dict, OrderedDict)):
@@ -1207,7 +1323,7 @@ class n0list(list):
                             one_of_list_compare=self.direct_compare,
                             composite_key=composite_key, compare_only=compare_only,
                             # Not used in real, just for compatibility
-                            exclude=exclude, transform=transform,
+                            exclude_xpaths=exclude_xpaths, transform=transform,
                         )
                     )
                 elif self[i] is None:
@@ -1237,7 +1353,7 @@ class n0list(list):
                             )
                         )
                     )
-                    result["messages"].append(
+                    result["differences"].append(
                         "!!Types are different: %s[%d]=(%s)%s != %s[%d]=(%s)%s" %
                         (
                             self_name, i, type(self[i]), str(self[i]),
@@ -1254,7 +1370,7 @@ class n0list(list):
                             )
                         )
                     )
-                    result["messages"].append(
+                    result["differences"].append(
                         "Values are different: %s[%d]='%s' != %s[\"%s\"]='%s' " %
                         (
                             self_name, i, str(self[i]),
@@ -1267,7 +1383,7 @@ class n0list(list):
             # self list is SHORTER that other
             for i, itm in enumerate(other[len(self):]):
                 i += len(self)
-                result["messages"].append(
+                result["differences"].append(
                     "List %s is longer %s: %s[%d]='%s' doesn't exist in %s" %
                     (
                         other_name, self_name,
@@ -1290,19 +1406,19 @@ class n0list(list):
             self_name: str = "self",
             other_name: str = "other",
             prefix: str = "",
-
+            # /,  # When everybody migrates to py3.8, then we will make it much beautiful
             continuity_check: str = "continuity_check",  # After this argument, other MUST be defined only with names
             # Strictly recommended to define composite_key+compare_only or composite_key
             # else in case of just only one attribute of element will be different
             # both elements will be marked as not found (unique) inside the opposite list
             composite_key: tuple = (),  # ()|None|empty mean all
             compare_only: tuple = (),  # ()|None|empty mean all
-            exclude: tuple = (),  # ()|None|empty mean nothing to exclude
+            exclude_xpaths: tuple = (),  # ()|None|empty mean nothing to exclude
             transform: tuple = (),  # ()|None|empty mean nothing to transform
     ) -> n0dict:
         """
         Recursively compare self[i] with other[?] WITHOUT using order of elements.
-        If self[i] (other[?] must be the same) is n0list/n0dict,
+        If self[i] is n0list/n0dict (and if other[?] is found with the same type),
         then goes deeper with n0list. compare(..)/n0dict.direct_compare(..)
 
         :param other:
@@ -1312,33 +1428,33 @@ class n0list(list):
         :param continuity_check:
         :param composite_key:
         :param compare_only:
-        :param exclude:
+        :param exclude_xpaths:
         :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
         :return:
                 n0dict({
-                    "messages"      : [], # generated for each case of not equality
-                    "not_equal"      : [], # generated if elements with the same xpath and type are not equal
-                    "self_unique" : [], # generated if elements from self list don't exist in other list
-                    "other_unique"  : [], # generated if elements from other list don't exist in self list
-                    "difftypes"     : [], # generated if elements with the same xpath have different types
+                    "differences":  [], # generated for each case of not equality
+                    "not_equal":    [], # generated if elements with the same xpath and type are not equal
+                    "self_unique":  [], # generated if elements from self list don't exist in other list
+                    "other_unique": [], # generated if elements from other list don't exist in self list
+                    "difftypes":    [], # generated if elements with the same xpath have different types
                 })
-                if not returned["messages"]: self and other are totally equal.
+                if not returned["differences"]: self and other are totally equal.
         """
         if continuity_check != "continuity_check":
             raise Exception("n0list. compare(..): incorrect order of arguments")
         if not isinstance(other, n0list):
             raise Exception("n0list. compare(..): other (%s) must be n0list" % str(other))
         result = n0dict({
-            "messages": [],
-            "not_equal": [],
-            "self_unique": [],
+            "differences":  [],
+            "not_equal":    [],
+            "self_unique":  [],
             "other_unique": [],
         })
         if get__flag_compare_check_different_types():
             result.update({"difftypes": []})
 
         # FIX ME: index in [] is not supported -- only node.
-        if xpath_match(prefix, exclude):
+        if xpath_match(prefix, exclude_xpaths):
             return result
 
         self_not_exist_in_other = generate_composite_keys(self, composite_key, prefix, transform)
@@ -1404,7 +1520,7 @@ class n0list(list):
                                 except ValueError:  # self_value or other_value could not be converted to float
                                     difference = None
                                 result["not_equal"][-1][1].append(difference)
-                            result["messages"].append(
+                            result["differences"].append(
                                 "Values are different: %s[%d]='%s' != %s[%d]='%s' " %
                                 (
                                     self_name, self_i, str(self[self_i]),
@@ -1423,7 +1539,7 @@ class n0list(list):
                                     ("<>[%d]" % other_i) if self_i != other_i else ""
                                 ),
                                 composite_key=composite_key, compare_only=compare_only,
-                                exclude=exclude, transform=transform,
+                                exclude_xpaths=exclude_xpaths, transform=transform,
                             )
                         )
 # 0.18 = Splitted logic, to avoid convertation of dict, OrderedDict into n0dict
@@ -1438,7 +1554,7 @@ class n0list(list):
                                     "<>[" + str(other_i) + "]" if self_i != other_i else ""),
                                 one_of_list_compare=self.compare,
                                 composite_key=composite_key, compare_only=compare_only,
-                                exclude=exclude, transform=transform,
+                                exclude_xpaths=exclude_xpaths, transform=transform,
                             )
                         )
 # 0.18 = Splitted logic, to avoid convertation of dict, OrderedDict into n0dict
@@ -1469,7 +1585,7 @@ class n0list(list):
                                 )
                             )
                         )
-                        result["messages"].append("++Types are different: %s[%d]=(%s)%s != %s[%d]=(%s)%s" %
+                        result["differences"].append("++Types are different: %s[%d]=(%s)%s != %s[%d]=(%s)%s" %
                                                   (
                                                       self_name, self_i, type(self[self_i]), str(self[self_i]),
                                                       other_name, other_i, type(other[other_i]), str(other[other_i]),
@@ -1496,7 +1612,7 @@ class n0list(list):
                                     )
                                 )
                             )
-                        result["messages"].append(
+                        result["differences"].append(
                             "Values are different: %s[%d]='%s' != %s[\"%s\"]='%s' " %
                             (
                                 self_name, self_i, str(self[self_i]),
@@ -1515,7 +1631,7 @@ class n0list(list):
             # for composite_key in self_not_exist_in_other:
                 # self_i = notmutable__self_not_exist_in_other.index(composite_key)
             for composite_key, self_i in self_not_exist_in_other:
-                result["messages"].append(
+                result["differences"].append(
                     "Element %s[%d]='%s' doesn't exist in %s" %
                     (
                         self_name, self_i, str(self[self_i]),
@@ -1527,7 +1643,7 @@ class n0list(list):
             # for composite_key in other_not_exist_in_self:
                 # other_i = notmutable__other_not_exist_in_self.index(composite_key)
             for composite_key, other_i in other_not_exist_in_self:
-                result["messages"].append(
+                result["differences"].append(
                     "Element %s[%d]='%s' doesn't exist in %s" %
                     (
                         other_name, other_i, str(other[other_i]),
@@ -1712,17 +1828,24 @@ class n0dict(dict):
             # both elements will be marked as not found (unique) inside the opposite list
             composite_key: tuple = (),  # ()|None|empty mean all
             compare_only: tuple = (),  # ()|None|empty mean all
-            exclude: tuple = (),  # ()|None|empty mean nothing to exclude
-            transform: tuple = (),  # ()|None|empty mean nothing to transform
+            exclude_xpaths: tuple = (),  # ()|None|empty mean nothing to exclude
+            # transform: tuple = (),  # ()|None|empty mean nothing to transform
+            transform:  typing.Tuple[
+                                typing.Tuple[
+                                    str,
+                                    typing.Callable,
+                                    typing.Callable
+                                ]
+                        ] = (),  
     ) -> n0dict:
         if continuity_check != "continuity_check":
             raise Exception("n0dict. compare(..): incorrect order of arguments")
         if not isinstance(other, n0dict):
             raise Exception("n0dict. compare(..): other (%s) must be n0dict" % str(other))
         result = n0dict({
-            "messages": [],
-            "not_equal": [],
-            "self_unique": [],
+            "differences":  [],
+            "not_equal":    [],
+            "self_unique":  [],
             "other_unique": [],
         })
         if get__flag_compare_check_different_types():
@@ -1740,7 +1863,7 @@ class n0dict(dict):
                 # fullxpath = prefix + "/" + key
                 fullxpath = "%s/%s" % (prefix, key)
                 # n0debug("fullxpath")
-                if not xpath_match(fullxpath, exclude):
+                if not xpath_match(fullxpath, exclude_xpaths):
                     # --- TRANSFORM: START -------------------------------------
                     # Transform self and other linked values with function transform[]()
                     self_value = self[key]
@@ -1779,7 +1902,7 @@ class n0dict(dict):
                                     except ValueError:  # self_value or other_value could not be converted to float
                                         difference = None
                                     result["not_equal"][-1][1].append(difference)
-                                result["messages"].append(
+                                result["differences"].append(
                                     "Values are different: %s[\"%s\"]=%s != %s[\"%s\"]=%s " %
                                     (
                                         self_name, key, self[key],
@@ -1795,7 +1918,7 @@ class n0dict(dict):
                                     '%s["%s"]' % (other_name, key),
                                     "%s/%s" % (prefix, key),
                                     composite_key=composite_key, compare_only=compare_only,
-                                    exclude=exclude, transform=transform,
+                                    exclude_xpaths=exclude_xpaths, transform=transform,
                                 )
                             )
                         elif isinstance(self[key], (dict, OrderedDict)):
@@ -1807,7 +1930,7 @@ class n0dict(dict):
                                     "%s/%s" % (prefix, key),
                                     one_of_list_compare=one_of_list_compare,  # Only for n0dict. compare()
                                     composite_key=composite_key, compare_only=compare_only,
-                                    exclude=exclude, transform=transform,
+                                    exclude_xpaths=exclude_xpaths, transform=transform,
                                 )
                             )
                         elif self[key] is None:
@@ -1828,7 +1951,7 @@ class n0dict(dict):
                                         )
                                     )
                                 )
-                                result["messages"].append(
+                                result["differences"].append(
                                     "*Types are different: %s[\"%s\"]=(%s)%s != %s[\"%s\"]=(%s)%s" %
                                     (
                                         self_name, key, type(self[key]), str(self[key]),
@@ -1837,7 +1960,7 @@ class n0dict(dict):
                                 )
                             else:
                                 result["not_equal"].append((prefix + "/" + key, (self[key], other[key])))
-                                result["messages"].append(
+                                result["differences"].append(
                                     "Values are different: %s[\"%s\"]=%s != %s[\"%s\"]=%s " %
                                     (
                                         self_name, key, self[key],
@@ -1850,9 +1973,9 @@ class n0dict(dict):
         if self_not_exist_in_other:
             for key in self_not_exist_in_other:
                 fullxpath = "%s/%s" % (prefix, key)
-                if not xpath_match(fullxpath, exclude) \
+                if not xpath_match(fullxpath, exclude_xpaths) \
                    and (not compare_only or xpath_match(fullxpath, compare_only)):
-                    result["messages"].append(
+                    result["differences"].append(
                         "Element %s[\"%s\"]='%s' doesn't exist in %s" %
                         (
                             self_name,
@@ -1865,9 +1988,9 @@ class n0dict(dict):
         if other_not_exist_in_self:
             for key in other_not_exist_in_self:
                 fullxpath = "%s/%s" % (prefix, key)
-                if not xpath_match(fullxpath, exclude) \
+                if not xpath_match(fullxpath, exclude_xpaths) \
                    and (not compare_only or xpath_match(fullxpath, compare_only)):
-                    result["messages"].append(
+                    result["differences"].append(
                         "Element %s[\"%s\"]='%s' doesn't exist in %s" %
                         (
                             other_name,
@@ -1898,7 +2021,7 @@ class n0dict(dict):
             # both elements will be marked as not found (unique) inside the opposite list
             composite_key: tuple = (),  # None/empty means all
             compare_only: tuple = (),  # None/empty means all
-            exclude: tuple = (),  # ()|None|empty mean nothing to exclude
+            exclude_xpaths: tuple = (),  # ()|None|empty mean nothing to exclude
             transform: tuple = (),  # ()|None|empty mean nothing to transform
     ) -> n0dict:
         if continuity_check != "continuity_check":
@@ -1908,7 +2031,7 @@ class n0dict(dict):
             self_name, other_name, prefix,
             one_of_list_compare=one_of_list_compare,  # Only for n0dict. compare()
             composite_key=composite_key, compare_only=compare_only,
-            exclude=exclude, transform=transform,
+            exclude_xpaths=exclude_xpaths, transform=transform,
         )
     # ******************************************************************************
     # XPATH
@@ -2105,9 +2228,9 @@ class n0dict(dict):
         Public function: return empty lists in dict, if self[xpath] exists
         """
         validation_results = n0dict({
-            "messages": [],
-            "not_equal": [],
-            "self_unique": [],
+            "differences":  [],
+            "not_equal":    [],
+            "self_unique":  [],
             "other_unique": [],
         })
         if get__flag_compare_check_different_types():
@@ -2119,20 +2242,27 @@ class n0dict(dict):
                 return validation_results
         except:
             pass
-        validation_results["messages"].append("[%s] doesn't exist" % xpath)
+        validation_results["differences"].append("[%s] doesn't exist" % xpath)
         validation_results["other_unique"].append((xpath, None))
         return validation_results
     # ******************************************************************************
-    def is_exist(self, xpath) -> bool:
+    def is_exist(self, xpath: str) -> bool:
         """
         Public function: return True, if self[xpath] exists
         """
         # TO DO: redo with 'in'
+        '''
         try:
             if self[xpath]:
                 return True
         except:
-            return False
+            pass
+        return False
+        '''
+        with contextlib.suppress(Exception):
+            if self[xpath]:
+                return True
+        return False
     # ******************************************************************************
     # ******************************************************************************
     def has_all(self,tupple_of_keys):
@@ -2168,7 +2298,7 @@ class n0dict(dict):
                 return []
         except:
             pass
-        validation_results["messages"].append("[%s]=='%s' != '%s'" % (xpath, self[xpath], value))
+        validation_results["differences"].append("[%s]=='%s' != '%s'" % (xpath, self[xpath], value))
         validation_results["not_equal"].append((xpath, (self[xpath], value)))
         return validation_results
 
@@ -2189,7 +2319,7 @@ class n0dict(dict):
         except:
             # n0print("EXCEPTION in 'if transformation(self[xpath]) == transformation(other_n0dict[other_xpath]):'")
             pass
-        validation_results["messages"].append("[%s]=='%s' != [%s]=='%s'" % (
+        validation_results["differences"].append("[%s]=='%s' != [%s]=='%s'" % (
             xpath, transformation(self[xpath]),
             other_xpath, transformation(other_n0dict[other_xpath])
         )
@@ -2199,7 +2329,19 @@ class n0dict(dict):
     # **********************************************************************************************
     # n0dict _find
     # **********************************************************************************************
-    def _find(self, xpath_list: list, parent_node, return_lists, xpath_found_str: str = "/") -> list:
+    # def _find(self, xpath_list: list, parent_node, return_lists, xpath_found_str: str = "/") -> list:
+    def _find(self, 
+            xpath_list: typing.Union[str, list], 
+            parent_node, 
+            return_lists, 
+            xpath_found_str: str = "/") \
+        ->  typing.Tuple[
+                typing.Union[n0dict, n0list, None],
+                typing.Union[str, int, None],
+                typing.Union[typing.Any, None],
+                str,
+                typing.Union[list, None]
+            ]:
         """
         [0] = parent node: n0dict/n0list
         [1] = node_name_index: str (or key or index)
@@ -2244,17 +2386,22 @@ class n0dict(dict):
                     if cur_node_name:
                         nxt_parent_node = cur_parent_node[cur_node_name]
                     else:
-                        # n0debug("cur_node_name_index")
-                        # n0debug("cur_node_name")
-                        # n0debug("cur_node_index")
-                        # n0debug("cur_parent_node")
-                        nxt_parent_node = cur_parent_node[n0eval(cur_node_index)]
+                        if isinstance(cur_node_index, str):
+                            nxt_parent_node = cur_parent_node[n0eval(cur_node_index)]
+                        else:
+                            raise Exception("If index is in '%s', then (%s)'%s' must be str" % 
+                                                (
+                                                    cur_node_name_index,
+                                                    type(cur_node_index),
+                                                    cur_node_index
+                                                )
+                                            )
                 else:
                     nxt_parent_node = cur_parent_node
 
                 if node_index or len(xpath_list) > 1:
                     if node_index:
-                        return self._find(["[%s]" % node_index] + xpath_list[1:], nxt_parent_node, return_lists, cur_found_xpath_str)
+                        return self._find(["[%s]" % str(node_index)] + xpath_list[1:], nxt_parent_node, return_lists, cur_found_xpath_str)
                     else:
                         return self._find(                        xpath_list[1:], nxt_parent_node, return_lists, cur_found_xpath_str)
                 else:
@@ -2283,7 +2430,13 @@ class n0dict(dict):
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 for next_node_name in parent_node:
                     cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
-                        cur_not_found_xpath_list = self._find([next_node_name] + new_xpath_list, return_lists, parent_node, found_xpath_str)
+                        cur_not_found_xpath_list = self._find(
+                                                        # [next_node_name] + new_xpath_list, # mypy: error: Name 'new_xpath_list' is not defined
+                                                        [next_node_name] + xpath_list,
+                                                        return_lists,
+                                                        parent_node,
+                                                        found_xpath_str
+                                                   )
                     if not cur_not_found_xpath_list:
                         cur_values.append(cur_value)
                         if not fst_found_xpath_str:
@@ -2331,8 +2484,8 @@ class n0dict(dict):
                 return self._find(
                                     [
                                         "[%s%s'%s']" % (node_index[0], node_index[1], node_index[2]) \
-                                        if isinstance(node_index,tuple) else \
-                                        "[%s]" % node_index
+                                        if isinstance(node_index, tuple) else \
+                                        "[%s]" % str(node_index) # Because of mypy: error: Not all arguments converted during string formatting
                                     ] + xpath_list[1:],
                                     parent_node[node_name],
                                     return_lists,
@@ -2390,19 +2543,19 @@ class n0dict(dict):
                         node_index[2] = int(node_index[2])
                     elif isinstance(parent_node, float):
                         node_index[2] = float(node_index[2])
-                        
+
                     if node_index[1][1] == '=':
                         comparing_result = parent_node == node_index[2]  # expected_value
                     elif node_index[1][1] == '~':
                         comparing_result = node_index[2] in parent_node  # expected_value
                     else:
-                        raise Exception ("Unknown comparing command in %s" % node_index)
-                        
+                        raise Exception ("Unknown comparing command in %s" % str(node_index))
+
                     if node_index[1][0] == '!':
                         comparing_result = not comparing_result
                     elif node_index[1][0] != '=' and node_index[1][0] != '~':
-                        raise Exception ("Unknown comparing command in %s" % node_index)
-                        
+                        raise Exception ("Unknown comparing command in %s" % str(node_index))
+
                     if comparing_result:
                         # *******************************
                         # Deeper
@@ -2438,7 +2591,7 @@ class n0dict(dict):
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             else:
                 try:
-                    node_index = n0eval(node_index)
+                    node_index_int = n0eval(node_index)
                 except:
                     raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, node_index))
 
@@ -2448,23 +2601,23 @@ class n0dict(dict):
                     len__parent_node = 1
                     parent_node = [parent_node]
 
-                if node_index >= len__parent_node or node_index < -len__parent_node:
+                if node_index_int >= len__parent_node or node_index_int < -len__parent_node:
                     #--------------------------------
                     # NOT FOUND: Element in n0list
                     #--------------------------------
-                    return parent_node, "[%s]" % node_index, None, xpath_found_str, xpath_list
+                    return parent_node, "[%d]" % node_index_int, None, xpath_found_str, xpath_list
                     # raise IndexError("If we are looking for element of list '%s[%s]', then parent node (%s)'%s' must be list" % (xpath_found_str, node_index, type(parent_node), str(parent_node)))
 
                 if len(xpath_list) == 1:
                     #================================
                     # FOUND: the last is n0list
                     #================================
-                    return parent_node, "[%s]" % node_index, parent_node[node_index], xpath_found_str, None
+                    return parent_node, "[%d]" % node_index_int, parent_node[node_index_int], xpath_found_str, None
                 else:
                     #*******************************
                     # Deeper: any type under n0dict
                     #*******************************
-                    return self._find(xpath_list[1:], parent_node[node_index], return_lists, "%s[%s]" % (xpath_found_str, node_index))
+                    return self._find(xpath_list[1:], parent_node[node_index_int], return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
     # **********************************************************************************************
     # **********************************************************************************************
     def _get(self, xpath: str, raise_exception = True, if_not_found = None, return_lists = True):
@@ -2621,13 +2774,13 @@ class n0dict(dict):
                         parent_node.append(n0dict({next_node_name: n0list()}))
                         next_node = parent_node[-1][next_node_name]
                         # Expected to have 'new()' in next_node_index, else it will be failed at the next step
-                        next_node_name_index = "[%s]" % next_node_index
+                        next_node_name_index = "[%s]" % str(next_node_index)
                 elif next_node_index:
                     # List under list: [0][0] or [0]/[0]
                     parent_node.append(n0list([]))
                     next_node = parent_node[-1]
                     # Expected to have 'new()' in next_node_index, else it will be failed at the next step
-                    next_node_name_index = "[%s]" % next_node_index
+                    next_node_name_index = "[%s]" % str(next_node_index)
                 else:
                     raise Exception("Nonsence! Both next_node_name and next_node_index could NOT be empty")
             if cur_node_index == "last()":
@@ -2647,13 +2800,13 @@ class n0dict(dict):
                         parent_node[-1] = n0dict({next_node_name: n0list()})
                         next_node = parent_node[-1][next_node_name]
                         # Expected to have 'new()' in next_node_index, else it will be failed at the next step
-                        next_node_name_index = "[%s]" % next_node_index
+                        next_node_name_index = "[%s]" % str(next_node_index)
                 elif next_node_index:
                     # List under list: [0][0] or [0]/[0]
                     parent_node.append(n0list([]))
                     next_node = parent_node[-1]
                     # Expected to have 'new()' in next_node_index, else it will be failed at the next step
-                    next_node_name_index = "[%s]" % next_node_index
+                    next_node_name_index = "[%s]" % str(next_node_index)
             else:
                 raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
                                 % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
