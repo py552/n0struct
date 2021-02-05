@@ -149,6 +149,19 @@ DESCRIPTION
     #                           xml.first('/repository/instanceInfo/instanceInfoProperty/@value[contains(text(),"PRE")]/../@value'))
     #                           xml.first('/repository/instanceInfo/instanceInfoProperty/@value[text()~~"PRE"]/../@value'))
     #                           xml.first('/repository/instanceInfo/instanceInfoProperty/[@value~~"PRE"]/@value'))
+    # 0.42 = 2021-01-22
+    #                   enhanced:
+    #                       n0debug(..)
+    #                       mypy optimization
+    # 0.43 = 2021-01-28
+    #                   enhanced:
+    #                       mypy optimization
+    #                       compare()["messages"] -> compare()["differences"]
+    #                       compare(exclude=) -> compare(exclude_xpaths=)
+    #                   added:
+    #                       def load_file(file_name: str) -> list:
+    #                       def save_file(file_name: str, lines: typing.Any):
+    #                       def load_serialized(...):
 
 PACKAGE CONTENTS
     test (package)
@@ -229,12 +242,12 @@ CLASSES
      |  any_valid(self, validate)
      |      # ******************************************************************************
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x000002603D7B51F0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x00000280E7C97DC0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. compare(..)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x000002603D7B5160>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x00000280E7C97D30>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # ******************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # ******************************************************************************
@@ -270,10 +283,10 @@ CLASSES
      |  isExist(self, xpath) -> 'n0dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x000002603D7B8160>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x00000280E7C9AD30>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
-     |  is_exist(self, xpath) -> 'bool'
+     |  is_exist(self, xpath: 'str') -> 'bool'
      |      Public function: return True, if self[xpath] exists
      |  
      |  to_json(self, indent: 'int' = 4) -> 'str'
@@ -470,9 +483,9 @@ CLASSES
      |  any_not_in(self, other_list)
      |      # ******************************************************************************
      |  
-     |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[?] WITHOUT using order of elements.
-     |      If self[i] (other[?] must be the same) is n0list/n0dict,
+     |      If self[i] is n0list/n0dict (and if other[?] is found with the same type),
      |      then goes deeper with n0list. compare(..)/n0dict.direct_compare(..)
      |      
      |      :param other:
@@ -482,17 +495,17 @@ CLASSES
      |      :param continuity_check:
      |      :param composite_key:
      |      :param compare_only:
-     |      :param exclude:
+     |      :param exclude_xpaths:
      |      :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
      |      :return:
      |              n0dict({
-     |                  "messages"      : [], # generated for each case of not equality
-     |                  "not_equal"      : [], # generated if elements with the same xpath and type are not equal
-     |                  "self_unique" : [], # generated if elements from self list don't exist in other list
-     |                  "other_unique"  : [], # generated if elements from other list don't exist in self list
-     |                  "difftypes"     : [], # generated if elements with the same xpath have different types
+     |                  "differences":  [], # generated for each case of not equality
+     |                  "not_equal":    [], # generated if elements with the same xpath and type are not equal
+     |                  "self_unique":  [], # generated if elements from self list don't exist in other list
+     |                  "other_unique": [], # generated if elements from other list don't exist in self list
+     |                  "difftypes":    [], # generated if elements with the same xpath have different types
      |              })
-     |              if not returned["messages"]: self and other are totally equal.
+     |              if not returned["differences"]: self and other are totally equal.
      |  
      |  consists_of_all(self, other_list)
      |      # ******************************************************************************
@@ -500,7 +513,7 @@ CLASSES
      |  consists_of_any(self, other_list)
      |      # ******************************************************************************
      |  
-     |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[i]
      |      strictly according to the order of elements.
      |      If self[i] (other[i] must be the same) is n0list/n0dict, then goes deeper
@@ -508,23 +521,23 @@ CLASSES
      |      
      |      :param self: etalon list for compare.
      |      :param other: list to compare with etalon
-     |      :param self_name: <default = "self"> dict/list name, used in result["messages"]
-     |      :param other_name: <default = "other"> dict/list name, used in result["messages"]
+     |      :param self_name: <default = "self"> dict/list name, used in result["differences"]
+     |      :param other_name: <default = "other"> dict/list name, used in result["differences"]
      |      :param prefix: <default = ""> xpath prefix, used for full xpath generation
      |      :param continuity_check: used for checking that below arguments are defined only with names
      |      :param composite_key:  For compatibility with compare(..)
      |      :param compare_only: For compatibility with compare(..)
-     |      :param exclude: ()|None|empty mean nothing to exclude
+     |      :param exclude_xpaths: ()|None|empty mean nothing to exclude
      |      :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
      |      :return:
      |              n0dict({
-     |                  "messages"      : [], # generated for each case of not equality
-     |                  "not_equal"      : [], # generated if elements with the same xpath and type are not equal
-     |                  "self_unique"   : [], # generated if elements from self list don't exist in other list
-     |                  "other_unique"  : [], # generated if elements from other list don't exist in self list
-     |                  "difftypes"     : [], # generated if elements with the same xpath have different types
+     |                  "differences":  [], # generated for each case of not equality
+     |                  "not_equal":    [], # generated if elements with the same xpath and type are not equal
+     |                  "self_unique":  [], # generated if elements from self list don't exist in other list
+     |                  "other_unique": [], # generated if elements from other list don't exist in self list
+     |                  "difftypes":    [], # generated if elements with the same xpath have different types
      |              })
-     |              if not returned["messages"]: self and other are totally equal.
+     |              if not returned["differences"]: self and other are totally equal.
      |  
      |  first(self, xpath: 'str', if_not_found=None)
      |      Public function:
@@ -678,42 +691,42 @@ FUNCTIONS
         # }
         # def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
     
-    date_ddmmyyyy(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_ddmmyyyy(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str DD-MM-YYYY
     
-    date_delta(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'date'
+    date_delta(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'datetime'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> date
     
-    date_iso(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_iso(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str ISO date format
     
-    date_mmyy(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_mmyy(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str MMYY
     
-    date_now(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_now(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str 20 characters YYYYMMDDHHMMSSFFFFFF
     
-    date_slash_ddmmyyyy(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_slash_ddmmyyyy(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str DD/MM/YYYY
     
-    date_yymm(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_yymm(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str YYMM
     
-    date_yyyymmdd(now: 'date' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+    date_yyyymmdd(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> str YYYY-MM-DD
@@ -730,22 +743,31 @@ FUNCTIONS
         :param date_str: YYYY-MM-DD # 2020-07-16
         :return: str -> date
     
-    generate_composite_keys(input_list: 'n0list', elemets_for_composite_key: 'tuple', prefix: 'str' = None, transform: 'tuple' = None) -> 'list'
-        serialization all or {elemets_for_composite_key} elements of {input_list[]}
-            :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
+    generate_composite_keys(input_list: 'n0list', elements_for_composite_key: 'tuple', prefix: 'str' = None, transform: 'typing.List[typing.Tuple[str, typing.Callable[[str], str]]]' = []) -> 'list'
+        serialization all or {elements_for_composite_key} elements of {input_list[]}
+        :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
         :return:
             [[<composite_key>,[<index of entry>],...}
     
-    get__flag_compare_check_different_types()
+    get__flag_compare_check_different_types() -> 'bool'
     
-    get__flag_compare_return_difference_of_values()
+    get__flag_compare_return_difference_of_values() -> 'bool'
     
-    get_key_by_value(dict_: 'dict', value_)
+    get_key_by_value(dict_: 'dict', value_: 'typing.Any')
         :param dict_:
         :param value_:
         :return: last key which is associated with value_ in dict_
     
-    n0debug(var_name: 'str', level: 'int' = 5)
+    init_logger(debug_level: 'str' = 'TRACE', debug_output=<_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>, debug_timeformat: 'str' = 'YYYY-MM-DD HH:mm:ss.SSS', debug_showobjectid=True, log_file_name: 'str' = None)
+    
+    load_file(file_name: 'str') -> 'list'
+        # ********************************************************************
+        # ********************************************************************
+    
+    load_serialized(file_name: 'str', equal_tag: 'str' = '=', separator_tag: 'str' = ';', comment_tags: 'typing.Union[tuple, list]' = ('#', '//'), remove_startswith: 'str' = '', remove_endswith: 'str' = '') -> 'n0list'
+        # ********************************************************************
+    
+    n0debug(var_name: 'str', level: 'str' = 'DEBUG')
         Print value of the variable with name {var_name},
         depends of value in global variable {__debug_level}.
         
@@ -753,31 +775,32 @@ FUNCTIONS
         :param level:
         :return:
     
-    n0debug_calc(var_value: 'str', var_name: 'str' = '', level: 'int' = 5)
+    n0debug_calc(var_object, var_name: 'str' = '', level: 'str' = 'DEBUG', internal_call: 'int' = 0)
         Print  calculated value (for example returned by function),
         depends of value in global variable __debug_level.
         
-        :param var_value:
+        :param var_object:
         :param var_name:
         :param level:
         :return:
     
-    n0debug_object(object_name: 'str', level: 'int' = 5)
+    n0debug_object(object_name: 'str', level: 'str' = 'DEBUG')
+        # ******************************************************************************
     
-    n0eval(_str: 'str') -> 'Union(int, str)'
-        # ********************************************************************
-        # ********************************************************************
-    
-    n0isnumeric(value: 'str')
+    n0eval(_str: 'str') -> 'typing.Union[int, float, typing.Any]'
         # ********************************************************************
         # ********************************************************************
     
-    n0pretty(item, indent_: 'int' = 0, show_type: 'bool' = True)
+    n0isnumeric(value: 'str') -> 'bool'
+        # ********************************************************************
+        # ********************************************************************
+    
+    n0pretty(item: 'typing.Any', indent_: 'int' = 0, show_type: 'bool' = True, __indent_size: 'int' = 4)
         :param item:
         :param indent_:
         :return:
     
-    n0print(text: 'str', level: 'int' = 5, internal_call: 'bool' = False, end: 'str' = '\n')
+    n0print(text: 'str', level: 'str' = 'INFO', internal_call: 'int' = 0)
         if {level} <= {__debug_level} then print {text}{end}
         
         :param text:
@@ -793,7 +816,7 @@ FUNCTIONS
         #   Return count of notempty item/subitems.
         # ******************************************************************************
     
-    random_from(from_list: 'list')
+    random_from(from_list: 'list') -> 'typing.Any'
         :param from_list:
         :return: from_list[rnd]
     
@@ -801,21 +824,20 @@ FUNCTIONS
         :param till_not_included:
         :return: int [0..till_not_included)
     
-    set__debug_level(value: 'int')
+    save_file(file_name: 'str', lines: 'typing.Any')
+        # ********************************************************************
     
-    set__debug_output(value: 'function')
-    
-    set__flag_compare_check_different_types(value)
+    set__flag_compare_check_different_types(value: 'bool')
         if __flag_compare_check_different_types == True, then
         validate type of attributes in .compare()/.direct_compare()
         and return result["difftypes"]
     
-    set__flag_compare_return_difference_of_values(value)
+    set__flag_compare_return_difference_of_values(value: 'bool')
         if __flag_compare_return_difference_of_values == True, then
         if values of attributes are different and are int,float,
         return additional element in result["not_equal"] with difference
     
-    split_name_index(node_name: 'str') -> 'tuple'
+    split_name_index(node_name: 'str') -> 'typing.Tuple[str, typing.Union[str, typing.Tuple[str, str, typing.Union[str, bool]]]]'
         # ********************************************************************
         # ********************************************************************
     
@@ -823,11 +845,12 @@ FUNCTIONS
         # ******************************************************************************
     
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
+        # ********************************************************************
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x000002603D7B19D0>, transform_value=<function convert_to_native_format at 0x000002603D7B1A60>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x00000280E7C975E0>, transform_value=<function convert_to_native_format at 0x00000280E7C97670>)
         # ******************************************************************************
     
-    xpath_match(xpath: 'str', xpath_list)
+    xpath_match(xpath: 'str', xpath_list: 'typing.Union[str, list, tuple]') -> 'int'
         :param xpath:
             xpath: str
         :param xpath_list:
@@ -837,8 +860,8 @@ FUNCTIONS
             >0 matched
 
 DATA
-    Union = typing.Union
     annotations = _Feature((3, 7, 0, 'beta', 1), (4, 0, 0, 'alpha', 0), 16...
+    logger = <loguru.logger handlers=[(id=0, level=10, sink=<stderr>)]>
 
 FILE
     c:\repo\n0struct\n0struct\__init__.py
