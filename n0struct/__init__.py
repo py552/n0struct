@@ -156,6 +156,9 @@
 #                       def load_file(file_name: str) -> list:
 #                       def save_file(file_name: str, lines: typing.Any):
 #                       def load_serialized(...):
+# 0.44 = 2021-02-08
+#                   fixed:
+#                       split_name_index(..)
 
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
@@ -274,51 +277,55 @@ def split_name_index(node_name: str) -> typing.Tuple[
                                                         # typing.Any,
                                                         str,
                                                         typing.Union[
-                                                            str, 
+                                                            str,
                                                             typing.Tuple[str, str, typing.Union[str, bool]]
                                                         ]
                                                     ]:
-    node_index_tuple = None
-    if isinstance(node_name, str):
-        if '[' in node_name and node_name.endswith(']'):
-            node_name, node_index_str = node_name[:-1].split('[', 1)
-            node_name = node_name.strip()
-            node_index_str = node_index_str.strip()
-            if isinstance(node_index_str, str):
-                if node_index_str != "":
-                    if node_index_str.lower().startswith('contains') and node_index_str.endswith(')'):
-                        node_index_part1, node_index_part2 = node_index_str[8:-1].strip().split('(',1)[1].split(',',1)
-                        if node_index_part1.lower().startswith('text'):
-                            node_index_str = "text()~~" + node_index_part2
-                    if '=' in node_index_str or '~' in node_index_str:
-                        separators = ("==","!=","~~","!~","~","=")
-                        for separator in separators:
-                            if separator in node_index_str:
-                                expected_node_name, expected_value = node_index_str.split(separator,1)
-                                expected_node_name = expected_node_name.strip()
-                                expected_value = expected_value.strip()
-                                if separator == '=':
-                                    separator = '=='
-                                if separator == '~':
-                                    separator = '~~'
-                                break
-                        else:
-                            raise Exception("Never must be happend!")
+    if not isinstance(node_name, str):
+        raise Exception("node_name (%s)%s must be string" % (type(node_name), node_name))
 
-                        expected_value_bool = False  # Default value, in real None was used, but mypy raised error
-                        if expected_value.lower() == "true()":
-                            expected_value = ""
-                            expected_value_bool = True
-                        elif expected_value.lower() == "false()":
-                            expected_value = ""
-                            expected_value_bool = False
-                        elif (expected_value.startswith('"') and expected_value.endswith('"')) or \
-                                (expected_value.startswith("'") and expected_value.endswith("'")):
-                            expected_value = expected_value[1:-1]
-                            # expected_value = urllib.parse.unquote(expected_value) # mypy: error: Module has no attribute "parse"
-                            expected_value = urllib__parse__unquote(expected_value)
-                        node_index_tuple = (expected_node_name, separator, expected_value or expected_value_bool)
-    return node_name, (node_index_tuple if node_index_tuple is None else node_index_str)
+    node_index_tuple = None
+    if '[' in node_name and node_name.endswith(']'):
+        node_name, node_index_str = node_name[:-1].split('[', 1)
+        node_name = node_name.strip()
+        node_index_str = node_index_str.strip()
+        if isinstance(node_index_str, str):
+            if node_index_str != "":
+                if node_index_str.lower().startswith('contains') and node_index_str.endswith(')'):
+                    node_index_part1, node_index_part2 = node_index_str[8:-1].strip().split('(',1)[1].split(',',1)
+                    if node_index_part1.lower().startswith('text'):
+                        node_index_str = "text()~~" + node_index_part2
+                if '=' in node_index_str or '~' in node_index_str:
+                    separators = ("==","!=","~~","!~","~","=")
+                    for separator in separators:
+                        if separator in node_index_str:
+                            expected_node_name, expected_value = node_index_str.split(separator,1)
+                            expected_node_name = expected_node_name.strip()
+                            expected_value = expected_value.strip()
+                            if separator == '=':
+                                separator = '=='
+                            if separator == '~':
+                                separator = '~~'
+                            break
+                    else:
+                        raise Exception("Never must be happend!")
+
+                    expected_value_bool = False  # Default value, in real None was used, but mypy raised error
+                    if expected_value.lower() == "true()":
+                        expected_value = ""
+                        expected_value_bool = True
+                    elif expected_value.lower() == "false()":
+                        expected_value = ""
+                        expected_value_bool = False
+                    elif (expected_value.startswith('"') and expected_value.endswith('"')) or \
+                            (expected_value.startswith("'") and expected_value.endswith("'")):
+                        expected_value = expected_value[1:-1]
+                        # expected_value = urllib.parse.unquote(expected_value) # mypy: error: Module has no attribute "parse"
+                        expected_value = urllib__parse__unquote(expected_value)
+                    node_index_tuple = (expected_node_name, separator, expected_value or expected_value_bool)
+    else:
+        node_index_str = None
+    return node_name, (node_index_tuple if not node_index_tuple is None else node_index_str)
 # ********************************************************************
 # ********************************************************************
 def date_delta(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> datetime:
@@ -456,16 +463,16 @@ def save_file(file_name: str, lines: typing.Any):
 # ********************************************************************
 def load_serialized(file_name: str,
                     # /,  # When everybody migrates to py3.8, then we will make it much beautiful
-                    equal_tag: str = "=", 
-                    separator_tag: str = ";", 
-                    comment_tags: typing.Union[tuple, list] = ("#", "//"), 
-                    remove_startswith: str = "", 
+                    equal_tag: str = "=",
+                    separator_tag: str = ";",
+                    comment_tags: typing.Union[tuple, list] = ("#", "//"),
+                    remove_startswith: str = "",
                     remove_endswith: str = ""
                     ) -> n0list:
-                    
+
     result = n0list()
     # result = n0dict({"root": n0list()})
-    
+
     for line in load_file(file_name):
         line = line.strip()
         if any(line.startswith(comment_tag) for comment_tag in comment_tags):
@@ -474,7 +481,7 @@ def load_serialized(file_name: str,
             line = line[len(remove_startswith):]
         if line.startswith(remove_startswith):
             line = line[len(remove_startswith):]
-            
+
         pairs = line.split(separator_tag)
         if len(pairs):
             result.append(n0dict())
@@ -522,14 +529,14 @@ def get_key_by_value(dict_: dict, value_: typing.Any):
 __debug_showobjectid = True
 __main_log_filename = None
 def init_logger(
-        debug_level: str = "TRACE", 
-        debug_output = sys.stderr, 
+        debug_level: str = "TRACE",
+        debug_output = sys.stderr,
         debug_timeformat: str = "YYYY-MM-DD HH:mm:ss.SSS",
         debug_showobjectid = True,
         log_file_name: str = None,
     ):
     logger.level("DEBUG", color="<white>")
-    
+
     global __main_log_filename
     if not __main_log_filename:
         # print(f"{__main_log_filename=}")
@@ -539,17 +546,17 @@ def init_logger(
     # print(f"{__main_log_filename=}")
     if __main_log_filename == "<string>":
         return
-    
+
     # print("f_back=%s" % str(inspect.getframeinfo(inspect.currentframe().f_back)))
     # print("f_back2=%s" % str(inspect.getframeinfo(inspect.currentframe().f_back.f_back)))
     # print("stack()[3]=%s" % str(inspect.stack()[3]))
     # print("stack()[2]=%s" % str(inspect.stack()[2]))
     # print("stack()[1]=%s" % str(inspect.stack()[1]))
     # print("stack()[0]=%s" % str(inspect.stack()[0]))
-    
+
     global __debug_showobjectid
     __debug_showobjectid = debug_showobjectid
-    
+
     # try:
         # frameinfo = inspect.stack()[3]
         # print(frameinfo)
@@ -560,16 +567,16 @@ def init_logger(
         # except:
             # frameinfo = inspect.stack()[1]
             # print(frameinfo)
-            
+
     # n0debug_calc(inspect.getframeinfo(inspect.currentframe().f_back))
 
-    
+
     # format = "<green>{time:" + debug_timeformat + "}</green>| <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
     # format = "<green>{time:" + debug_timeformat + "}</green>| <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
     format = "<green>{time:" + debug_timeformat + "}</green>|<level>{level: <8}</level>|<cyan>{file}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan>|<level>{message}</level>"
-    
-    
-    
+
+
+
     logger.configure(
         handlers=[
             dict(sink=debug_output or sys.stderr, level=debug_level, format=format),
@@ -619,7 +626,7 @@ def n0print(
             # )
             # if (src_filename:=os.path.split(frameinfo.filename)[1:2]): src_filename=src_filename[0]
         '''
-            logger.log(level, 
+            logger.log(level,
                 # "%s:" % str(frameinfo) +
                 "%s:%s:%d:" % (
                     n0list(os.path.split(frameinfo.filename)).get(1,""),
@@ -635,7 +642,7 @@ def n0print(
             )
         '''
         if 1:
-            logger.opt(depth=1+internal_call).log(level, 
+            logger.opt(depth=1+internal_call).log(level,
                 # # "%s:" % str(frameinfo) +
                 # "%s:%s:%d:" % (
                     # n0list(os.path.split(frameinfo.filename)).get(1,""),
@@ -984,10 +991,10 @@ class n0list(list):
     # ******************************************************************************
     # n0list. _find()
     # ******************************************************************************
-    def _find(self, 
-            xpath_list: typing.Union[str, list], 
-            parent_node, 
-            return_lists, 
+    def _find(self,
+            xpath_list: typing.Union[str, list],
+            parent_node,
+            return_lists,
             xpath_found_str: str = "/") \
         ->  typing.Tuple[
                 typing.Union[n0dict, n0list, None],
@@ -1029,7 +1036,7 @@ class n0list(list):
                 node_index_str = node_index
             else:
                 raise Exception("Impossible to have complex index for lists")
-            
+
             # ..................................................................
             # Try to check all [*] items in the loop
             # ..................................................................
@@ -1839,7 +1846,7 @@ class n0dict(dict):
                                     typing.Callable,
                                     typing.Callable
                                 ]
-                        ] = (),  
+                        ] = (),
     ) -> n0dict:
         if continuity_check != "continuity_check":
             raise Exception("n0dict. compare(..): incorrect order of arguments")
@@ -2333,10 +2340,10 @@ class n0dict(dict):
     # n0dict _find
     # **********************************************************************************************
     # def _find(self, xpath_list: list, parent_node, return_lists, xpath_found_str: str = "/") -> list:
-    def _find(self, 
-            xpath_list: typing.Union[str, list], 
-            parent_node, 
-            return_lists, 
+    def _find(self,
+            xpath_list: typing.Union[str, list],
+            parent_node,
+            return_lists,
             xpath_found_str: str = "/") \
         ->  typing.Tuple[
                 typing.Union[n0dict, n0list, None],
@@ -2369,6 +2376,9 @@ class n0dict(dict):
             # parent_node = self
 
         node_name, node_index = split_name_index(xpath_list[0])
+        if not node_name and not node_index:
+            n0debug("xpath_list")
+            raise Exception("Empty node_name and node_index")
         # ##########################################################################################
         # Key in n0dict
         # ##########################################################################################
@@ -2392,7 +2402,7 @@ class n0dict(dict):
                         if isinstance(cur_node_index, str):
                             nxt_parent_node = cur_parent_node[n0eval(cur_node_index)]
                         else:
-                            raise Exception("If index is in '%s', then (%s)'%s' must be str" % 
+                            raise Exception("If index is in '%s', then (%s)'%s' must be str" %
                                                 (
                                                     cur_node_name_index,
                                                     type(cur_node_index),
@@ -2420,6 +2430,7 @@ class n0dict(dict):
                 # Indulge #1 for incorrect syntax -- [*] was skipped for list in xpath
                 # *******************************
                 return self._find(["[*]"] + xpath_list, parent_node, return_lists, xpath_found_str)
+
             if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
                 raise IndexError("If key '%s' is set then (%s)'%s' must be n0dict at '%s'" %
                     (node_name, type(parent_node), str(parent_node), xpath_found_str)
@@ -2468,6 +2479,7 @@ class n0dict(dict):
                     return self._find(xpath_list[2:], parent_node, return_lists, xpath_found_str)
                 else:
                     return parent_node, None, None, xpath_found_str, xpath_list
+
             if len(xpath_list) == 1 and node_index is None:
                 #================================
                 # FOUND: the last is n0dict
