@@ -159,15 +159,26 @@
 # 0.44 = 2021-02-08
 #                   fixed:
 #                       split_name_index(..)
-
+# 0.45 = 2021-02-27
+#                   enhanced:
+#                       mypy optimization
+#                       def init_logger(..)
+#                   added:
+#                       def timestamp() -> str:
+#                       def date_yymmdd(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
+#                       class OrderedSet(MutableSet):
+#                       def unpack_references(initial_dict: dict, initial_key: str, recursive: bool = True) -> OrderedSet:
+#                       class Git():
+#                   fixed:
+#                       nolist. _get(..)
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
 import os
 import inspect
 
-import typing
 # from typing import Any, Union, Dict, Tuple, List, Set, FrozenSet, NewType, Sequence
+import typing
 # from mypy_extensions import (Arg, DefaultArg, NamedArg, DefaultNamedArg, VarArg, KwArg)
 from mypy_extensions import Arg
 
@@ -175,17 +186,18 @@ from datetime import datetime, timedelta, date
 import random
 from collections import OrderedDict
 import xmltodict
-# from .xmltodict0121 import *
 import json
-# from .json2010 import *
 # import urllib # expected_value = urllib.parse.unquote(expected_value) # mypy: error: Module has no attribute "parse"
 from urllib.parse import unquote as urllib__parse__unquote
-# from contextlib import suppress
 import contextlib
 from loguru import logger
 from logging import StreamHandler
 # ********************************************************************
-import n0struct
+# Used by class Git():
+import subprocess
+import signal
+# ********************************************************************
+# import n0struct
 # ********************************************************************
 # ********************************************************************
 __flag_compare_check_different_types = False
@@ -350,6 +362,12 @@ def date_now(now: typing.Union[datetime, None] = None, day_delta: int = 0, month
     """
     return date_delta(now, day_delta, month_delta).strftime("%Y%m%d%H%M%S%f")
 # ********************************************************************
+def timestamp() -> str:
+    """
+    :return: now -> str 13 characters YYMMDD_HHMMSS
+    """
+    return (timestamp := date_now())[2:8] + "_" + timestamp[8:14]
+# ********************************************************************
 def date_iso(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param day_delta:
@@ -357,6 +375,14 @@ def date_iso(now: typing.Union[datetime, None] = None, day_delta: int = 0, month
     :return: today + day_delta + month_delta -> str ISO date format
     """
     return date_delta(now, day_delta, month_delta).isoformat(timespec='microseconds')
+# ********************************************************************
+def date_yymmdd(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
+    """
+    :param day_delta:
+    :param month_delta:
+    :return: today + day_delta + month_delta -> str YYMMDD
+    """
+    return date_delta(now, day_delta, month_delta).strftime("%y%m%d")
 # ********************************************************************
 def date_yyyymmdd(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -533,56 +559,38 @@ def init_logger(
         debug_output = sys.stderr,
         debug_timeformat: str = "YYYY-MM-DD HH:mm:ss.SSS",
         debug_showobjectid = True,
+        debug_logtofile = True,
         log_file_name: str = None,
     ):
     logger.level("DEBUG", color="<white>")
 
     global __main_log_filename
-    if not __main_log_filename:
-        # print(f"{__main_log_filename=}")
-        # for i,itm in enumerate(inspect.stack()):
-            # print("%d = (%s)%s" % (i, type(itm.filename), itm.filename))
-        __main_log_filename = os.path.splitext(os.path.split(inspect.stack()[-1].filename)[1])[0]
-    # print(f"{__main_log_filename=}")
-    if __main_log_filename == "<string>":
-        return
-
-    # print("f_back=%s" % str(inspect.getframeinfo(inspect.currentframe().f_back)))
-    # print("f_back2=%s" % str(inspect.getframeinfo(inspect.currentframe().f_back.f_back)))
-    # print("stack()[3]=%s" % str(inspect.stack()[3]))
-    # print("stack()[2]=%s" % str(inspect.stack()[2]))
-    # print("stack()[1]=%s" % str(inspect.stack()[1]))
-    # print("stack()[0]=%s" % str(inspect.stack()[0]))
+    if debug_logtofile:
+        if log_file_name:
+            __main_log_filename = log_file_name
+        else:
+            if not __main_log_filename:
+                __main_log_filename = os.path.splitext(os.path.split(inspect.stack()[-1].filename)[1])[0]
+            if __main_log_filename == "<string>":
+                __main_log_filename = "debuglog"
+            __main_log_filename += "_" + timestamp() + ".log"
 
     global __debug_showobjectid
     __debug_showobjectid = debug_showobjectid
 
-    # try:
-        # frameinfo = inspect.stack()[3]
-        # print(frameinfo)
-    # except:
-        # try:
-            # frameinfo = inspect.stack()[2]
-            # print(frameinfo)
-        # except:
-            # frameinfo = inspect.stack()[1]
-            # print(frameinfo)
+    format = ""
+    if debug_timeformat:
+        format += "<green>{time:" + debug_timeformat + "}</green>|"
+    format += "<level>{level: <8}</level>|<cyan>{file}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan>|<level>{message}</level>"
 
-    # n0debug_calc(inspect.getframeinfo(inspect.currentframe().f_back))
-
-
-    # format = "<green>{time:" + debug_timeformat + "}</green>| <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
-    # format = "<green>{time:" + debug_timeformat + "}</green>| <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
-    format = "<green>{time:" + debug_timeformat + "}</green>|<level>{level: <8}</level>|<cyan>{file}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan>|<level>{message}</level>"
-
-
-
-    logger.configure(
-        handlers=[
-            dict(sink=debug_output or sys.stderr, level=debug_level, format=format),
-            dict(sink=log_file_name or __main_log_filename + "_{time}.log", enqueue=True, level=debug_level, format=format),
-        ],
-    )
+    handlers = [
+        dict(sink = debug_output, level = debug_level, format = format),
+    ]
+    if debug_logtofile:
+        handlers.append(
+            dict(sink = __main_log_filename, enqueue = True, level = debug_level, format = format),
+        )
+    logger.configure(handlers = handlers)
 # ********************************************************************
 def n0print(
         text: str,
@@ -886,8 +894,7 @@ def xpath_match(xpath: str, xpath_list: typing.Union[str, list, tuple]) -> int:
         # n0print("Let's try new loop")
     # n0print("not matched: not matched with all from list")
     return 0
-
-
+# ******************************************************************************
 def generate_composite_keys(
                             input_list: n0list,
                             elements_for_composite_key: tuple,
@@ -947,8 +954,9 @@ def generate_composite_keys(
             # composite_keys_for_all_lines.update({created_composite_key:[line_i]})
         composite_keys_for_all_lines.append((created_composite_key, line_i))
     return composite_keys_for_all_lines
-
-
+# ******************************************************************************
+# ******************************************************************************
+# ******************************************************************************
 class n0list(list):
     """
     Class extended builtins.list(builtins.object) with additional methods:
@@ -988,9 +996,9 @@ class n0list(list):
         # n0debug("args")
         # n0debug("kw")
         raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple/n0list)")
-    # ******************************************************************************
+    # **************************************************************************
     # n0list. _find()
-    # ******************************************************************************
+    # **************************************************************************
     def _find(self,
             xpath_list: typing.Union[str, list],
             parent_node,
@@ -1109,10 +1117,10 @@ class n0list(list):
                         return self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
                     else:
                         raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
-    # ******************************************************************************
+    # **************************************************************************
     # n0list. _get()
-    # ******************************************************************************
-    def _get(self, xpath: str, raise_exception = True, if_not_found = None, return_lists = True):
+    # **************************************************************************
+    def _get(self, xpath: typing.Union[str, int], raise_exception = True, if_not_found = None, return_lists = True):
         """
         Private function:
         return self[where1/where2/.../whereN]
@@ -1122,7 +1130,7 @@ class n0list(list):
         If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
         if isinstance(xpath, int):
-            if len(self) >= xpath:
+            if (xpath < 0 and -xpath <= len(self)) or (xpath >= 0 and xpath < len(self)):
                 return self[xpath]
             else:
                 return if_not_found
@@ -1150,10 +1158,10 @@ class n0list(list):
                     raise ex
                 else:
                     return if_not_found
-    # ******************************************************************************
+    # **************************************************************************
     # n0list. get()
-    # ******************************************************************************
-    def get(self, xpath: str, if_not_found = None):
+    # **************************************************************************
+    def get(self, xpath: typing.Union[str, int], if_not_found = None):
         """
         Public function:
         return self[where1/where2/.../whereN]
@@ -1163,9 +1171,9 @@ class n0list(list):
         If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
         """
         return self._get(xpath, raise_exception = False, if_not_found = if_not_found)
-    # ******************************************************************************
+    # **************************************************************************
     # n0list. first()
-    # ******************************************************************************
+    # **************************************************************************
     def first(self, xpath: str, if_not_found = None):
         """
         Public function:
@@ -1180,8 +1188,7 @@ class n0list(list):
         if isinstance(result, (list, tuple, n0list)) and len(result) == 1:
             result = result[0]
         return result
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
     def __getitem__(self, xpath):
         """
         Private function:
@@ -1195,9 +1202,9 @@ class n0list(list):
             return self._get(xpath, raise_exception = True)
         else:
             return super(n0list, self).__getitem__(xpath)
-    # ******************************************************************************
+    # **************************************************************************
     # * n0list. direct_compare(..): only n0dict. direct_compare/compare have one_of_list_compare
-    # ******************************************************************************
+    # **************************************************************************
     def direct_compare(
             self,
             other: n0list,
@@ -1403,13 +1410,9 @@ class n0list(list):
                 )
                 result["other_unique"].append(("%s[%i]" % (prefix, i), other[i]))
         return result
-
-    # ******************************************************************************
-    # ******************************************************************************
-
-    # ******************************************************************************
+    # **************************************************************************
     # * n0list. compare(..)
-    # ******************************************************************************
+    # **************************************************************************
     def compare(
             self,
             other: n0list,
@@ -1662,22 +1665,19 @@ class n0list(list):
                 )
                 result["other_unique"].append(("%s[%d]" % (prefix, other_i), other[other_i]))
         return result
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
     # def append(self, sigle_item):
     # if isinstance(sigle_item, (list,n0list)):
     # raise (TypeError, '(%s)%s must be scalar' % (type(sigle_item), sigle_item))
     # super(n0list, self).append(sigle_item)  #append the item to itself (the list)
     # return self
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
     # def extend(self, other_list):
     # if not isinstance(other_list, (list,n0list)):
     # raise (TypeError, '(%s)%s must be list' % (type(sigle_item), sigle_item))
     # super(n0list, self).extend(other_list)
     # return self
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
     def _in(self, other_list, in_is_expected: bool):
         if not isinstance(other_list, (list,tuple,n0list)):
             other_list = [other_list]
@@ -1686,20 +1686,19 @@ class n0list(list):
                 return True
         else:
             return False
-    # ******************************************************************************
+    # **************************************************************************
     def any_in(self, other_list):
         return self._in(other_list, True)
-    # ******************************************************************************
+    # **************************************************************************
     def any_not_in(self, other_list):
         return not self._in(other_list, True)
-    # ******************************************************************************
+    # **************************************************************************
     def all_in(self, other_list):
         return not self._in(other_list, False)
-    # ******************************************************************************
+    # **************************************************************************
     def all_not_in(self, other_list):
         return self._in(other_list, False)
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
     def _consists_of(self, other_list, in_is_expected: bool):
         if not isinstance(other_list, (list,tuple,n0list)):
             other_list = [other_list]
@@ -1708,18 +1707,20 @@ class n0list(list):
                 return True
         else:
             return False
-    # ******************************************************************************
+    # **************************************************************************
     def consists_of_any(self, other_list):
         return self._consists_of(other_list, True)
-    # ******************************************************************************
+    # **************************************************************************
     def consists_of_all(self, other_list):
         return not self._consists_of(other_list, False)
-    # ******************************************************************************
+    # **************************************************************************
     def __contains__(self, other_list):  # otherlist in n0list([a])
         return self.consists_of_all(other_list)
-    # ******************************************************************************
+    # **************************************************************************
     def not_consists_of_any(self, other_list):
         return not self._consists_of(other_list, True)
+# ******************************************************************************
+# ******************************************************************************
 # ******************************************************************************
 # class n0dict(OrderedDict):
 class n0dict(dict):
@@ -1727,8 +1728,8 @@ class n0dict(dict):
     https://github.com/martinblech/xmltodict/issues/252
     For Python >= 3.6, dictionary are Sorted by insertion order, so avoid the use of OrderedDict for those python versions.
     """
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def __init__(self, *args, **kw):
         """
         args == tuple, kw == mapping(dictionary)
@@ -1791,7 +1792,7 @@ class n0dict(dict):
                         self.update({pair[0]: pair[1]})
                     return None
         raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/OrderedDict/n0dict/zip or paired tuple/list)")
-    # ******************************************************************************
+    # **************************************************************************
     def update_extend(self, other):
         if other is None:
             return self
@@ -1819,10 +1820,9 @@ class n0dict(dict):
         else:
             raise Exception("Unexpected type of other: " + str(type(other)))
         return self
-
-    # ******************************************************************************
+    # **************************************************************************
     # * n0dict. compare(..)
-    # ******************************************************************************
+    # **************************************************************************
     def compare(
             self,
             other: n0dict,
@@ -2011,10 +2011,9 @@ class n0dict(dict):
                     )
                     result["other_unique"].append((fullxpath, other[key]))
         return result
-
-    # ******************************************************************************
+    # **************************************************************************
     # * n0dict. direct_compare(..)
-    # ******************************************************************************
+    # **************************************************************************
     def direct_compare(
             self,
             other: n0dict,
@@ -2043,9 +2042,9 @@ class n0dict(dict):
             composite_key=composite_key, compare_only=compare_only,
             exclude_xpaths=exclude_xpaths, transform=transform,
         )
-    # ******************************************************************************
+    # **************************************************************************
     # XPATH
-    # ******************************************************************************
+    # **************************************************************************
     def __xpath(self, value, path: str = None, mode: int = None) -> list:
         """
         Private function: recursively collect elements xpath starts from parent
@@ -2062,13 +2061,13 @@ class n0dict(dict):
         else:
             raise Exception("Not expected type (%s) %s/%s == %s" % (type(value), path, key, str(value)))
         return result
-
+    # **************************************************************************
     def xpath(self, mode: int = None) -> list:  # list[(xpath, value)]
         """
         Public function: collect elements xpath starts from root
         """
         return self.__xpath(self, "/", mode)
-
+    # **************************************************************************
     def to_xpath(self, mode: int = None) -> str:
         """
         Public function: collect elements xpath starts from root and print with indents
@@ -2083,10 +2082,9 @@ class n0dict(dict):
                             ('"' + str(itm[1]) + '"') if itm[1] else "None"
                         )
         return result
-
-    # ******************************************************************************
+    # **************************************************************************
     # XML
-    # ******************************************************************************
+    # **************************************************************************
     def __xml(self, parent: n0dict, indent: int, inc_indent: int) -> str:
         """
         Private function: recursively export OrderedDict into xml result string
@@ -2118,16 +2116,24 @@ class n0dict(dict):
                                 else:
                                     result += (" " * indent + "<%s>%s</%s>") % (key, sub_result, key)
                     elif isinstance(value, (str, int, float)):
-                        result += " " * indent + ("<%s>%s</%s>" % (key, str(value), key))
+                        if not key.startswith("@"):
+                            result += " " * indent + ("<%s>%s</%s>" % (key, str(value), key))
                     elif isinstance(value, (dict, OrderedDict, n0dict)):
                         sub_result = self.__xml(value, indent + inc_indent, inc_indent)
                         # if "\n" in sub_result: sub_result = "\n" + sub_result
+                        # if sub_result:
+                            # sub_result = "\n" + sub_result
+                            
+                        attribs = ""
+                        attribs_of_current_key = [(__key[1:], __value) for __key,__value in value.items() if __key.startswith("@")]
+                        if len(attribs_of_current_key):
+                            for __key, __value in attribs_of_current_key:
+                                attribs += " %s=\"%s\"" % (__key, __value)
                         if sub_result:
-                            sub_result = "\n" + sub_result
-                        if sub_result:
-                            result += (" " * indent + "<%s>%s\n" + " " * indent + "</%s>") % (key, sub_result, key)
+                            # result += (" " * indent + "<%s%s>%s\n" + " " * indent + "</%s>") % (key, attribs, sub_result, key)
+                            result += (" " * indent + "<%s%s>\n%s\n" + " " * indent + "</%s>") % (key, attribs, sub_result, key)
                         else:
-                            result += " " * indent + "<%s/>" % key
+                            result += " " * indent + "<%s%s/>" % (key, attribs)
                     elif value is None:
                         result += " " * indent + "<%s/>" % key
                     else:
@@ -2149,7 +2155,7 @@ class n0dict(dict):
         else:
             # return None
             return ""
-
+    # **************************************************************************
     def to_xml(self, indent: int = 4, encoding: str = "utf-8") -> str:
         """
         Public function: export self into xml result string
@@ -2158,6 +2164,9 @@ class n0dict(dict):
         if encoding:
             result = "<?xml version=\"1.0\" encoding=\"%s\"?>\n" % encoding
 
+        return result + self.__xml(self, 0, indent)
+        
+        '''
         for key in self:
             value = self[key]
             if isinstance(value, (list, tuple, n0list)):
@@ -2181,11 +2190,12 @@ class n0dict(dict):
                     else:
                         result += "\n" + self.__xml(value, indent, indent) + "\n"
                     result += "</%s>\n" % key
+        '''
+        
         return result
-
-    # ******************************************************************************
+    # **************************************************************************
     # JSON
-    # ******************************************************************************
+    # **************************************************************************
     def __json(self, parent: OrderedDict, indent: int, inc_indent: int) -> str:
         """
         Private function: recursively export OrderedDict into json result string
@@ -2230,9 +2240,8 @@ class n0dict(dict):
         Public function: export self into json result string
         """
         return n0pretty(self, show_type=False, __indent_size = indent)
-
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def isExist(self, xpath) -> n0dict:
         """
         Public function: return empty lists in dict, if self[xpath] exists
@@ -2255,7 +2264,8 @@ class n0dict(dict):
         validation_results["differences"].append("[%s] doesn't exist" % xpath)
         validation_results["other_unique"].append((xpath, None))
         return validation_results
-    # ******************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def is_exist(self, xpath: str) -> bool:
         """
         Public function: return True, if self[xpath] exists
@@ -2273,8 +2283,8 @@ class n0dict(dict):
             if self[xpath]:
                 return True
         return False
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def has_all(self,tupple_of_keys):
         for key in tupple_of_keys:
             if key not in self:
@@ -2285,17 +2295,15 @@ class n0dict(dict):
                 if isinstance(self[key],(str,tuple,list,set,frozenset,dict,OrderedDict,n0dict)) and len(self[key]) == 0:
                     return False
         return True
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def has_any_of(self,tupple_of_keys):
         for key in tupple_of_keys:
             if key in self:
                 return True
         return True
-    # ******************************************************************************
-    # ******************************************************************************
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def isEqual(self, xpath, value):
         """
         Public function: return empty lists in dict, if self[xpath] == value
@@ -2311,9 +2319,8 @@ class n0dict(dict):
         validation_results["differences"].append("[%s]=='%s' != '%s'" % (xpath, self[xpath], value))
         validation_results["not_equal"].append((xpath, (self[xpath], value)))
         return validation_results
-
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=lambda x: x):
         """
         Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
@@ -2336,9 +2343,9 @@ class n0dict(dict):
                                               )
         validation_results["not_equal"].append((xpath, (self[xpath], other_n0dict[other_xpath])))
         return validation_results
-    # **********************************************************************************************
+    # **************************************************************************
     # n0dict _find
-    # **********************************************************************************************
+    # **************************************************************************
     # def _find(self, xpath_list: list, parent_node, return_lists, xpath_found_str: str = "/") -> list:
     def _find(self,
             xpath_list: typing.Union[str, list],
@@ -2633,8 +2640,8 @@ class n0dict(dict):
                     # Deeper: any type under n0dict
                     #*******************************
                     return self._find(xpath_list[1:], parent_node[node_index_int], return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
-    # **********************************************************************************************
-    # **********************************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def _get(self, xpath: str, raise_exception = True, if_not_found = None, return_lists = True):
         """
         Private function:
@@ -2678,8 +2685,8 @@ class n0dict(dict):
         If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
         return self._get(xpath, raise_exception = True)
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def get(self, xpath: str, if_not_found = None):
         """
         Private function:
@@ -2690,8 +2697,8 @@ class n0dict(dict):
         If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
         """
         return self._get(xpath, raise_exception = False, if_not_found = if_not_found)
-    # **********************************************************************************************
-    # **********************************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def first(self, xpath: str, if_not_found = None):
         """
         Private function:
@@ -2706,8 +2713,8 @@ class n0dict(dict):
         if isinstance(result, (list, tuple, n0list)) and len(result) == 1:
             result = result[0]
         return result
-    # **********************************************************************************************
-    # **********************************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def _add(self, parent_node, node_name_index: str, xpath_list: list) -> str:
         if node_name_index:
             # or cur_node_name OR cur_node_index MUST have value, both could NOT have values
@@ -2830,8 +2837,8 @@ class n0dict(dict):
             return next_node, next_node_name_index
         else:
             return self._add(next_node, next_node_name_index, xpath_list[1:])
-    # **********************************************************************************************
-    # **********************************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def __setitem__(self, xpath: str, new_value):
         """
         Private function:
@@ -2885,26 +2892,26 @@ class n0dict(dict):
             super(n0dict, self).__setitem__(xpath, new_value)
 
         return new_value  # For speed
-    # ******************************************************************************
-    # ******************************************************************************
+    # **************************************************************************
+    # **************************************************************************
     def _valid(self, validate, valid_is_expected: bool):
         for itm in self:
             if validate(itm) == valid_is_expected:
                 return True
         return False
-    # ******************************************************************************
+    # **************************************************************************
     def any_valid(self, validate):
         return self._consists_of(validate, True)
-    # ******************************************************************************
+    # **************************************************************************
     def any_not_valid(self, validate):
         return self._consists_of(validate, False)
-    # ******************************************************************************
+    # **************************************************************************
     def all_valid(self, validate):
         return not self._consists_of(validate, False)
-    # ******************************************************************************
+    # **************************************************************************
     def all_not_valid(self, validate):
         return not self._consists_of(validate, True)
-    # ******************************************************************************
+    # **************************************************************************
     def valid(self, node_xpath:str, validate, expected_result_for_error: bool = False, msg:str = None):
         """
         :param node_xpath:
@@ -2952,6 +2959,178 @@ class n0dict(dict):
                 return True
             else:
                 return ""
+# ******************************************************************************
+# ******************************************************************************
+# ******************************************************************************
+# https://stackoverflow.com/questions/1653970/does-python-have-an-ordered-set
+# https://code.activestate.com/recipes/576694/
+from collections.abc import MutableSet
+class OrderedSet(MutableSet):
+    def __init__(self, iterable=None):
+        self.end = end = [] 
+        end += [None, end, end]         # sentinel node for doubly linked list
+        self.map = {}                   # key --> [key, prev, next]
+        if iterable is not None:
+            self |= iterable
+
+    def __len__(self):
+        return len(self.map)
+
+    def __contains__(self, key):
+        return key in self.map
+
+    def add(self, key):
+        if key not in self.map:
+            end = self.end
+            curr = end[1]
+            curr[2] = end[1] = self.map[key] = [key, curr, end]
+
+    def discard(self, key):
+        if key in self.map:        
+            key, prev, next = self.map.pop(key)
+            prev[2] = next
+            next[1] = prev
+
+    def __iter__(self):
+        end = self.end
+        curr = end[2]
+        while curr is not end:
+            yield curr[0]
+            curr = curr[2]
+
+    def __reversed__(self):
+        end = self.end
+        curr = end[1]
+        while curr is not end:
+            yield curr[0]
+            curr = curr[1]
+
+    def pop(self, last=True):
+        if not self:
+            raise KeyError('set is empty')
+        key = self.end[1][0] if last else self.end[2][0]
+        self.discard(key)
+        return key
+
+    def __repr__(self):
+        if not self:
+            return '%s()' % (self.__class__.__name__,)
+        return '%s(%r)' % (self.__class__.__name__, list(self))
+
+    def __eq__(self, other):
+        if isinstance(other, OrderedSet):
+            return len(self) == len(other) and list(self) == list(other)
+        return set(self) == set(other)
+# ******************************************************************************
+# 2 levels dict:
+# initial_dict:
+#   key1:
+#       - item1
+#       - item2
+#   key2:
+#       - key1
+#       - item3
+#       - item4
+# Unpack references recursive: bool = True
+# unpacked_dict = {key : list(unpack_references(initial_dict, key)) for key in initial_dict}
+# unpacked_dict:
+#   key1:
+#       - item1
+#       - item2
+#   key2:
+#       - item1
+#       - item2
+#       - item3
+#       - item4
+# Remove references recursive: bool = False
+# unpacked_dict = {key : list(unpack_references(initial_dict, key), False) for key in initial_dict}
+# unpacked_dict:
+#   key1:
+#       - item1
+#       - item2
+#   key2:
+#       - item3
+#       - item4
+def unpack_references(initial_dict: dict, initial_key: str, recursive: bool = True) -> OrderedSet:
+    collected_set = OrderedSet() # Not allow to save order with ordinary set
+    node = initial_dict[initial_key]
+    if isinstance(node, str):
+        node = [node]
+    if not isinstance(node, list):
+        raise Exception(f"node under {initial_key} must be str or list")
+    
+    for item in node:
+        if item in initial_dict:    # item == reference (key)
+            if recursive:
+                collected_set |= unpack_references(initial_dict, item)
+        else:                       # item == component dir 
+            collected_set.add(item)
+    return collected_set
+# ******************************************************************************
+# ******************************************************************************
+# ******************************************************************************
+class Git():
+    _repository_name = None
+    _repository_path = None
+    # ##############################################################################################
+    def __init__(self, repo_root_dir: str, repository_url: str, rsa_key_path: str = ""):
+        if not repository_url.startswith("ssh://") or not repository_url.endswith(".git"):
+            raise Exception("repository_url must be 'ssh://...git'")
+
+        outs = errs = None
+        self._repository_path = os.path.abspath(repo_root_dir)
+        if not os.path.exists(os.path.join(self._repository_path, ".git")):
+            outs, errs = self.run(
+                                ["clone", repository_url] +
+                                ["--config", "core.sshCommand=ssh -i " + rsa_key_path + " -F /dev/null"] if rsa_key_path else []
+            )
+            self._repository_name = repository_url.split("/")[-1].split(".git")[0]
+            self._repository_path = os.path.join(self._repository_path, self._repository_name)
+        else:
+            self._repository_name = os.path.split(self._repository_path)[1]
+            n0print("Other repository '%s' is already existed" % self._repository_name)
+
+        if errs and "already exists and is not an empty directory." in errs:
+            outs, errs = self.run("pull")
+            if outs != "Already up to date.\n":
+                n0debug_calc(outs.strip(), "outs")
+                n0debug_calc(errs.strip(), "errs")
+                # raise Exception(outs + "\n" if outs else "" + errs)
+    # ##############################################################################################
+    def run(self, git_arguments: typing.Union[str, list], show_result = True) -> tuple:
+        if isinstance(git_arguments, str):
+            git_arguments = git_arguments.split(" ")
+        n0print("*** git %s" % " ".join(git_arguments))
+        p = subprocess.Popen(   (command_line:=["git",] + git_arguments),
+                                cwd = self._repository_path,
+                                stdout = subprocess.PIPE,
+                                stderr = subprocess.PIPE,
+                                shell = True,
+                                encoding = "utf-8",
+        )
+        try:
+            outs, errs = p.communicate(timeout=(timeout_sec:=600))
+        except subprocess.TimeoutExpired:
+            raise Exception("Timeout %d seconds were happened during execution:\n%s>%s" % (timeout_sec, self._repository_path, " ".join(command_line)))
+            os.kill(p.pid, signal.CTRL_BREAK_EVENT)
+            outs, errs = p.communicate()
+
+        if show_result:
+            n0debug_calc(outs.strip(), "outs")
+            n0debug_calc(errs.strip(), "errs")
+        return outs, errs
+    # ##############################################################################################
+    def checkout(self, branch_name: str):
+        outs, errs = self.run(["checkout", branch_name])
+        return outs, errs
+    # ##############################################################################################
+    def log(self, git_arguments: typing.Union[str, list]):
+        if isinstance(git_arguments, str):
+            git_arguments = git_arguments.split(" ")
+
+        outs, errs = self.run(["log",  "--date=format:%y%m%d_%H%M%S", "--pretty=format:%H=%ad=%cn=%s"] + git_arguments)
+        return outs, errs
+    # ##############################################################################################
 # ******************************************************************************
 # ******************************************************************************
 # ******************************************************************************

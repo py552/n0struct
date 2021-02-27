@@ -165,6 +165,18 @@ DESCRIPTION
     # 0.44 = 2021-02-08
     #                   fixed:
     #                       split_name_index(..)
+    # 0.45 = 2021-02-27
+    #                   enhanced:
+    #                       mypy optimization
+    #                       def init_logger(..)
+    #                   added:
+    #                       def timestamp() -> str:
+    #                       def date_yymmdd(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
+    #                       class OrderedSet(MutableSet):
+    #                       def unpack_references(initial_dict: dict, initial_key: str, recursive: bool = True) -> OrderedSet:
+    #                       class Git():
+    #                   fixed:
+    #                       nolist. _get(..)
 
 PACKAGE CONTENTS
     test (package)
@@ -174,6 +186,169 @@ CLASSES
         n0dict
     builtins.list(builtins.object)
         n0list
+    builtins.object
+        Git
+    collections.abc.MutableSet(collections.abc.Set)
+        OrderedSet
+    
+    class Git(builtins.object)
+     |  Git(repo_root_dir: 'str', repository_url: 'str', rsa_key_path: 'str' = '')
+     |  
+     |  # ******************************************************************************
+     |  # ******************************************************************************
+     |  # ******************************************************************************
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, repo_root_dir: 'str', repository_url: 'str', rsa_key_path: 'str' = '')
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  checkout(self, branch_name: 'str')
+     |      # ##############################################################################################
+     |  
+     |  log(self, git_arguments: 'typing.Union[str, list]')
+     |      # ##############################################################################################
+     |  
+     |  run(self, git_arguments: 'typing.Union[str, list]', show_result=True) -> 'tuple'
+     |      # ##############################################################################################
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class OrderedSet(collections.abc.MutableSet)
+     |  OrderedSet(iterable=None)
+     |  
+     |  A mutable set is a finite, iterable container.
+     |  
+     |  This class provides concrete generic implementations of all
+     |  methods except for __contains__, __iter__, __len__,
+     |  add(), and discard().
+     |  
+     |  To override the comparisons (presumably for speed, as the
+     |  semantics are fixed), all you have to do is redefine __le__ and
+     |  then the other operations will automatically follow suit.
+     |  
+     |  Method resolution order:
+     |      OrderedSet
+     |      collections.abc.MutableSet
+     |      collections.abc.Set
+     |      collections.abc.Collection
+     |      collections.abc.Sized
+     |      collections.abc.Iterable
+     |      collections.abc.Container
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __contains__(self, key)
+     |  
+     |  __eq__(self, other)
+     |      Return self==value.
+     |  
+     |  __init__(self, iterable=None)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __iter__(self)
+     |  
+     |  __len__(self)
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __reversed__(self)
+     |  
+     |  add(self, key)
+     |      Add an element.
+     |  
+     |  discard(self, key)
+     |      Remove an element.  Do not raise an exception if absent.
+     |  
+     |  pop(self, last=True)
+     |      Return the popped value.  Raise KeyError if empty.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  __abstractmethods__ = frozenset()
+     |  
+     |  __hash__ = None
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from collections.abc.MutableSet:
+     |  
+     |  __iand__(self, it)
+     |  
+     |  __ior__(self, it)
+     |  
+     |  __isub__(self, it)
+     |  
+     |  __ixor__(self, it)
+     |  
+     |  clear(self)
+     |      This is slow (creates N new iterators!) but effective.
+     |  
+     |  remove(self, value)
+     |      Remove an element. If not a member, raise a KeyError.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from collections.abc.Set:
+     |  
+     |  __and__(self, other)
+     |  
+     |  __ge__(self, other)
+     |      Return self>=value.
+     |  
+     |  __gt__(self, other)
+     |      Return self>value.
+     |  
+     |  __le__(self, other)
+     |      Return self<=value.
+     |  
+     |  __lt__(self, other)
+     |      Return self<value.
+     |  
+     |  __or__(self, other)
+     |  
+     |  __rand__ = __and__(self, other)
+     |  
+     |  __ror__ = __or__(self, other)
+     |  
+     |  __rsub__(self, other)
+     |  
+     |  __rxor__ = __xor__(self, other)
+     |  
+     |  __sub__(self, other)
+     |  
+     |  __xor__(self, other)
+     |  
+     |  isdisjoint(self, other)
+     |      Return True if two sets have a null intersection.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from collections.abc.Collection:
+     |  
+     |  __subclasshook__(C) from abc.ABCMeta
+     |      Abstract classes can override this to customize issubclass().
+     |      
+     |      This is invoked early on by abc.ABCMeta.__subclasscheck__().
+     |      It should return True, False or NotImplemented.  If it returns
+     |      NotImplemented, the normal algorithm is used.  Otherwise, it
+     |      overrides the normal algorithm (and the outcome is cached).
     
     class n0dict(builtins.dict)
      |  n0dict(*args, **kw)
@@ -234,26 +409,26 @@ CLASSES
      |          [new()]
      |  
      |  all_not_valid(self, validate)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  all_valid(self, validate)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  any_not_valid(self, validate)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  any_valid(self, validate)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0000020CAE0E8DC0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
-     |      # ******************************************************************************
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x00000264B6864C10>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
+     |      # **************************************************************************
      |      # * n0dict. compare(..)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000020CAE0E8D30>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
-     |      # ******************************************************************************
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x00000264B6864B80>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |      # **************************************************************************
      |      # * n0dict. direct_compare(..)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  first(self, xpath: 'str', if_not_found=None)
      |      Private function:
@@ -273,12 +448,12 @@ CLASSES
      |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
      |  
      |  has_all(self, tupple_of_keys)
-     |      # ******************************************************************************
-     |      # ******************************************************************************
+     |      # **************************************************************************
+     |      # **************************************************************************
      |  
      |  has_any_of(self, tupple_of_keys)
-     |      # ******************************************************************************
-     |      # ******************************************************************************
+     |      # **************************************************************************
+     |      # **************************************************************************
      |  
      |  isEqual(self, xpath, value)
      |      Public function: return empty lists in dict, if self[xpath] == value
@@ -286,7 +461,7 @@ CLASSES
      |  isExist(self, xpath) -> 'n0dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0000020CAE0EAD30>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x00000264B6866B80>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  is_exist(self, xpath: 'str') -> 'bool'
@@ -302,7 +477,7 @@ CLASSES
      |      Public function: collect elements xpath starts from root and print with indents
      |  
      |  update_extend(self, other)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  valid(self, node_xpath: 'str', validate, expected_result_for_error: 'bool' = False, msg: 'str' = None)
      |      :param node_xpath:
@@ -475,16 +650,16 @@ CLASSES
      |          recursively = None/False/0 => don't convert subnodes into n0list/n0dict
      |  
      |  all_in(self, other_list)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  all_not_in(self, other_list)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  any_in(self, other_list)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  any_not_in(self, other_list)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[?] WITHOUT using order of elements.
@@ -511,10 +686,10 @@ CLASSES
      |              if not returned["differences"]: self and other are totally equal.
      |  
      |  consists_of_all(self, other_list)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  consists_of_any(self, other_list)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[i]
@@ -551,7 +726,7 @@ CLASSES
      |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
      |      If self[where1/where2/.../whereN] is list, thet the first element will be returned
      |  
-     |  get(self, xpath: 'str', if_not_found=None)
+     |  get(self, xpath: 'typing.Union[str, int]', if_not_found=None)
      |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
@@ -560,7 +735,7 @@ CLASSES
      |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
      |  
      |  not_consists_of_any(self, other_list)
-     |      # ******************************************************************************
+     |      # **************************************************************************
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
@@ -729,6 +904,11 @@ FUNCTIONS
         :param month_delta:
         :return: today + day_delta + month_delta -> str YYMM
     
+    date_yymmdd(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> str YYMMDD
+    
     date_yyyymmdd(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
         :param month_delta:
@@ -761,7 +941,7 @@ FUNCTIONS
         :param value_:
         :return: last key which is associated with value_ in dict_
     
-    init_logger(debug_level: 'str' = 'TRACE', debug_output=<_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>, debug_timeformat: 'str' = 'YYYY-MM-DD HH:mm:ss.SSS', debug_showobjectid=True, log_file_name: 'str' = None)
+    init_logger(debug_level: 'str' = 'TRACE', debug_output=<_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>, debug_timeformat: 'str' = 'YYYY-MM-DD HH:mm:ss.SSS', debug_showobjectid=True, debug_logtofile=True, log_file_name: 'str' = None)
     
     load_file(file_name: 'str') -> 'list'
         # ********************************************************************
@@ -847,11 +1027,46 @@ FUNCTIONS
     strip_ns lambda key
         # ******************************************************************************
     
+    timestamp() -> 'str'
+        :return: now -> str 13 characters YYMMDD_HHMMSS
+    
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
         # ********************************************************************
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x0000020CAE0E85E0>, transform_value=<function convert_to_native_format at 0x0000020CAE0E8670>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x00000264B6864430>, transform_value=<function convert_to_native_format at 0x00000264B68644C0>)
         # ******************************************************************************
+    
+    unpack_references(initial_dict: 'dict', initial_key: 'str', recursive: 'bool' = True) -> 'OrderedSet'
+        # ******************************************************************************
+        # 2 levels dict:
+        # initial_dict:
+        #   key1:
+        #       - item1
+        #       - item2
+        #   key2:
+        #       - key1
+        #       - item3
+        #       - item4
+        # Unpack references recursive: bool = True
+        # unpacked_dict = {key : list(unpack_references(initial_dict, key)) for key in initial_dict}
+        # unpacked_dict:
+        #   key1:
+        #       - item1
+        #       - item2
+        #   key2:
+        #       - item1
+        #       - item2
+        #       - item3
+        #       - item4
+        # Remove references recursive: bool = False
+        # unpacked_dict = {key : list(unpack_references(initial_dict, key), False) for key in initial_dict}
+        # unpacked_dict:
+        #   key1:
+        #       - item1
+        #       - item2
+        #   key2:
+        #       - item3
+        #       - item4
     
     xpath_match(xpath: 'str', xpath_list: 'typing.Union[str, list, tuple]') -> 'int'
         :param xpath:
