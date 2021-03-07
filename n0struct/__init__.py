@@ -170,7 +170,12 @@
 #                       def unpack_references(initial_dict: dict, initial_key: str, recursive: bool = True) -> OrderedSet:
 #                       class Git():
 #                   fixed:
-#                       nolist. _get(..)
+#                       n0list. _get(..)
+# 0.45 = 2021-03-05
+#                   added:
+#                       n0dict. def update(self, xpath: typing.Union[dict, str], new_value: str = None) -> n0dict:
+#                       n0dict. def delete(self, xpath: str, recursively: bool = False) -> n0dict:
+#                       n0dict. def pop(self, xpath: str, recursively: bool = False) -> typing.Any:
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -196,9 +201,6 @@ from logging import StreamHandler
 # Used by class Git():
 import subprocess
 import signal
-# ********************************************************************
-# import n0struct
-# ********************************************************************
 # ********************************************************************
 __flag_compare_check_different_types = False
 def set__flag_compare_check_different_types(value: bool):
@@ -497,7 +499,6 @@ def load_serialized(file_name: str,
                     ) -> n0list:
 
     result = n0list()
-    # result = n0dict({"root": n0list()})
 
     for line in load_file(file_name):
         line = line.strip()
@@ -607,110 +608,18 @@ def n0print(
     :param internal_call:
     :return: None
     """
-    # global __prev_end
-    # if __prev_end == "\n":
-    if 1:
-        if internal_call:  # Called from n0debug|n0debug_calc|n0debug_object
+    if internal_call:  # Called from n0debug|n0debug_calc|n0debug_object
+        try:
+            frameinfo = inspect.stack()[3]
+        except:
             try:
-                frameinfo = inspect.stack()[3]
+                frameinfo = inspect.stack()[2]
             except:
-                try:
-                    frameinfo = inspect.stack()[2]
-                except:
-                    frameinfo = inspect.stack()[1]
-        else:
-            frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
-        # global __debug_level
-        # global __debug_levels
-        # if level <= __debug_level:
-            # __debug_output(
-                # "***%s %s %s:%d: " % (
-                    # (" [%s]" % __debug_levels[level]) if internal_call else " [ALWAYS]",
-                    # datetime.now().strftime(__debug_timeformat),
-                    # os.path.split(frameinfo.filename)[1],
-                    # frameinfo.lineno
-                # )
-                # + (text if text else "") + end
-            # )
-            # if (src_filename:=os.path.split(frameinfo.filename)[1:2]): src_filename=src_filename[0]
-        '''
-            logger.log(level,
-                # "%s:" % str(frameinfo) +
-                "%s:%s:%d:" % (
-                    n0list(os.path.split(frameinfo.filename)).get(1,""),
-                    frameinfo.function,
-                    frameinfo.lineno
-                )
-                + (text if text else "")
-                # + (text if text else "") + end
-                ,
-                name = n0list(os.path.split(frameinfo.filename)).get(1,""),
-                function = frameinfo.function,
-                line = frameinfo.lineno,
-            )
-        '''
-        if 1:
-            logger.opt(depth=1+internal_call).log(level,
-                # # "%s:" % str(frameinfo) +
-                # "%s:%s:%d:" % (
-                    # n0list(os.path.split(frameinfo.filename)).get(1,""),
-                    # frameinfo.function,
-                    # frameinfo.lineno
-                # ) +
-                (text if text else "")
-                # + (text if text else "") + end
-                # ,
-                # name = n0list(os.path.split(frameinfo.filename)).get(1,""),
-                # function = frameinfo.function,
-                # line = frameinfo.lineno,
-            )
-    # else:
-        # __debug_output((text if text else "") + end)
-    # __prev_end = end
-# ********************************************************************
-def n0debug(var_name: str, level: str = "DEBUG"):
-    """
-    Print value of the variable with name {var_name},
-    depends of value in global variable {__debug_level}.
-
-    :param var_name:
-    :param level:
-    :return:
-    """
-    if not isinstance(var_name,str):
-        raise Exception("incorrect call of n0debug(..): argument MUST BE string")
-
-    __f_locals = inspect.currentframe().f_back.f_locals
-    if not var_name in __f_locals:
-        raise Exception("impossible to find object '%s'" % var_name)
-    var_object = __f_locals.get(var_name)
-
-    # print(inspect.currentframe().f_back.f_locals)
-    # print("~"*80)
-    # print(var_name)
-    # print(inspect.currentframe().f_back.f_locals.get(var_name))
-    # var_object = inspect.currentframe().f_back.f_locals[var_name]
-    n0debug_calc(var_object, var_name, level = level, internal_call = 1)
-# ********************************************************************
-def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_call: int = 0):
-    """
-    Print  calculated value (for example returned by function),
-    depends of value in global variable __debug_level.
-
-    :param var_object:
-    :param var_name:
-    :param level:
-    :return:
-    """
-    n0print(
-        "(%s%s)%s == %s" % (
-            type(var_object),
-            (" id=%s" % id(var_object)) if __debug_showobjectid else "",
-            var_name,
-            n0pretty(var_object)
-        ),
-        level = level,
-        internal_call = internal_call + 1,
+                frameinfo = inspect.stack()[1]
+    else:
+        frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
+    logger.opt(depth=1+internal_call).log(level,
+        (text if text else "")
     )
 # ********************************************************************
 def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = True, __indent_size: int = 4):
@@ -753,6 +662,45 @@ def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = True, __indent
         result = str(item)
     return result
 # ******************************************************************************
+def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_call: int = 0):
+    """
+    Print  calculated value (for example returned by function),
+    depends of value in global variable __debug_level.
+
+    :param var_object:
+    :param var_name:
+    :param level:
+    :return:
+    """
+    n0print(
+        "(%s%s)%s == %s" % (
+            type(var_object),
+            (" id=%s" % id(var_object)) if __debug_showobjectid else "",
+            var_name,
+            n0pretty(var_object)
+        ),
+        level = level,
+        internal_call = internal_call + 1,
+    )
+# ********************************************************************
+def n0debug(var_name: str, level: str = "DEBUG"):
+    """
+    Print value of the variable with name {var_name},
+    depends of value in global variable {__debug_level}.
+
+    :param var_name:
+    :param level:
+    :return:
+    """
+    if not isinstance(var_name,str):
+        raise Exception("incorrect call of n0debug(..): argument MUST BE string")
+
+    __f_locals = inspect.currentframe().f_back.f_locals
+    if not var_name in __f_locals:
+        raise Exception("impossible to find object '%s'" % var_name)
+    var_object = __f_locals.get(var_name)
+    n0debug_calc(var_object, var_name, level = level, internal_call = 1)
+# ********************************************************************
 def n0debug_object(object_name: str, level: str = "DEBUG"):
     class_object = inspect.currentframe().f_back.f_locals[object_name]
     class_attribs_methods = set(dir(class_object)) - set(dir(object))
@@ -776,13 +724,15 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
     n0print(to_print, level = level, internal_call = True)
 # ******************************************************************************
 strip_ns = lambda key: key.split(':',1)[1] if ':' in key else key
-# # Sample
-# currency_converter = {"682": "SAR"}
-# keys_for_currency_convertion = {
-    # "currency":         lambda value: currency_converter[value] if value in currency_converter else value,
-    # "source_currency":  lambda value: currency_converter[value] if value in currency_converter else value,
-# }
-# def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
+'''
+# Sample
+currency_converter = {"682": "SAR"}
+keys_for_currency_convertion = {
+    "currency":         lambda value: currency_converter[value] if value in currency_converter else value,
+    "source_currency":  lambda value: currency_converter[value] if value in currency_converter else value,
+}
+def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
+'''
 def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = None):
     if key is not None:
         if exception is not None:
@@ -798,12 +748,7 @@ def convert_to_native_format(value, key = None, exception = None, transform_depe
             return datetime.strptime(value, "%Y-%m-%d")
         if len(value) == 19 and value[4] == '-' and value[7] == '-' and value[10] == ' ' and value[13] == ':' and value[16] == ':':
             return datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
-        # if value.translate(str.maketrans("+-.", "000")).isnumeric():
         if n0isnumeric(value):
-            # if '.' in value:
-            #     return abs(float(value))
-            # else:
-            #     return abs(int(value))
             return abs(float(value))
         else:
             return value.upper()
@@ -811,17 +756,13 @@ def convert_to_native_format(value, key = None, exception = None, transform_depe
         return value
 # ******************************************************************************
 def transform_structure(in_structure, transform_key = strip_ns, transform_value = convert_to_native_format):
-    # n0debug("in_structure")
     if isinstance(in_structure, (dict, OrderedDict, n0dict)):
-        # in_list = (in_structure,)
         in_list = [in_structure]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
     else:
         in_list = in_structure
-    # n0debug("in_list")
     if isinstance(in_list, (list, tuple, n0list)):
         out_list = n0list()
         for in_dict in in_list:
-            # n0debug("in_dict")
             if not isinstance(in_dict, (dict, OrderedDict, n0dict)):
                 raise Exception("transform_structure(): expected to get dict/OrderedDict/n0dict as second level item")
             out_list.append(n0dict())
@@ -932,26 +873,8 @@ def generate_composite_keys(
                         else:
                             tranformed = str(line[key])
                         created_composite_key += key + "=" + tranformed
-            '''
-            if not created_composite_key:
-                for key in line:
-                    if created_composite_key:
-                        created_composite_key += ";"
-                    fullxpath = "%s/%s" % (prefix, key)
-                    transform_i = xpath_match(fullxpath, attributes_to_transform)
-                    if transform_i:
-                        transform_i -= 1
-                        tranformed = transform[transform_i][1](line[key])
-                    else:
-                        tranformed = str(line[key])
-                    created_composite_key += key + "=" + tranformed
-            '''
         else:
             raise Exception("generate_composite_keys(..): expected element dict inside list, but got (%s)%s" % (type(line), line))
-        # if created_composite_key in composite_keys_for_all_lines:
-            # composite_keys_for_all_lines[created_composite_key].append(line_i])
-        # else:
-            # composite_keys_for_all_lines.update({created_composite_key:[line_i]})
         composite_keys_for_all_lines.append((created_composite_key, line_i))
     return composite_keys_for_all_lines
 # ******************************************************************************
@@ -990,11 +913,7 @@ class n0list(list):
                     elif isinstance(value, (list, tuple)):
                         value = n0list(value, recursively = _recursively)
                 self.append(value)
-# TypeError: __init__() should return None, not 'n0list'
-            # return super(n0list, self).__init__(self)
             return None
-        # n0debug("args")
-        # n0debug("kw")
         raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple/n0list)")
     # **************************************************************************
     # n0list. _find()
@@ -1062,16 +981,11 @@ class n0list(list):
                     if isinstance(next_parent_node, n0dict):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                             cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists)
-                            # cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index_str))
                     elif isinstance(next_parent_node, n0list):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                             cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists)
-                            # cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%s]" % (xpath_found_str, node_index_str))
                     else:
                         raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
-
-                    # cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
-                        # cur_not_found_xpath_list = self._find(["[%d]" % i] + xpath_list[1:], parent_node, return_lists, xpath_found_str)
 
                     if not cur_not_found_xpath_list:
                         cur_values.append(cur_value)
@@ -1083,7 +997,7 @@ class n0list(list):
                 if fst_found_xpath_str:
                     return fst_parent_node, fst_node_name_index, cur_values, fst_found_xpath_str,   None
                 else:
-                    return parent_node,     None,               None,       xpath_found_str,        xpath_list
+                    return parent_node,     None,                None,       xpath_found_str,        xpath_list
             else:
                 try:
                     node_index_int = n0eval(node_index_str)
@@ -1191,7 +1105,7 @@ class n0list(list):
     # **************************************************************************
     def __getitem__(self, xpath):
         """
-        Private function:
+        Public function:
         return self[where1/where2/.../whereN]
             AKA
         return self[where1][where2]...[whereN]
@@ -1474,11 +1388,7 @@ class n0list(list):
         other_not_exist_in_self = generate_composite_keys(other, composite_key, prefix, transform)
 
         notmutable__self_not_exist_in_other = self_not_exist_in_other.copy()
-        # notmutable__other_not_exist_in_self = other_not_exist_in_self.copy()
-        # for self_i, composite_key in enumerate(notmutable__self_not_exist_in_other):
         for composite_key, self_i  in notmutable__self_not_exist_in_other:
-            # other_composite_keys = [itm[0] for itm in other_not_exist_in_self]
-            # other_i = other_not_exist_in_self[other_composite_keys.index(composite_key)][1]
             try:
                 other_i = other_not_exist_in_self[[itm[0] for itm in other_not_exist_in_self].index(composite_key)][1]
             except ValueError:
@@ -1641,8 +1551,6 @@ class n0list(list):
         # ######### for key in notmutable__self_not_exist_in_other:
 
         if self_not_exist_in_other:
-            # for composite_key in self_not_exist_in_other:
-                # self_i = notmutable__self_not_exist_in_other.index(composite_key)
             for composite_key, self_i in self_not_exist_in_other:
                 result["differences"].append(
                     "Element %s[%d]='%s' doesn't exist in %s" %
@@ -1653,8 +1561,6 @@ class n0list(list):
                 )
                 result["self_unique"].append((prefix + "[" + str(self_i) + "]", self[self_i]))
         if other_not_exist_in_self:
-            # for composite_key in other_not_exist_in_self:
-                # other_i = notmutable__other_not_exist_in_self.index(composite_key)
             for composite_key, other_i in other_not_exist_in_self:
                 result["differences"].append(
                     "Element %s[%d]='%s' doesn't exist in %s" %
@@ -2091,11 +1997,8 @@ class n0dict(dict):
         """
         result = ""
         if not parent is None:
-            # type_parent = type(parent)
-            # type_parent_str = str(type_parent)
             if isinstance(parent, (dict, OrderedDict, n0dict)):
                 if not len(parent.items()):
-                    # return None
                     return ""
                 for key, value in parent.items():
                     if result:
@@ -2120,17 +2023,13 @@ class n0dict(dict):
                             result += " " * indent + ("<%s>%s</%s>" % (key, str(value), key))
                     elif isinstance(value, (dict, OrderedDict, n0dict)):
                         sub_result = self.__xml(value, indent + inc_indent, inc_indent)
-                        # if "\n" in sub_result: sub_result = "\n" + sub_result
-                        # if sub_result:
-                            # sub_result = "\n" + sub_result
-                            
+
                         attribs = ""
                         attribs_of_current_key = [(__key[1:], __value) for __key,__value in value.items() if __key.startswith("@")]
                         if len(attribs_of_current_key):
                             for __key, __value in attribs_of_current_key:
                                 attribs += " %s=\"%s\"" % (__key, __value)
                         if sub_result:
-                            # result += (" " * indent + "<%s%s>%s\n" + " " * indent + "</%s>") % (key, attribs, sub_result, key)
                             result += (" " * indent + "<%s%s>\n%s\n" + " " * indent + "</%s>") % (key, attribs, sub_result, key)
                         else:
                             result += " " * indent + "<%s%s/>" % (key, attribs)
@@ -2163,36 +2062,7 @@ class n0dict(dict):
         result = ""
         if encoding:
             result = "<?xml version=\"1.0\" encoding=\"%s\"?>\n" % encoding
-
         return result + self.__xml(self, 0, indent)
-        
-        '''
-        for key in self:
-            value = self[key]
-            if isinstance(value, (list, tuple, n0list)):
-                if len(value):
-                    for i, subitm in enumerate(value):
-                        result += "<%s>" % key
-                        sub_result = self.__xml(subitm, indent, indent)
-                        if '<' in sub_result:
-                            sub_result = '\n' + sub_result + '\n'
-                        result += sub_result + "</%s>\n" % key
-                else:
-                    result += "<%s/>\n" % key
-            else:
-                if value is None:
-                    result += "</%s>" % key
-                else:
-                    result += "<%s>" % key
-                    if isinstance(value, (str, int, float)):
-                        # buffer += "<%s>%s</%s>\n" % (key, str(value), key)
-                        result += "%s" % str(value)
-                    else:
-                        result += "\n" + self.__xml(value, indent, indent) + "\n"
-                    result += "</%s>\n" % key
-        '''
-        
-        return result
     # **************************************************************************
     # JSON
     # **************************************************************************
@@ -2378,9 +2248,6 @@ class n0dict(dict):
                 return parent_node, None, parent_node, xpath_found_str, None
             else:
                 return self._find(xpath_found_str, self, return_lists)
-            # raise IndexError("too much '..' in xpath")
-        # if parent_node is None:
-            # parent_node = self
 
         node_name, node_index = split_name_index(xpath_list[0])
         if not node_name and not node_index:
@@ -2423,7 +2290,7 @@ class n0dict(dict):
                     if node_index:
                         return self._find(["[%s]" % str(node_index)] + xpath_list[1:], nxt_parent_node, return_lists, cur_found_xpath_str)
                     else:
-                        return self._find(                        xpath_list[1:], nxt_parent_node, return_lists, cur_found_xpath_str)
+                        return self._find(                             xpath_list[1:], nxt_parent_node, return_lists, cur_found_xpath_str)
                 else:
                     # ================================
                     # FOUND: the last is n0dict
@@ -2651,6 +2518,8 @@ class n0dict(dict):
 
         If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
+        if not xpath:
+            raise Exception("xpath '%s' is not valid" % str(xpath))
         if xpath.startswith('?'):
             xpath = xpath[1:]
             raise_exception = False
@@ -2667,7 +2536,6 @@ class n0dict(dict):
         else:
             try:
                 return super(n0dict, self).__getitem__(xpath)
-            # except IndexError as ex:
             except KeyError as ex:
                 if raise_exception:
                     raise ex
@@ -2677,7 +2545,7 @@ class n0dict(dict):
     # ******************************************************************************
     def __getitem__(self, xpath):
         """
-        Private function:
+        Public function:
         return self[where1/where2/.../whereN]
             AKA
         return self[where1][where2]...[whereN]
@@ -2689,7 +2557,7 @@ class n0dict(dict):
     # **************************************************************************
     def get(self, xpath: str, if_not_found = None):
         """
-        Private function:
+        Public function:
         return self[where1/where2/.../whereN]
             AKA
         return self[where1][where2]...[whereN]
@@ -2701,7 +2569,7 @@ class n0dict(dict):
     # **************************************************************************
     def first(self, xpath: str, if_not_found = None):
         """
-        Private function:
+        Public function:
         return self[where1/where2/.../whereN]
             AKA
         return self[where1][where2]...[whereN]
@@ -2715,7 +2583,7 @@ class n0dict(dict):
         return result
     # **************************************************************************
     # **************************************************************************
-    def _add(self, parent_node, node_name_index: str, xpath_list: list) -> str:
+    def _add(self, parent_node, node_name_index: typing.Union[str, tuple], xpath_list: list) -> typing.Tuple[str, str]:
         if node_name_index:
             # or cur_node_name OR cur_node_index MUST have value, both could NOT have values
             cur_node_name, cur_node_index = split_name_index(node_name_index)
@@ -2841,7 +2709,7 @@ class n0dict(dict):
     # **************************************************************************
     def __setitem__(self, xpath: str, new_value):
         """
-        Private function:
+        Public function:
         self[where1/where2/.../whereN] = value
             AKA
         self[where1][where2]...[whereN] = value
@@ -2892,6 +2760,42 @@ class n0dict(dict):
             super(n0dict, self).__setitem__(xpath, new_value)
 
         return new_value  # For speed
+    # **************************************************************************
+    def update(self, xpath: typing.Union[dict, str], new_value: str = None) -> n0dict:
+        # **********************************************************************
+        def multi_define(xpath, new_value):
+            if isinstance(new_value, (dict, OrderedDict, n0dict)):
+                self[xpath] = n0dict(new_value, recursively=True)
+            elif isinstance(new_value, (list, tuple, n0list)):
+                self[xpath] = n0list(new_value, recursively=True)
+            else:
+                self[xpath] = new_value
+        # **********************************************************************
+        if isinstance(xpath, dict) and new_value is None:
+            for item_key in xpath:
+                multi_define(item_key, xpath[item_key])
+        elif isinstance(xpath, str) and not new_value is None:
+            multi_define(xpath, new_value)
+        else:
+            raise Exception("Received (%s,%s) as argument, but expected (key,value) or (dict)." % (type(xpath), type(new_value)))
+        return self
+    # **************************************************************************
+    def delete(self, xpath: str, recursively: bool = False) -> n0dict:
+        xpath_list = xpath.split('/')
+        for i,last_xpath_index in enumerate(range(len(xpath_list), 0, -1)):
+            parent_node, node_name_index, cur_value, found_xpath_str, not_found_xpath_list = \
+                self._find(xpath_list[0:last_xpath_index], self, return_lists=True)
+            if i == 0 or (
+                recursively and
+                isinstance(cur_value, n0dict) and not len(cur_value)
+            ):
+                del parent_node[node_name_index]
+        return self
+    # **************************************************************************
+    def pop(self, xpath: str, recursively: bool = False) -> typing.Any:
+        result = self[xpath]
+        self.delete(xpath, recursively)
+        return result
     # **************************************************************************
     # **************************************************************************
     def _valid(self, validate, valid_is_expected: bool):
@@ -2967,7 +2871,7 @@ class n0dict(dict):
 from collections.abc import MutableSet
 class OrderedSet(MutableSet):
     def __init__(self, iterable=None):
-        self.end = end = [] 
+        self.end = end = []
         end += [None, end, end]         # sentinel node for doubly linked list
         self.map = {}                   # key --> [key, prev, next]
         if iterable is not None:
@@ -2986,7 +2890,7 @@ class OrderedSet(MutableSet):
             curr[2] = end[1] = self.map[key] = [key, curr, end]
 
     def discard(self, key):
-        if key in self.map:        
+        if key in self.map:
             key, prev, next = self.map.pop(key)
             prev[2] = next
             next[1] = prev
@@ -3058,12 +2962,12 @@ def unpack_references(initial_dict: dict, initial_key: str, recursive: bool = Tr
         node = [node]
     if not isinstance(node, list):
         raise Exception(f"node under {initial_key} must be str or list")
-    
+
     for item in node:
         if item in initial_dict:    # item == reference (key)
             if recursive:
                 collected_set |= unpack_references(initial_dict, item)
-        else:                       # item == component dir 
+        else:                       # item == component dir
             collected_set.add(item)
     return collected_set
 # ******************************************************************************

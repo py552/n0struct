@@ -416,5 +416,45 @@ def main():
     assert (dict_from_xml_empty["root"] is None) == True
     dict_from_xml_empty.to_json(); dict_from_xml_empty.to_xml(); dict_from_xml_empty.to_xpath()
 
+    dict4 = n0dict().update(
+        {
+            "a": 1,
+            "b": {
+                "c": 2,
+                "d": {
+                    "e": 3
+                }
+            }
+        }
+    )
+    n0debug("dict4")
+    assert isinstance(dict4, n0dict) == True
+    assert dict4["a"] == 1
+    assert dict4["b/c"] == 2
+    assert dict4["b/d/e"] == 3
+    assert dict4.get("b/d/e", "ALREADY_DELETED") == 3
+    assert dict4.pop("b/d/e") == 3
+    assert dict4.get("b/d/e", "ALREADY_DELETED") == "ALREADY_DELETED"
+    assert dict4.delete("b/c")["a"] == 1
+    assert dict4.get("b/c", "ALREADY_DELETED") == "ALREADY_DELETED"
+    assert dict4.delete("b/d", recursively=True)
+    assert dict4.get("b", "ALREADY_DELETED") == "ALREADY_DELETED"
+    n0debug("dict4")
+
+    dict5 = n0dict().update(
+        {
+            "a": {
+                "b": {
+                    "c": {
+                        "d": 4
+                    }
+                }
+            }
+        }
+    )
+    n0debug("dict5")
+    dict5.delete("a/b/c/d", recursively=True)
+    n0debug("dict5")
+
 if __name__ == '__main__':
     main()

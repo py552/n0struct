@@ -176,7 +176,12 @@ DESCRIPTION
     #                       def unpack_references(initial_dict: dict, initial_key: str, recursive: bool = True) -> OrderedSet:
     #                       class Git():
     #                   fixed:
-    #                       nolist. _get(..)
+    #                       n0list. _get(..)
+    # 0.45 = 2021-03-05
+    #                   added:
+    #                       n0dict. def update(self, xpath: typing.Union[dict, str], new_value: str = None) -> n0dict:
+    #                       n0dict. def delete(self, xpath: str, recursively: bool = False) -> n0dict:
+    #                       n0dict. def pop(self, xpath: str, recursively: bool = False) -> typing.Any:
 
 PACKAGE CONTENTS
     test (package)
@@ -364,7 +369,7 @@ CLASSES
      |  Methods defined here:
      |  
      |  __getitem__(self, xpath)
-     |      Private function:
+     |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
@@ -382,7 +387,7 @@ CLASSES
      |          recursively = None/False/0 => don't convert subnodes into n0list/n0dict
      |  
      |  __setitem__(self, xpath: 'str', new_value)
-     |      Private function:
+     |      Public function:
      |      self[where1/where2/.../whereN] = value
      |          AKA
      |      self[where1][where2]...[whereN] = value
@@ -420,18 +425,21 @@ CLASSES
      |  any_valid(self, validate)
      |      # **************************************************************************
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x00000264B6864C10>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x000001DC9FF73C10>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. compare(..)
      |      # **************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x00000264B6864B80>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  delete(self, xpath: 'str', recursively: 'bool' = False) -> 'n0dict'
+     |      # **************************************************************************
+     |  
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x000001DC9FF73B80>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # **************************************************************************
      |  
      |  first(self, xpath: 'str', if_not_found=None)
-     |      Private function:
+     |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
@@ -440,7 +448,7 @@ CLASSES
      |      If self[where1/where2/.../whereN] is list, thet the first element will be returned
      |  
      |  get(self, xpath: 'str', if_not_found=None)
-     |      Private function:
+     |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
@@ -461,11 +469,15 @@ CLASSES
      |  isExist(self, xpath) -> 'n0dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x00000264B6866B80>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x000001DC9FF75B80>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  is_exist(self, xpath: 'str') -> 'bool'
      |      Public function: return True, if self[xpath] exists
+     |  
+     |  pop(self, xpath: 'str', recursively: 'bool' = False) -> 'typing.Any'
+     |      D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
+     |      If key is not found, d is returned if given, otherwise KeyError is raised
      |  
      |  to_json(self, indent: 'int' = 4) -> 'str'
      |      Public function: export self into json result string
@@ -475,6 +487,12 @@ CLASSES
      |  
      |  to_xpath(self, mode: 'int' = None) -> 'str'
      |      Public function: collect elements xpath starts from root and print with indents
+     |  
+     |  update(self, xpath: 'typing.Union[dict, str]', new_value: 'str' = None) -> 'n0dict'
+     |      D.update([E, ]**F) -> None.  Update D from dict/iterable E and F.
+     |      If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
+     |      If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
+     |      In either case, this is followed by: for k in F:  D[k] = F[k]
      |  
      |  update_extend(self, other)
      |      # **************************************************************************
@@ -573,10 +591,6 @@ CLASSES
      |  keys(...)
      |      D.keys() -> a set-like object providing a view on D's keys
      |  
-     |  pop(...)
-     |      D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
-     |      If key is not found, d is returned if given, otherwise KeyError is raised
-     |  
      |  popitem(self, /)
      |      Remove and return a (key, value) pair as a 2-tuple.
      |      
@@ -587,12 +601,6 @@ CLASSES
      |      Insert key with a value of default if key is not in the dictionary.
      |      
      |      Return the value for key if key is in the dictionary, else default.
-     |  
-     |  update(...)
-     |      D.update([E, ]**F) -> None.  Update D from dict/iterable E and F.
-     |      If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
-     |      If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
-     |      In either case, this is followed by: for k in F:  D[k] = F[k]
      |  
      |  values(...)
      |      D.values() -> an object providing a view on D's values
@@ -632,7 +640,7 @@ CLASSES
      |      Return key in self.
      |  
      |  __getitem__(self, xpath)
-     |      Private function:
+     |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
@@ -866,8 +874,6 @@ CLASSES
 
 FUNCTIONS
     convert_to_native_format(value, key=None, exception=None, transform_depends_of_key=None)
-        # }
-        # def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
     
     date_ddmmyyyy(now: 'typing.Union[datetime, None]' = None, day_delta: 'int' = 0, month_delta: 'int' = 0) -> 'str'
         :param day_delta:
@@ -968,7 +974,7 @@ FUNCTIONS
         :return:
     
     n0debug_object(object_name: 'str', level: 'str' = 'DEBUG')
-        # ******************************************************************************
+        # ********************************************************************
     
     n0eval(_str: 'str') -> 'typing.Union[int, float, typing.Any]'
         # ********************************************************************
@@ -1033,7 +1039,7 @@ FUNCTIONS
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
         # ********************************************************************
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x00000264B6864430>, transform_value=<function convert_to_native_format at 0x00000264B68644C0>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x000001DC9FF73430>, transform_value=<function convert_to_native_format at 0x000001DC9FF734C0>)
         # ******************************************************************************
     
     unpack_references(initial_dict: 'dict', initial_key: 'str', recursive: 'bool' = True) -> 'OrderedSet'
