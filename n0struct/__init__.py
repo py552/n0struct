@@ -176,6 +176,7 @@
 #                       n0dict. def update(self, xpath: typing.Union[dict, str], new_value: str = None) -> n0dict:
 #                       n0dict. def delete(self, xpath: str, recursively: bool = False) -> n0dict:
 #                       n0dict. def pop(self, xpath: str, recursively: bool = False) -> typing.Any:
+# 0.46 = 2021-07-21 optimized for debugging
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -553,6 +554,7 @@ def get_key_by_value(dict_: dict, value_: typing.Any):
     return {value: key for key, value in dict_.items()}[value_]
 # ********************************************************************
 # __prev_end = "\n"
+__debug_showobjecttype = True
 __debug_showobjectid = True
 __main_log_filename = None
 def init_logger(
@@ -608,6 +610,8 @@ def n0print(
     :param internal_call:
     :return: None
     """
+    
+    '''
     if internal_call:  # Called from n0debug|n0debug_calc|n0debug_object
         try:
             frameinfo = inspect.stack()[3]
@@ -615,14 +619,22 @@ def n0print(
             try:
                 frameinfo = inspect.stack()[2]
             except:
-                frameinfo = inspect.stack()[1]
+                try:
+                    frameinfo = inspect.stack()[1]
+                except:
+                    try:
+                        frameinfo = inspect.stack()[0]
+                    except:
+                        frameinfo = None
     else:
         frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
+    '''
+    
     logger.opt(depth=1+internal_call).log(level,
         (text if text else "")
     )
 # ********************************************************************
-def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = True, __indent_size: int = 4):
+def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = None, __indent_size: int = 4, __quotes:str = '"'):
     """
     :param item:
     :param indent_:
@@ -642,10 +654,15 @@ def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = True, __indent
             if result:
                 result += "," + indent()
             if isinstance(item, dict):
-                result += "\"" + sub_item + "\":" + (" " if __indent_size else "") + n0pretty(item[sub_item], indent_ + 1, show_type, __indent_size)  # json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes
+                result += __quotes + sub_item + __quotes + ":" + (" " if __indent_size else "")
+                sub_item_value = n0pretty(item[sub_item], indent_ + 1, show_type, __indent_size, __quotes)  
+                # to mitigate json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes, __quotes == "\""
+                if isinstance(sub_item_value, str):
+                    sub_item_value = __quotes + sub_item_value + __quotes
+                result += sub_item_value
             else:
-                result += n0pretty(sub_item, indent_ + 1, show_type, __indent_size)
-        if show_type:
+                result += n0pretty(sub_item, indent_ + 1, show_type, __indent_size, __quotes)
+        if show_type or __debug_showobjecttype:
             result_type = str(type(item)) + ("%s%d%s " % (brackets[0], len(item), brackets[1])) + brackets[0]
         else:
             result_type = brackets[0]
@@ -654,10 +671,10 @@ def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = True, __indent
         else:
             result = result_type + result
         result += brackets[1]
-    elif isinstance(item, str):
-        result = '"' + item.replace('"', '\\"') + '"'
+    elif isinstance(item, str) and not indent_:
+        result = "'" + item.replace("'", "\\'") + "'"
     elif item is None:
-        result = '"N0ne"'  # json.decoder.JSONDecodeError: Expecting value
+        result = 'N0ne'  # json.decoder.JSONDecodeError: Expecting value
     else:
         result = str(item)
     return result
@@ -672,10 +689,14 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
     :param level:
     :return:
     """
+    prefix = str(type(var_object)) if __debug_showobjecttype else "" + \
+             " id=%s" % id(var_object) if __debug_showobjectid else ""
+    if prefix:
+        prefix = "(" + prefix + ")"
+    
     n0print(
-        "(%s%s)%s == %s" % (
-            type(var_object),
-            (" id=%s" % id(var_object)) if __debug_showobjectid else "",
+        "%s%s == %s" % (
+            prefix,
             var_name,
             n0pretty(var_object)
         ),
@@ -706,8 +727,13 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
     class_attribs_methods = set(dir(class_object)) - set(dir(object))
     class_attribs = set()
     class_methods = set()
-    to_print = "(%s id=%s)%s = \n" % (type(class_object), id(class_object), object_name)
-
+    
+    prefix = str(type(class_object)) if __debug_showobjecttype else "" + \
+             " id=%s" % id(class_object) if __debug_showobjectid else ""
+    if prefix:
+        prefix = "(" + prefix + ")"
+    to_print = "%s%s = \n" % (prefix, object_name)
+    
     for attrib_name in class_attribs_methods:
         attrib = getattr(class_object, attrib_name)
         if callable(attrib):
@@ -720,7 +746,12 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
 
     for attrib_name in class_attribs:
         attrib = getattr(class_object, attrib_name)
-        to_print += "=== (%s id=%s)%s = %s\n" % (type(attrib), id(attrib), attrib_name, n0pretty(attrib))
+        prefix = str(type(attrib)) if __debug_showobjecttype else "" + \
+                 " id=%s" % id(attrib) if __debug_showobjectid else ""
+        if prefix:
+            prefix = "(" + prefix + ")"
+        to_print += "=== %s%s = %s\n" % (prefix, attrib_name, n0pretty(attrib))
+        
     n0print(to_print, level = level, internal_call = True)
 # ******************************************************************************
 strip_ns = lambda key: key.split(':',1)[1] if ':' in key else key
@@ -2088,19 +2119,19 @@ class n0dict(dict):
                             sub_result += (" " * (indent + inc_indent) + "[\n%s\n" + " " * (
                                     indent + inc_indent) + "]") % sub_sub_result
                 if sub_result:
-                    result += (" " * indent + "\"%s\": [\n%s\n" + " " * indent + "]") % (key, sub_result)
+                    result += (" " * indent + '"%s": [\n%s\n' + " " * indent + "]") % (key, sub_result)
                 else:
-                    result += " " * indent + "\"%s\": null" % key
+                    result += " " * indent + '"%s": null' % key
             elif isinstance(value, str):
-                result += " " * indent + ("\"%s\": \"%s\"" % (key, value))
+                result += " " * indent + ('"%s": "%s"' % (key, value))
             elif isinstance(value, (n0dict, dict, OrderedDict)):
                 sub_result = self.__json(value, indent + inc_indent, inc_indent)
                 if sub_result:
-                    result += (" " * indent + "\"%s\": {\n%s\n" + " " * indent + "}") % (key, sub_result)
+                    result += (" " * indent + '"%s": {\n%s\n' + " " * indent + "}") % (key, sub_result)
                 else:
-                    result += " " * indent + "\"%s\": null" % key
+                    result +=  " " * indent + '"%s": null' % key
             elif value is None:
-                result += " " * indent + "\"%s\": null" % key
+                result += " " * indent + '"%s": null' % key
             else:
                 raise Exception("Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
         return result
