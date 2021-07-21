@@ -183,6 +183,7 @@ DESCRIPTION
     #                       n0dict. def delete(self, xpath: str, recursively: bool = False) -> n0dict:
     #                       n0dict. def pop(self, xpath: str, recursively: bool = False) -> typing.Any:
     # 0.46 = 2021-07-21 optimized for debugging
+    # 0.46 = 2021-07-21 fix for n0pretty()
 
 PACKAGE CONTENTS
     test (package)

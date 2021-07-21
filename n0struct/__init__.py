@@ -177,6 +177,7 @@
 #                       n0dict. def delete(self, xpath: str, recursively: bool = False) -> n0dict:
 #                       n0dict. def pop(self, xpath: str, recursively: bool = False) -> typing.Any:
 # 0.46 = 2021-07-21 optimized for debugging
+# 0.46 = 2021-07-21 fix for n0pretty()
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -662,7 +663,7 @@ def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = None, __indent
                 result += sub_item_value
             else:
                 result += n0pretty(sub_item, indent_ + 1, show_type, __indent_size, __quotes)
-        if show_type or __debug_showobjecttype:
+        if show_type or (show_type is None and __debug_showobjecttype):
             result_type = str(type(item)) + ("%s%d%s " % (brackets[0], len(item), brackets[1])) + brackets[0]
         else:
             result_type = brackets[0]
