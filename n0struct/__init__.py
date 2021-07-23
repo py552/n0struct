@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # 0.01 = 2020-07-25 = Initial version
 # 0.02 = 2020-07-26 = Enhancements
 # 0.03 = 2020-08-02 = Huge enhancements
@@ -177,12 +178,18 @@
 #                       n0dict. def delete(self, xpath: str, recursively: bool = False) -> n0dict:
 #                       n0dict. def pop(self, xpath: str, recursively: bool = False) -> typing.Any:
 # 0.46 = 2021-07-21 optimized for debugging
-# 0.46 = 2021-07-21 fix for n0pretty()
+# 0.47 = 2021-07-21 fix for n0pretty()
+# 0.48 = 2021-07-22
+#                   added:
+#                       def mask_number(not_masked_number: str):
+#                       def unmask_number(masked_number: str):
+#                       def mask_pan(buffer: str):
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
 import os
 import inspect
+import re
 
 # from typing import Any, Union, Dict, Tuple, List, Set, FrozenSet, NewType, Sequence
 import typing
@@ -611,7 +618,7 @@ def n0print(
     :param internal_call:
     :return: None
     """
-    
+
     '''
     if internal_call:  # Called from n0debug|n0debug_calc|n0debug_object
         try:
@@ -630,7 +637,7 @@ def n0print(
     else:
         frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
     '''
-    
+
     logger.opt(depth=1+internal_call).log(level,
         (text if text else "")
     )
@@ -656,7 +663,7 @@ def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = None, __indent
                 result += "," + indent()
             if isinstance(item, dict):
                 result += __quotes + sub_item + __quotes + ":" + (" " if __indent_size else "")
-                sub_item_value = n0pretty(item[sub_item], indent_ + 1, show_type, __indent_size, __quotes)  
+                sub_item_value = n0pretty(item[sub_item], indent_ + 1, show_type, __indent_size, __quotes)
                 # to mitigate json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes, __quotes == "\""
                 if isinstance(sub_item_value, str):
                     sub_item_value = __quotes + sub_item_value + __quotes
@@ -694,7 +701,7 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
              " id=%s" % id(var_object) if __debug_showobjectid else ""
     if prefix:
         prefix = "(" + prefix + ")"
-    
+
     n0print(
         "%s%s == %s" % (
             prefix,
@@ -728,13 +735,13 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
     class_attribs_methods = set(dir(class_object)) - set(dir(object))
     class_attribs = set()
     class_methods = set()
-    
+
     prefix = str(type(class_object)) if __debug_showobjecttype else "" + \
              " id=%s" % id(class_object) if __debug_showobjectid else ""
     if prefix:
         prefix = "(" + prefix + ")"
     to_print = "%s%s = \n" % (prefix, object_name)
-    
+
     for attrib_name in class_attribs_methods:
         attrib = getattr(class_object, attrib_name)
         if callable(attrib):
@@ -752,7 +759,7 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
         if prefix:
             prefix = "(" + prefix + ")"
         to_print += "=== %s%s = %s\n" % (prefix, attrib_name, n0pretty(attrib))
-        
+
     n0print(to_print, level = level, internal_call = True)
 # ******************************************************************************
 strip_ns = lambda key: key.split(':',1)[1] if ':' in key else key
@@ -3070,3 +3077,111 @@ class Git():
 # ******************************************************************************
 # ******************************************************************************
 # ******************************************************************************
+def split_pair(in_str: str, separator: str, transform1: callable = lambda x:x, transform2: callable = lambda x:x, default_element: int = 1) -> tuple:
+    """
+    split_pair(in_str: str, separator: str, transform1: callable = lambda x:x, transform2: callable = lambda x:x, default_element: int = 1) -> tuple:
+    
+    split string into 2 sub strings in any cases:
+        '' by '://'                                     => (None,   None)
+        'www.aaa.com' by '://'                          => (None,   'www.aaa.com')
+        'https://www.aaa.com' by '://'                  => ('http', 'www.aaa.com')
+        'www.aaa.com',default_element = 0 by '/'        => ('www.aaa.com')
+        'www.aaa.com/path',default_element = 0 by '/'   => ('www.aaa.com', 'path')
+    """
+    if not in_str:
+        return transform1(None), transform2(None)
+
+    str_parts = in_str.split(separator, 1)
+    if len(str_parts) == 1:
+        if default_element:
+            # second (right) element is default
+            return transform1(None), transform2(str_parts[0])
+        else:
+            # first (left) element is default
+            return transform1(str_parts[0]), transform2(None)
+    return transform1(str_parts[0]), transform2(str_parts[1])
+# ******************************************************************************
+# ******************************************************************************
+def join_triplets(in_list: typing.Union[None, str, tuple, list], level = 0) -> str:
+    """
+    join_triplets(in_list: typing.Union[None, str, tuple, list], level = 0) -> str:
+    
+    join elements with middle sepataror:
+        [elem1, separator, elem2]   => elem1, separator, elem2
+        [elem1, separator, None]    => elem1
+        [None, separator, elem2]    => elem2
+    """
+    if isinstance(in_list, str) or in_list is None:
+        return in_list or ""
+    elif not isinstance(in_list, (tuple, list)):
+        raise Exception(f"{type(in_list)} '{in_list}' should be None|str|tuple|list")
+    elif not len(in_list):
+        return ""
+    elif len(in_list) > 3:
+        raise Exception(f"'{in_list}' should consist not more 3 elements")
+    else:
+        out_list = []
+        for item in in_list:
+            out_list.append(join_triplets(item, level+1))
+
+        if len(in_list) == 3:
+            if isinstance(in_list[1], str):
+                result = out_list[0] +  (out_list[1] if out_list[0] and out_list[2] else "") + out_list[2]
+            else:
+                if not isinstance(in_list[1], (tuple, list)) or not len(in_list[1]) in (1,2):
+                    raise Exception(f"{type(in_list[1])} '{in_list[1]}' is not correct separator")
+                if len(in_list[1]) == 2 and not in_list[1][0]:
+                    result = out_list[0] +  (out_list[1] if out_list[2] else "") + out_list[2]
+                else:
+                    result = out_list[0] +  (out_list[1] if out_list[0] else "") + out_list[2]
+        else:
+            result = "".join(out_list)
+
+        return result
+# ******************************************************************************
+# ******************************************************************************
+def mask_number(not_masked_number: str):
+    """
+    Public function: convert numbers into similar looks letters
+    """
+    not_masked_number = str(not_masked_number)
+    return not_masked_number \
+                    .replace("0","o") \
+                    .replace("1","i") \
+                    .replace("2","Z") \
+                    .replace("3","З") \
+                    .replace("4","Ч") \
+                    .replace("5","S") \
+                    .replace("6","b") \
+                    .replace("7","T") \
+                    .replace("8","B") \
+                    .replace("9","g")
+# ******************************************************************************
+def unmask_number(masked_number: str):
+    """
+    Public function: convert letters into similar looks numbers
+    """
+    return masked_number \
+                    .replace("o","0") \
+                    .replace("O","0") \
+                    .replace("i","1") \
+                    .replace("I","1") \
+                    .replace("l","1") \
+                    .replace("z","2") \
+                    .replace("Z","2") \
+                    .replace("З","3") \
+                    .replace("Ч","4") \
+                    .replace("s","5") \
+                    .replace("S","5") \
+                    .replace("b","6") \
+                    .replace("T","7") \
+                    .replace("B","8") \
+                    .replace("g","9")
+# ******************************************************************************
+compiled_regexp_mask_pan = re.compile("(([^0-9]|^)?(000)?[456][0-9]{5})([0-9]{6})([0-9]{4})([^0-9]|$)?")
+def mask_pan(buffer: str):
+    """
+    Public function: mask PANs in buffer
+    """
+    return compiled_regexp_mask_pan.sub(r"\1******\5\6", buffer)
+# ####################################################################################################################################################
