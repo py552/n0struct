@@ -190,6 +190,7 @@ DESCRIPTION
     #                       def mask_number(not_masked_number: str):
     #                       def unmask_number(masked_number: str):
     #                       def mask_pan(buffer: str):
+    # 0.49 = 2021-07-23 fix for n0pretty()
 
 PACKAGE CONTENTS
     test (package)
@@ -1052,7 +1053,7 @@ FUNCTIONS
         # ********************************************************************
         # ********************************************************************
     
-    split_pair(in_str: 'str', separator: 'str', transform1: 'callable' = <function <lambda> at 0x0000000003564430>, transform2: 'callable' = <function <lambda> at 0x0000000003564700>, default_element: 'int' = 1) -> 'tuple'
+    split_pair(in_str: 'str', separator: 'str', transform1: 'callable' = <function <lambda> at 0x0000000003565430>, transform2: 'callable' = <function <lambda> at 0x0000000003565700>, default_element: 'int' = 1) -> 'tuple'
         split_pair(in_str: str, separator: str, transform1: callable = lambda x:x, transform2: callable = lambda x:x, default_element: int = 1) -> tuple:
         
         split string into 2 sub strings in any cases:
@@ -1071,7 +1072,7 @@ FUNCTIONS
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
         # ********************************************************************
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x000000000355DCA0>, transform_value=<function convert_to_native_format at 0x000000000355DD30>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x000000000355ECA0>, transform_value=<function convert_to_native_format at 0x000000000355ED30>)
         # ******************************************************************************
     
     unmask_number(masked_number: 'str')

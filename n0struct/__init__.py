@@ -184,6 +184,7 @@
 #                       def mask_number(not_masked_number: str):
 #                       def unmask_number(masked_number: str):
 #                       def mask_pan(buffer: str):
+# 0.49 = 2021-07-23 fix for n0pretty()
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -665,8 +666,9 @@ def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = None, __indent
                 result += __quotes + sub_item + __quotes + ":" + (" " if __indent_size else "")
                 sub_item_value = n0pretty(item[sub_item], indent_ + 1, show_type, __indent_size, __quotes)
                 # to mitigate json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes, __quotes == "\""
-                if isinstance(sub_item_value, str):
+                if isinstance(item[sub_item], str):
                     sub_item_value = __quotes + sub_item_value + __quotes
+                        
                 result += sub_item_value
             else:
                 result += n0pretty(sub_item, indent_ + 1, show_type, __indent_size, __quotes)
