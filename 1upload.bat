@@ -3,8 +3,10 @@
 REM python -m pip install --upgrade pip
 REM python -m pip install --upgrade setuptools wheel
 REM python -m pip install twine
-REM python -m pip install venv
-REM python -m pip install keyring
+REM echo XXX | keyring set pypi pythonist552-test
+REM echo YYY | keyring set pypi pythonist552
+REM python -m pip install pytest
+REM python -m pip install -r requirements.txt 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Unit testing before building
 echo **********************************************************************
@@ -19,7 +21,7 @@ call generate_pydoc.bat
 set "mydir=%~dp0"
 set "mydir=%mydir:~0,-1%"
 for /f %%i in ("%mydir%") do set "mydir=%%~ni"
-for /f %%i in ('setup.py --name') do set "myprj=%%i"
+for /f %%i in ('python setup.py --name') do set "myprj=%%i"
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Increment revision in VERSION
 if not exist "VERSION" echo.0.1.-1> VERSION
@@ -46,6 +48,7 @@ call :init_credentials
 echo **********************************************************************
 echo *** twine upload --username %USERNAME% --password XXX %test_upload% dist/*
 echo **********************************************************************
+if "%PASSWORD%"=="" echo PASSWORD for pypi is not set. Continue is terminated. && exit
 python -m twine upload --username %USERNAME% --password %PASSWORD% %test_upload% dist/*
 call :clean
 

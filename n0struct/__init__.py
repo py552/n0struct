@@ -185,6 +185,8 @@
 #                       def unmask_number(masked_number: str):
 #                       def mask_pan(buffer: str):
 # 0.49 = 2021-07-23 fix for n0pretty()
+# 0.50 = 2021-08-04 Impossible easely adopt for 3.6, only for 3.7, because of some modules (for example: immutables) 
+#                   are not precompiled for 3.6 at pypi.org. So installing of Visual C/C++ (or MinGW) is required.
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -378,7 +380,9 @@ def timestamp() -> str:
     """
     :return: now -> str 13 characters YYMMDD_HHMMSS
     """
-    return (timestamp := date_now())[2:8] + "_" + timestamp[8:14]
+    # return (timestamp := date_now())[2:8] + "_" + timestamp[8:14] # Only for 3.8+
+    timestamp = date_now()
+    return timestamp[2:8] + "_" + timestamp[8:14]
 # ********************************************************************
 def date_iso(now: typing.Union[datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -3046,7 +3050,9 @@ class Git():
         if isinstance(git_arguments, str):
             git_arguments = git_arguments.split(" ")
         n0print("*** git %s" % " ".join(git_arguments))
-        p = subprocess.Popen(   (command_line:=["git",] + git_arguments),
+        # p = subprocess.Popen(   (command_line:=["git",] + git_arguments), # Only for 3.8+
+        command_line = ["git",]
+        p = subprocess.Popen(   (command_line + git_arguments),
                                 cwd = self._repository_path,
                                 stdout = subprocess.PIPE,
                                 stderr = subprocess.PIPE,
@@ -3054,7 +3060,9 @@ class Git():
                                 encoding = "utf-8",
         )
         try:
-            outs, errs = p.communicate(timeout=(timeout_sec:=600))
+            # outs, errs = p.communicate(timeout=(timeout_sec:=600)) # Only for 3.8+
+            timeout_sec = 600
+            outs, errs = p.communicate(timeout = timeout_sec)
         except subprocess.TimeoutExpired:
             raise Exception("Timeout %d seconds were happened during execution:\n%s>%s" % (timeout_sec, self._repository_path, " ".join(command_line)))
             os.kill(p.pid, signal.CTRL_BREAK_EVENT)
