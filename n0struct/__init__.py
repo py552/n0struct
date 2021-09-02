@@ -131,7 +131,7 @@
 #                       n0dict. __init__(..): xmltodict.parse(args[0], dict_constuctor = n0dict),
 # 0.40 = 2021-01-08
 #                   enhanced:
-#                       def n0pretty(item, indent_: int = 0, show_type:bool = True):
+#                       n0pretty(item, indent_: int = 0, show_type:bool = True):
 #                   added:
 #                       n0dict. first(..)
 #                       n0list. __getitem__(..)
@@ -191,6 +191,11 @@
 #                   fixed:
 #                       n0dict. to_xpath(): prevent xpath generating for empty structures
 #                       n0dict. _find(): changing incoming var name found_xpath_str -> xpath_found_str
+# 0.52 = 2021-09-02
+#                   added/enhanced:
+#                       n0dict. __init__(file="{file_path}")
+#                       n0dict. to_json/n0pretty(pairs_in_one_line=True)
+#                   fixed:
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -653,7 +658,14 @@ def n0print(
         (text if text else "")
     )
 # ********************************************************************
-def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = None, __indent_size: int = 4, __quotes:str = '"'):
+def n0pretty(
+            item: typing.Any, 
+            indent_: int = 0, 
+            show_type:bool = None, 
+            __indent_size: int = 4, 
+            __quotes:str = '"', 
+            pairs_in_one_line = False
+ ):
     """
     :param item:
     :param indent_:
@@ -669,19 +681,64 @@ def n0pretty(item: typing.Any, indent_: int = 0, show_type:bool = None, __indent
         elif isinstance(item, tuple):
             brackets = "()"
         result = ""
-        for sub_item in item:
-            if result:
-                result += "," + indent()
-            if isinstance(item, dict):
-                result += __quotes + sub_item + __quotes + ":" + (" " if __indent_size else "")
-                sub_item_value = n0pretty(item[sub_item], indent_ + 1, show_type, __indent_size, __quotes)
-                # to mitigate json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes, __quotes == "\""
-                if isinstance(item[sub_item], str):
-                    sub_item_value = __quotes + sub_item_value + __quotes
-
-                result += sub_item_value
-            else:
-                result += n0pretty(sub_item, indent_ + 1, show_type, __indent_size, __quotes)
+        # ######################################################################
+        def is_list_with_pairs(item: list) -> Union[None, dict]:
+            element_names = {} # {keyname1: max_len_of_values1, keyname2: max_len_of_values2}
+            for sub_item in item:
+                if not isinstance(sub_item, dict) or len(sub_item) > 2:
+                    return None # Sub element not dictionary with 2 or less elements
+                for key in sub_item:
+                    if not key in element_names:
+                        element_names.update({key: 0})
+                    if len(element_names) > 2:
+                        return None # Not more that 2 elems could be condensed into one line
+                    sub_item_key_value = sub_item[key] or ""
+                    if not isinstance(sub_item_key_value, (str, int, float)):
+                        return None # Sub element has complex structure
+                    element_names.update({
+                        key: max(
+                                element_names[key], 
+                                len(str(sub_item_key_value)) + (2*len(__quotes) if isinstance(sub_item_key_value, str) else 0)
+                             )
+                    })
+            return element_names
+            
+        if isinstance(item, list) and (element_names := is_list_with_pairs(item)):
+            # list of dict with 0-1-2 _same_ elements in each
+            for sub_item in item:
+                if result:
+                    result += "," + indent()
+                result += "{"
+                sub_result = ""
+                for key in element_names:
+                    if key in sub_item:
+                        sub_item_key_value = str(sub_item[key])
+                        if isinstance(sub_item_key_value, str):
+                            sub_item_key_value = __quotes + sub_item_key_value + __quotes
+                        sub_item_key_value = sub_item_key_value.ljust(element_names[key])
+                        
+                        if sub_result: 
+                            sub_result += ", "
+                        sub_result += f" {__quotes}{key}{__quotes}: {sub_item_key_value}"
+                    else:
+                        if sub_result: 
+                            sub_result += "  "
+                        sub_result += " "*(1+len(__quotes)+len(key)+len(__quotes)+len(": ")+element_names[key])
+                result += sub_result + " }"
+        else:
+            # dict or list with complex or not pairs structure
+            for sub_item in item:
+                if result:
+                    result += "," + indent()
+                if isinstance(item, dict):
+                    result += __quotes + sub_item + __quotes + ":" + (" " if __indent_size else "")
+                    sub_item_value = n0pretty(item[sub_item], indent_ + 1, show_type, __indent_size, __quotes)
+                    # to mitigate json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes, __quotes == "\""
+                    if isinstance(item[sub_item], str):
+                        sub_item_value = __quotes + sub_item_value + __quotes
+                    result += sub_item_value
+                else:
+                    result += n0pretty(sub_item, indent_ + 1, show_type, __indent_size, __quotes)
         if show_type or (show_type is None and __debug_showobjecttype):
             result_type = str(type(item)) + ("%s%d%s " % (brackets[0], len(item), brackets[1])) + brackets[0]
         else:
@@ -1696,15 +1753,30 @@ class n0dict(dict):
 
         :param args:
         :param kw:
-            recursively = None/False/0 => don't convert subnodes into n0list/n0dict
+            force_dict=True     =>  leave JSON subnodes as dict.
+                                    by default all dictionaries will be converted into n0dict,
+                                               but all lists will stay lists. lists could be 
+                                               converted into n0list only with recursively=True.
+            force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
+            
+            recursively=True    =>  convert all dict/list/XML-text/JSON-text subnodes into n0dict/n0list.
+                                    by default all subnodes are dict/list, only the root node is n0dict/n0list.
+            recursively=True is required to have ability to apply n0dict/n0list speci-fic methods to all subnodes, 
+            not only to the root node. This option will impact to memory consumation.
+            
+            file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
         """
-        _object_pairs_hook = n0dict if kw.pop("force_n0dict", None) else None
         len__args = len(args)
         if not len__args:
-            return super(n0dict, self).__init__(*args, **kw)
+            _file = kw.pop("file", None)
+            if _file:
+                with open(_file, "rt") as in_filehandler:
+                    return self.__init__(in_filehandler.read(), **kw)
+            else:
+                return super(n0dict, self).__init__(*args, **kw)
         if len__args == 1:
-            # Not kw.pop()! Because of "recursively" will be provided deeper into _constructor(..)
-            _recursively = kw.get("recursively", False) or False
+            # Not kw.pop()! Because of in case of .get "recursively" will be provided deeper into _constructor(..)
+            _recursively = kw.get("recursively", False)
             if isinstance(args[0], str):
                 if _recursively:
                     _constructor = self.__init__
@@ -1719,6 +1791,8 @@ class n0dict(dict):
                         **kw
                     )
                 elif args[0].strip()[0] == "{":
+                    # By default all JSON dictinaries will be converted into n0dict 
+                    _object_pairs_hook = None if kw.pop("force_dict", None) else n0dict
                     return _constructor(
                         json.loads(args[0], object_pairs_hook = _object_pairs_hook),
                         **kw
@@ -1733,10 +1807,6 @@ class n0dict(dict):
                             value = n0list(value, recursively = _recursively)
                     self.update({key: value})
                 return None
-            elif isinstance(args[0], zip):
-                for key, value in args[0]:
-                    self.update({key: value})
-                return None
             elif isinstance(args[0], (list, tuple)):
                 # [key1, value1, key2, value2, ..., keyN, valueN]
                 if (len(args[0]) % 2) == 0 and all(isinstance(itm, str) for itm in args[0][0::2]):
@@ -1748,6 +1818,10 @@ class n0dict(dict):
                     for pair in args[0]:
                         self.update({pair[0]: pair[1]})
                     return None
+            elif isinstance(args[0], zip):
+                for key, value in args[0]:
+                    self.update({key: value})
+                return None
         raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/OrderedDict/n0dict/zip or paired tuple/list)")
     # **************************************************************************
     def update_extend(self, other):
@@ -2157,11 +2231,11 @@ class n0dict(dict):
                 raise Exception("Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
         return result
 
-    def to_json(self, indent: int = 4) -> str:
+    def to_json(self, indent: int = 4, pairs_in_one_line = False) -> str:
         """
         Public function: export self into json result string
         """
-        return n0pretty(self, show_type=False, __indent_size = indent)
+        return n0pretty(self, show_type=False, __indent_size = indent, pairs_in_one_line = pairs_in_one_line)
     # **************************************************************************
     # **************************************************************************
     def isExist(self, xpath) -> n0dict:

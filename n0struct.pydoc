@@ -137,7 +137,7 @@ DESCRIPTION
     #                       n0dict. __init__(..): xmltodict.parse(args[0], dict_constuctor = n0dict),
     # 0.40 = 2021-01-08
     #                   enhanced:
-    #                       def n0pretty(item, indent_: int = 0, show_type:bool = True):
+    #                       n0pretty(item, indent_: int = 0, show_type:bool = True):
     #                   added:
     #                       n0dict. first(..)
     #                       n0list. __getitem__(..)
@@ -197,6 +197,11 @@ DESCRIPTION
     #                   fixed:
     #                       n0dict. to_xpath(): prevent xpath generating for empty structures
     #                       n0dict. _find(): changing incoming var name found_xpath_str -> xpath_found_str
+    # 0.52 = 2021-09-02
+    #                   added/enhanced:
+    #                       n0dict. __init__(file="{file_path}")
+    #                       n0dict. to_json/n0pretty(pairs_in_one_line=True)
+    #                   fixed:
 
 PACKAGE CONTENTS
     test (package)
@@ -399,7 +404,18 @@ CLASSES
      |      
      |      :param args:
      |      :param kw:
-     |          recursively = None/False/0 => don't convert subnodes into n0list/n0dict
+     |          force_dict=True     =>  leave JSON subnodes as dict.
+     |                                  by default all dictionaries will be converted into n0dict,
+     |                                             but all lists will stay lists. lists could be 
+     |                                             converted into n0list only with recursively=True.
+     |          force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
+     |          
+     |          recursively=True    =>  convert all dict/list/XML-text/JSON-text subnodes into n0dict/n0list.
+     |                                  by default all subnodes are dict/list, only the root node is n0dict/n0list.
+     |          recursively=True is required to have ability to apply n0dict/n0list speci-fic methods to all subnodes, 
+     |          not only to the root node. This option will impact to memory consumation.
+     |          
+     |          file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
      |  
      |  __setitem__(self, xpath: 'str', new_value)
      |      Public function:
@@ -440,7 +456,7 @@ CLASSES
      |  any_valid(self, validate)
      |      # **************************************************************************
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0347DB20>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x03FDEB68>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. compare(..)
      |      # **************************************************************************
@@ -448,7 +464,7 @@ CLASSES
      |  delete(self, xpath: 'str', recursively: 'bool' = False) -> 'n0dict'
      |      # **************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0347DAD8>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x03FDEB20>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # **************************************************************************
@@ -484,7 +500,7 @@ CLASSES
      |  isExist(self, xpath) -> 'n0dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x034802F8>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x03FE2340>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  is_exist(self, xpath: 'str') -> 'bool'
@@ -494,7 +510,7 @@ CLASSES
      |      D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
      |      If key is not found, d is returned if given, otherwise KeyError is raised
      |  
-     |  to_json(self, indent: 'int' = 4) -> 'str'
+     |  to_json(self, indent: 'int' = 4, pairs_in_one_line=False) -> 'str'
      |      Public function: export self into json result string
      |  
      |  to_xml(self, indent: 'int' = 4, encoding: 'str' = 'utf-8') -> 'str'
@@ -1013,7 +1029,7 @@ FUNCTIONS
         # ********************************************************************
         # ********************************************************************
     
-    n0pretty(item: 'typing.Any', indent_: 'int' = 0, show_type: 'bool' = None, __indent_size: 'int' = 4, __quotes: 'str' = '"')
+    n0pretty(item: 'typing.Any', indent_: 'int' = 0, show_type: 'bool' = None, __indent_size: 'int' = 4, __quotes: 'str' = '"', pairs_in_one_line=False)
         :param item:
         :param indent_:
         :return:
@@ -1059,7 +1075,7 @@ FUNCTIONS
         # ********************************************************************
         # ********************************************************************
     
-    split_pair(in_str: 'str', separator: 'str', transform1: 'callable' = <function <lambda> at 0x03480AD8>, transform2: 'callable' = <function <lambda> at 0x03480C40>, default_element: 'int' = 1) -> 'tuple'
+    split_pair(in_str: 'str', separator: 'str', transform1: 'callable' = <function <lambda> at 0x03FE2B20>, transform2: 'callable' = <function <lambda> at 0x03FE2C88>, default_element: 'int' = 1) -> 'tuple'
         split_pair(in_str: str, separator: str, transform1: callable = lambda x:x, transform2: callable = lambda x:x, default_element: int = 1) -> tuple:
         
         split string into 2 sub strings in any cases:
@@ -1078,7 +1094,7 @@ FUNCTIONS
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
         # ********************************************************************
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x0347D730>, transform_value=<function convert_to_native_format at 0x0347D778>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x03FDE778>, transform_value=<function convert_to_native_format at 0x03FDE7C0>)
         # ******************************************************************************
     
     unmask_number(masked_number: 'str')
