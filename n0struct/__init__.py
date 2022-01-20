@@ -195,7 +195,7 @@
 #                   added/enhanced:
 #                       n0dict. __init__(file="{file_path}")
 #                       n0dict. to_json/n0pretty(pairs_in_one_line=True)
-#                   fixed:
+# 0.53 = 2022-01-20 enhanced: n0dict. to_json/n0pretty(skip_none = False, skip_empty_arrays = False, skip_simple_types = True, auto_quotes = True)
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -659,20 +659,62 @@ def n0print(
     )
 # ********************************************************************
 def n0pretty(
-            item: typing.Any, 
-            indent_: int = 0, 
-            show_type:bool = None, 
-            __indent_size: int = 4, 
-            __quotes:str = '"', 
-            pairs_in_one_line = False
+            item: typing.Any,
+            indent_: int = 0,
+            show_type:bool = None,
+            __indent_size: int = 4,
+            __quotes:str = '"',
+            pairs_in_one_line = True,
+            skip_none = False,
+            skip_empty_arrays = False,
+            skip_simple_types = True,
+            auto_quotes = True,
  ):
     """
     :param item:
     :param indent_:
     :return:
     """
+    # ######################################################################
     def indent(indent__ = indent_):
         return "\n" + (" " * (indent__ + 1) * __indent_size) if __indent_size else ""
+    # ######################################################################
+    def is_list_with_pairs(item: list) -> Union[None, dict]:
+        element_names = {} # {keyname1: max_len_of_values1, keyname2: max_len_of_values2}
+        for sub_item in item:
+            if not isinstance(sub_item, dict) or len(sub_item) > 2:
+                return None # Sub element not dictionary with 2 or less elements
+            for key in sub_item:
+                if not key in element_names:
+                    element_names.update({key: 0})
+                if len(element_names) > 2:
+                    return None # Not more that 2 elems could be condensed into one line
+                sub_item_key_value = sub_item[key] or ""
+                if not isinstance(sub_item_key_value, (str, int, float)):
+                    return None # Sub element has complex structure
+
+                # construct presentation string
+                presentation_string = \
+                    (
+                        f"{type(sub_item_key_value)}{len(sub_item_key_value)} "
+                        if (show_type or (show_type is None and __debug_showobjecttype))
+                        and (not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float)))
+                        else ""
+                    ) + \
+                    (
+                        f"{__quotes}{sub_item_key_value}{__quotes}"
+                        if isinstance(sub_item_key_value, str)
+                        else "{str(sub_item_key_value)}"
+                    )
+                element_names.update({key: max(element_names[key], len(presentation_string))})
+        return element_names  # Returns dict {"name of key": max length of presented (+type+len and etc) value assosiated with key}
+    # ######################################################################
+    if not __indent_size:
+        pairs_in_one_line = False
+    if auto_quotes:
+        __quotes = '"'
+
+    result_type = ""
 
     if isinstance(item, (list, tuple, dict, set, frozenset)):
         brackets = "[]"
@@ -681,78 +723,125 @@ def n0pretty(
         elif isinstance(item, tuple):
             brackets = "()"
         result = ""
-        # ######################################################################
-        def is_list_with_pairs(item: list) -> Union[None, dict]:
-            element_names = {} # {keyname1: max_len_of_values1, keyname2: max_len_of_values2}
-            for sub_item in item:
-                if not isinstance(sub_item, dict) or len(sub_item) > 2:
-                    return None # Sub element not dictionary with 2 or less elements
-                for key in sub_item:
-                    if not key in element_names:
-                        element_names.update({key: 0})
-                    if len(element_names) > 2:
-                        return None # Not more that 2 elems could be condensed into one line
-                    sub_item_key_value = sub_item[key] or ""
-                    if not isinstance(sub_item_key_value, (str, int, float)):
-                        return None # Sub element has complex structure
-                    element_names.update({
-                        key: max(
-                                element_names[key], 
-                                len(str(sub_item_key_value)) + (2*len(__quotes) if isinstance(sub_item_key_value, str) else 0)
-                             )
-                    })
-            return element_names
-            
-        if isinstance(item, list) and (element_names := is_list_with_pairs(item)):
+
+        if pairs_in_one_line and isinstance(item, (list, tuple)) and (keys_and_max_len_of_value := is_list_with_pairs(item)):
             # list of dict with 0-1-2 _same_ elements in each
             for sub_item in item:
                 if result:
                     result += "," + indent()
                 result += "{"
                 sub_result = ""
-                for key in element_names:
+                for key in keys_and_max_len_of_value:
                     if key in sub_item:
-                        sub_item_key_value = str(sub_item[key])
+                        sub_item_key_value = sub_item[key]
+
+                        key_type = ""
+                        value_type = ""
+                        if show_type or (show_type is None and __debug_showobjecttype):
+                            if not skip_simple_types or not isinstance(key, (str, int, float)):
+                                key_type = f"{type(key)}"
+                                if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
+                                    key_type += f"{len(key)} "
+
+                            if not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float)):
+                                value_type = f"{type(sub_item_key_value)}"
+                                if isinstance(sub_item_key_value, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
+                                    value_type += f"{len(sub_item_key_value)} "
+
                         if isinstance(sub_item_key_value, str):
-                            sub_item_key_value = __quotes + sub_item_key_value + __quotes
-                        sub_item_key_value = sub_item_key_value.ljust(element_names[key])
-                        
-                        if sub_result: 
-                            sub_result += ", "
-                        sub_result += f" {__quotes}{key}{__quotes}: {sub_item_key_value}"
+                            sub_item_key_value = f"{__quotes}{sub_item_key_value}{__quotes}"
+                        else:
+                            sub_item_key_value = str(sub_item_key_value)
+                        sub_item_key_value = f"{value_type}{sub_item_key_value}".ljust(keys_and_max_len_of_value[key])
+
+                        if isinstance(key, str):
+                            key = f"{__quotes}{key}{__quotes}"
+                        else:
+                            key = str(key)
+
+                        if sub_result:
+                            sub_result += ","
+                        sub_result += f" {key_type}{key}: {sub_item_key_value}"
                     else:
-                        if sub_result: 
-                            sub_result += "  "
-                        sub_result += " "*(1+len(__quotes)+len(key)+len(__quotes)+len(": ")+element_names[key])
+                        if sub_result:
+                            sub_result += " "
+                        sub_result += " "*(1+len(__quotes)+len(key)+len(__quotes)+len(": ")+keys_and_max_len_of_value[key])
                 result += sub_result + " }"
         else:
-            # dict or list with complex or not pairs structure
+            # dict, set, frozenset or list/tuple with complex or not paired structure
             for sub_item in item:
-                if result:
-                    result += "," + indent()
                 if isinstance(item, dict):
-                    result += __quotes + sub_item + __quotes + ":" + (" " if __indent_size else "")
-                    sub_item_value = n0pretty(item[sub_item], indent_ + 1, show_type, __indent_size, __quotes)
-                    # to mitigate json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes, __quotes == "\""
-                    if isinstance(item[sub_item], str):
-                        sub_item_value = __quotes + sub_item_value + __quotes
-                    result += sub_item_value
+                    key = sub_item
+                    sub_item_value = n0pretty(
+                                            item[key],
+                                            indent_ + 1,
+                                            show_type,
+                                            __indent_size,
+                                            __quotes,
+                                            pairs_in_one_line,
+                                            skip_none,
+                                            skip_empty_arrays
+                    )
+
+                    key_type = ""
+                    if (show_type or (show_type is None and __debug_showobjecttype)) \
+                    and (not skip_simple_types or not isinstance(key, (str, int, float))):
+                        key_type = f"{type(key)}"
+                        if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
+                            key_type += f"{len(key)} "
+                    if isinstance(key, str):
+                        key = f"{__quotes}{key}{__quotes}"
+                    else:
+                        key = str(key)
+                    if sub_item_value:
+                        sub_item_value = f"{key_type}{key}:" + (" " if __indent_size else "") + sub_item_value
                 else:
-                    result += n0pretty(sub_item, indent_ + 1, show_type, __indent_size, __quotes)
-        if show_type or (show_type is None and __debug_showobjecttype):
-            result_type = str(type(item)) + ("%s%d%s " % (brackets[0], len(item), brackets[1])) + brackets[0]
+                    sub_item_value = n0pretty(
+                                            sub_item,
+                                            indent_ + 1,
+                                            show_type,
+                                            __indent_size,
+                                            __quotes,
+                                            pairs_in_one_line,
+                                            skip_none,
+                                            skip_empty_arrays,
+                    )
+
+                if not sub_item_value is None:
+                    if result:
+                        result += "," + indent()
+                    result += sub_item_value
+
+        if (show_type or (show_type is None and __debug_showobjecttype)) \
+        and (not skip_simple_types or not isinstance(item, (str, int, float))):
+            result_type = f"{type(item)}{brackets[0]}{len(item)}{brackets[1]} "
+
+        if result or skip_empty_arrays == False:
+            if "\n" in result:
+                result = result_type + brackets[0] + indent() + result + indent(indent_ - 1) + brackets[1]
+            else:
+                result = result_type + brackets[0] + result + brackets[1]
+
+        if not result and (skip_none or skip_empty_arrays):
+            result = None
+
+    elif isinstance(item, str):
+        if (show_type or (show_type is None and __debug_showobjecttype)) \
+        and (not skip_simple_types or not isinstance(item, (str, int, float))):
+            result_type = f"{type(item)}{len(item)} "
+        if auto_quotes and '"' in item and not "'" in item:
+                result = result_type + f"'{item}'"
         else:
-            result_type = brackets[0]
-        if result and "\n" in result:
-            result = result_type + indent() + result + indent(indent_ - 1)
-        else:
-            result = result_type + result
-        result += brackets[1]
-    elif isinstance(item, str) and not indent_:
-        result = "'" + item.replace("'", "\\'") + "'"
+            result = result_type + __quotes + item.replace(__quotes, '\\"' if __quotes == '"' else "\\'") + __quotes
     elif item is None:
-        result = 'N0ne'  # json.decoder.JSONDecodeError: Expecting value
+        if skip_none:
+            result = None
+        else:
+            result = "null"  # json.decoder.JSONDecodeError: Expecting value
     else:
+        if (show_type or (show_type is None and __debug_showobjecttype)) \
+        and (not skip_simple_types or not isinstance(item, (str, int, float))):
+            result_type = f"{type(item)} "
         result = str(item)
     return result
 # ******************************************************************************
@@ -1755,15 +1844,15 @@ class n0dict(dict):
         :param kw:
             force_dict=True     =>  leave JSON subnodes as dict.
                                     by default all dictionaries will be converted into n0dict,
-                                               but all lists will stay lists. lists could be 
+                                               but all lists will stay lists. lists could be
                                                converted into n0list only with recursively=True.
             force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
-            
+
             recursively=True    =>  convert all dict/list/XML-text/JSON-text subnodes into n0dict/n0list.
                                     by default all subnodes are dict/list, only the root node is n0dict/n0list.
-            recursively=True is required to have ability to apply n0dict/n0list speci-fic methods to all subnodes, 
+            recursively=True is required to have ability to apply n0dict/n0list speci-fic methods to all subnodes,
             not only to the root node. This option will impact to memory consumation.
-            
+
             file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
         """
         len__args = len(args)
@@ -1791,7 +1880,7 @@ class n0dict(dict):
                         **kw
                     )
                 elif args[0].strip()[0] == "{":
-                    # By default all JSON dictinaries will be converted into n0dict 
+                    # By default all JSON dictinaries will be converted into n0dict
                     _object_pairs_hook = None if kw.pop("force_dict", None) else n0dict
                     return _constructor(
                         json.loads(args[0], object_pairs_hook = _object_pairs_hook),
@@ -2231,11 +2320,19 @@ class n0dict(dict):
                 raise Exception("Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
         return result
 
-    def to_json(self, indent: int = 4, pairs_in_one_line = False) -> str:
+    def to_json(self, indent: int = 4, pairs_in_one_line = True, skip_none = False, skip_empty_arrays = False) -> str:
         """
         Public function: export self into json result string
         """
-        return n0pretty(self, show_type=False, __indent_size = indent, pairs_in_one_line = pairs_in_one_line)
+        return n0pretty(self,
+                        show_type=False,
+                        auto_quotes=False,
+                        __quotes='"',
+                        __indent_size=indent,
+                        pairs_in_one_line=pairs_in_one_line,
+                        skip_none=skip_none,
+                        skip_empty_arrays=skip_empty_arrays
+        )
     # **************************************************************************
     # **************************************************************************
     def isExist(self, xpath) -> n0dict:
@@ -2370,7 +2467,7 @@ class n0dict(dict):
             # debug_count = debug_count # Dummy operation just for break point
         # n0debug_calc(debug_count, "debug_count")
         # n0debug("parent_node")
-        
+
         if isinstance(xpath_list, str):
             xpath_list = [itm.strip() for itm in xpath_list.replace("][","]/[").split('/') if itm]
         if not isinstance(xpath_list, (list, tuple)):
