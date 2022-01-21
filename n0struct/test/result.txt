@@ -1,21 +1,21 @@
 INFO    |test_n0struct.py:main:126|================================================================================
-DEBUG   |test_n0struct.py:main:127|<n0struct.n0dict> dict1 == <n0struct.n0dict 1> {
-    "C": <n0struct.n0list 3> [
-        <n0struct.n0dict 5> {
+DEBUG   |test_n0struct.py:main:127|dict1 == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "C": <n0struct.n0struct_n0list_n0dict.n0list 3> [
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -25,23 +25,23 @@ DEBUG   |test_n0struct.py:main:127|<n0struct.n0dict> dict1 == <n0struct.n0dict 1
     ]
 }
 INFO    |test_n0struct.py:main:128|================================================================================
-DEBUG   |test_n0struct.py:main:129|<n0struct.n0dict> dict2 == <n0struct.n0dict 1> {
-    "C": <n0struct.n0list 3> [
-        <n0struct.n0dict 5> {
+DEBUG   |test_n0struct.py:main:129|dict2 == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "C": <n0struct.n0struct_n0list_n0dict.n0list 3> [
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 99
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -51,23 +51,23 @@ DEBUG   |test_n0struct.py:main:129|<n0struct.n0dict> dict2 == <n0struct.n0dict 1
     ]
 }
 INFO    |test_n0struct.py:main:130|================================================================================
-DEBUG   |test_n0struct.py:main:131|<n0struct.n0dict> dict3 == <n0struct.n0dict 1> {
-    "C": <n0struct.n0list 3> [
-        <n0struct.n0dict 5> {
+DEBUG   |test_n0struct.py:main:131|dict3 == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "C": <n0struct.n0struct_n0list_n0dict.n0list 3> [
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 99
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -93,9 +93,9 @@ INFO    |test_n0struct.py:test_SortedLists:61|*** self_unique
 INFO    |test_n0struct.py:test_SortedLists:61|*** other_unique
 INFO    |test_n0struct.py:test_SortedLists:61|*** difftypes
 INFO    |test_n0struct.py:test_SortedLists:65|================================================================================
-DEBUG   |test_n0struct.py:test_SortedLists:66|<n0struct.n0dict> differences1_direct_compare == <n0struct.n0dict 5> {
-    "differences": <n0struct.n0list 1> ['Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 '],
-    "not_equal": <n0struct.n0list 1> [
+DEBUG   |test_n0struct.py:test_SortedLists:66|differences1_direct_compare == <n0struct.n0struct_n0list_n0dict.n0dict 5> {
+    "differences": <n0struct.n0struct_n0list_n0dict.n0list 1> ['Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 '],
+    "not_equal": <n0struct.n0struct_n0list_n0dict.n0list 1> [
         <tuple 2> (
             "/C[1]/value2",
             <list 3> [
@@ -105,16 +105,16 @@ DEBUG   |test_n0struct.py:test_SortedLists:66|<n0struct.n0dict> differences1_dir
             ]
         )
     ],
-    "self_unique": <n0struct.n0list 0> [],
-    "other_unique": <n0struct.n0list 0> [],
-    "difftypes": <n0struct.n0list 0> []
+    "self_unique": <n0struct.n0struct_n0list_n0dict.n0list 0> [],
+    "other_unique": <n0struct.n0struct_n0list_n0dict.n0list 0> [],
+    "difftypes": <n0struct.n0struct_n0list_n0dict.n0list 0> []
 }
-DEBUG   |test_n0struct.py:test_SortedLists:67|<int> notemptyitems(differences1_direct_compare["differences"]) == 1
-DEBUG   |test_n0struct.py:test_SortedLists:69|<int> notemptyitems(differences1_direct_compare["not_equal"]) == 4
+DEBUG   |test_n0struct.py:test_SortedLists:67|notemptyitems(differences1_direct_compare["differences"]) == 1
+DEBUG   |test_n0struct.py:test_SortedLists:69|notemptyitems(differences1_direct_compare["not_equal"]) == 4
 INFO    |test_n0struct.py:test_SortedLists:75|================================================================================
-DEBUG   |test_n0struct.py:test_SortedLists:76|<n0struct.n0dict> differences2_wise_compare == <n0struct.n0dict 5> {
-    "differences": <n0struct.n0list 1> ['Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 '],
-    "not_equal": <n0struct.n0list 1> [
+DEBUG   |test_n0struct.py:test_SortedLists:76|differences2_wise_compare == <n0struct.n0struct_n0list_n0dict.n0dict 5> {
+    "differences": <n0struct.n0struct_n0list_n0dict.n0list 1> ['Values are different: dict1["C"][1]["value2"]=5 != dict2["C"][1]["value2"]=99 '],
+    "not_equal": <n0struct.n0struct_n0list_n0dict.n0list 1> [
         <tuple 2> (
             "/C[1]/value2",
             <list 3> [
@@ -124,9 +124,9 @@ DEBUG   |test_n0struct.py:test_SortedLists:76|<n0struct.n0dict> differences2_wis
             ]
         )
     ],
-    "self_unique": <n0struct.n0list 0> [],
-    "other_unique": <n0struct.n0list 0> [],
-    "difftypes": <n0struct.n0list 0> []
+    "self_unique": <n0struct.n0struct_n0list_n0dict.n0list 0> [],
+    "other_unique": <n0struct.n0struct_n0list_n0dict.n0list 0> [],
+    "difftypes": <n0struct.n0struct_n0list_n0dict.n0list 0> []
 }
 INFO    |test_n0struct.py:test_UnsortedLists:84|******************************************************************************** 3 = Unsorted list in dictionary = direct_compare
 INFO    |test_n0struct.py:test_UnsortedLists:87|*** differences
@@ -169,8 +169,8 @@ INFO    |test_n0struct.py:test_UnsortedLists:97|*** other_unique
 INFO    |test_n0struct.py:test_UnsortedLists:99|('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
 INFO    |test_n0struct.py:test_UnsortedLists:97|*** difftypes
 INFO    |test_n0struct.py:test_UnsortedLists:101|================================================================================
-DEBUG   |test_n0struct.py:test_UnsortedLists:102|<n0struct.n0dict> differences1_direct_compare == <n0struct.n0dict 5> {
-    "differences": <n0struct.n0list 12> [
+DEBUG   |test_n0struct.py:test_UnsortedLists:102|differences1_direct_compare == <n0struct.n0struct_n0list_n0dict.n0dict 5> {
+    "differences": <n0struct.n0struct_n0list_n0dict.n0list 12> [
         'Values are different: dict1["C"][0]["a"]=1 != dict3["C"][0]["a"]=7 ',
         'Values are different: dict1["C"][0]["b"]=2 != dict3["C"][0]["b"]=8 ',
         'Values are different: dict1["C"][0]["c"]=3 != dict3["C"][0]["c"]=9 ',
@@ -184,7 +184,7 @@ DEBUG   |test_n0struct.py:test_UnsortedLists:102|<n0struct.n0dict> differences1_
         'Values are different: dict1["C"][2]["value2"]=6 != dict3["C"][2]["value2"]=4 ',
         "List dict3[\"C\"] is longer dict1[\"C\"]: dict3[\"C\"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1[\"C\"]"
     ],
-    "not_equal": <n0struct.n0list 11> [
+    "not_equal": <n0struct.n0struct_n0list_n0dict.n0list 11> [
         <tuple 2> (
             "/C[0]/a",
             <list 3> [
@@ -274,11 +274,11 @@ DEBUG   |test_n0struct.py:test_UnsortedLists:102|<n0struct.n0dict> differences1_
             ]
         )
     ],
-    "self_unique": <n0struct.n0list 0> [],
-    "other_unique": <n0struct.n0list 1> [
+    "self_unique": <n0struct.n0struct_n0list_n0dict.n0list 0> [],
+    "other_unique": <n0struct.n0struct_n0list_n0dict.n0list 1> [
         <tuple 2> (
             "/C[3]",
-            <n0struct.n0dict 5> {
+            <n0struct.n0struct_n0list_n0dict.n0dict 5> {
                 "a": 1,
                 "b": 2,
                 "c": 3,
@@ -287,19 +287,19 @@ DEBUG   |test_n0struct.py:test_UnsortedLists:102|<n0struct.n0dict> differences1_
             }
         )
     ],
-    "difftypes": <n0struct.n0list 0> []
+    "difftypes": <n0struct.n0struct_n0list_n0dict.n0list 0> []
 }
-DEBUG   |test_n0struct.py:test_UnsortedLists:103|<int> notemptyitems(differences1_direct_compare["differences"] == 12
-DEBUG   |test_n0struct.py:test_UnsortedLists:105|<int> differences1_direct_compare["not_equal"] == 44
-DEBUG   |test_n0struct.py:test_UnsortedLists:108|<int> notemptyitems(differences1_direct_compare["other_unique"]) == 6
-DEBUG   |test_n0struct.py:test_UnsortedLists:110|<int> notemptyitems(differences1_direct_compare["self_unique"]) == 0
+DEBUG   |test_n0struct.py:test_UnsortedLists:103|notemptyitems(differences1_direct_compare["differences"] == 12
+DEBUG   |test_n0struct.py:test_UnsortedLists:105|differences1_direct_compare["not_equal"] == 44
+DEBUG   |test_n0struct.py:test_UnsortedLists:108|notemptyitems(differences1_direct_compare["other_unique"]) == 6
+DEBUG   |test_n0struct.py:test_UnsortedLists:110|notemptyitems(differences1_direct_compare["self_unique"]) == 0
 INFO    |test_n0struct.py:test_UnsortedLists:113|================================================================================
-DEBUG   |test_n0struct.py:test_UnsortedLists:114|<n0struct.n0dict> differences2_wise_compare == <n0struct.n0dict 5> {
-    "differences": <n0struct.n0list 2> [
+DEBUG   |test_n0struct.py:test_UnsortedLists:114|differences2_wise_compare == <n0struct.n0struct_n0list_n0dict.n0dict 5> {
+    "differences": <n0struct.n0struct_n0list_n0dict.n0list 2> [
         'Values are different: dict1["C"][1]["value2"]=5 != dict3["C"][1]["value2"]=99 ',
         "Element dict3[\"C\"][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1[\"C\"]"
     ],
-    "not_equal": <n0struct.n0list 1> [
+    "not_equal": <n0struct.n0struct_n0list_n0dict.n0list 1> [
         <tuple 2> (
             "/C[1]/value2",
             <list 3> [
@@ -309,11 +309,11 @@ DEBUG   |test_n0struct.py:test_UnsortedLists:114|<n0struct.n0dict> differences2_
             ]
         )
     ],
-    "self_unique": <n0struct.n0list 0> [],
-    "other_unique": <n0struct.n0list 1> [
+    "self_unique": <n0struct.n0struct_n0list_n0dict.n0list 0> [],
+    "other_unique": <n0struct.n0struct_n0list_n0dict.n0list 1> [
         <tuple 2> (
             "/C[3]",
-            <n0struct.n0dict 5> {
+            <n0struct.n0struct_n0list_n0dict.n0dict 5> {
                 "a": 1,
                 "b": 2,
                 "c": 3,
@@ -322,29 +322,29 @@ DEBUG   |test_n0struct.py:test_UnsortedLists:114|<n0struct.n0dict> differences2_
             }
         )
     ],
-    "difftypes": <n0struct.n0list 0> []
+    "difftypes": <n0struct.n0struct_n0list_n0dict.n0list 0> []
 }
-DEBUG   |test_n0struct.py:test_UnsortedLists:115|<int> notemptyitems(differences2_wise_compare["differences"] == 2
-DEBUG   |test_n0struct.py:test_UnsortedLists:117|<int> differences2_wise_compare["not_equal"] == 4
-DEBUG   |test_n0struct.py:test_UnsortedLists:120|<int> notemptyitems(differences2_wise_compare["other_unique"]) == 6
-DEBUG   |test_n0struct.py:test_UnsortedLists:122|<int> notemptyitems(differences2_wise_compare["self_unique"]) == 0
-DEBUG   |test_n0struct.py:main:136|<n0struct.n0dict> dict1 == <n0struct.n0dict 1> {
-    "C": <n0struct.n0list 3> [
-        <n0struct.n0dict 5> {
+DEBUG   |test_n0struct.py:test_UnsortedLists:115|notemptyitems(differences2_wise_compare["differences"] == 2
+DEBUG   |test_n0struct.py:test_UnsortedLists:117|differences2_wise_compare["not_equal"] == 4
+DEBUG   |test_n0struct.py:test_UnsortedLists:120|notemptyitems(differences2_wise_compare["other_unique"]) == 6
+DEBUG   |test_n0struct.py:test_UnsortedLists:122|notemptyitems(differences2_wise_compare["self_unique"]) == 0
+DEBUG   |test_n0struct.py:main:136|dict1 == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "C": <n0struct.n0struct_n0list_n0dict.n0list 3> [
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -353,26 +353,23 @@ DEBUG   |test_n0struct.py:main:136|<n0struct.n0dict> dict1 == <n0struct.n0dict 1
         }
     ]
 }
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"value": <n0struct.n0dict 0> {}}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"value": 2}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "value"
-DEBUG   |test_n0struct.py:main:138|<n0struct.n0dict> dict1 == <n0struct.n0dict 2> {
-    "C": <n0struct.n0list 3> [
-        <n0struct.n0dict 5> {
+DEBUG   |test_n0struct.py:main:138|dict1 == <n0struct.n0struct_n0list_n0dict.n0dict 2> {
+    "C": <n0struct.n0struct_n0list_n0dict.n0list 3> [
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -380,31 +377,25 @@ DEBUG   |test_n0struct.py:main:138|<n0struct.n0dict> dict1 == <n0struct.n0dict 2
             "value2": 6
         }
     ],
-    "moreone": <n0struct.n0dict 1> {"node": <n0struct.n0list 1> [{ "value": {} }]}
+    "moreone": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"node": <n0struct.n0struct_n0list_n0dict.n0list 1> [{ "value": {} }]}
 }
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"value": <n0struct.n0dict 0> {}}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"value": 2}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "value"
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"value": null}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"value": 2}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "value"
-DEBUG   |test_n0struct.py:main:140|<n0struct.n0dict> dict1 == <n0struct.n0dict 2> {
-    "C": <n0struct.n0list 3> [
-        <n0struct.n0dict 5> {
+DEBUG   |test_n0struct.py:main:140|dict1 == <n0struct.n0struct_n0list_n0dict.n0dict 2> {
+    "C": <n0struct.n0struct_n0list_n0dict.n0list 3> [
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        <n0struct.n0dict 5> {
+        <n0struct.n0struct_n0list_n0dict.n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -412,54 +403,13 @@ DEBUG   |test_n0struct.py:main:140|<n0struct.n0dict> dict1 == <n0struct.n0dict 2
             "value2": 6
         }
     ],
-    "moreone": <n0struct.n0dict 1> {
-        "node": <n0struct.n0list 2> [
+    "moreone": <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+        "node": <n0struct.n0struct_n0list_n0dict.n0list 2> [
             { "value": {} },
             { "value": <NoneType> None }
         ]
     }
 }
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"value": <n0struct.n0dict 0> {}}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 2> {
-    "value": 25,
-    "code": 6
-}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "value"
-DEBUG   |__init__.py:n0pretty:742|<str> key == "code"
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"value": null}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 2> {
-    "value": 25,
-    "code": 6
-}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "value"
-DEBUG   |__init__.py:n0pretty:742|<str> key == "code"
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"value": ""}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 2> {
-    "value": 25,
-    "code": 6
-}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "value"
-DEBUG   |__init__.py:n0pretty:742|<str> key == "code"
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 2> {
-    "value": 2,
-    "code": "two"
-}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 2> {
-    "value": 25,
-    "code": 6
-}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "value"
-DEBUG   |__init__.py:n0pretty:742|<str> key == "code"
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 2> {
-    "value": 4,
-    "code": "four"
-}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 2> {
-    "value": 25,
-    "code": 6
-}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "value"
-DEBUG   |__init__.py:n0pretty:742|<str> key == "code"
 INFO    |test_n0struct.py:main:157|{
     "C": [
         {
@@ -545,123 +495,99 @@ INFO    |test_n0struct.py:main:187|7
 INFO    |test_n0struct.py:main:190|7
 INFO    |test_n0struct.py:main:193|
 INFO    |test_n0struct.py:main:196|
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"j": 6}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"j": 25}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "j"
-DEBUG   |test_n0struct.py:main:228|<n0struct.n0dict> dict_from_json_default == <n0struct.n0dict 1> {
-    "root": <n0struct.n0dict 3> {
+DEBUG   |test_n0struct.py:main:228|dict_from_json_default == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "root": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
         "a": 1.0,
-        "b": <n0struct.n0dict 2> {
+        "b": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
             "c": 2,
-            "d": <n0struct.n0dict 3> {
-                "e": <n0struct.n0dict 1> {"f": 3},
-                "g": <n0struct.n0list 2> [
+            "d": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
+                "e": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"f": 3},
+                "g": <n0struct.n0struct_n0list_n0dict.n0list 2> [
                     "4",
-                    <n0struct.n0dict 1> {"h": 5}
+                    <n0struct.n0struct_n0list_n0dict.n0dict 1> {"h": 5}
                 ],
-                "i": <n0struct.n0list 1> [{ "j": 6                         }]
+                "i": <n0struct.n0struct_n0list_n0dict.n0list 1> [{ "j": 6                         }]
             }
         },
-        "k": <n0struct.n0list 2> [
+        "k": <n0struct.n0struct_n0list_n0dict.n0list 2> [
             7,
             8
         ]
     }
 }
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"j": 6}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"j": 25}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "j"
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"j": 6}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"j": 25}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "j"
-DEBUG   |test_n0struct.py:main:248|<n0struct.n0dict> dict_from_json_force_n0dict == <n0struct.n0dict 2> {
-    "root": <n0struct.n0dict 3> {
+DEBUG   |test_n0struct.py:main:248|dict_from_json_force_n0dict == <n0struct.n0struct_n0list_n0dict.n0dict 2> {
+    "root": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
         "a": 1.0,
-        "b": <n0struct.n0dict 2> {
+        "b": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
             "c": 2,
-            "d": <n0struct.n0dict 3> {
-                "e": <n0struct.n0dict 1> {"f": 3},
-                "g": <n0struct.n0list 2> [
+            "d": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
+                "e": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"f": 3},
+                "g": <n0struct.n0struct_n0list_n0dict.n0list 2> [
                     "4",
-                    <n0struct.n0dict 1> {"h": 5}
+                    <n0struct.n0struct_n0list_n0dict.n0dict 1> {"h": 5}
                 ],
-                "i": <n0struct.n0list 1> [{ "j": 6                         }]
+                "i": <n0struct.n0struct_n0list_n0dict.n0list 1> [{ "j": 6                         }]
             }
         },
-        "k": <n0struct.n0list 2> [
+        "k": <n0struct.n0struct_n0list_n0dict.n0list 2> [
             7,
             8
         ]
     },
     "force_n0dict": True
 }
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"j": 6}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"j": 25}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "j"
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"j": 6}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"j": 25}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "j"
-DEBUG   |test_n0struct.py:main:268|<n0struct.n0dict> dict_from_json_recursevely == <n0struct.n0dict 1> {
-    "root": <n0struct.n0dict 3> {
+DEBUG   |test_n0struct.py:main:268|dict_from_json_recursevely == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "root": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
         "a": 1.0,
-        "b": <n0struct.n0dict 2> {
+        "b": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
             "c": 2,
-            "d": <n0struct.n0dict 3> {
-                "e": <n0struct.n0dict 1> {"f": 3},
-                "g": <n0struct.n0list 2> [
+            "d": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
+                "e": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"f": 3},
+                "g": <n0struct.n0struct_n0list_n0dict.n0list 2> [
                     "4",
-                    <n0struct.n0dict 1> {"h": 5}
+                    <n0struct.n0struct_n0list_n0dict.n0dict 1> {"h": 5}
                 ],
-                "i": <n0struct.n0list 1> [{ "j": 6                         }]
+                "i": <n0struct.n0struct_n0list_n0dict.n0list 1> [{ "j": 6                         }]
             }
         },
-        "k": <n0struct.n0list 2> [
+        "k": <n0struct.n0struct_n0list_n0dict.n0list 2> [
             7,
             8
         ]
     }
 }
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"j": 6}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"j": 25}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "j"
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"j": 6}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"j": 25}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "j"
-DEBUG   |test_n0struct.py:main:288|<n0struct.n0dict> dict_from_json_recursevely_force_n0dict == <n0struct.n0dict 1> {
-    "root": <n0struct.n0dict 3> {
+DEBUG   |test_n0struct.py:main:288|dict_from_json_recursevely_force_n0dict == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "root": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
         "a": 1.0,
-        "b": <n0struct.n0dict 2> {
+        "b": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
             "c": 2,
-            "d": <n0struct.n0dict 3> {
-                "e": <n0struct.n0dict 1> {"f": 3},
-                "g": <n0struct.n0list 2> [
+            "d": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
+                "e": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"f": 3},
+                "g": <n0struct.n0struct_n0list_n0dict.n0list 2> [
                     "4",
-                    <n0struct.n0dict 1> {"h": 5}
+                    <n0struct.n0struct_n0list_n0dict.n0dict 1> {"h": 5}
                 ],
-                "i": <n0struct.n0list 1> [{ "j": 6                         }]
+                "i": <n0struct.n0struct_n0list_n0dict.n0list 1> [{ "j": 6                         }]
             }
         },
-        "k": <n0struct.n0list 2> [
+        "k": <n0struct.n0struct_n0list_n0dict.n0list 2> [
             7,
             8
         ]
     }
 }
-DEBUG   |__init__.py:n0pretty:735|<n0struct.n0dict> sub_item == <n0struct.n0dict 1> {"j": 6}
-DEBUG   |__init__.py:n0pretty:740|<dict> keys_and_max_len_of_value == <dict 1> {"j": 25}
-DEBUG   |__init__.py:n0pretty:742|<str> key == "j"
-DEBUG   |test_n0struct.py:main:332|<n0struct.n0dict> dict_from_xml_default == <n0struct.n0dict 1> {
-    "root": <n0struct.n0dict 3> {
+DEBUG   |test_n0struct.py:main:332|dict_from_xml_default == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "root": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
         "a": "1",
-        "b": <n0struct.n0dict 2> {
+        "b": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
             "c": "2",
-            "d": <n0struct.n0dict 3> {
-                "e": <n0struct.n0dict 1> {"f": "3"},
+            "d": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
+                "e": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"f": "3"},
                 "g": <list 2> [
                     "4",
-                    <n0struct.n0dict 1> {"h": "5"}
+                    <n0struct.n0struct_n0list_n0dict.n0dict 1> {"h": "5"}
                 ],
-                "i": <n0struct.n0dict 1> {"j": "6"}
+                "i": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"j": "6"}
             }
         },
         "k": <list 2> [
@@ -670,18 +596,18 @@ DEBUG   |test_n0struct.py:main:332|<n0struct.n0dict> dict_from_xml_default == <n
         ]
     }
 }
-DEBUG   |test_n0struct.py:main:353|<n0struct.n0dict> dict_from_xml_force_n0dict == <n0struct.n0dict 2> {
-    "root": <n0struct.n0dict 3> {
+DEBUG   |test_n0struct.py:main:353|dict_from_xml_force_n0dict == <n0struct.n0struct_n0list_n0dict.n0dict 2> {
+    "root": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
         "a": "1",
-        "b": <n0struct.n0dict 2> {
+        "b": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
             "c": "2",
-            "d": <n0struct.n0dict 3> {
-                "e": <n0struct.n0dict 1> {"f": "3"},
+            "d": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
+                "e": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"f": "3"},
                 "g": <list 2> [
                     "4",
-                    <n0struct.n0dict 1> {"h": "5"}
+                    <n0struct.n0struct_n0list_n0dict.n0dict 1> {"h": "5"}
                 ],
-                "i": <n0struct.n0dict 1> {"j": "6"}
+                "i": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"j": "6"}
             }
         },
         "k": <list 2> [
@@ -691,65 +617,116 @@ DEBUG   |test_n0struct.py:main:353|<n0struct.n0dict> dict_from_xml_force_n0dict 
     },
     "force_n0dict": True
 }
-DEBUG   |test_n0struct.py:main:373|<n0struct.n0dict> dict_from_xml_recursevely == <n0struct.n0dict 1> {
-    "root": <n0struct.n0dict 3> {
+DEBUG   |test_n0struct.py:main:373|dict_from_xml_recursevely == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "root": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
         "a": "1",
-        "b": <n0struct.n0dict 2> {
+        "b": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
             "c": "2",
-            "d": <n0struct.n0dict 3> {
-                "e": <n0struct.n0dict 1> {"f": "3"},
-                "g": <n0struct.n0list 2> [
+            "d": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
+                "e": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"f": "3"},
+                "g": <n0struct.n0struct_n0list_n0dict.n0list 2> [
                     "4",
-                    <n0struct.n0dict 1> {"h": "5"}
+                    <n0struct.n0struct_n0list_n0dict.n0dict 1> {"h": "5"}
                 ],
-                "i": <n0struct.n0dict 1> {"j": "6"}
+                "i": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"j": "6"}
             }
         },
-        "k": <n0struct.n0list 2> [
+        "k": <n0struct.n0struct_n0list_n0dict.n0list 2> [
             "7",
             "8"
         ]
     }
 }
-DEBUG   |test_n0struct.py:main:393|<n0struct.n0dict> dict_from_xml_recursevely_force_n0dict == <n0struct.n0dict 1> {
-    "root": <n0struct.n0dict 3> {
+DEBUG   |test_n0struct.py:main:393|dict_from_xml_recursevely_force_n0dict == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "root": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
         "a": "1",
-        "b": <n0struct.n0dict 2> {
+        "b": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
             "c": "2",
-            "d": <n0struct.n0dict 3> {
-                "e": <n0struct.n0dict 1> {"f": "3"},
-                "g": <n0struct.n0list 2> [
+            "d": <n0struct.n0struct_n0list_n0dict.n0dict 3> {
+                "e": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"f": "3"},
+                "g": <n0struct.n0struct_n0list_n0dict.n0list 2> [
                     "4",
-                    <n0struct.n0dict 1> {"h": "5"}
+                    <n0struct.n0struct_n0list_n0dict.n0dict 1> {"h": "5"}
                 ],
-                "i": <n0struct.n0dict 1> {"j": "6"}
+                "i": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"j": "6"}
             }
         },
-        "k": <n0struct.n0list 2> [
+        "k": <n0struct.n0struct_n0list_n0dict.n0list 2> [
             "7",
             "8"
         ]
     }
 }
-DEBUG   |test_n0struct.py:main:414|<n0struct.n0dict> dict_from_xml_empty == <n0struct.n0dict 1> {"root": null}
-DEBUG   |test_n0struct.py:main:430|<n0struct.n0dict> dict4 == <n0struct.n0dict 2> {
+DEBUG   |test_n0struct.py:main:414|dict_from_xml_empty == <n0struct.n0struct_n0list_n0dict.n0dict 1> {"root": null}
+DEBUG   |test_n0struct.py:main:430|dict4 == <n0struct.n0struct_n0list_n0dict.n0dict 2> {
     "a": 1,
-    "b": <n0struct.n0dict 2> {
+    "b": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
         "c": 2,
-        "d": <n0struct.n0dict 1> {"e": 3}
+        "d": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"e": 3}
     }
 }
-DEBUG   |test_n0struct.py:main:442|<n0struct.n0dict> dict4 == <n0struct.n0dict 1> {"a": 1}
-DEBUG   |test_n0struct.py:main:455|<n0struct.n0dict> dict5 == <n0struct.n0dict 1> {"a": <n0struct.n0dict 1> {"b": <n0struct.n0dict 1> {"c": <n0struct.n0dict 1> {"d": 4}}}}
-DEBUG   |test_n0struct.py:main:457|<n0struct.n0dict> dict5 == <n0struct.n0dict 0> {}
-item=[{'value': {}}]
-item=[{'value': {}}, {'value': None}]
-item=[{'value': {}}, {'value': None}, {'value': ''}, {'value': 2, 'code': 'two'}, {'value': 4, 'code': 'four'}]
-item=[{'j': 6}]
-item=[{'j': 6}]
-item=[{'j': 6}]
-item=[{'j': 6}]
-item=[{'j': 6}]
-item=[{'j': 6}]
-item=[{'j': 6}]
-item=[{'j': 6}]
+DEBUG   |test_n0struct.py:main:442|dict4 == <n0struct.n0struct_n0list_n0dict.n0dict 1> {"a": 1}
+DEBUG   |test_n0struct.py:main:455|dict5 == <n0struct.n0struct_n0list_n0dict.n0dict 1> {"a": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"b": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"c": <n0struct.n0struct_n0list_n0dict.n0dict 1> {"d": 4}}}}
+DEBUG   |test_n0struct.py:main:457|dict5 == <n0struct.n0struct_n0list_n0dict.n0dict 0> {}
+DEBUG   |test_n0struct.py:main:486|dict6 == <n0struct.n0struct_n0list_n0dict.n0dict 1> {
+    "Root": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
+        "Node1": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
+            "Subnode1_1": <n0struct.n0struct_n0list_n0dict.n0list 2> [
+                { "tag": "PARAM1", "value": "VALUE1 from subnode1_1" },
+                { "tag": "PARAM2", "value": "VALUE2 from subnode1_1" }
+            ],
+            "Subnode1_2": <n0struct.n0struct_n0list_n0dict.n0list 2> [
+                { "tag": "PARAM1", "value": "VALUE1 from subnode1_2" },
+                { "tag": "PARAM2", "value": "VALUE2 from subnode1_2" }
+            ]
+        },
+        "Node2": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
+            "Subnode2_1": <n0struct.n0struct_n0list_n0dict.n0list 2> [
+                { "tag": "PARAM1", "value": "VALUE1 from subnode2_1" },
+                { "tag": "PARAM2", "value": "VALUE2 from subnode2_1" }
+            ],
+            "Subnode2_2": <n0struct.n0struct_n0list_n0dict.n0list 2> [
+                { "tag": "PARAM1", "value": "VALUE1 from subnode2_2" },
+                { "tag": "PARAM2", "value": "VALUE2 from subnode2_2" }
+            ]
+        }
+    }
+}
+DEBUG   |test_n0struct.py:main:487| == <dict 1> {
+    "//Root/Node1": <n0struct.n0struct_n0list_n0dict.n0dict 2> {
+        "Subnode1_1": <n0struct.n0struct_n0list_n0dict.n0list 2> [
+            { "tag": "PARAM1", "value": "VALUE1 from subnode1_1" },
+            { "tag": "PARAM2", "value": "VALUE2 from subnode1_1" }
+        ],
+        "Subnode1_2": <n0struct.n0struct_n0list_n0dict.n0list 2> [
+            { "tag": "PARAM1", "value": "VALUE1 from subnode1_2" },
+            { "tag": "PARAM2", "value": "VALUE2 from subnode1_2" }
+        ]
+    }
+}
+DEBUG   |test_n0struct.py:main:488| == <dict 1> {"//Root/Node2/Subnode2_1[0]/value": "VALUE1 from subnode2_1"}
+INFO    |test_n0struct.py:main:514|
+['//Root/Nodes[0][0]/tag']   = "PARAM1"
+['//Root/Nodes[0][0]/value'] = "VALUE1 from subnode0_0"
+['//Root/Nodes[0][1]/tag']   = "PARAM2"
+['//Root/Nodes[0][1]/value'] = "VALUE2 from subnode0_1"
+['//Root/Nodes[1][0]/tag']   = "PARAM1"
+['//Root/Nodes[1][0]/value'] = "VALUE1 from subnode1_0"
+['//Root/Nodes[1][1]/tag']   = "PARAM2"
+['//Root/Nodes[1][1]/value'] = "VALUE2 from subnode1_1"
+['//Root/Nodes[2][0]/tag']   = "PARAM1"
+['//Root/Nodes[2][0]/value'] = "VALUE1 from subnode2_0"
+['//Root/Nodes[2][1]/tag']   = "PARAM2"
+['//Root/Nodes[2][1]/value'] = "VALUE2 from subnode2_1"
+['//Root/Nodes[3][0]/tag']   = "PARAM1"
+['//Root/Nodes[3][0]/value'] = "VALUE1 from subnode3_0"
+['//Root/Nodes[3][1]/tag']   = "PARAM2"
+['//Root/Nodes[3][1]/value'] = "VALUE2 from subnode3_1"
+
+DEBUG   |test_n0struct.py:main:516|"//Root/Nodes/tag[text()==PARAM1]/../value" == <dict 4> {
+    "//Root/Nodes[0][0]/value": "VALUE1 from subnode0_0",
+    "//Root/Nodes[1][0]/value": "VALUE1 from subnode1_0",
+    "//Root/Nodes[2][0]/value": "VALUE1 from subnode2_0",
+    "//Root/Nodes[3][0]/value": "VALUE1 from subnode3_0"
+}
+INFO    |test_n0struct.py:<module>:522|Mission acomplished

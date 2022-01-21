@@ -51,7 +51,7 @@ def test_SortedLists():
         n0print("*"*3 + " " + key)
         for itm in differences1_direct_compare[key]:
             n0print(itm)
-            
+
     n0print("*"*80 + " 2 = Sorted list in dictionary = wise_compare")
     differences2_wise_compare = dict1.compare(dict2, "dict1", "dict2",
         composite_key = ("a", "b", "c"),
@@ -61,7 +61,7 @@ def test_SortedLists():
         n0print("*"*3 + " " + key)
         for itm in differences2_wise_compare[key]:
             n0print(itm)
-            
+
     n0print("="*80)
     n0debug("differences1_direct_compare")
     n0debug_calc(notemptyitems(differences1_direct_compare["differences"]), 'notemptyitems(differences1_direct_compare["differences"])')
@@ -71,7 +71,7 @@ def test_SortedLists():
     assert notemptyitems(differences1_direct_compare["difftypes"]) == 0
     assert notemptyitems(differences1_direct_compare["other_unique"]) == 0
     assert notemptyitems(differences1_direct_compare["self_unique"]) == 0
-            
+
     n0print("="*80)
     n0debug("differences2_wise_compare")
     assert differences1_direct_compare["differences"]     == differences2_wise_compare["differences"]
@@ -87,7 +87,7 @@ def test_UnsortedLists():
         n0print("*"*3 + " " + key)
         for itm in differences1_direct_compare[key]:
             n0print(itm)
-    
+
     n0print("*"*80 + " 4 = Unsorted list in dictionary = compare")
     differences2_wise_compare = dict1.compare(dict3, "dict1", "dict3",
         composite_key = ("a", "b", "c"),
@@ -97,7 +97,7 @@ def test_UnsortedLists():
         n0print("*"*3 + " " + key)
         for itm in differences2_wise_compare[key]:
             n0print(itm)
-            
+
     n0print("="*80)
     n0debug("differences1_direct_compare")
     n0debug_calc(notemptyitems(differences1_direct_compare["differences"]), 'notemptyitems(differences1_direct_compare["differences"]')
@@ -129,7 +129,7 @@ def main():
     n0debug_calc(dict2,"dict2")
     n0print("="*80)
     n0debug_calc(dict2,"dict3")
-    
+
     test_SortedLists()
     test_UnsortedLists()
 
@@ -138,7 +138,7 @@ def main():
     n0debug_calc(dict1,'dict1')
     dict1["moreone/node[new()]/value"] = None
     n0debug_calc(dict1,'dict1')  # Defect: new() has not converted single n0dict node into node[]
-    
+
     dict1["moreone/node[new()]/value"] = ""
     dict1["moreone/node[new()]/value"] = 1
     dict1["moreone/node[last()]/value"] = 2
@@ -178,7 +178,7 @@ def main():
     assert dict1["moreone/node/code[text()='two']/../value"] == [6]
     assert dict1["moreone/node/code[text()=two]/../value"] == [6]
     assert dict1['moreone/node/code[text()="two"]/../value'] == [6]
-    
+
     n0print(dict1["moreone/node[code='two']/value"])
     assert dict1["moreone/node[code='two']/value"] == [6]
 
@@ -186,18 +186,18 @@ def main():
     dict1["moretwo/node/value"] = 7
     n0print(dict1["moretwo/node/code[text()='seven']/../value"])
     assert dict1["moretwo/node/code[text()='seven']/../value"] == 7
-    
+
     n0print(dict1["moretwo/node[code='seven']/value"])
     assert dict1["moretwo/node[code='seven']/value"] == 7
-    
+
     n0print(dict1.get("moretwo/node/code[text()='eight']/../value"))
     assert dict1.get("moretwo/node/code[text()='eight']/../value") is None
-    
+
     n0print(dict1["?moretwo/node/code[text()='eight']/../value"] or None)
     assert (dict1["?moretwo/node/code[text()='eight']/../value"] or None) is None
-    
+
     # set__debug_output(sys.stdout.write)
-    
+
     str_json = """
     {
         "root": {
@@ -283,7 +283,7 @@ def main():
     assert isinstance(dict_from_json_recursevely["root/k[0]"], int) == True # XML supports only str, for JSON int
     assert isinstance(dict_from_json_recursevely["root/k[1]"], int) == True # XML supports only str, for JSON int
     dict_from_json_recursevely.to_json(); dict_from_json_recursevely.to_xml(); dict_from_json_recursevely.to_xpath()
-    
+
     dict_from_json_recursevely_force_n0dict = n0dict(str_json, recursively=True, force_n0dict = True)
     n0debug("dict_from_json_recursevely_force_n0dict")
     assert isinstance(dict_from_json_recursevely_force_n0dict, n0dict) == True
@@ -303,7 +303,7 @@ def main():
     assert isinstance(dict_from_json_recursevely_force_n0dict["root/k[0]"], int) == True # XML supports only str, for JSON int
     assert isinstance(dict_from_json_recursevely_force_n0dict["root/k[1]"], int) == True # XML supports only str, for JSON int
     dict_from_json_recursevely_force_n0dict.to_json(); dict_from_json_recursevely_force_n0dict.to_xml(); dict_from_json_recursevely_force_n0dict.to_xpath()
-    
+
     str_xml = """
     <root>
         <a>1</a>
@@ -349,7 +349,7 @@ def main():
     dict_from_xml_default.to_json(); dict_from_xml_default.to_xml(); dict_from_xml_default.to_xpath()
 
     # force_n0dict = True for XML is useless, in any cases dictionaries will be n0dict
-    dict_from_xml_force_n0dict = n0dict(str_xml, force_n0dict = True) 
+    dict_from_xml_force_n0dict = n0dict(str_xml, force_n0dict = True)
     n0debug("dict_from_xml_force_n0dict")
     assert isinstance(dict_from_xml_force_n0dict, n0dict) == True
     assert isinstance(dict_from_xml_force_n0dict["root"], n0dict) == True
@@ -368,7 +368,7 @@ def main():
     assert isinstance(dict_from_xml_force_n0dict["root/k[0]"], str) == True # XML supports only str, for JSON int
     assert isinstance(dict_from_xml_force_n0dict["root/k[1]"], str) == True # XML supports only str, for JSON int
     dict_from_xml_force_n0dict.to_json(); dict_from_xml_force_n0dict.to_xml(); dict_from_xml_force_n0dict.to_xpath()
-    
+
     dict_from_xml_recursevely = n0dict(str_xml, recursively=True)
     n0debug("dict_from_xml_recursevely")
     assert isinstance(dict_from_xml_recursevely, n0dict) == True
@@ -456,5 +456,67 @@ def main():
     dict5.delete("a/b/c/d", recursively=True)
     n0debug("dict5")
 
+    # ##########################################################################
+    # n0struct_findall.py
+    # ##########################################################################
+    dict6 = n0dict({
+        "Root": {
+            "Node1": {
+                "Subnode1_1": [
+                    {"tag": "PARAM1", "value": "VALUE1 from subnode1_1"},
+                    {"tag": "PARAM2", "value": "VALUE2 from subnode1_1"},
+                ],
+                "Subnode1_2": [
+                    {"tag": "PARAM1", "value": "VALUE1 from subnode1_2"},
+                    {"tag": "PARAM2", "value": "VALUE2 from subnode1_2"},
+                ],
+            },
+            "Node2": {
+                "Subnode2_1": [
+                    {"tag": "PARAM1", "value": "VALUE1 from subnode2_1"},
+                    {"tag": "PARAM2", "value": "VALUE2 from subnode2_1"},
+                ],
+                "Subnode2_2": [
+                    {"tag": "PARAM1", "value": "VALUE1 from subnode2_2"},
+                    {"tag": "PARAM2", "value": "VALUE2 from subnode2_2"},
+                ],
+            },
+        }
+    })
+    n0debug("dict6")
+    n0debug_calc(dict6.findall("//Root/Node1"))
+    n0debug_calc(dict6.findall("//Root/Node2/Subnode2_1/tag[text()==PARAM1]/../value"))
+    assert list(dict6.findall("//Root/Node2/Subnode2_1/tag[text()==PARAM1]/../value").keys())[0] == "//Root/Node2/Subnode2_1[0]/value"
+    assert list(dict6.findall("//Root/Node2/Subnode2_1/tag[text()==PARAM1]/../value").values())[0] == "VALUE1 from subnode2_1"
+
+    dict7 = n0dict({
+        "Root": {
+            "Nodes": [
+                [
+                    {"tag": "PARAM1", "value": "VALUE1 from subnode0_0"},
+                    {"tag": "PARAM2", "value": "VALUE2 from subnode0_1"},
+                ],
+                [
+                    {"tag": "PARAM1", "value": "VALUE1 from subnode1_0"},
+                    {"tag": "PARAM2", "value": "VALUE2 from subnode1_1"},
+                ],
+                [
+                    {"tag": "PARAM1", "value": "VALUE1 from subnode2_0"},
+                    {"tag": "PARAM2", "value": "VALUE2 from subnode2_1"},
+                ],
+                [
+                    {"tag": "PARAM1", "value": "VALUE1 from subnode3_0"},
+                    {"tag": "PARAM2", "value": "VALUE2 from subnode3_1"},
+                ],
+            ],
+        }
+    })
+    n0print("\n" + list(dict7.findall("//").values())[0].to_xpath())
+    found = dict7.findall("//Root/Nodes/tag[text()==PARAM1]/../value")
+    n0debug_calc(found, '"//Root/Nodes/tag[text()==PARAM1]/../value"')
+    assert len(found) == 4
+    assert list(found.values())[2] == "VALUE1 from subnode2_0"
+
 if __name__ == '__main__':
     main()
+    n0print("Mission acomplished")
