@@ -202,6 +202,7 @@ DESCRIPTION
     #                       n0dict. __init__(file="{file_path}")
     #                       n0dict. to_json/n0pretty(pairs_in_one_line=True)
     # 0.53 = 2022-01-20 enhanced: n0dict. to_json/n0pretty(skip_none = False, skip_empty_arrays = False, skip_simple_types = True, auto_quotes = True)
+    # 0.54 = 2022-01-21 fixed defect got in 0.2.51, some enchancements in n0pretty
 
 PACKAGE CONTENTS
     test (package)
@@ -456,7 +457,7 @@ CLASSES
      |  any_valid(self, validate)
      |      # **************************************************************************
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0371B2B0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0385B2F8>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. compare(..)
      |      # **************************************************************************
@@ -464,7 +465,7 @@ CLASSES
      |  delete(self, xpath: 'str', recursively: 'bool' = False) -> 'n0dict'
      |      # **************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0371B268>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0385B2B0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # **************************************************************************
@@ -500,7 +501,7 @@ CLASSES
      |  isExist(self, xpath) -> 'n0dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0371BA48>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict.<lambda> at 0x0385BA90>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  is_exist(self, xpath: 'str') -> 'bool'
@@ -1075,7 +1076,7 @@ FUNCTIONS
         # ********************************************************************
         # ********************************************************************
     
-    split_pair(in_str: 'str', separator: 'str', transform1: 'callable' = <function <lambda> at 0x0371C268>, transform2: 'callable' = <function <lambda> at 0x0371C3D0>, default_element: 'int' = 1) -> 'tuple'
+    split_pair(in_str: 'str', separator: 'str', transform1: 'callable' = <function <lambda> at 0x0385C2B0>, transform2: 'callable' = <function <lambda> at 0x0385C418>, default_element: 'int' = 1) -> 'tuple'
         split_pair(in_str: str, separator: str, transform1: callable = lambda x:x, transform2: callable = lambda x:x, default_element: int = 1) -> tuple:
         
         split string into 2 sub strings in any cases:
@@ -1094,7 +1095,7 @@ FUNCTIONS
     to_date(date_str: 'str') -> 'typing.Union[date, str]'
         # ********************************************************************
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x03718E80>, transform_value=<function convert_to_native_format at 0x03718EC8>)
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x03858EC8>, transform_value=<function convert_to_native_format at 0x03858F10>)
         # ******************************************************************************
     
     unmask_number(masked_number: 'str')

@@ -196,6 +196,7 @@
 #                       n0dict. __init__(file="{file_path}")
 #                       n0dict. to_json/n0pretty(pairs_in_one_line=True)
 # 0.53 = 2022-01-20 enhanced: n0dict. to_json/n0pretty(skip_none = False, skip_empty_arrays = False, skip_simple_types = True, auto_quotes = True)
+# 0.54 = 2022-01-21 fixed defect got in 0.2.51, some enchancements in n0pretty
 from __future__ import annotations  # Python 3.7+: for using own class name inside body of class
 
 import sys
@@ -696,9 +697,11 @@ def n0pretty(
                 # construct presentation string
                 presentation_string = \
                     (
-                        f"{type(sub_item_key_value)}{len(sub_item_key_value)} "
+                        # (str(type(sub_item_key_value)) or "").replace("<class '", "<").replace("'>", ">") + str(len(sub_item_key_value))
+                        (str(type(sub_item_key_value)) or "").replace("<class '", "<").replace("'>", " ") + str(len(sub_item_key_value)) + "> "
+                        # f"{type(sub_item_key_value)}{len(sub_item_key_value)} "
                         if (show_type or (show_type is None and __debug_showobjecttype))
-                        and (not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float)))
+                        and (not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float))) 
                         else ""
                     ) + \
                     (
@@ -713,7 +716,7 @@ def n0pretty(
         pairs_in_one_line = False
     if auto_quotes:
         __quotes = '"'
-
+        
     result_type = ""
 
     if isinstance(item, (list, tuple, dict, set, frozenset)):
@@ -726,27 +729,40 @@ def n0pretty(
 
         if pairs_in_one_line and isinstance(item, (list, tuple)) and (keys_and_max_len_of_value := is_list_with_pairs(item)):
             # list of dict with 0-1-2 _same_ elements in each
+            # n0debug("item")
+            print(f"{item=}")
             for sub_item in item:
+                n0debug("sub_item")
                 if result:
                     result += "," + indent()
                 result += "{"
                 sub_result = ""
+                n0debug("keys_and_max_len_of_value")
                 for key in keys_and_max_len_of_value:
+                    n0debug("key")
                     if key in sub_item:
                         sub_item_key_value = sub_item[key]
 
                         key_type = ""
                         value_type = ""
                         if show_type or (show_type is None and __debug_showobjecttype):
-                            if not skip_simple_types or not isinstance(key, (str, int, float)):
-                                key_type = f"{type(key)}"
+                            if not skip_simple_types or not isinstance(key, (str, int, float, complex, bool, list, tuple, set, frozenset, dict)):
+                                # key_type = f"{type(key)}"
+                                # key_type = (str(type(key)) or "").replace("<class '", "<").replace("'>", ">")
+                                key_type = (str(type(key)) or "").replace("<class '", "<").replace("'>", "")
                                 if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
-                                    key_type += f"{len(key)} "
+                                    # key_type += f"{len(key)} "
+                                    key_type += f" {len(key)}"
+                                key_type += "> "
 
-                            if not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float)):
-                                value_type = f"{type(sub_item_key_value)}"
+                            if not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float, complex, bool, list, tuple, set, frozenset, dict)):
+                                # value_type = f"{type(sub_item_key_value)}"
+                                # value_type = (str(type(sub_item_key_value)) or "").replace("<class '", "<").replace("'>", ">")
+                                value_type = (str(type(sub_item_key_value)) or "").replace("<class '", "<").replace("'>", "")
                                 if isinstance(sub_item_key_value, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
-                                    value_type += f"{len(sub_item_key_value)} "
+                                    # value_type += f"{len(sub_item_key_value)} "
+                                    value_type += f" {len(sub_item_key_value)}"
+                                value_type += "> "
 
                         if isinstance(sub_item_key_value, str):
                             sub_item_key_value = f"{__quotes}{sub_item_key_value}{__quotes}"
@@ -766,6 +782,7 @@ def n0pretty(
                         if sub_result:
                             sub_result += " "
                         sub_result += " "*(1+len(__quotes)+len(key)+len(__quotes)+len(": ")+keys_and_max_len_of_value[key])
+                        # raise Exception(f"Nonsense: '{key}' is not found in '{sub_item}'")
                 result += sub_result + " }"
         else:
             # dict, set, frozenset or list/tuple with complex or not paired structure
@@ -786,9 +803,13 @@ def n0pretty(
                     key_type = ""
                     if (show_type or (show_type is None and __debug_showobjecttype)) \
                     and (not skip_simple_types or not isinstance(key, (str, int, float))):
-                        key_type = f"{type(key)}"
+                        # key_type = f"{type(key)}"
+                        # key_type = (str(type(key)) or "").replace("<class '", "<").replace("'>", ">")
+                        key_type = (str(type(key)) or "").replace("<class '", "<").replace("'>", "")
                         if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
-                            key_type += f"{len(key)} "
+                            # key_type += f"{len(key)} "
+                            key_type += f" {len(key)}"
+                        key_type += "> "
                     if isinstance(key, str):
                         key = f"{__quotes}{key}{__quotes}"
                     else:
@@ -814,7 +835,13 @@ def n0pretty(
 
         if (show_type or (show_type is None and __debug_showobjecttype)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            result_type = f"{type(item)}{brackets[0]}{len(item)}{brackets[1]} "
+            # result_type = f"{type(item)}"
+            # result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", ">")
+            result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", "")
+            # result_type += f"{brackets[0]}{len(item)}{brackets[1]} "
+            if isinstance(item, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
+                result_type += f" {len(item)}"
+            result_type += "> "
 
         if result or skip_empty_arrays == False:
             if "\n" in result:
@@ -828,7 +855,11 @@ def n0pretty(
     elif isinstance(item, str):
         if (show_type or (show_type is None and __debug_showobjecttype)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            result_type = f"{type(item)}{len(item)} "
+            # result_type = f"{type(item)}"
+            # result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", ">")
+            result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", " ")
+            # result_type += f"{len(item)} "
+            result_type += f"{len(item)}> "
         if auto_quotes and '"' in item and not "'" in item:
                 result = result_type + f"'{item}'"
         else:
@@ -841,7 +872,9 @@ def n0pretty(
     else:
         if (show_type or (show_type is None and __debug_showobjecttype)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            result_type = f"{type(item)} "
+            result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", ">")
+            # result_type = f"{type(item)} "
+            result_type += f" "
         result = str(item)
     return result
 # ******************************************************************************
@@ -855,10 +888,13 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
     :param level:
     :return:
     """
-    prefix = str(type(var_object)) if __debug_showobjecttype else "" + \
-             " id=%s" % id(var_object) if __debug_showobjectid else ""
+    prefix = (
+                 (str(type(var_object)) or "").replace("<class '", "<").replace("'>", ">")
+                 if __debug_showobjecttype 
+                 else ""
+             ) + (" id=%s" % id(var_object) if __debug_showobjectid else "")
     if prefix:
-        prefix = "(" + prefix + ")"
+        prefix += " "
 
     n0print(
         "%s%s == %s" % (
@@ -2556,6 +2592,10 @@ class n0dict(dict):
                             self._find(
                                         # [next_node_name] + new_xpath_list, # mypy: error: Name 'new_xpath_list' is not defined
                                         [next_node_name] + xpath_list,
+                                        # 0.50: return_lists, parent_node,
+                                        # return_lists,
+                                        # parent_node,
+                                        # 0.51: CORRECT: parent_node, return_lists,
                                         parent_node,
                                         return_lists,
                                         xpath_found_str
@@ -2598,17 +2638,20 @@ class n0dict(dict):
             # Deeper
             #*******************************
             if node_index is None:
-                if isinstance(parent_node[node_name], (dict, OrderedDict, n0dict)):
+                # # 0.51: NOT CORRECTLY FIXED
+                # if isinstance(parent_node[node_name], (dict, OrderedDict, n0dict)):
                     return self._find(
                                     xpath_list[1:],
                                     parent_node[node_name],
                                     return_lists,
                                     xpath_found_str + '/' + node_name
                     )
-                else:
-                    return parent_node, None, None, xpath_found_str, xpath_list # Impossible to go deeper
+                # # 0.51: NOT CORRECTLY FIXED
+                # else:
+                    # return parent_node, None, None, xpath_found_str, xpath_list # Impossible to go deeper
             else:
-                if isinstance(parent_node[node_name], (list, tuple, n0list, dict, OrderedDict, n0dict)):
+                # # 0.51: NOT CORRECTLY FIXED
+                # if isinstance(parent_node[node_name], (list, tuple, n0list, dict, OrderedDict, n0dict)):
                     return self._find(
                                     [
                                         "[%s%s'%s']" % (node_index[0], node_index[1], node_index[2]) \
@@ -2619,8 +2662,9 @@ class n0dict(dict):
                                     return_lists,
                                     xpath_found_str + '/' + node_name
                     )
-                else:
-                    return parent_node, None, None, xpath_found_str, xpath_list  # Impossible to go deeper
+                # # 0.51: NOT CORRECTLY FIXED
+                # else:
+                    # return parent_node, None, None, xpath_found_str, xpath_list  # Impossible to go deeper
         # ##########################################################################################
         # Index in n0list (node_index is not None)
         # ##########################################################################################

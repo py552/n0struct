@@ -50,10 +50,10 @@ with open("requirements.txt", "rt") as fIn:
 setuptools.setup(
     name = "n0struct",
     version = _version,
-    description = "list/OrderedDict extensions allow to work with structure, generated for example by json.loads(..), using xpath approach",
+    description = "list/dict extensions allow to load/save xml/json files into python structures, compare them and work with them using xpath approach",
     author = "pythonist552",
     author_email = "pythonist552@gmail.com",
-    long_description = "list/OrderedDict extensions allow to work with structure, generated for example by json.loads(..), using xpath approach",
+    long_description = "list/dict extensions allow to load/save xml/json files into python structures, compare them and work with them using xpath approach",
     long_description_content_type="text/markdown",    
     url = "https://github.com/pythonist552/n0struct/",
     license = 'ASL',
