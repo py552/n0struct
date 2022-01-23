@@ -3,7 +3,7 @@ import typing
 # ******************************************************************************
 class n0list_(list):
     # **************************************************************************
-    # n0list. _get()
+    # n0list_. _get()
     # **************************************************************************
     def _get(self, xpath: typing.Union[str, int], raise_exception = True, if_not_found = None, return_lists = True):
         """
@@ -44,7 +44,7 @@ class n0list_(list):
                 else:
                     return if_not_found
     # **************************************************************************
-    # n0list. get()
+    # n0list_. get()
     # **************************************************************************
     def get(self, xpath: typing.Union[str, int], if_not_found = None):
         """
@@ -57,7 +57,7 @@ class n0list_(list):
         """
         return self._get(xpath, raise_exception = False, if_not_found = if_not_found)
     # **************************************************************************
-    # n0list. first()
+    # n0list_. first()
     # **************************************************************************
     def first(self, xpath: str, if_not_found = None):
         """
@@ -70,7 +70,7 @@ class n0list_(list):
         If self[where1/where2/.../whereN] is list, thet the first element will be returned
         """
         result = self._get(xpath, raise_exception = False, if_not_found = if_not_found, return_lists = False)
-        if isinstance(result, (list, tuple, n0list)) and len(result) == 1:
+        if isinstance(result, (list, tuple)) and len(result) == 1:
             result = result[0]
         return result
     # **************************************************************************

@@ -14,7 +14,6 @@ class n0dict_(n0dict__):
         if isinstance(value, (list, tuple)):
             for i, subitm in enumerate(value):
                 result += self.__xpath(subitm, "%s[%d]" % (path, i), mode)
-        # elif isinstance(value, (dict, OrderedDict, n0dict)):
         elif isinstance(value, dict):
             for key, value in value.items():
                 result += self.__xpath(value, "%s/%s" % (path, key), mode)
@@ -48,14 +47,12 @@ class n0dict_(n0dict__):
     # **************************************************************************
     # XML
     # **************************************************************************
-    # def __xml(self, parent: n0dict, indent: int, inc_indent: int) -> str:
     def __xml(self, parent: dict, indent: int, inc_indent: int) -> str:
         """
         Private function: recursively export n0dict into xml result string
         """
         result = ""
         if not parent is None:
-            # if isinstance(parent, (dict, OrderedDict, n0dict)):
             if isinstance(parent, dict):
                 if not len(parent.items()):
                     return ""
@@ -80,7 +77,6 @@ class n0dict_(n0dict__):
                     elif isinstance(value, (str, int, float)):
                         if not key.startswith("@"):
                             result += " " * indent + ("<%s>%s</%s>" % (key, str(value), key))
-                    # elif isinstance(value, (dict, OrderedDict, n0dict)):
                     elif isinstance(value, dict):
                         sub_result = self.__xml(value, indent + inc_indent, inc_indent)
 
@@ -141,11 +137,10 @@ class n0dict_(n0dict__):
                         sub_result += ",\n"
                     sub_sub_result = self.__json(subitm, indent + inc_indent * 2, inc_indent)
                     if sub_sub_result:
-                        # if isinstance(subitm, (dict, OrderedDict, n0dict)):
                         if isinstance(subitm, dict):
                             sub_result += (" " * (indent + inc_indent) + "{\n%s\n" + " " * (
                                     indent + inc_indent) + "}") % sub_sub_result
-                        elif isinstance(subitm, (list, tuple, n0list)):
+                        elif isinstance(subitm, (list, tuple)):
                             sub_result += (" " * (indent + inc_indent) + "[\n%s\n" + " " * (
                                     indent + inc_indent) + "]") % sub_sub_result
                 if sub_result:
@@ -154,7 +149,6 @@ class n0dict_(n0dict__):
                     result += " " * indent + '"%s": null' % key
             elif isinstance(value, str):
                 result += " " * indent + ('"%s": "%s"' % (key, value))
-            # elif isinstance(value, (n0dict, dict, OrderedDict)):
             elif isinstance(value, dict):
                 sub_result = self.__json(value, indent + inc_indent, inc_indent)
                 if sub_result:

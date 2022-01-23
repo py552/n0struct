@@ -66,7 +66,7 @@ class n0dict__(dict):
         If self[where1/where2/.../whereN] is list, thet the first element will be returned
         """
         result = self._get(xpath, raise_exception = False, if_not_found = if_not_found, return_lists = False)
-        if isinstance(result, (list, tuple, n0list)) and len(result) == 1:
+        if isinstance(result, (list, tuple)) and len(result) == 1:
             result = result[0]
         return result
     # ******************************************************************************
@@ -122,7 +122,6 @@ class n0dict__(dict):
                 parent_node, node_name_index = self._add(parent_node, node_name_index, not_found_xpath_list)
 
             node_name, node_index = split_name_index(node_name_index)
-            # if isinstance(parent_node, (dict, OrderedDict, n0dict)):
             if isinstance(parent_node, dict):
                 if node_index:
                     raise Exception("How is it possible: index '%s' for dictionary (%s)'%s'?"% (node_index, type(parent_node), parent_node))
@@ -138,15 +137,14 @@ class n0dict__(dict):
 
         return new_value  # For speed
     # **************************************************************************
-    def delete(self, xpath: str, recursively: bool = False) -> n0dict:
+    def delete(self, xpath: str, recursively: bool = False) -> n0dict__:
         xpath_list = xpath.split('/')
         for i,last_xpath_index in enumerate(range(len(xpath_list), 0, -1)):
             parent_node, node_name_index, cur_value, xpath_found_str, not_found_xpath_list = \
                 self._find(xpath_list[0:last_xpath_index], self, return_lists=True)
             if i == 0 or (
                 recursively and
-                isinstance(cur_value, dict) and not len(cur_value)
-                # isinstance(cur_value, n0dict) and not len(cur_value)
+                isinstance(cur_value, n0dict__) and not len(cur_value)
             ):
                 del parent_node[node_name_index]
         return self
@@ -227,7 +225,6 @@ class n0dict__(dict):
     def update_extend(self, other):
         if other is None:
             return self
-        # elif isinstance(other, (n0dict, OrderedDict, dict)):
         elif isinstance(other, dict):
             for key in other:
                 if key not in self:
@@ -254,12 +251,10 @@ class n0dict__(dict):
         return self
     # **************************************************************************
     # **************************************************************************
-    # def isExist(self, xpath) -> n0dict:
     def isExist(self, xpath) -> dict:
         """
         Public function: return empty lists in dict, if self[xpath] exists
         """
-        # validation_results = n0dict({
         validation_results = dict({
             "differences":  [],
             "not_equal":    [],

@@ -204,6 +204,7 @@ DESCRIPTION
     # 0.53 = 2022-01-20 enhanced: n0dict. to_json/n0pretty(skip_none = False, skip_empty_arrays = False, skip_simple_types = True, auto_quotes = True)
     # 0.54 = 2022-01-21 fixed defect got in 0.2.51, some enchancements in n0pretty
     # 0.55 = 2022-01-21 try #2 to split single __init__.py into separate files
+    # 0.56 = 2022-01-23 fixed defect with using child class in parent
     # ******************************************************************************
     # ******************************************************************************
 
