@@ -1,4 +1,5 @@
 import typing
+from pathlib import Path
 # import n0struct
 # ******************************************************************************
 # ******************************************************************************
@@ -7,14 +8,110 @@ def load_file(file_name: str) -> list:
         return [line.strip() for line in inFile.read().split("\n") if line.strip()]
 # ******************************************************************************
 def save_file(file_name: str, lines: typing.Any):
+    Path(file_name).parent.mkdir(parents=True, exist_ok=True)
+
     if isinstance(lines, (list, tuple)):
         buffer = "\n".join(lines)
-    elif isinstance(lines, (str)):
+    elif isinstance(lines, str):
         buffer = lines
     else:
         buffer = str(lines)
-    with open(file_name, 'wt') as outFile:
-        outFile.write(buffer)
+    with open(file_name, 'wt') as out_filehandler:
+        out_filehandler.write(buffer)
+# ******************************************************************************
+def load_ini(file_name: str, default_value = None, equal_sign = '=') -> dict:
+    ini_dict = {}
+    with open(file_name, 'rt') as in_filehanlder:
+        for line in in_filehanlder.readlines():
+            items = line.strip().split(equal_sign, 1)
+            if items:
+                ini_dict.update({
+                                items[0].upper():   (
+                                                    int(items[1])
+                                                    if len(items) > 1 and items[1].isdecimal()
+                                                    else default_value
+                                                    )
+                })
+    return ini_dict
+# ******************************************************************************
+# def generate_csv(root_node:n0dict, list_xpath:str, mapping_dict:dict, file_path:str = None, separator:str = '|') -> list:
+def generate_csv(root_node:dict, list_xpath:str, mapping_dict:dict, file_path:str = None, separator:str = '|') -> list:
+    '''
+    Samples:
+        response_json = n0dict({
+            "records" : [
+                {
+                    "node" : {
+                        "field1": "row1_value1",
+                        "subnode1": {
+                            "field2": "row1_value2",
+                        },
+                        "subnode2": {
+                            "field3": "row1_value3",
+                        },
+                    }
+                },
+                {
+                    "node" : {
+                        "field1": "row2_value1",
+                        "subnode1": {
+                            "field2": "row2_value2",
+                        },
+                        "subnode2": {
+                            "field3": "row2_value3",
+                        },
+                    }
+                },
+            ]
+        })
+        generated_csv = generate_csv(
+                                        response_json,
+                                        "//records[*]",
+                                        {
+                                            "Name of field #1": "node/field1",
+                                            "Name of field #2": "node/subnode1/field2",
+                                            "Name of field #3": ("node/subnode1/field3", "node/subnode2/field3"),
+                                        }
+        ) == [
+            ["row1_value1", "row1_value2", "row1_value3"],
+            ["row2_value1", "row2_value2", "row2_value3"],
+        ]
+        generate_csv(
+                                        response_json,
+                                        "//records[*]",
+                                        {
+                                            "Name of field #1": "node/field1",
+                                            "Name of field #2": "node/subnode1/field2",
+                                            "Name of field #3": "node/subnode2/field3",
+                                        },
+                                        "sample.csv"
+        )
+    '''
+    if file_path:
+        out_filehandler = open(file_path, 'wt')
+        out_filehandler.write(separator.join(list(mapping_dict.keys())) +  "\n")
+
+    csv_table = []
+    for found_node in root_node.get(list_xpath, set()):
+        csv_row = []
+        for key in mapping_dict:
+            xpaths = mapping_dict[key]
+            if not isinstance(xpaths, (list, tuple)):
+                xpaths = [xpaths]
+            for xpath in xpaths:
+                found_value = found_node.first(xpath, "")
+                if found_value:
+                    break
+            csv_row.append(found_value)
+        csv_table.append(csv_row)
+
+        if file_path:
+            out_filehandler.write(separator.join(csv_row) +  "\n")
+
+    if file_path:
+        out_filehandler.close
+
+    return csv_table
 # ******************************************************************************
 def n0eval(_str: str) -> typing.Union[int, float, typing.Any]:
     def my_split(_str: str, _separator: str) -> typing.List:

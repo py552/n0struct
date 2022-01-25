@@ -205,6 +205,10 @@ DESCRIPTION
     # 0.54 = 2022-01-21 fixed defect got in 0.2.51, some enchancements in n0pretty
     # 0.55 = 2022-01-21 try #2 to split single __init__.py into separate files
     # 0.56 = 2022-01-23 fixed defect with using child class in parent
+    # 0.57 = 2022-01-24 added: 
+    #                       def is_date_format(date: datetime.date, format: str) -> bool:
+    #                       def load_ini(file_name: str, default_value = None, equal_sign = '=') -> dict:
+    #                       def generate_csv(root_node:n0dict, list_xpath:str, mapping_dict:dict, file_path:str = None, separator:str = '|') -> list:
     # ******************************************************************************
     # ******************************************************************************
 

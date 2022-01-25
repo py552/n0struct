@@ -141,4 +141,11 @@ def to_date(date_str: str) -> typing.Union[datetime.date, str]:
                     except (ValueError, TypeError):
                         return date_str
 # ******************************************************************************
+def is_date_format(date: datetime.date, format: str) -> bool:
+    try:
+        datetime.datetime.strptime(date, format)
+        return True
+    except ValueError:
+        return False
+# ******************************************************************************
 # ******************************************************************************
