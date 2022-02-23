@@ -338,9 +338,10 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
     prefix = ""
 
     n0print(
-        "%s%s == %s" % (
+        "%s%s%s%s" % (
             prefix,
             var_name,
+            " == " if prefix or var_name else "",
             n0pretty(var_object)
         ),
         level = level,

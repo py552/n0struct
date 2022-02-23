@@ -232,8 +232,9 @@ class n0list(n0list_):
         })
         if get__flag_compare_check_different_types():
             result.update({"difftypes": []})
-        if get__flag_compare_check_different_types():
-            result.update({"difftypes": []})
+        if get__flag_compare_return_equal():
+            result.update({"self_equal": []})
+            result.update({"other_equal": []})
 
         # FIX ME: index in [] is not supported -- only node.
         if xpath_match(prefix, exclude_xpaths):
@@ -299,6 +300,11 @@ class n0list(n0list_):
                                 other_name, i, str(other[i])
                             )
                         )
+                    else:
+                        # NOT TESTED! #1
+                        if get__flag_compare_return_equal():
+                            result["self_equal"].append(self)
+                            result["other_equal"].append(other)
                 elif isinstance(self[i], (list, tuple)):
                     result.update_extend(
                         self[i].direct_compare(
@@ -454,8 +460,8 @@ class n0list(n0list_):
         if get__flag_compare_check_different_types():
             result.update({"difftypes": []})
         if get__flag_compare_return_equal():
-            result.update({"equal_self": []})
-            result.update({"equal_other": []})
+            result.update({"self_equal": []})
+            result.update({"other_equal": []})
 
         # FIX ME: index in [] is not supported -- only node.
         if xpath_match(prefix, exclude_xpaths):
@@ -527,6 +533,11 @@ class n0list(n0list_):
                                     other_name, other_i, str(other[other_i])
                                 )
                             )
+                        else:
+                            # NOT TESTED! #2
+                            if get__flag_compare_return_equal():
+                                result["self_equal"].append(self)
+                                result["other_equal"].append(other)
                     elif isinstance(self[self_i], (list, tuple)):
                         result.update_extend(
                             n0list(self[self_i]).compare(
@@ -790,8 +801,8 @@ class n0dict(n0dict_):
         if get__flag_compare_check_different_types():
             result.update({"difftypes": []})
         if get__flag_compare_return_equal():
-            result.update({"equal_self": []})
-            result.update({"equal_other": []})
+            result.update({"self_equal": []})
+            result.update({"other_equal": []})
 
         self_keys = list(self.keys())
         self_not_exist_in_other = list(self.keys())
@@ -957,8 +968,8 @@ class n0dict(n0dict_):
                         result["other_unique"].append(other[key])
 
         if is_still_equal and get__flag_compare_return_equal():
-            result["equal_self"].append(self)
-            result["equal_other"].append(other)
+            result["self_equal"].append(self)
+            result["other_equal"].append(other)
 
         return result
     # **************************************************************************
