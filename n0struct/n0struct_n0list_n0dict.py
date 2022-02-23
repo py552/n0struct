@@ -9,6 +9,8 @@ import datetime
 # from .n0struct_utils_compare import *
 from .n0struct_utils_compare import get__flag_compare_check_different_types
 from .n0struct_utils_compare import get__flag_compare_return_difference_of_values
+from .n0struct_utils_compare import get__flag_compare_return_equal
+from .n0struct_utils_compare import get__flag_compare_return_place
 from .n0struct_utils_compare import xpath_match
 from .n0struct_utils_compare import generate_composite_keys
 
@@ -17,6 +19,8 @@ from .n0struct_utils_find import split_name_index
 
 from .n0struct_n0list_ import n0list_
 from .n0struct_n0dict_ import n0dict_
+
+from .n0struct_logging import *
 # ******************************************************************************
 # ******************************************************************************
 class n0list(n0list_):
@@ -210,7 +214,10 @@ class n0list(n0list_):
                     "other_unique": [], # generated if elements from other list don't exist in self list
                     "difftypes":    [], # generated if elements with the same xpath have different types
                 })
-                if not returned["differences"]: self and other are totally equal.
+                if not returned["differences"]: self and other are equal with conditions:
+                    except exclude_xpaths;
+                    compare_only
+                    transform
         """
         if continuity_check != "continuity_check":
             raise Exception("Incorrect order of arguments")
@@ -223,6 +230,8 @@ class n0list(n0list_):
             "self_unique":  [],
             "other_unique": [],
         })
+        if get__flag_compare_check_different_types():
+            result.update({"difftypes": []})
         if get__flag_compare_check_different_types():
             result.update({"difftypes": []})
 
@@ -241,7 +250,10 @@ class n0list(n0list_):
                         other_name
                     )
                 )
-                result["self_unique"].append(("%s[%i]" % (prefix, i), self[i]))
+                if get__flag_compare_return_place():
+                    result["self_unique"].append(("%s[%i]" % (prefix, i), self[i]))
+                else:
+                    result["self_unique"].append(self[i])
                 continue
             # ######### if i >= len(other):
             # --- TRANSFORM: START -------------------------------------
@@ -378,7 +390,10 @@ class n0list(n0list_):
                         self_name
                     )
                 )
-                result["other_unique"].append(("%s[%i]" % (prefix, i), other[i]))
+                if get__flag_compare_return_place():
+                    result["other_unique"].append(("%s[%i]" % (prefix, i), other[i]))
+                else:
+                    result["other_unique"].append(other[i])
         return result
     # **************************************************************************
     # * n0list. compare(..)
@@ -421,7 +436,10 @@ class n0list(n0list_):
                     "other_unique": [], # generated if elements from other list don't exist in self list
                     "difftypes":    [], # generated if elements with the same xpath have different types
                 })
-                if not returned["differences"]: self and other are totally equal.
+                if not returned["differences"]: self and other are equal with conditions:
+                    except exclude_xpaths;
+                    compare_only
+                    transform
         """
         if continuity_check != "continuity_check":
             raise Exception("n0list. compare(..): incorrect order of arguments")
@@ -435,6 +453,9 @@ class n0list(n0list_):
         })
         if get__flag_compare_check_different_types():
             result.update({"difftypes": []})
+        if get__flag_compare_return_equal():
+            result.update({"equal_self": []})
+            result.update({"equal_other": []})
 
         # FIX ME: index in [] is not supported -- only node.
         if xpath_match(prefix, exclude_xpaths):
@@ -616,7 +637,11 @@ class n0list(n0list_):
                         other_name
                     )
                 )
-                result["self_unique"].append((prefix + "[" + str(self_i) + "]", self[self_i]))
+                if get__flag_compare_return_place():
+                    result["self_unique"].append((prefix + "[" + str(self_i) + "]", self[self_i]))
+                else:
+                    result["self_unique"].append(self[self_i])
+
         if other_not_exist_in_self:
             for composite_key, other_i in other_not_exist_in_self:
                 result["differences"].append(
@@ -626,7 +651,11 @@ class n0list(n0list_):
                         self_name
                     )
                 )
-                result["other_unique"].append(("%s[%d]" % (prefix, other_i), other[other_i]))
+                if get__flag_compare_return_place():
+                    result["other_unique"].append(("%s[%d]" % (prefix, other_i), other[other_i]))
+                else:
+                    result["other_unique"].append(other[other_i])
+
         return result
 # ******************************************************************************
 # ******************************************************************************
@@ -760,10 +789,14 @@ class n0dict(n0dict_):
         })
         if get__flag_compare_check_different_types():
             result.update({"difftypes": []})
+        if get__flag_compare_return_equal():
+            result.update({"equal_self": []})
+            result.update({"equal_other": []})
 
         self_keys = list(self.keys())
         self_not_exist_in_other = list(self.keys())
         other_not_exist_in_self = list(other.keys())
+        is_still_equal = True
 
         # #############################################################
         # NEVER fetch data from the mutable list in the loop !!!
@@ -819,6 +852,7 @@ class n0dict(n0dict_):
                                         other_name, key, other[key]
                                     )
                                 )
+                                is_still_equal = False
                         elif isinstance(self[key], (list, tuple)):
                             result.update_extend(
                                 one_of_list_compare(
@@ -852,6 +886,7 @@ class n0dict(n0dict_):
                             raise Exception("Not expected type %s in %s[\"%s\"]" % (type(self[key]), key, self_name))
                     else:
                         if not compare_only or xpath_match(fullxpath, compare_only):
+                            is_still_equal = False
                             if get__flag_compare_check_different_types():
                                 result["difftypes"].append(
                                     (
@@ -886,6 +921,7 @@ class n0dict(n0dict_):
                 fullxpath = "%s/%s" % (prefix, key)
                 if not xpath_match(fullxpath, exclude_xpaths) \
                    and (not compare_only or xpath_match(fullxpath, compare_only)):
+                    is_still_equal = False
                     result["differences"].append(
                         "Element %s[\"%s\"]='%s' doesn't exist in %s" %
                         (
@@ -895,12 +931,17 @@ class n0dict(n0dict_):
                             other_name
                         )
                     )
-                    result["self_unique"].append((fullxpath, self[key]))
+                    if get__flag_compare_return_place():
+                        result["self_unique"].append((fullxpath, self[key]))
+                    else:
+                        result["self_unique"].append(self[key])
+                        
         if other_not_exist_in_self:
             for key in other_not_exist_in_self:
                 fullxpath = "%s/%s" % (prefix, key)
                 if not xpath_match(fullxpath, exclude_xpaths) \
                    and (not compare_only or xpath_match(fullxpath, compare_only)):
+                    is_still_equal = False
                     result["differences"].append(
                         "Element %s[\"%s\"]='%s' doesn't exist in %s" %
                         (
@@ -910,7 +951,15 @@ class n0dict(n0dict_):
                             self_name
                         )
                     )
-                    result["other_unique"].append((fullxpath, other[key]))
+                    if get__flag_compare_return_place():
+                        result["other_unique"].append((fullxpath, other[key]))
+                    else:
+                        result["other_unique"].append(other[key])
+
+        if is_still_equal and get__flag_compare_return_equal():
+            result["equal_self"].append(self)
+            result["equal_other"].append(other)
+
         return result
     # **************************************************************************
     # * n0dict. direct_compare(..)

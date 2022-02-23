@@ -265,7 +265,19 @@ def n0pretty(
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
             # result_type = f"{type(item)}"
             # result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", ">")
-            result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", "")
+            result_type =   (
+                                (
+                                    class_type
+                                    if len(class_type_parts := class_type.split('.')) == 1
+                                    else ".".join((class_type_parts[0],class_type_parts[-1]))
+                                )
+                                if (class_type := str(type(item))) 
+                                else ""
+                            ) \
+                                .replace("<class '", "<") \
+                                .replace("'>", " ") \
+            
+            
             # result_type += f"{brackets[0]}{len(item)}{brackets[1]} "
             if isinstance(item, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
                 result_type += f" {len(item)}"

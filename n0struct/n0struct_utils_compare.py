@@ -28,6 +28,33 @@ def get__flag_compare_return_difference_of_values() -> bool:
     global __flag_compare_return_difference_of_values
     return __flag_compare_return_difference_of_values
 # ******************************************************************************
+__flag_compare_return_equal = False
+def set__flag_compare_return_equal(value: bool):
+    """
+    if __flag_compare_return_equal == True, then
+    if records are the same, 
+    then return additional element in result["equal"] with equal records
+    """
+    global __flag_compare_return_equal
+    __flag_compare_return_equal = value
+def get__flag_compare_return_equal() -> bool:
+    global __flag_compare_return_equal
+    return __flag_compare_return_equal
+# ******************************************************************************
+__flag_compare_return_place = True
+def set__flag_compare_return_place(value: bool):
+    """
+    if __flag_compare_return_place == True, then
+        if record is the different, then return tupple of index and record in result["self_unique"]/result["other_unique"]
+    else
+        return only the record in result["self_unique"]/result["other_unique"]
+    """
+    global __flag_compare_return_place
+    __flag_compare_return_place = value
+def get__flag_compare_return_place() -> bool:
+    global __flag_compare_return_place
+    return __flag_compare_return_place
+# ******************************************************************************
 # xpath_match(xpath: str, xpath_list):
 #   Check that real xpath (or xpath like) is equal any of xpath_list[0..n].
 #   Returns i+1
