@@ -704,8 +704,11 @@ class n0dict(n0dict_):
         if not len__args:
             _file = kw.pop("file", None)
             if _file:
-                with open(_file, "rt") as in_filehandler:
-                    return self.__init__(in_filehandler.read(), **kw)
+                with open(_file, "rb") as in_filehandler:
+                    buffer = in_filehandler.read()
+                    if buffer[:3] == b'\xEF\xBB\xBF': # UTF-8 BOM (Byte Order Mark)
+                        buffer = buffer[3:]
+                    return self.__init__(buffer.decode('utf-8').strip(), **kw)
             else:
                 return super(n0dict, self).__init__(*args, **kw)
         if len__args == 1:

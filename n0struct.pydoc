@@ -233,11 +233,11 @@ PACKAGE CONTENTS
     test (package)
 
 DATA
-    annotations = _Feature((3, 7, 0, 'beta', 1), (3, 10, 0, 'alpha', 0), 1...
+    annotations = _Feature((3, 7, 0, 'beta', 1), (4, 0, 0, 'alpha', 0), 16...
     compiled_regexp_mask_pan = re.compile('(([^0-9]|^)?(000)?[456][0-9]{5}...
     logger = <loguru.logger handlers=[(id=0, level=10, sink=<stderr>)]>
 
 FILE
-    d:\repo\n0struct2\n0struct\__init__.py
+    c:\repo\n0struct59\n0struct\__init__.py
 
 
