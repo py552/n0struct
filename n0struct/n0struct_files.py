@@ -4,8 +4,34 @@ from pathlib import Path
 # ******************************************************************************
 # ******************************************************************************
 def load_file(file_name: str) -> list:
-    with open(file_name, 'rt') as inFile:
-        return [line.strip() for line in inFile.read().split("\n") if line.strip()]
+    with open(file_name, 'rt') as in_file:
+        return [line.strip() for line in in_file.read().split("\n") if line.strip()]
+# ******************************************************************************
+def load_simple_csv(file_name: str, format:list = None, delimiter:str = ',', contains_header = False) -> list:
+    loaded_csv = []
+    with open(file_name, 'rt') as in_file:
+        if contains_header:
+            header_line = in_file.readline()
+            column_names = header_line.rstrip('\n').split(delimiter)
+            if not isinstance(contains_header, bool):
+                # if contains_header is not boolean, then first line could be header or not
+                # to check if the first line is header, check value of first column
+                # if it's like expected, then the first line is header
+                if column_names[0] != contains_header:
+                    in_file.seek(0) # first line is NOT header, re-read first line as data line
+                    column_names = None
+            if not format:
+                format = column_names
+
+        if format and len(format) != len(set(format)):
+            raise Exception(f"Format {format} contains not unique names of columns")
+
+        for line in in_file.readlines():
+            column_values = line.rstrip('\n').split(delimiter)
+            if format:
+                column_values = dict(zip(format, column_values))
+            loaded_csv.append(column_values)
+    return loaded_csv
 # ******************************************************************************
 def save_file(file_name: str, lines: typing.Any):
     Path(file_name).parent.mkdir(parents=True, exist_ok=True)

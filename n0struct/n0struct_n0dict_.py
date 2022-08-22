@@ -1,11 +1,54 @@
 from .n0struct_n0dict__ import n0dict__
 from .n0struct_logging import n0pretty
-# ******************************************************************************
-# ******************************************************************************
+
+# **********************************************************************************************************************
+# *****************************************************************************
+# https://www.w3.org/TR/html4/sgml/entities.html#h-24.4.1
+# https://www.htmlhelp.com/reference/html40/entities/special.html
+html_entities = {
+    # C0 Controls and Basic Latin
+    0x22:           "&quot;",   # quotation mark = APL quote
+    0x26:           "&amp;",    # ampersand
+    0x3C:           "&lt;",     # less-than sign
+    0x3E:           "&gt;",     # greater-than sign
+    # Latin Extended-A
+    0x152:          "&OElig;",  # latin capital ligature OE
+    0x153:          "&oelig;",  # latin small ligature oe
+    # ligature is a misnomer, this is a separate character in some languages
+    0x160:          "&Scaron;", # latin capital letter S with caron
+    0x161:          "&scaron;", # latin small letter s with caron
+    0x178:          "&Yuml;",   # latin capital letter Y with diaeresis
+    # Spacing Modifier Letters
+    0x02C6:         "&circ;",   # modifier letter circumflex accent
+    0x02DC:         "&tilde;",  # small tilde, U+02DC ISOdia
+    # General Punctuation
+    0x2002:         "&ensp;",   # en space
+    0x2003:         "&emsp;",   # em space
+    0x2009:         "&thinsp;", # thin space
+    0x200C:         "&zwnj;",   # zero width non-joiner
+    0x200D:         "&zwj;",    # zero width joiner
+    0x200E:         "&lrm;",    # left-to-right mark
+    0x200F:         "&rlm;",    # right-to-left mark
+    0x2013:         "&ndash;",  # en dash
+    0x2014:         "&mdash;",  # em dash
+    0x2018:         "&lsquo;",  # left single quotation mark
+    0x2019:         "&rsquo;",  # right single quotation mark
+    0x201A:         "&sbquo;",  # single low-9 quotation mark
+    0x201C:         "&ldquo;",  # left double quotation mark
+    0x201D:         "&rdquo;",  # right double quotation mark
+    0x201E:         "&bdquo;",  # double low-9 quotation mark
+    0x2020:         "&dagger;", # dagger
+    0x2021:         "&Dagger;", # double dagger
+    0x2030:         "&permil;", # per mille sign
+    0x2039:         "&lsaquo;", # single left-pointing angle quotation mark, it is proposed but not yet ISO standardized
+    0x203A:         "&rsaquo;", # single right-pointing angle quotation mark, it is proposed but not yet ISO standardized
+    0x20AC:         "&euro;",   # euro sign, U+20AC NEW
+}
+# **********************************************************************************************************************
 class n0dict_(n0dict__):
-    # **************************************************************************
+    # *************************************************************************
     # XPATH
-    # **************************************************************************
+    # *************************************************************************
     def __xpath(self, value, path: str = None, mode: int = None) -> list:
         """
         Private function: recursively collect elements xpath starts from parent
@@ -76,7 +119,7 @@ class n0dict_(n0dict__):
                                     result += (" " * indent + "<%s>%s</%s>") % (key, sub_result, key)
                     elif isinstance(value, (str, int, float)):
                         if not key.startswith("@"):
-                            result += " " * indent + ("<%s>%s</%s>" % (key, str(value), key))
+                            result += " " * indent + ("<%s>%s</%s>" % (key, str(value).translate(html_entities), key))
                     elif isinstance(value, dict):
                         sub_result = self.__xml(value, indent + inc_indent, inc_indent)
 

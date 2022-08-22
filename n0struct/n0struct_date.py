@@ -7,19 +7,28 @@ import typing
 import datetime
 # ******************************************************************************
 # ******************************************************************************
+def sysdate() -> datetime.datetime:
+    """
+    :return: today -> date
+
+    https://stackoverflow.com/questions/32517248/what-is-the-difference-between-python-functions-datetime-now-and-datetime-t
+        datetime.datetime.now() takes tzinfo as keyword argument but datetime.today() does not take any keyword arguments.
+        By default, now() executes with datetime.datetime.now(tz=None)
+    """
+    return datetime.datetime.today()
+# ******************************************************************************
 def date_delta(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> datetime.datetime:
     """
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> date
     """
-    date_delta_ = (now or datetime.datetime.today()) + timedelta(days=day_delta)
+    date_delta_ = (now or sysdate()) + datetime.timedelta(days=day_delta)
     month_quotient, month_remainder = divmod(date_delta_.month + month_delta - 1, 12)
-    date_delta_ = datetime.datetime  (
+    return datetime.datetime(
                             date_delta_.year + month_quotient, month_remainder + 1, date_delta_.day,
                             date_delta_.hour, date_delta_.minute,  date_delta_.second,  date_delta_.microsecond
-                            )
-    return date_delta_
+    )
 # ******************************************************************************
 def date_now(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -39,6 +48,7 @@ def timestamp() -> str:
 # ******************************************************************************
 def date_iso(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
+    :param now:
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str ISO date format
@@ -47,14 +57,16 @@ def date_iso(now: typing.Union[datetime.datetime, None] = None, day_delta: int =
 # ******************************************************************************
 def date_yymmdd(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
+    :param now:
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str YYMMDD
     """
     return date_delta(now, day_delta, month_delta).strftime("%y%m%d")
 # ******************************************************************************
-def date_yyyymmdd(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
+def date_dash_yyyymmdd(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
+    :param now:
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str YYYY-MM-DD
@@ -63,14 +75,16 @@ def date_yyyymmdd(now: typing.Union[datetime.datetime, None] = None, day_delta: 
 # ******************************************************************************
 def date_slash_ddmmyyyy(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
+    :param now:
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str DD/MM/YYYY
     """
     return date_delta(now, day_delta, month_delta).strftime("%d/%m/%Y")
 # ******************************************************************************
-def date_ddmmyyyy(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
+def date_dash_ddmmyyyy(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
+    :param now:
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str DD-MM-YYYY
@@ -79,6 +93,7 @@ def date_ddmmyyyy(now: typing.Union[datetime.datetime, None] = None, day_delta: 
 # ******************************************************************************
 def date_yymm(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
+    :param now:
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str YYMM
@@ -87,11 +102,26 @@ def date_yymm(now: typing.Union[datetime.datetime, None] = None, day_delta: int 
 # ******************************************************************************
 def date_mmyy(now: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
+    :param now:
     :param day_delta:
     :param month_delta:
     :return: today + day_delta + month_delta -> str MMYY
     """
     return date_delta(now, day_delta, month_delta).strftime("%m%y")
+# ******************************************************************************
+def time_hhmmss(now: typing.Union[datetime.datetime, None] = None) -> str:
+    """
+    :param now:
+    :return: now -> str
+    """
+    return (now or sysdate()).strftime("%H%M%S")
+# ******************************************************************************
+def time_colon_hhmmss(now: typing.Union[datetime.datetime, None] = None) -> str:
+    """
+    :param now:
+    :return: now -> str
+    """
+    return (now or sysdate()).strftime("%H:%M:%S")
 # ******************************************************************************
 def from_ddmmmyy(date_str: str) -> typing.Union[datetime.date, str, None]:
     """

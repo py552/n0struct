@@ -2,6 +2,7 @@ from __future__ import annotations  # Python 3.7+: for using own class name insi
 import typing
 from .n0struct_utils_find import split_name_index
 from .n0struct_findall import findall as n0struct_findall__findall
+from .n0struct_files import n0eval
 # ******************************************************************************
 # ******************************************************************************
 class n0dict__(dict):
@@ -129,6 +130,7 @@ class n0dict__(dict):
             elif isinstance(parent_node, (list, tuple)):
                 if node_name:
                     raise Exception("How is it possible: key '%s' for list (%s)'%s'?" % (node_name, type(parent_node), parent_node))
+                eval_node_index = n0eval(node_index)
                 parent_node[n0eval(node_index)] = new_value
             else:
                 raise Exception("How is it possible: unknown type of parent node (%s) of '%s'" % (type(parent_node), parent_node))

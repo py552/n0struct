@@ -238,6 +238,6 @@ DATA
     logger = <loguru.logger handlers=[(id=0, level=10, sink=<stderr>)]>
 
 FILE
-    c:\repo\n0struct59\n0struct\__init__.py
+    c:\repo\n0struct063\n0struct\__init__.py
 
 

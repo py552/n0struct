@@ -1351,14 +1351,19 @@ class n0dict(n0dict_):
                 if not next_node_name in parent_node:
                     # New node
                     if next_node_index:
-                        if next_node_index != "new()":
-                            raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
-                                            % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
-                        # item[0] == None, will be reused at the next step with last()
+                        # NEWFIX
+                        if next_node_index != "new()" and next_node_index != "0":
+                            # raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
+                            #                 % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
+                            raise Exception(f"Nonsence! Impossible to add {next_node_name}[{next_node_index}] to the {cur_node_name}"
+                                            + (f"[{cur_node_index}]" if cur_node_index else "")
+                                            + f" {str(parent_node)}"
+                            )
                         parent_node.update({next_node_name: n0list([None])})
                         next_node = parent_node[next_node_name]
                         # next_node_name_index = "[%s]" % next_node_index
                         next_node_name_index = "[last()]"
+                        # item[0] == None, will be reused at the next step with last()
                     else:
                         parent_node.update({next_node_name: n0dict({})})
                         next_node = parent_node
@@ -1381,8 +1386,13 @@ class n0dict(n0dict_):
             ####################################################################
             # Parent is LIST or should be a list
             ####################################################################
+            # Original code
             if cur_node_index == "new()":
-                if not isinstance(parent_node[cur_node_name], (list, tuple, n0list)):
+            # FIXME
+            # or (isinstance(parent_node, (list, tuple)) and n0eval(cur_node_index) == len(parent_node)) \
+            # or (isinstance(parent_node[cur_node_name], (list, tuple)) and n0eval(cur_node_index) == len(parent_node)[cur_node_name]):
+                if cur_node_name and not isinstance(parent_node[cur_node_name], (list, tuple, n0list)):
+                # if not isinstance(parent_node[cur_node_name], (list, tuple, n0list)):
                     ####################################################################
                     # Convert not LIST into the list
                     ####################################################################
@@ -1413,7 +1423,7 @@ class n0dict(n0dict_):
                     next_node_name_index = "[%s]" % str(next_node_index)
                 else:
                     raise Exception("Nonsence! Both next_node_name and next_node_index could NOT be empty")
-            if cur_node_index == "last()":
+            elif cur_node_index == "last()":
                 # Came from previous level: we create [None] and point to [last()] for exchange
                 if not isinstance(parent_node, (list, tuple, n0list)):
                     raise Exception("Nonsence! if index '%s' is set then (%s)%s must be n0list"
@@ -1437,9 +1447,15 @@ class n0dict(n0dict_):
                     next_node = parent_node[-1]
                     # Expected to have 'new()' in next_node_index, else it will be failed at the next step
                     next_node_name_index = "[%s]" % str(next_node_index)
+            # New fix
+            elif n0eval(cur_node_index) == len(parent_node):
+                parent_node.append(None)
+                next_node = parent_node
+                next_node_name_index = "[last()]"
             else:
-                raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
-                                % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
+                # raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
+                #                 % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
+                raise Exception(f"Nonsence! Impossible to add item {cur_node_index} to the list {str(parent_node)}")
 
         if len(xpath_list) == 1:
             return next_node, next_node_name_index
