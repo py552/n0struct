@@ -7,14 +7,33 @@ import typing
 # ******************************************************************************
 # ******************************************************************************
 # __prev_end = "\n"
-__debug_showobjecttype = True
-__debug_showobjectid = True
+
+__debug_show_object_type = True
+def set_debug_show_object_type(debug_show_object_type:bool):
+    global __debug_show_object_type
+    __debug_show_object_type = debug_show_object_type
+
+
+__debug_show_object_id = True
+def set_debug_show_object_id(debug_show_object_id:bool):
+    global __debug_show_object_id
+    __debug_show_object_id = debug_show_object_id
+
+
+__debug_show_item_count = True
+def set_debug_show_item_count(debug_show_item_count:bool):
+    global __debug_show_item_count
+    __debug_show_item_count = debug_show_item_count
+
+
 __main_log_filename = None
 def init_logger(
         debug_level: str = "TRACE",
         debug_output = sys.stderr,
         debug_timeformat: str = "YYYY-MM-DD HH:mm:ss.SSS",
-        debug_showobjectid = True,
+        debug_show_object_type = True,
+        debug_show_object_id = True,
+        debug_show_item_count = True,
         debug_logtofile = True,
         log_file_name: str = None,
     ):
@@ -31,8 +50,9 @@ def init_logger(
                 __main_log_filename = "debuglog"
             __main_log_filename += "_" + timestamp() + ".log"
 
-    global __debug_showobjectid
-    __debug_showobjectid = debug_showobjectid
+    set_debug_show_object_type(debug_show_object_type)
+    set_debug_show_object_id(debug_show_object_id)
+    set_debug_show_item_count(debug_show_item_count)
 
     format = ""
     if debug_timeformat:
@@ -99,12 +119,13 @@ def n0pretty(
             show_type:bool = None,
             __indent_size: int = 4,
             __quotes:str = '"',
-            pairs_in_one_line = True,
-            skip_none = False,
-            skip_empty_arrays = False,
-            skip_simple_types = True,
-            auto_quotes = True,
- ):
+            pairs_in_one_line:bool = True,
+            json_convention:bool = False,
+            skip_empty_arrays:bool = False,
+            skip_simple_types:bool = True,
+            auto_quotes:bool = True,
+            show_item_count:bool = None,
+):
     """
     :param item:
     :param indent_:
@@ -132,7 +153,7 @@ def n0pretty(
                 presentation_string = \
                     (
                         (str(type(sub_item_key_value)) or "").replace("<class '", "<").replace("'>", " ") + str(len(sub_item_key_value)) + "> "
-                        if (show_type or (show_type is None and __debug_showobjecttype))
+                        if (show_type or (show_type is None and __debug_show_object_type))
                         and (not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float)))
                         else ""
                     ) + \
@@ -152,6 +173,7 @@ def n0pretty(
     result_type = ""
 
     if isinstance(item, (list, tuple, dict, set, frozenset)):
+        # print(f"{item=}")
         brackets = "[]"
         if isinstance(item, (set, frozenset, dict)):
             brackets = "{}"
@@ -171,7 +193,7 @@ def n0pretty(
 
                         key_type = ""
                         value_type = ""
-                        if show_type or (show_type is None and __debug_showobjecttype):
+                        if show_type or (show_type is None and __debug_show_object_type):
                             if not skip_simple_types or not isinstance(key, (str, int, float, complex, bool, list, tuple, set, frozenset, dict)):
                                 key_type = (str(type(key)) or "").replace("<class '", "<").replace("'>", "")
                                 if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
@@ -207,21 +229,31 @@ def n0pretty(
         else:
             # dict, set, frozenset or list/tuple with complex or not paired structure
             for i_sub_item, sub_item in enumerate(item):
+                # print(f"{sub_item=}")
                 if isinstance(item, dict):
                     key = sub_item
-                    sub_item_value = n0pretty(
-                                            item[key],
-                                            indent_ + 1,
-                                            show_type,
-                                            __indent_size,
-                                            __quotes,
-                                            pairs_in_one_line,
-                                            skip_none,
-                                            skip_empty_arrays
-                    )
+                    # print(f"{key=}")
+                    
+                    if indent_ < 111:
+                        sub_item_value = n0pretty(
+                                                item[key],
+                                                indent_ + 1,
+                                                show_type,
+                                                __indent_size,
+                                                __quotes,
+                                                pairs_in_one_line,
+                                                json_convention,
+                                                skip_empty_arrays,
+                                                skip_simple_types,
+                                                auto_quotes,
+                                                show_item_count,
+                        )
+                    else:
+                        sub_item_value = "{.......}"
+                    # print(f"{sub_item_value=}")
 
                     key_type = ""
-                    if (show_type or (show_type is None and __debug_showobjecttype)) \
+                    if (show_type or (show_type is None and __debug_show_object_type)) \
                     and (not skip_simple_types or not isinstance(key, (str, int, float))):
                         key_type = (str(type(key)) or "").replace("<class '", "<").replace("'>", "")
                         if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
@@ -231,27 +263,42 @@ def n0pretty(
                         key = f"{__quotes}{key}{__quotes}"
                     else:
                         key = str(key)
-                    if sub_item_value:
-                        sub_item_value = f"{key_type}{key}:" + (" " if __indent_size else "") + sub_item_value
+                        
+                    if not sub_item_value:
+                        sub_item_value = str(sub_item_value) # None
+                    
+                    sub_item_value = f"{key_type}{key}:" + (" " if __indent_size else "") + sub_item_value
+                    
                 else:
                     # set, frozenset or list/tuple with complex or not paired structure
-                    sub_item_value = f"#{i_sub_item} ".ljust(5) + n0pretty(
-                                            sub_item,
-                                            indent_ + 1,
-                                            show_type,
-                                            __indent_size,
-                                            __quotes,
-                                            pairs_in_one_line,
-                                            skip_none,
-                                            skip_empty_arrays,
-                    )
+                    if show_item_count or (show_item_count is None and __debug_show_item_count):
+                        sub_item_value = f"#{i_sub_item} ".ljust(5)
+                    else:
+                        sub_item_value = ""
+                    
+                    if indent_ < 111:
+                        sub_item_value += str(n0pretty(
+                                                sub_item,
+                                                indent_ + 1,
+                                                show_type,
+                                                __indent_size,
+                                                __quotes,
+                                                pairs_in_one_line,
+                                                json_convention,
+                                                skip_empty_arrays,
+                                                skip_simple_types,
+                                                auto_quotes,
+                                                show_item_count,
+                        ))
+                    else:
+                        sub_item_value = "[.......]"
 
                 if not sub_item_value is None:
                     if result:
                         result += "," + indent()
                     result += sub_item_value
 
-        if (show_type or (show_type is None and __debug_showobjecttype)) \
+        if (show_type or (show_type is None and __debug_show_object_type)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
             result_type =   (
                                 (
@@ -276,32 +323,43 @@ def n0pretty(
             else:
                 result = result_type + brackets[0] + result + brackets[1]
 
-        if not result and (skip_none or skip_empty_arrays):
+        if not result and (not json_convention or skip_empty_arrays):
             result = None
 
     elif isinstance(item, str):
-        if (show_type or (show_type is None and __debug_showobjecttype)) \
+        if (show_type or (show_type is None and __debug_show_object_type)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
             result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", " ") + f"{len(item)}> "
         if auto_quotes and '"' in item and not "'" in item:
                 result = result_type + f"'{item}'"
         else:
             result = result_type + __quotes + item.replace(__quotes, '\\"' if __quotes == '"' else "\\'") + __quotes
+            
     elif item is None:
-        if skip_none:
-            result = None
-        else:
+        if json_convention:
             result = "null"  # json.decoder.JSONDecodeError: Expecting value
+        else:
+            result = None
     else:
-        if (show_type or (show_type is None and __debug_showobjecttype)) \
+        if (show_type or (show_type is None and __debug_show_object_type)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", ">")
-            # result_type = f"{type(item)} "
-            result_type += f" "
-        result = str(item)
+            result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", ">") + " "
+            
+        result = result_type + str(item)
+        if isinstance(item, bool) and json_convention:
+            result = result.lower()
+            
     return result
 # ******************************************************************************
-def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_call: int = 0):
+def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_call: int = 0,
+            show_type:bool = None,
+            pairs_in_one_line:bool = True,
+            json_convention:bool = False,
+            skip_empty_arrays:bool = False,
+            skip_simple_types:bool = True,
+            auto_quotes:bool = True,
+            show_item_count:bool = None,
+):
     """
     Print  calculated value (for example returned by function),
     depends of value in global variable __debug_level.
@@ -313,9 +371,9 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
     """
     # prefix = (
                  # (str(type(var_object)) or "").replace("<class '", "<").replace("'>", ">")
-                 # if __debug_showobjecttype
+                 # if __debug_show_object_type
                  # else ""
-             # ) + (" id=%s" % id(var_object) if __debug_showobjectid else "")
+             # ) + (" id=%s" % id(var_object) if __debug_show_object_id else "")
     # if prefix:
         # prefix += " "
     prefix = ""
@@ -325,13 +383,32 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
             prefix,
             var_name,
             " == " if prefix or var_name else "",
-            n0pretty(var_object)
+            n0pretty(
+                var_object,
+
+                show_type = show_type,
+                pairs_in_one_line = pairs_in_one_line,
+                json_convention = json_convention,
+                skip_empty_arrays = skip_empty_arrays,
+                skip_simple_types = skip_simple_types,
+                auto_quotes = auto_quotes,
+                show_item_count = show_item_count,
+            )
         ),
         level = level,
         internal_call = internal_call + 1,
     )
 # ******************************************************************************
-def n0debug(var_name: str, level: str = "DEBUG"):
+def n0debug(var_name: str, level: str = "DEBUG",
+
+            show_type:bool = None,
+            pairs_in_one_line:bool = True,
+            json_convention:bool = False,
+            skip_empty_arrays:bool = False,
+            skip_simple_types:bool = True,
+            auto_quotes:bool = True,
+            show_item_count:bool = None,
+):
     """
     Print value of the variable with name {var_name},
     depends of value in global variable {__debug_level}.
@@ -347,7 +424,18 @@ def n0debug(var_name: str, level: str = "DEBUG"):
     if not var_name in __f_locals:
         raise Exception("impossible to find object '%s'" % var_name)
     var_object = __f_locals.get(var_name)
-    n0debug_calc(var_object, var_name, level = level, internal_call = 1)
+    n0debug_calc(
+        var_object, var_name,
+        level = level, internal_call = 1,
+
+        show_type = show_type,
+        pairs_in_one_line = pairs_in_one_line,
+        json_convention = json_convention,
+        skip_empty_arrays = skip_empty_arrays,
+        skip_simple_types = skip_simple_types,
+        auto_quotes = auto_quotes,
+        show_item_count = show_item_count,
+    )
 # ******************************************************************************
 def n0debug_object(object_name: str, level: str = "DEBUG"):
     class_object = inspect.currentframe().f_back.f_locals[object_name]
@@ -355,8 +443,8 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
     class_attribs = set()
     class_methods = set()
 
-    prefix = str(type(class_object)) if __debug_showobjecttype else "" + \
-             " id=%s" % id(class_object) if __debug_showobjectid else ""
+    prefix = str(type(class_object)) if __debug_show_object_type else "" + \
+             " id=%s" % id(class_object) if __debug_show_object_id else ""
     if prefix:
         prefix = "(" + prefix + ")"
     to_print = "%s%s = \n" % (prefix, object_name)
@@ -373,8 +461,8 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
 
     for attrib_name in class_attribs:
         attrib = getattr(class_object, attrib_name)
-        prefix = str(type(attrib)) if __debug_showobjecttype else "" + \
-                 " id=%s" % id(attrib) if __debug_showobjectid else ""
+        prefix = str(type(attrib)) if __debug_show_object_type else "" + \
+                 " id=%s" % id(attrib) if __debug_show_object_id else ""
         if prefix:
             prefix = "(" + prefix + ")"
         to_print += "=== %s%s = %s\n" % (prefix, attrib_name, n0pretty(attrib))

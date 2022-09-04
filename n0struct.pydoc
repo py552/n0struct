@@ -216,6 +216,8 @@ PACKAGE CONTENTS
     n0struct_arrays
     n0struct_date
     n0struct_files
+    n0struct_files_csv
+    n0struct_files_fwf
     n0struct_findall
     n0struct_git
     n0struct_logging
@@ -238,6 +240,6 @@ DATA
     logger = <loguru.logger handlers=[(id=0, level=10, sink=<stderr>)]>
 
 FILE
-    c:\repo\n0struct063\n0struct\__init__.py
+    c:\repo\n0struct062\n0struct\__init__.py
 
 

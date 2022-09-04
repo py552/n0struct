@@ -2,12 +2,16 @@ from __future__ import annotations  # Python 3.7+: for using own class name insi
 import typing
 from .n0struct_utils_find import split_name_index
 from .n0struct_findall import findall as n0struct_findall__findall
+from .n0struct_findall import findsingle as n0struct_findall__findsingle
 from .n0struct_files import n0eval
+from .n0struct_logging import *
 # ******************************************************************************
 # ******************************************************************************
 class n0dict__(dict):
-    def findall(self, xpath: str):
-        return n0struct_findall__findall(self, xpath)
+    def findall(self, xpath: str, raise_exception: bool = True):
+        return n0struct_findall__findall(self, xpath, raise_exception)
+    def findsingle(self, xpath: str, raise_exception: bool = True):
+        return n0struct_findall__findsingle(self, xpath, raise_exception)
     # **************************************************************************
     # **************************************************************************
     def _get(self, xpath: str, raise_exception = True, if_not_found = None, return_lists = True):
@@ -148,6 +152,13 @@ class n0dict__(dict):
                 recursively and
                 isinstance(cur_value, n0dict__) and not len(cur_value)
             ):
+                # n0debug("parent_node")
+                # n0debug("node_name_index")
+                if isinstance(parent_node, list) and not isinstance(node_name_index, int):
+                    if not isinstance(node_name_index, str) or not node_name_index.startswith('[') or not node_name_index.endswith(']'):
+                        raise Exception(f"Not expactable index for list {node_name_index}")
+                    node_name_index = n0eval(node_name_index[1:-1])
+                    # n0debug("node_name_index")
                 del parent_node[node_name_index]
         return self
     # **************************************************************************

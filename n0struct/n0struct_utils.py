@@ -24,4 +24,46 @@ def get_key_by_value(dict_: dict, value_: typing.Any):
     """
     return {value: key for key, value in dict_.items()}[value_]
 # ******************************************************************************
+def n0eval(_str: str) -> typing.Union[int, float, typing.Any]:
+    def my_split(_str: str, _separator: str) -> typing.List:
+        return [
+                (_separator if _separator != '+' and i else "") + itm.strip()
+                for i, itm in enumerate(_str.split(_separator))
+                if itm.strip()
+        ]
+
+    if not isinstance(_str, str):
+        return _str
+
+    _str = _str.replace(" ","").lower()
+    if not _str:
+        return _str
+        # raise ValueError("Could not convert empty/null string into index")
+
+    first_split = my_split(_str, '+')
+    second_split = []
+    for item in first_split:
+        items = my_split(item, '-')
+        second_split.extend(items)
+
+    result = 0
+    for item in second_split:
+        if item == "new()":
+            return _str
+        if item == "last()":
+            item = -1
+        else:
+            try:
+                if '.' in item:
+                    item = float(item)
+                else:
+                    item = int(item)
+            except Exception:
+                return _str
+        result += item
+
+    return result
+# ******************************************************************************
+def raise_in_lambda(ex): raise ex
+# ******************************************************************************
 # ******************************************************************************

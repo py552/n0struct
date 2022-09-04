@@ -215,6 +215,8 @@ from .n0struct_utils import *
 from .n0struct_transform_structure import *
 from .n0struct_logging import *
 from .n0struct_files import *
+from .n0struct_files_csv import *
+from .n0struct_files_fwf import *
 from .n0struct_utils_find import *
 from .n0struct_utils_compare import *
 from .n0struct_findall import *

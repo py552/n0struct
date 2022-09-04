@@ -3,7 +3,7 @@ from .n0struct_utils import n0isnumeric
 from .n0struct_logging import *
 # ******************************************************************************
 # ******************************************************************************
-def findall(current_node: dict, seeked_xpath_str: str, raise_exception = True) -> dict:
+def findall(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise_exception = True) -> dict:
     if not isinstance(seeked_xpath_str, str):
         raise TypeError(f"seeked_xpath_str: expected str, got other type: {type(seeked_xpath_str)}{str(seeked_xpath_str)}")
     if seeked_xpath_str.startswith("./"):
@@ -21,6 +21,20 @@ def findall(current_node: dict, seeked_xpath_str: str, raise_exception = True) -
                         if (stripped_item:=itm.strip())
     ]
     return _findall(current_node, seeked_xpath_list)
+# ******************************************************************************
+def findsingle(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise_exception = True) -> tuple:
+    found = findall(current_node, seeked_xpath_str, False)
+    if not found:
+        if raise_exception:
+            raise IndexError(f"Not found item {seeked_xpath_str}")
+        else:
+            return None,None
+    elif len(found) != 1:
+        if raise_exception:
+            raise IndexError(f"Found more that single item {seeked_xpath_str}")
+            
+    found_keys = list(found.keys())
+    return found_keys[0], found[found_keys[0]]
 # ******************************************************************************
 def _findall(
             parent_node: typing.Union[dict, list],
@@ -256,6 +270,8 @@ def _findall(
         elif isinstance(child_index, str) and child_index == '*':
             # # n0print("*"*30 + " Multiple deep to each index [*]...")
             multi_found = {}
+            if not len(found_xpath_list):
+                found_xpath_list = [""]
             last_xpath = found_xpath_list[-1]
             for child_index, child_node in enumerate(parent_node):
                 if isinstance(child_node, (dict, list)):

@@ -14,7 +14,7 @@ from .n0struct_utils_compare import get__flag_compare_return_place
 from .n0struct_utils_compare import xpath_match
 from .n0struct_utils_compare import generate_composite_keys
 
-from .n0struct_files import n0eval
+from .n0struct_utils import n0eval
 from .n0struct_utils_find import split_name_index
 
 from .n0struct_n0list_ import n0list_
@@ -122,12 +122,12 @@ class n0list(n0list_):
                     # n0debug("return_lists")
                     # n0debug("xpath_found_str")
 
-                    if isinstance(next_parent_node, n0dict):
+                    if isinstance(next_parent_node, dict):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
-                            cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists)
-                    elif isinstance(next_parent_node, n0list):
+                            cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists,  xpath_found_str + f"[{i}]")
+                    elif isinstance(next_parent_node, (list, tuple)):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
-                            cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists)
+                            cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists, xpath_found_str + f"[{i}]")
                     else:
                         raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
 
@@ -148,7 +148,7 @@ class n0list(n0list_):
                 except:
                     raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, node_index_str))
 
-                if isinstance(parent_node, (list, tuple, n0list)):
+                if isinstance(parent_node, (list, tuple)):
                     len__parent_node = len(parent_node)
                 else:
                     len__parent_node = 1
@@ -169,9 +169,9 @@ class n0list(n0list_):
                     # Deeper: any type under n0dict
                     #*******************************
                     next_parent_node =  parent_node[node_index_int]
-                    if isinstance(next_parent_node, n0dict):
+                    if isinstance(next_parent_node, dict):
                         return n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
-                    if isinstance(next_parent_node, n0list):
+                    if isinstance(next_parent_node, (list, tuple)):
                         return self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
                     else:
                         raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
@@ -554,7 +554,7 @@ class n0list(n0list_):
                             )
                         )
 # 0.18 = Splitted logic, to avoid convertation of dict, OrderedDict into n0dict
-                    elif isinstance(self[self_i], (n0dict,)):
+                    elif isinstance(self[self_i], dict):
                         result.update_extend(
                             n0dict(self[self_i]).compare(
                                 # n0dict(other[other_i]),  # 0.18
@@ -1093,7 +1093,7 @@ class n0dict(n0dict_):
             # ..................................................................
             # Try to parse as list
             # ..................................................................
-            if isinstance(parent_node, (list, tuple, n0list)):
+            if isinstance(parent_node, (list, tuple)):
                 # *******************************
                 # Indulge #1 for incorrect syntax -- [*] was skipped for list in xpath
                 # *******************************
@@ -1202,14 +1202,14 @@ class n0dict(n0dict_):
             if node_index == "new()":
                 parent_node, node_name_index, cur_value, xpath_found_str, \
                     not_found_xpath_list = self._find(xpath_found_str, self, return_lists)
-                if not isinstance(parent_node[node_name_index], (list, tuple, n0list)):
+                if not isinstance(parent_node[node_name_index], (list, tuple)):
                     parent_node[node_name_index] = n0list([parent_node[node_name_index]])
                 return parent_node[node_name_index], None, None, xpath_found_str, ["[new()]"] + xpath_list[1:]
             # ..................................................................
             # Try to check all [*] items in the loop
             # ..................................................................
             elif node_index == "*":
-                if not isinstance(parent_node, (list, tuple, n0list)):
+                if not isinstance(parent_node, (list, tuple)):
                     # Hidden list. Convert single item into list
                     parent_node = [parent_node]
                 # cur_values = n0list([])
@@ -1268,7 +1268,7 @@ class n0dict(n0dict_):
                         #--------------------------------
                         return parent_node, None, None, xpath_found_str, xpath_list
                 else:
-                    if isinstance(parent_node, (list, tuple, n0list)) and len(parent_node):
+                    if isinstance(parent_node, (list, tuple)) and len(parent_node):
                         # *******************************
                         # Not correct: indulge #2 in incorrect syntax -- [*] was skipped for list in xpath
                         # *******************************
@@ -1297,7 +1297,7 @@ class n0dict(n0dict_):
                 except:
                     raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, node_index))
 
-                if isinstance(parent_node, (list, tuple, n0list)):
+                if isinstance(parent_node, (list, tuple)):
                     len__parent_node = len(parent_node)
                 else:
                     len__parent_node = 1

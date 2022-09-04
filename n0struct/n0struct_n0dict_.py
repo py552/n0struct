@@ -204,18 +204,28 @@ class n0dict_(n0dict__):
                 raise Exception("Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
         return result
     # **************************************************************************
-    def to_json(self, indent: int = 4, pairs_in_one_line = True, skip_none = False, skip_empty_arrays = False) -> str:
+    def to_json(self, 
+                indent: int = 4,
+                pairs_in_one_line = True,
+                json_convention: bool = True,
+                skip_empty_arrays: bool = False,
+                compress: bool = False,
+    ) -> str:
         """
         Public function: export self into json result string
         """
+        if compress:
+            indent = 0
+        
         return n0pretty(self,
                         show_type=False,
                         auto_quotes=False,
                         __quotes='"',
                         __indent_size=indent,
                         pairs_in_one_line=pairs_in_one_line,
-                        skip_none=skip_none,
-                        skip_empty_arrays=skip_empty_arrays
+                        json_convention=json_convention,
+                        skip_empty_arrays=skip_empty_arrays,
+                        show_item_count=False,
         )
 # ******************************************************************************
 # ******************************************************************************

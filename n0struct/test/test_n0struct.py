@@ -10,7 +10,7 @@ sys.path.insert(0, mydir+"/../../")
 from n0struct import * # For using n0dict(), n0print(), n0debug without prefixes
 set__flag_compare_check_different_types(True)
 set__flag_compare_return_difference_of_values(True)
-init_logger(debug_timeformat = None, debug_showobjectid = False, debug_logtofile = False)
+init_logger(debug_timeformat = None, debug_show_object_id = False, debug_logtofile = False)
 
 # ******************************************************************************
 # Etalon list in dictionary
