@@ -1,14 +1,14 @@
 import typing
 from .n0struct_utils import n0eval
 from .n0struct_findall import findall as n0struct_findall__findall
-from .n0struct_findall import findsingle as n0struct_findall__findsingle
+from .n0struct_findall import findfirst as n0struct_findall__findfirst
 # ******************************************************************************
 # ******************************************************************************
 class n0list_(list):
     def findall(self, xpath: str, raise_exception: bool = True):
         return n0struct_findall__findall(self, xpath, raise_exception)
-    def findsingle(self, xpath: str, raise_exception: bool = True):
-        return n0struct_findall__findsingle(self, xpath, raise_exception)
+    def findfirst(self, xpath: str, raise_exception: bool = True):
+        return n0struct_findall__findfirst(self, xpath, raise_exception)
     # **************************************************************************
     # **************************************************************************
     # n0list_. _get()

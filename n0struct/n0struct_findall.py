@@ -22,7 +22,7 @@ def findall(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise
     ]
     return _findall(current_node, seeked_xpath_list)
 # ******************************************************************************
-def findsingle(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise_exception = True) -> tuple:
+def findfirst(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise_exception = True) -> tuple:
     found = findall(current_node, seeked_xpath_str, False)
     if not found:
         if raise_exception:

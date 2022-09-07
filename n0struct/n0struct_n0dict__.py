@@ -2,7 +2,7 @@ from __future__ import annotations  # Python 3.7+: for using own class name insi
 import typing
 from .n0struct_utils_find import split_name_index
 from .n0struct_findall import findall as n0struct_findall__findall
-from .n0struct_findall import findsingle as n0struct_findall__findsingle
+from .n0struct_findall import findfirst as n0struct_findall__findfirst
 from .n0struct_files import n0eval
 from .n0struct_logging import *
 # ******************************************************************************
@@ -10,8 +10,8 @@ from .n0struct_logging import *
 class n0dict__(dict):
     def findall(self, xpath: str, raise_exception: bool = True):
         return n0struct_findall__findall(self, xpath, raise_exception)
-    def findsingle(self, xpath: str, raise_exception: bool = True):
-        return n0struct_findall__findsingle(self, xpath, raise_exception)
+    def findfirst(self, xpath: str, raise_exception: bool = True):
+        return n0struct_findall__findfirst(self, xpath, raise_exception)
     # **************************************************************************
     # **************************************************************************
     def _get(self, xpath: str, raise_exception = True, if_not_found = None, return_lists = True):
