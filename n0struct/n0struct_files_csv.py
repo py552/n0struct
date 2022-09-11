@@ -38,10 +38,11 @@ def load_csv(
     file_name: str,
     format:list = None,
     separator:str = ',',
-    contains_header = False,
+    contains_header:bool = False,
     strip_line:callable = lambda line: line,
     strip_column:callable = lambda column_value: column_value,
     parse_csv_line:callable = parse_complex_csv_line,
+    skip_empty_lines:bool = True,
 ) -> typing.Union[list, dict]:
 
     # n0debug("strip_line")
@@ -108,6 +109,8 @@ def load_csv(
 
             stripped_line = strip_line(line.rstrip('\n'))
             # n0debug("stripped_line")
+            if skip_empty_lines and not stripped_line:
+                continue
             column_values = parse_csv_line(stripped_line, separator, strip_column)
             if format:
                 column_values = n0dict(zip(format, column_values))
@@ -153,12 +156,12 @@ def load_complex_csv(
 # ******************************************************************************
 def generate_comlex_csv_row(row:list, separator:str = ',') -> str:
     buff = ""
-    for column_value in row:
+    for column_i,column_value in enumerate(row):
         if column_value is None:
             column_value = ""
         elif not isinstance(column_value, str):
             column_value = str(column_value)
-        if buff:
+        if column_i:
             buff += separator
         if separator in column_value:
             if '"' in column_value:

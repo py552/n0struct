@@ -5,6 +5,9 @@ import typing
 
 # from datetime import datetime, timedelta, date
 import datetime
+
+#from .n0struct_logging import *
+
 # ******************************************************************************
 # ******************************************************************************
 def date_today() -> datetime.datetime:
@@ -15,7 +18,12 @@ def date_today() -> datetime.datetime:
         datetime.datetime.now() takes tzinfo as keyword argument but datetime.today() does not take any keyword arguments.
         By default, now() executes with datetime.datetime.now(tz=None)
     """
-    return datetime.datetime.today()
+    result = datetime.datetime.today()
+    ##n0debug_calc(result, "date_today()")
+    return result
+# ******************************************************************************
+def date_only(input_date: datetime.datetime) -> datetime.datetime:
+    return input_date.date()
 # ******************************************************************************
 def date_delta(input_date: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> datetime.datetime:
     """
@@ -29,10 +37,13 @@ def date_delta(input_date: typing.Union[datetime.datetime, None] = None, day_del
         return None
     date_delta_ = input_date + datetime.timedelta(days=day_delta)
     month_quotient, month_remainder = divmod(date_delta_.month + month_delta - 1, 12)
-    return datetime.datetime(
+    result = datetime.datetime(
                             date_delta_.year + month_quotient, month_remainder + 1, date_delta_.day,
                             date_delta_.hour, date_delta_.minute,  date_delta_.second,  date_delta_.microsecond
     )
+    ##n0debug_calc(result, f"date_delta({input_date=}, {day_delta=}, {month_delta=})")
+    return result
+    
 # ******************************************************************************
 def date_format(date_format: str, input_date: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -42,7 +53,14 @@ def date_format(date_format: str, input_date: typing.Union[datetime.datetime, No
     :param month_delta:
     :return: (input_date or today) + day_delta + month_delta -> date_format
     """
-    return date_delta(input_date, day_delta, month_delta).strftime(date_format)
+    ##n0print(f"date_format({date_format=}, {input_date=}, {day_delta=}, {month_delta=}")
+    
+    result = date_delta(input_date, day_delta, month_delta)
+    ##n0debug_calc(result, f"date_delta({input_date=}, {day_delta=}, {month_delta=}")
+    
+    result = date_delta(input_date, day_delta, month_delta).strftime(date_format)
+    ##n0debug_calc(result, f"date_format({date_format=}, {input_date=}, {day_delta=}, {month_delta=}")
+    return result
 # ******************************************************************************
 def date_timestamp_full(input_date: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -154,8 +172,12 @@ def from_date(date_str: str, date_format: str) -> typing.Union[datetime.date, st
     :return: str -> date
     """
     try:
-        return datetime.datetime.strptime(date_str, date_format).date()
+        # result = datetime.datetime.strptime(date_str, date_format).date()
+        result = datetime.datetime.strptime(date_str, date_format)
+        ##n0debug_calc(result, f"from_date({date_str=}, {date_format=})")
+        return result
     except (ValueError, TypeError):
+        ##n0debug_calc(date_str, f"FAILED: from_date({date_str=}, {date_format=})")
         return date_str
 # ******************************************************************************
 def from_ddmmmyy(date_str: str) -> typing.Union[datetime.date, str, None]:
