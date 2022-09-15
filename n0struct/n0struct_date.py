@@ -6,7 +6,7 @@ import typing
 # from datetime import datetime, timedelta, date
 import datetime
 
-#from .n0struct_logging import *
+from .n0struct_logging import *
 
 # ******************************************************************************
 # ******************************************************************************
@@ -31,8 +31,11 @@ def date_delta(input_date: typing.Union[datetime.datetime, None] = None, day_del
     :param month_delta:
     :return: today + day_delta + month_delta -> date
     """
+    ## n0debug("input_date")
     if input_date is None:
         input_date = date_today()
+    elif isinstance(input_date, datetime.date):
+        input_date = datetime.datetime.combine(input_date, datetime.datetime.min.time())
     elif not isinstance(input_date, datetime.datetime):
         return None
     date_delta_ = input_date + datetime.timedelta(days=day_delta)
@@ -41,7 +44,7 @@ def date_delta(input_date: typing.Union[datetime.datetime, None] = None, day_del
                             date_delta_.year + month_quotient, month_remainder + 1, date_delta_.day,
                             date_delta_.hour, date_delta_.minute,  date_delta_.second,  date_delta_.microsecond
     )
-    ##n0debug_calc(result, f"date_delta({input_date=}, {day_delta=}, {month_delta=})")
+    ## n0debug_calc(result, f"date_delta({input_date=}, {day_delta=}, {month_delta=})")
     return result
     
 # ******************************************************************************
@@ -53,13 +56,17 @@ def date_format(date_format: str, input_date: typing.Union[datetime.datetime, No
     :param month_delta:
     :return: (input_date or today) + day_delta + month_delta -> date_format
     """
-    ##n0print(f"date_format({date_format=}, {input_date=}, {day_delta=}, {month_delta=}")
+    ## n0print(f"date_format({date_format=}, {input_date=}, {day_delta=}, {month_delta=}")
+    if not input_date:
+        return input_date
     
     result = date_delta(input_date, day_delta, month_delta)
-    ##n0debug_calc(result, f"date_delta({input_date=}, {day_delta=}, {month_delta=}")
+    ## n0debug_calc(result, f"date_delta({input_date=}, {day_delta=}, {month_delta=}")
     
-    result = date_delta(input_date, day_delta, month_delta).strftime(date_format)
-    ##n0debug_calc(result, f"date_format({date_format=}, {input_date=}, {day_delta=}, {month_delta=}")
+    if result:
+        result = result.strftime(date_format)
+        
+    ## n0debug_calc(result, f"date_format({date_format=}, {input_date=}, {day_delta=}, {month_delta=}")
     return result
 # ******************************************************************************
 def date_timestamp_full(input_date: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
