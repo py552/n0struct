@@ -18,9 +18,7 @@ def date_today() -> datetime.datetime:
         datetime.datetime.now() takes tzinfo as keyword argument but datetime.today() does not take any keyword arguments.
         By default, now() executes with datetime.datetime.now(tz=None)
     """
-    result = datetime.datetime.today()
-    ##n0debug_calc(result, "date_today()")
-    return result
+    return datetime.datetime.today()
 # ******************************************************************************
 def date_only(input_date: datetime.datetime) -> datetime.date:
     return input_date.date()
@@ -31,21 +29,25 @@ def date_delta(input_date: typing.Union[datetime.datetime, datetime.date, None] 
     :param month_delta:
     :return: today + day_delta + month_delta -> date
     """
-    ## n0debug("input_date")
-    if input_date is None:
-        input_date = date_today()
-    elif isinstance(input_date, datetime.date):
-        input_date = datetime.datetime.combine(input_date, datetime.datetime.min.time())
-    elif not isinstance(input_date, datetime.datetime):
-        return None
+    if not isinstance(input_date, datetime.datetime):
+        if isinstance(input_date, datetime.date):
+            input_date = datetime.datetime.combine(input_date, datetime.datetime.min.time())
+        else:
+            return None
 
+    # n0debug("input_date")
     date_delta_ = input_date + datetime.timedelta(days=day_delta)
+    # n0debug("date_delta_")
+    
     month_quotient, month_remainder = divmod(date_delta_.month + month_delta - 1, 12)
+    # n0debug("month_quotient")
+    # n0debug("month_remainder")
+    
     result = datetime.datetime(
                             date_delta_.year + month_quotient, month_remainder + 1, date_delta_.day,
                             date_delta_.hour, date_delta_.minute,  date_delta_.second,  date_delta_.microsecond
     )
-    ## n0debug_calc(result, f"date_delta({input_date=}, {day_delta=}, {month_delta=})")
+    # n0debug("result")
     return result
 
 # ******************************************************************************
@@ -57,17 +59,15 @@ def date_to_format(input_date: typing.Union[datetime.datetime, None], date_forma
     :param month_delta:
     :return: (input_date or today) + day_delta + month_delta -> date_format
     """
-    ## n0print(f"date_to_format({input_date=}, {date_format=}, {day_delta=}, {month_delta=}")
-    ## if not input_date:
-    ##     return input_date
-
+    # n0debug("input_date")
+    # n0debug("day_delta")
+    # n0debug("month_delta")
     result = date_delta(input_date, day_delta, month_delta)
-    ## n0debug_calc(result, f"date_delta({input_date=}, {day_delta=}, {month_delta=}")
-
+    # n0debug("result")
+    # n0debug("date_format")
     if result:
         result = result.strftime(date_format)
-
-    ## n0debug_calc(result, f"date_to_format({input_date=}, {date_format=}, {day_delta=}, {month_delta=}")
+    # n0debug("result")
     return result
 # ******************************************************************************
 def date_timestamp_full(input_date: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
@@ -77,13 +77,14 @@ def date_timestamp_full(input_date: typing.Union[datetime.datetime, None] = None
     :param month_delta:
     :return: (input_date or today) + day_delta + month_delta -> str 20 characters YYYYMMDDHHMMSSFFFFFF
     """
+    if not input_date:
+        input_date = date_today()
     return date_to_format(input_date, "%Y%m%d%H%M%S%f", day_delta, month_delta)
 # ******************************************************************************
 def date_timestamp(input_date: typing.Union[datetime.datetime, None] = None) -> str:
     """
     :return: input_date -> str 13 characters YYMMDD_HHMMSS
     """
-    # return (timestamp := date_timestamp_full())[2:8] + "_" + timestamp[8:14] # Only for 3.8+
     timestamp = date_timestamp_full(input_date)
     return timestamp[2:8] + "_" + timestamp[8:14]
 # ******************************************************************************
