@@ -70,6 +70,14 @@ def date_to_format(input_date: typing.Union[datetime.datetime, None], date_forma
     # n0debug("result")
     return result
 # ******************************************************************************
+# LEGACY
+# ******************************************************************************
+def date_format(date_format: str, input_date: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
+    """
+    LEGACY
+    """
+    return date_to_format(input_date or date_today(), date_format, day_delta, month_delta)
+# ******************************************************************************
 def date_timestamp_full(input_date: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
@@ -175,6 +183,12 @@ def time_colon_hhmmss(input_date: typing.Union[datetime.datetime, None]) -> str:
     return date_to_format(input_date, "%H:%M:%S")
 # ******************************************************************************
 def to_date(input_date_str: str, date_format: str = None) -> typing.Union[datetime.datetime, str]:
+    """
+    :param input_date_str:
+    :param date_format:
+    :return: input_date_str converted into date_time as date_format
+    :return: str -> date
+    """
     if not input_date_str:
         return input_date_str
     elif not isinstance(input_date_str, str):
@@ -209,6 +223,14 @@ def to_date(input_date_str: str, date_format: str = None) -> typing.Union[dateti
                             return datetime.datetime.strptime(input_date_str, "%m/%d/%Y").date()  # 07/16/2020
                         except (ValueError, TypeError):
                             return input_date_str
+# ******************************************************************************
+# LEGACY
+# ******************************************************************************
+def from_date(input_date_str: str, date_format: str) -> typing.Union[datetime.datetime, str, None]:
+    """
+    LEGACY
+    """
+    return to_date(input_date_str, date_format)
 # ******************************************************************************
 def from_ddmmmyy(input_date_str: str) -> typing.Union[datetime.datetime, str, None]:
     """
