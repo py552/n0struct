@@ -5,7 +5,11 @@ import n0struct
 from .n0struct_utils import n0eval
 # ******************************************************************************
 # ******************************************************************************
-def load_file(file_name: str) -> list:
+def load_file(file_name: str) -> str:
+    with open(file_name, 'rt') as in_file:
+        return in_file.read()
+# ******************************************************************************
+def load_lines(file_name: str) -> list:
     with open(file_name, 'rt') as in_file:
         # return [line.strip() for line in in_file.read().split("\n") if line.strip()]
         while True:
