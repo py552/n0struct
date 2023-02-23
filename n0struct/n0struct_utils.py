@@ -75,7 +75,7 @@ def deserialize_list(
         return []
     return [
             process_item(stripped_item)
-            for item in buffer.split(separator)
+            for item in buffer.split(separator_tag)
             if (stripped_item := item.strip())
     ]
 # ******************************************************************************

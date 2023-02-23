@@ -4,6 +4,7 @@ import inspect
 from loguru import logger
 from logging import StreamHandler
 import typing
+from .n0struct_date import date_timestamp
 # ******************************************************************************
 # ******************************************************************************
 # __prev_end = "\n"
@@ -34,10 +35,10 @@ def init_logger(
         debug_show_object_type = True,
         debug_show_object_id = True,
         debug_show_item_count = True,
-        debug_logtofile = True,
+        debug_logtofile = False,
         log_file_name: str = None,
     ):
-    logger.level("DEBUG", color="<white>")
+    logger.level("DEBUG", color="<white>")  # Change default color of DEBUG messages from blue into light gray
 
     global __main_log_filename
     if debug_logtofile:
@@ -48,7 +49,7 @@ def init_logger(
                 __main_log_filename = os.path.splitext(os.path.split(inspect.stack()[-1].filename)[1])[0]
             if __main_log_filename == "<string>":
                 __main_log_filename = "debuglog"
-            __main_log_filename += "_" + timestamp() + ".log"
+            __main_log_filename += "_" + date_timestamp() + ".log"
 
     set_debug_show_object_type(debug_show_object_type)
     set_debug_show_object_id(debug_show_object_id)
@@ -56,8 +57,8 @@ def init_logger(
 
     format = ""
     if debug_timeformat:
-        format += "<green>{time:" + debug_timeformat + "}</green>|"
-    format += "<level>{level: <8}</level>|<cyan>{file}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan>|<level>{message}</level>"
+        format += "<green>{time:" + debug_timeformat + "}</green> |"
+    format += "<level> {level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | <level>{message}</level>"
 
     handlers = [
         dict(sink = debug_output, level = debug_level, format = format),
@@ -145,7 +146,7 @@ def n0pretty(
                     element_names.update({key: 0})
                 if len(element_names) > 2:
                     return None # Not more that 2 elems could be condensed into one line
-                sub_item_key_value = sub_item[key] or ""
+                sub_item_key_value = sub_item[key]
                 if not isinstance(sub_item_key_value, (str, int, float)):
                     return None # Sub element has complex structure
 
@@ -160,8 +161,9 @@ def n0pretty(
                     (
                         f"{__quotes}{sub_item_key_value}{__quotes}"
                         if isinstance(sub_item_key_value, str)
-                        else "{str(sub_item_key_value)}"
+                        else f"{str(sub_item_key_value)}"
                     )
+                # print(f"{len(presentation_string)} {presentation_string=}")
                 element_names.update({key: max(element_names[key], len(presentation_string))})
         return element_names  # Returns dict {"name of key": max length of presented (+type+len and etc) value assosiated with key}
     # ######################################################################
@@ -173,7 +175,6 @@ def n0pretty(
     result_type = ""
 
     if isinstance(item, (list, tuple, dict, set, frozenset)):
-        # print(f"{item=}")
         brackets = "[]"
         if isinstance(item, (set, frozenset, dict)):
             brackets = "{}"
@@ -182,6 +183,7 @@ def n0pretty(
         result = ""
 
         if pairs_in_one_line and isinstance(item, (list, tuple)) and (keys_and_max_len_of_value := is_list_with_pairs(item)):
+            # Sturcture contains 2 items together
             for sub_item in item:
                 if result:
                     result += "," + indent()
@@ -207,19 +209,23 @@ def n0pretty(
                                 value_type += "> "
 
                         if isinstance(sub_item_key_value, str):
-                            sub_item_key_value = f"{__quotes}{sub_item_key_value}{__quotes}"
+                            sub_item_key_value = sub_item_key_value.replace('\"', '\\\"')  # SyntaxError: f-string expression part cannot include a backslash
+                            sub_item_result = f"{__quotes}{sub_item_key_value}{__quotes}"
                         else:
-                            sub_item_key_value = str(sub_item_key_value)
-                        sub_item_key_value = f"{value_type}{sub_item_key_value}".ljust(keys_and_max_len_of_value[key])
+                            sub_item_result = str(sub_item_key_value)
+                            if isinstance(sub_item_key_value, bool) and json_convention:
+                                sub_item_result = sub_item_result.lower()
+                        sub_item_result = f"{value_type}{sub_item_result}".ljust(keys_and_max_len_of_value[key])
 
                         if isinstance(key, str):
+                            key = key.replace('\"', '\\\"')  # SyntaxError: f-string expression part cannot include a backslash
                             key = f"{__quotes}{key}{__quotes}"
                         else:
                             key = str(key)
 
                         if sub_result:
                             sub_result += ","
-                        sub_result += f" {key_type}{key}: {sub_item_key_value}"
+                        sub_result += f" {key_type}{key}: {sub_item_result}"
                     else:
                         if sub_result:
                             sub_result += " "
@@ -229,10 +235,8 @@ def n0pretty(
         else:
             # dict, set, frozenset or list/tuple with complex or not paired structure
             for i_sub_item, sub_item in enumerate(item):
-                # print(f"{sub_item=}")
                 if isinstance(item, dict):
                     key = sub_item
-                    # print(f"{key=}")
                     
                     if indent_ < 111:
                         sub_item_value = n0pretty(
@@ -250,7 +254,6 @@ def n0pretty(
                         )
                     else:
                         sub_item_value = "{.......}"
-                    # print(f"{sub_item_value=}")
 
                     key_type = ""
                     if (show_type or (show_type is None and __debug_show_object_type)) \
@@ -323,8 +326,14 @@ def n0pretty(
             else:
                 result = result_type + brackets[0] + result + brackets[1]
 
-        if not result and (not json_convention or skip_empty_arrays):
-            result = None
+        # I suppose never used
+        # if not result:
+        #     if json_convention:
+        #         result = "null"  # json.decoder.JSONDecodeError: Expecting value
+        #     else:
+        #         result = None
+        if result is None and json_convention:
+            result = "null"  # json.decoder.JSONDecodeError: Expecting value
 
     elif isinstance(item, str):
         if (show_type or (show_type is None and __debug_show_object_type)) \
@@ -334,18 +343,15 @@ def n0pretty(
                 result = result_type + f"'{item}'"
         else:
             result = result_type + __quotes + item.replace(__quotes, '\\"' if __quotes == '"' else "\\'") + __quotes
-            
-    elif item is None:
-        if json_convention:
-            result = "null"  # json.decoder.JSONDecodeError: Expecting value
-        else:
-            result = None
+    elif item is None and json_convention:
+        result = "null"  # json.decoder.JSONDecodeError: Expecting value
     else:
+        result = str(item)
         if (show_type or (show_type is None and __debug_show_object_type)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
             result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", ">") + " "
+            result = result_type + result
             
-        result = result_type + str(item)
         if isinstance(item, bool) and json_convention:
             result = result.lower()
             

@@ -6,7 +6,7 @@ import typing
 # from datetime import datetime, timedelta, date
 import datetime
 
-from .n0struct_logging import *
+# from .n0struct_logging import *
 
 # ******************************************************************************
 # ******************************************************************************
@@ -192,7 +192,7 @@ def to_date(input_date_str: str, date_format: str = None) -> typing.Union[dateti
     if not input_date_str:
         return input_date_str
     elif not isinstance(input_date_str, str):
-        raise TypeError("{input_date_str=} must be str")
+        raise TypeError(f"{input_date_str=} must be str")
 
     if date_format:
         try:
