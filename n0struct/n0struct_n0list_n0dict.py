@@ -42,7 +42,7 @@ class n0list(n0list_):
         """
         len__args = len(args)
         if not len__args:
-            return super(n0list, self).__init__(*args, **kw)
+            super(n0list, self).__init__(*args, **kw)
         elif isinstance(args, tuple):
             if len__args == 1:
                 from_tuple = args[0]
@@ -57,8 +57,8 @@ class n0list(n0list_):
                     elif isinstance(value, (list, tuple)):
                         value = n0list(value, recursively = _recursively)
                 self.append(value)
-            return None
-        raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple/n0list)")
+        else:
+            raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple/n0list)")
     # **************************************************************************
     # n0list. _find()
     # **************************************************************************
@@ -708,10 +708,10 @@ class n0dict(n0dict_):
                     buffer = in_filehandler.read()
                     if buffer[:3] == b'\xEF\xBB\xBF': # UTF-8 BOM (Byte Order Mark)
                         buffer = buffer[3:]
-                    return self.__init__(buffer.decode('utf-8').strip(), **kw)
+                    self.__init__(buffer.decode('utf-8').strip(), **kw)
             else:
-                return super(n0dict, self).__init__(*args, **kw)
-        if len__args == 1:
+                super(n0dict, self).__init__(*args, **kw)
+        elif len__args == 1:
             # Not kw.pop()! Because of in case of .get "recursively" will be provided deeper into _constructor(..)
             _recursively = kw.get("recursively", False)
             if isinstance(args[0], str):
@@ -734,35 +734,34 @@ class n0dict(n0dict_):
                         json.loads(args[0], object_pairs_hook = _object_pairs_hook),
                         **kw
                     )
-            # elif isinstance(args[0], (dict, OrderedDict, n0dict)):
             elif isinstance(args[0], dict):
                 for key in args[0]:
                     value = args[0][key]
                     if _recursively:
-                        # if isinstance(value, (dict, OrderedDict, n0dict)):
                         if isinstance(value, dict):
                             value = n0dict(value, recursively = _recursively)
-                        # elif isinstance(value, (list, tuple, n0list)):
                         elif isinstance(value, (list, tuple)):
                             value = n0list(value, recursively = _recursively)
                     self.update({key: value})
-                return None
             elif isinstance(args[0], (list, tuple)):
                 # [key1, value1, key2, value2, ..., keyN, valueN]
                 if (len(args[0]) % 2) == 0 and all(isinstance(itm, str) for itm in args[0][0::2]):
                     for key, value in zip(args[0][0::2],args[0][1::2]):
                         self.update({key: value})
-                    return None
+                    # return None
                 # [(key1, value1), (key2, value2), ..., (keyN, valueN)]
-                if all(isinstance(itm, tuple) and len(itm) == 2 and isinstance(itm[0], str) for itm in args[0]):
+                elif all(isinstance(itm, (tuple,list)) and len(itm) == 2 and isinstance(itm[0], str) for itm in args[0]):
                     for pair in args[0]:
                         self.update({pair[0]: pair[1]})
-                    return None
+                else:
+                    raise TypeError("Expected even strings in the list [k1,v1,k2,v2] or list of pairs [[k1,v1],[k2,v2]] as argument for n0dict.__init__({args})")
             elif isinstance(args[0], zip):
                 for key, value in args[0]:
                     self.update({key: value})
-                return None
-        raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/n0dict/zip or paired tuple/list)")
+            else:
+                raise TypeError("Expected str/dict/list/tuple/zip, but received {type((args[0])} as first argument for n0dict.__init__({args})")
+        else:
+            raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/zip or paired tuple/list)")
     # **************************************************************************
     # * n0dict. compare(..)
     # **************************************************************************
