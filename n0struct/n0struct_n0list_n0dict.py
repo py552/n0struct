@@ -723,14 +723,14 @@ class n0dict(n0dict_):
                 if args[0].strip()[0] == "<":
                     # https://github.com/martinblech/xmltodict/issues/252
                     # The main function parse has a force_n0dict keyword argument useful for this purpose.
-                    return _constructor(
+                    constructor(
                         xmltodict.parse(args[0], dict_constructor = n0dict),
                         **kw
                     )
                 elif args[0].strip()[0] == "{":
                     # By default all JSON dictinaries will be converted into n0dict
                     _object_pairs_hook = None if kw.pop("force_dict", None) else n0dict
-                    return _constructor(
+                    _constructor(
                         json.loads(args[0], object_pairs_hook = _object_pairs_hook),
                         **kw
                     )

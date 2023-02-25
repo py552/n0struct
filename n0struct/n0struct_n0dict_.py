@@ -63,7 +63,7 @@ class n0dict_(n0dict__):
         elif isinstance(value, (str, int, float)) or value is None:
             result.append((path, value))
         else:
-            raise Exception("Not expected type (%s) %s/%s == %s" % (type(value), path, key, str(value)))
+            raise Exception(f"Not expected type ({type(value)}) in {path} == {value}")
         return result
     # **************************************************************************
     def xpath(self, mode: int = None) -> list:  # list[(xpath, value)]
