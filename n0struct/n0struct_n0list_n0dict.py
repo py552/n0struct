@@ -718,7 +718,7 @@ class n0dict(n0dict_):
                 if args[0].strip()[0] == "<":
                     # https://github.com/martinblech/xmltodict/issues/252
                     # The main function parse has a force_n0dict keyword argument useful for this purpose.
-                    constructor(
+                    _constructor(
                         xmltodict.parse(args[0], dict_constructor = n0dict),
                         **kw
                     )

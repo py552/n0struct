@@ -7,7 +7,17 @@ sys.path.insert(0, mydir+"/../../")
 # import n0struct
 # n0struct._DIFFTYPES = True  # For updating global variables using prefix is mandatory
 # n0struct._DIFFVALUES = True
-from n0struct import * # For using n0dict(), n0print(), n0debug without prefixes
+from n0struct import (
+    n0dict,
+    n0list,
+    n0print,
+    n0debug,
+    n0debug_calc,
+    set__flag_compare_check_different_types,
+    set__flag_compare_return_difference_of_values,
+    init_logger,
+    notemptyitems,
+)
 set__flag_compare_check_different_types(True)
 set__flag_compare_return_difference_of_values(True)
 init_logger(debug_timeformat = None, debug_show_object_id = False, debug_logtofile = False)
