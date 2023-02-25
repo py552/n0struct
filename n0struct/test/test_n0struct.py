@@ -139,8 +139,10 @@ def main():
     dict1["moreone/node[new()]/value"] = None
     n0debug_calc(dict1,'dict1')  # Defect: new() has not converted single n0dict node into node[]
 
-    dict1["moreone/node[new()]/value"] = ""
-    dict1["moreone/node[new()]/value"] = 1
+    dict1["moreone/node[new()]/value"] = ""  # current and next lines generate 2 different new items
+    n0debug_calc(dict1,'dict1')
+    dict1["moreone/node[new()]/value"] = 1   # current and previous lines generate 2 different new items
+    n0debug_calc(dict1,'dict1')
     dict1["moreone/node[last()]/value"] = 2
     dict1["moreone/node[last()]/code"] = "two"
     dict1["moreone/node[new()]/value"] = 3

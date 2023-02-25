@@ -553,7 +553,6 @@ class n0list(n0list_):
                                 exclude_xpaths=exclude_xpaths, transform=transform,
                             )
                         )
-# 0.18 = Splitted logic, to avoid convertation of dict, OrderedDict into n0dict
                     elif isinstance(self[self_i], dict):
                         result.update_extend(
                             n0dict(self[self_i]).compare(
@@ -568,10 +567,6 @@ class n0list(n0list_):
                                 exclude_xpaths=exclude_xpaths, transform=transform,
                             )
                         )
-# 0.18 = Splitted logic, to avoid convertation of dict, OrderedDict into n0dict
-                    # elif isinstance(self[self_i], (dict, OrderedDict)):  # Very important isinstance suppose that n0dict is the same like OrderedDict, because of it's parent class
-                    elif isinstance(self[self_i], dict):  # Very important isinstance suppose that n0dict is the same like dict, because of it's parent class
-                        raise Exception("self[self_i] is %s, expected n0dict" % type(self[self_i]))
                     elif self[self_i] is None:
                         # type(self[self_i]) == type(other[other_i]) and self[self_i] is None
                         # So both are None

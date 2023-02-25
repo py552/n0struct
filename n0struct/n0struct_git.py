@@ -53,8 +53,6 @@ class Git():
             outs, errs = p.communicate(timeout = timeout_sec)
         except subprocess.TimeoutExpired:
             raise Exception("Timeout %d seconds were happened during execution:\n%s>%s" % (timeout_sec, self._repository_path, " ".join(command_line)))
-            os.kill(p.pid, signal.CTRL_BREAK_EVENT)
-            outs, errs = p.communicate()
 
         if show_result:
             n0debug_calc(outs.strip(), "outs")
