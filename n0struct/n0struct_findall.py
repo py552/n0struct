@@ -315,7 +315,7 @@ def _findall(
                 return None
         if not child_name:
             if raise_exception:
-                raise KeyError(f"Subnode {child_node} is not found at '{found_xpath_list}'")
+                raise KeyError(f"Subnode {child_name} is not found at '{found_xpath_list}'")
             else:
                 return None
         # **********************************************************************
