@@ -307,23 +307,18 @@ class n0dict__(dict):
         return False
     # **************************************************************************
     # **************************************************************************
-    def has_all(self,tupple_of_keys):
+    def has_all(self, tupple_of_keys: typing.Union[tuple, list]) -> bool:
         for key in tupple_of_keys:
-            if key not in self:
+            if key not in self or not self[key]:
                 return False
-            else:
-                if self[key] is None:
-                    return False
-                if isinstance(self[key],(str,tuple,list,set,frozenset,dict)) and len(self[key]) == 0:
-                    return False
         return True
     # **************************************************************************
     # **************************************************************************
-    def has_any_of(self,tupple_of_keys):
+    def has_any_of(self, tupple_of_keys: typing.Union[tuple, list]) -> bool:
         for key in tupple_of_keys:
             if key in self:
                 return True
-        return True
+        return False
     # **************************************************************************
     # **************************************************************************
     def isEqual(self, xpath, value):
