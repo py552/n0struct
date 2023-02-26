@@ -1,6 +1,6 @@
 import typing
 from .n0struct_utils import n0isnumeric
-from .n0struct_logging import *
+# from .n0struct_logging import *
 # ******************************************************************************
 # ******************************************************************************
 def findall(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise_exception = True) -> dict:

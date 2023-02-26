@@ -3,7 +3,7 @@ import typing
 # Used by class Git():
 import subprocess
 import signal
-from .n0struct_logging import *
+# from .n0struct_logging import *
 # ******************************************************************************
 # ******************************************************************************
 class Git():

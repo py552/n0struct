@@ -20,7 +20,7 @@ from .n0struct_utils_find import split_name_index
 from .n0struct_n0list_ import n0list_
 from .n0struct_n0dict_ import n0dict_
 
-from .n0struct_logging import *
+# from .n0struct_logging import *
 # ******************************************************************************
 # ******************************************************************************
 class n0list(n0list_):
