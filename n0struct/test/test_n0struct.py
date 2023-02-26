@@ -4,9 +4,6 @@ mydir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, mydir)
 sys.path.insert(0, mydir+"/../")
 sys.path.insert(0, mydir+"/../../")
-# import n0struct
-# n0struct._DIFFTYPES = True  # For updating global variables using prefix is mandatory
-# n0struct._DIFFVALUES = True
 from n0struct import (
     n0dict,
     n0list,
@@ -54,7 +51,7 @@ dict3 = n0dict({
     ],
 }, recursively=True)
 # ******************************************************************************
-def test_SortedLists():
+def test_sorted_lists():
     n0print("*"*80 + " 1 = Sorted list in dictionary = direct_compare")
     differences1_direct_compare = dict1.direct_compare(dict2, "dict1", "dict2")
     for key in differences1_direct_compare:
@@ -90,7 +87,7 @@ def test_SortedLists():
     assert differences1_direct_compare["other_unique"] == differences2_wise_compare["other_unique"]
     assert differences1_direct_compare["self_unique"]== differences2_wise_compare["self_unique"]
 # ******************************************************************************
-def test_UnsortedLists():
+def test_unsorted_lists():
     n0print("*"*80 + " 3 = Unsorted list in dictionary = direct_compare")
     differences1_direct_compare = dict1.direct_compare(dict3, "dict1", "dict3")
     for key in differences1_direct_compare:
@@ -140,8 +137,8 @@ def main():
     n0print("="*80)
     n0debug_calc(dict2,"dict3")
 
-    test_SortedLists()
-    test_UnsortedLists()
+    test_sorted_lists()
+    test_unsorted_lists()
 
     n0debug_calc(dict1,'dict1')
     dict1["moreone/node[new()]/value"] = n0dict()
