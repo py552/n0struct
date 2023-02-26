@@ -6,7 +6,6 @@ import json
 import contextlib
 import datetime
 
-# from .n0struct_utils_compare import *
 from .n0struct_utils_compare import get__flag_compare_check_different_types
 from .n0struct_utils_compare import get__flag_compare_return_difference_of_values
 from .n0struct_utils_compare import get__flag_compare_return_equal
@@ -20,7 +19,6 @@ from .n0struct_utils_find import split_name_index
 from .n0struct_n0list_ import n0list_
 from .n0struct_n0dict_ import n0dict_
 
-# from .n0struct_logging import *
 # ******************************************************************************
 # ******************************************************************************
 class n0list(n0list_):
@@ -106,7 +104,7 @@ class n0list(n0list_):
             if isinstance(node_index, str):
                 node_index_str = node_index
             else:
-                raise Exception("Impossible to have complex index for lists")
+                raise IndexError("Impossible to have complex index for lists")
 
             # ..................................................................
             # Try to check all [*] items in the loop
@@ -129,7 +127,7 @@ class n0list(n0list_):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                             cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists, xpath_found_str + f"[{i}]")
                     else:
-                        raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
+                        raise TypeError("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
 
                     if not cur_not_found_xpath_list:
                         cur_values.append(cur_value)
@@ -174,7 +172,7 @@ class n0list(n0list_):
                     if isinstance(next_parent_node, (list, tuple)):
                         return self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
                     else:
-                        raise Exception("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
+                        raise TypeError("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
     # **************************************************************************
     # * n0list. direct_compare(..): only n0dict. direct_compare/compare have one_of_list_compare
     # **************************************************************************
@@ -220,9 +218,9 @@ class n0list(n0list_):
                     transform
         """
         if continuity_check != "continuity_check":
-            raise Exception("Incorrect order of arguments")
+            raise SyntaxError("Incorrect order of arguments")
         if not isinstance(other, n0list):
-            raise Exception("n0list.direct_compare(): other (%s) must be n0list" % str(other))
+            raise TypeError("n0list.direct_compare(): other (%s) must be n0list" % str(other))
 
         result = n0dict({
             "differences":  [],
@@ -336,7 +334,7 @@ class n0list(n0list_):
                     # So both are None
                     pass
                 else:
-                    raise Exception(
+                    raise TypeError(
                         "Not expected type %s in %s[%d]/%s[%d]" %
                         (
                             type(self[i]),
@@ -448,9 +446,9 @@ class n0list(n0list_):
                     transform
         """
         if continuity_check != "continuity_check":
-            raise Exception("n0list. compare(..): incorrect order of arguments")
+            raise SyntaxError("n0list. compare(..): incorrect order of arguments")
         if not isinstance(other, n0list):
-            raise Exception("n0list. compare(..): other (%s) must be n0list" % str(other))
+            raise TypeError("n0list. compare(..): other (%s) must be n0list" % str(other))
         result = n0dict({
             "differences":  [],
             "not_equal":    [],
@@ -572,7 +570,7 @@ class n0list(n0list_):
                         # So both are None
                         pass
                     else:
-                        raise Exception(
+                        raise TypeError(
                             "Not expected type %s in %s[%d]/%s[%d]" %
                             (
                                 type(self[self_i]),
@@ -786,9 +784,9 @@ class n0dict(n0dict_):
                         ] = (),
     ) -> n0dict:
         if continuity_check != "continuity_check":
-            raise Exception("n0dict. compare(..): incorrect order of arguments")
+            raise SyntaxError("n0dict. compare(..): incorrect order of arguments")
         if not isinstance(other, n0dict):
-            raise Exception("n0dict. compare(..): other ((%s)%s) must be n0dict" % (type(other), str(other)))
+            raise TypeError("n0dict. compare(..): other ((%s)%s) must be n0dict" % (type(other), str(other)))
         result = n0dict({
             "differences":  [],
             "not_equal":    [],
@@ -891,7 +889,7 @@ class n0dict(n0dict_):
                             # So both are None
                             pass
                         else:
-                            raise Exception("Not expected type %s in %s[\"%s\"]" % (type(self[key]), key, self_name))
+                            raise TypeError("Not expected type %s in %s[\"%s\"]" % (type(self[key]), key, self_name))
                     else:
                         if not compare_only or xpath_match(fullxpath, compare_only):
                             is_still_equal = False
@@ -992,7 +990,7 @@ class n0dict(n0dict_):
             transform: tuple = (),  # ()|None|empty mean nothing to transform
     ) -> n0dict:
         if continuity_check != "continuity_check":
-            raise Exception("n0dict. direct_compare(..): incorrect order of arguments")
+            raise SyntaxError("n0dict. direct_compare(..): incorrect order of arguments")
         return self.compare(
             other,
             self_name, other_name, prefix,
@@ -1040,7 +1038,7 @@ class n0dict(n0dict_):
         node_name, node_index = split_name_index(xpath_list[0])
         if not node_name and not node_index:
             n0debug("xpath_list")
-            raise Exception("Empty node_name and node_index")
+            raise ValueError("Empty node_name and node_index")
         # ##########################################################################################
         # Key in n0dict
         # ##########################################################################################
@@ -1064,7 +1062,7 @@ class n0dict(n0dict_):
                         if isinstance(cur_node_index, str):
                             nxt_parent_node = cur_parent_node[n0eval(cur_node_index)]
                         else:
-                            raise Exception("If index is in '%s', then (%s)'%s' must be str" %
+                            raise TypeError("If index is in '%s', then (%s)'%s' must be str" %
                                                 (
                                                     cur_node_name_index,
                                                     type(cur_node_index),
@@ -1244,12 +1242,12 @@ class n0dict(n0dict_):
                     elif node_index[1][1] == '~':
                         comparing_result = node_index[2] in parent_node  # expected_value
                     else:
-                        raise Exception ("Unknown comparing command in %s" % str(node_index))
+                        raise SyntaxError("Unknown comparing command in %s" % str(node_index))
 
                     if node_index[1][0] == '!':
                         comparing_result = not comparing_result
                     elif node_index[1][0] != '=' and node_index[1][0] != '~':
-                        raise Exception ("Unknown comparing command in %s" % str(node_index))
+                        raise SyntaxError("Unknown comparing command in %s" % str(node_index))
 
                     if comparing_result:
                         # *******************************
@@ -1349,7 +1347,7 @@ class n0dict(n0dict_):
                         if next_node_index != "new()" and next_node_index != "0":
                             # raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
                             #                 % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
-                            raise Exception(f"Nonsence! Impossible to add {next_node_name}[{next_node_index}] to the {cur_node_name}"
+                            raise SyntaxError(f"Nonsence! Impossible to add {next_node_name}[{next_node_index}] to the {cur_node_name}"
                                             + (f"[{cur_node_index}]" if cur_node_index else "")
                                             + f" {str(parent_node)}"
                             )
@@ -1416,11 +1414,11 @@ class n0dict(n0dict_):
                     # Expected to have 'new()' in next_node_index, else it will be failed at the next step
                     next_node_name_index = "[%s]" % str(next_node_index)
                 else:
-                    raise Exception("Nonsence! Both next_node_name and next_node_index could NOT be empty")
+                    raise ValueError("Nonsence! Both next_node_name and next_node_index could NOT be empty")
             elif cur_node_index == "last()":
                 # Came from previous level: we create [None] and point to [last()] for exchange
                 if not isinstance(parent_node, (list, tuple, n0list)):
-                    raise Exception("Nonsence! if index '%s' is set then (%s)%s must be n0list"
+                    raise ValueError("Nonsence! if index '%s' is set then (%s)%s must be n0list"
                                     % (cur_node_index, type(parent_node), str(parent_node)))
                 if next_node_name:
                     if not next_node_index:
@@ -1447,9 +1445,7 @@ class n0dict(n0dict_):
                 next_node = parent_node
                 next_node_name_index = "[last()]"
             else:
-                # raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
-                #                 % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
-                raise Exception(f"Nonsence! Impossible to add item {cur_node_index} to the list {str(parent_node)}")
+                raise SyntaxError(f"Nonsence! Impossible to add item {cur_node_index} to the list {str(parent_node)}")
 
         if len(xpath_list) == 1:
             return next_node, next_node_name_index
@@ -1473,7 +1469,7 @@ class n0dict(n0dict_):
         elif isinstance(xpath, str) and new_value is not None:
             multi_define(xpath, new_value)
         else:
-            raise Exception("Received (%s,%s) as argument, but expected (key,value) or (dict)." % (type(xpath), type(new_value)))
+            raise TypeError("Received (%s,%s) as argument, but expected (key,value) or (dict)." % (type(xpath), type(new_value)))
         return self
 # ******************************************************************************
 # ******************************************************************************

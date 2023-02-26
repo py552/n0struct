@@ -12,7 +12,7 @@ class Git():
     # ##############################################################################################
     def __init__(self, repo_root_dir: str, repository_url: str, rsa_key_path: str = ""):
         if not repository_url.startswith("ssh://") or not repository_url.endswith(".git"):
-            raise Exception("repository_url must be 'ssh://...git'")
+            raise SyntaxError("repository_url must be 'ssh://...git'")
 
         outs = errs = None
         self._repository_path = os.path.abspath(repo_root_dir)
@@ -32,7 +32,6 @@ class Git():
             if outs != "Already up to date.\n":
                 n0debug_calc(outs.strip(), "outs")
                 n0debug_calc(errs.strip(), "errs")
-                # raise Exception(outs + "\n" if outs else "" + errs)
     # ##############################################################################################
     def run(self, git_arguments: typing.Union[str, list], show_result = True) -> tuple:
         if isinstance(git_arguments, str):
@@ -52,7 +51,7 @@ class Git():
             timeout_sec = 600
             outs, errs = p.communicate(timeout = timeout_sec)
         except subprocess.TimeoutExpired:
-            raise Exception("Timeout %d seconds were happened during execution:\n%s>%s" % (timeout_sec, self._repository_path, " ".join(command_line)))
+            raise TimeoutError("Timeout %d seconds were happened during execution:\n%s>%s" % (timeout_sec, self._repository_path, " ".join(command_line)))
 
         if show_result:
             n0debug_calc(outs.strip(), "outs")

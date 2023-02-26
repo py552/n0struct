@@ -230,7 +230,6 @@ def n0pretty(
                         if sub_result:
                             sub_result += " "
                         sub_result += " "*(1+len(__quotes)+len(key)+len(__quotes)+len(": ")+keys_and_max_len_of_value[key])
-                        # raise Exception(f"Nonsense: '{key}' is not found in '{sub_item}'")
                 result += sub_result + " }"
         else:
             # dict, set, frozenset or list/tuple with complex or not paired structure
@@ -424,11 +423,11 @@ def n0debug(var_name: str, level: str = "DEBUG",
     :return:
     """
     if not isinstance(var_name,str):
-        raise Exception("incorrect call of n0debug(..): argument MUST BE string")
+        raise TypeError("incorrect call of n0debug(..): argument MUST BE string")
 
     __f_locals = inspect.currentframe().f_back.f_locals
     if var_name not in __f_locals:
-        raise Exception("impossible to find object '%s'" % var_name)
+        raise NameError("impossible to find object '%s'" % var_name)
     var_object = __f_locals.get(var_name)
     n0debug_calc(
         var_object, var_name,

@@ -1,13 +1,5 @@
-# from typing import Any, Union, Dict, Tuple, List, Set, FrozenSet, NewType, Sequence
 import typing
-# from mypy_extensions import (Arg, DefaultArg, NamedArg, DefaultNamedArg, VarArg, KwArg)
-# from mypy_extensions import Arg
-
-# from datetime import datetime, timedelta, date
 import datetime
-
-# from .n0struct_logging import *
-
 # ******************************************************************************
 # ******************************************************************************
 def date_today() -> datetime.datetime:
@@ -35,19 +27,13 @@ def date_delta(input_date: typing.Union[datetime.datetime, datetime.date, None] 
         else:
             return None
 
-    # n0debug("input_date")
     date_delta_ = input_date + datetime.timedelta(days=day_delta)
-    # n0debug("date_delta_")
-    
     month_quotient, month_remainder = divmod(date_delta_.month + month_delta - 1, 12)
-    # n0debug("month_quotient")
-    # n0debug("month_remainder")
     
     result = datetime.datetime(
                             date_delta_.year + month_quotient, month_remainder + 1, date_delta_.day,
                             date_delta_.hour, date_delta_.minute,  date_delta_.second,  date_delta_.microsecond
     )
-    # n0debug("result")
     return result
 
 # ******************************************************************************
@@ -59,15 +45,9 @@ def date_to_format(input_date: typing.Union[datetime.datetime, None], date_forma
     :param month_delta:
     :return: (input_date or today) + day_delta + month_delta -> date_format
     """
-    # n0debug("input_date")
-    # n0debug("day_delta")
-    # n0debug("month_delta")
     result = date_delta(input_date, day_delta, month_delta)
-    # n0debug("result")
-    # n0debug("date_format")
     if result:
         result = result.strftime(date_format)
-    # n0debug("result")
     return result
 # ******************************************************************************
 # LEGACY
@@ -204,7 +184,6 @@ def to_date(input_date_str: str, date_format: str = None) -> typing.Union[dateti
             '''
             return datetime.datetime.strptime(input_date_str, date_format)
         except (ValueError, TypeError):
-            ##n0debug_calc(input_date_str, f"FAILED: to_date({input_date_str=}, {date_format=})")
             return input_date_str
     else:
         try:

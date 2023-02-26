@@ -96,7 +96,7 @@ def unpack_references(initial_dict: dict, initial_key: str, recursive: bool = Tr
     if isinstance(node, str):
         node = [node]
     if not isinstance(node, list):
-        raise Exception(f"node under {initial_key} must be str or list")
+        raise TypeError(f"node under {initial_key} must be str or list")
 
     for item in node:
         if item in initial_dict:    # item == reference (key)

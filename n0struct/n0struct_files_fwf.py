@@ -1,7 +1,6 @@
 import typing
 from pathlib import Path
 import n0struct
-# from .n0struct_logging import *
 from .n0struct_n0list_n0dict import n0dict
 # ******************************************************************************
 # ******************************************************************************
@@ -26,7 +25,7 @@ def load_fwf_format(file_path: str):
 # ******************************************************************************
 def parse_fwf_line(incoming_row: str, fwf_format: dict, validate: bool = True, validate_empty: bool = True):
     if not fwf_format:
-        raise Exception("fwf_format is mandatory parameter")
+        raise SyntaxError("fwf_format is mandatory parameter")
     parsed_line = {}
     for format_column in fwf_format:
         if format_column['name']:
@@ -51,7 +50,7 @@ def load_fwf(file_path:str, header_format: dict, body_format: dict = None, tail_
     success_parsed_lines = []
     failed_lines = []
     if not header_format:
-        raise Exception("header_format is mandatory parameter")
+        raise SyntaxError("header_format is mandatory parameter")
     if not body_format:
         body_format = header_format
     if not tail_format:

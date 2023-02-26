@@ -35,7 +35,6 @@ def convert_to_native_format(value, key = None, exception = None, transform_depe
         return value
 # ******************************************************************************
 def transform_structure(in_structure, transform_key = strip_ns, transform_value = convert_to_native_format):
-    # if isinstance(in_structure, (dict, OrderedDict, n0dict)):
     if isinstance(in_structure, dict):
         in_list = [in_structure]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
     else:
@@ -43,16 +42,14 @@ def transform_structure(in_structure, transform_key = strip_ns, transform_value 
     if isinstance(in_list, (list, tuple, n0list)):
         out_list = n0list()
         for in_dict in in_list:
-            # if not isinstance(in_dict, (dict, OrderedDict, n0dict)):
             if not isinstance(in_dict, dict):
-                raise Exception("transform_structure(): expected to get dict/n0dict as second level item")
+                raise TypeError("transform_structure(): expected to get dict/n0dict as second level item")
             out_list.append(n0dict())
             for key_in in in_dict:
                 key_out = transform_key(key_in)
                 out_list[-1].update({key_out: transform_value(in_dict[key_in], key_out) if transform_value else in_dict[key_in]})
     else:
-        raise Exception("transform_structure(): expected to get dict/n0dict or list/tuple/n0list as argument")
-    # if isinstance(in_structure, (dict, OrderedDict, n0dict)):
+        raise TypeError("transform_structure(): expected to get dict/n0dict or list/tuple/n0list as argument")
     if isinstance(in_structure, dict):
         return out_list[0]
     else:

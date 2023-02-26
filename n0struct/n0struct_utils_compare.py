@@ -73,7 +73,7 @@ def xpath_match(xpath: str, xpath_list: typing.Union[str, list, tuple]) -> int:
         # xpath_list = (xpath_list,)
         xpath_list = [xpath_list]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
     if not isinstance(xpath_list, (tuple, list)):
-        raise Exception("xpath_match(..): unknown type of xpath_list = %s" % type(xpath_list))
+        raise TypeError("xpath_match(..): unknown type of xpath_list = %s" % type(xpath_list))
 
     xpath_parts = xpath.split("/")
     for i, xpath_itm in enumerate(xpath_list):
@@ -135,7 +135,7 @@ def generate_composite_keys(
                             tranformed = str(line[key])
                         created_composite_key += key + "=" + tranformed
         else:
-            raise Exception("generate_composite_keys(..): expected element dict inside list, but got (%s)%s" % (type(line), line))
+            raise TypeError("generate_composite_keys(..): expected element dict inside list, but got (%s)%s" % (type(line), line))
         composite_keys_for_all_lines.append((created_composite_key, line_i))
     return composite_keys_for_all_lines
 # ******************************************************************************

@@ -63,7 +63,7 @@ class n0dict_(n0dict__):
         elif isinstance(value, (str, int, float)) or value is None:
             result.append((path, value))
         else:
-            raise Exception(f"Not expected type ({type(value)}) in {path} == {value}")
+            raise TypeError(f"Not expected type ({type(value)}) in {path} == {value}")
         return result
     # **************************************************************************
     def xpath(self, mode: int = None) -> list:  # list[(xpath, value)]
@@ -135,7 +135,7 @@ class n0dict_(n0dict__):
                     elif value is None:
                         result += " " * indent + "<%s/>" % key
                     else:
-                        raise Exception("__xml(..): Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
+                        raise TypeError("__xml(..): Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
             elif isinstance(parent, (list, tuple)):
                 if not len(parent):
                     return None
@@ -146,8 +146,7 @@ class n0dict_(n0dict__):
             elif isinstance(parent, (str, int, float)):
                 result += str(parent)
             else:
-                print("Exception")
-                raise Exception("__xml(..): Unknown type (%s) ==  %s" % (type(parent), str(parent)))
+                raise TypeError("__xml(..): Unknown type (%s) ==  %s" % (type(parent), str(parent)))
 
             return result
         else:
@@ -201,7 +200,7 @@ class n0dict_(n0dict__):
             elif value is None:
                 result += " " * indent + '"%s": null' % key
             else:
-                raise Exception("Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
+                raise TypeError("Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
         return result
     # **************************************************************************
     def to_json(self, 

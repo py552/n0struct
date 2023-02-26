@@ -1,7 +1,6 @@
 import typing
 from pathlib import Path
 import n0struct
-# from .n0struct_logging import *
 from .n0struct_n0list_n0dict import n0dict
 # ******************************************************************************
 # ******************************************************************************
@@ -29,7 +28,7 @@ def parse_complex_csv_line(
                     continue  # skip first " in the middle of line
                 flag_expect_delimiter_or_quotes = False # Paired " is got, so save the second "
         elif flag_expect_delimiter_or_quotes:
-            raise Exception(f"Expected separator or second \", but received '{ch}' in offset {i} of '{line}'")
+            raise ValueError(f"Expected separator or second \", but received '{ch}' in offset {i} of '{line}'")
         field_value += ch
     fields_in_the_row.append(strip_column(field_value))
     return fields_in_the_row
@@ -43,46 +42,28 @@ def load_csv(
     strip_column:callable = lambda column_value: column_value,
     parse_csv_line:callable = parse_complex_csv_line,
     skip_empty_lines:bool = True,
-) -> typing.Union[list, dict]:
+) -> typing.Generator:
 
-    # n0debug("strip_line")
     if not strip_line:
         strip_line = lambda line_value: line_value
     elif isinstance(strip_line, bool) and strip_line == True:
         strip_line = lambda line_value: line_value.strip()
 
-    # n0debug("strip_column")
     if not strip_column:
         strip_column = lambda column_value: column_value
     elif isinstance(strip_column, bool) and strip_column == True:
         strip_column = lambda column_value: column_value.strip()
 
-    # loaded_csv = []
     with open(file_name, 'rt') as in_file:
         if contains_header:
-            # n0debug("contains_header")
-            #file_offset = 0
-            #for line in in_file.readlines():
-            #    header_line = strip_line(line.rstrip('\n'))
-            #    n0debug("header_line")
-            #    if header_line:
-            #        break
-            #    file_offset = in_file.tell()
-            #else:
-            #    return [] # Empty file or file only with spaces
             while True:
                 file_offset = in_file.tell()
                 if not (line:=in_file.readline()):
                     return [] # Empty file or file only with spaces
-                # n0debug("line")
                 header_line = strip_line(line.rstrip('\n'))
-                # n0debug("header_line")
                 if header_line:
                     break
-            # n0debug("header_line")
-            # column_names = header_line.rstrip('\n').split(separator)
             column_names = parse_csv_line(header_line, separator, strip_column)
-            # n0debug("column_names")
             if not isinstance(contains_header, bool):
                 # if contains_header is not boolean, then first line could be header or not
                 # to check if the first line is header, check value of first column
@@ -92,31 +73,21 @@ def load_csv(
                     column_names = None
             if not format:
                 format = column_names
-            # n0debug("format")
 
         if format and len(format) != len(set(format)):
-            raise Exception(f"Format {format} contains not unique names of columns")
+            raise ValueError(f"Format {format} contains not unique names of columns")
 
 
-        # TypeError: 'type' object is not subscriptable
-
-        # for line in in_file.readlines():
         while True:
             if not (line:=in_file.readline()):
-                # break # EOF
                 return None  # EOF
-            # n0debug("line")
-
             stripped_line = strip_line(line.rstrip('\n'))
-            # n0debug("stripped_line")
             if skip_empty_lines and not stripped_line:
                 continue
             column_values = parse_csv_line(stripped_line, separator, strip_column)
             if format:
                 column_values = n0dict(zip(format, column_values))
-            # loaded_csv.append(column_values)
             yield column_values
-    # return loaded_csv
 # ******************************************************************************
 def load_simple_csv(
     file_name: str,
@@ -125,7 +96,7 @@ def load_simple_csv(
     contains_header = False,
     strip_line:callable = lambda line: line,
     strip_column:callable = lambda column_value: column_value,
-) -> list:
+) -> typing.Generator:
     return load_csv(
         file_name       = file_name,
         format          = format,
@@ -143,7 +114,7 @@ def load_complex_csv(
     contains_header = False,
     strip_line:callable = lambda line: line,
     strip_column:callable = lambda column_value: column_value,
-) -> list:
+) -> typing.Generator:
     return load_csv(
         file_name       = file_name,
         format          = format,
@@ -284,7 +255,7 @@ def remove_colums_in_csv(columns_to_remove: list, csv_rows: list = None, csv_sch
             for column_name in columns_to_remove:
                 del csv_rows[row_index][column_name]
         else:
-            raise Exception(f"row #{row_index} in csv_rows should dict/list, got {type(csv_rows[row_index])}")
+            raise TypeError(f"row #{row_index} in csv_rows should dict/list, got {type(csv_rows[row_index])}")
 
     if isinstance(csv_schema, dict):
         for column_name in columns_to_remove:
@@ -312,7 +283,7 @@ def add_colums_into_csv(additional_columns: list, csv_rows: list = None, csv_sch
             elif isinstance(csv_rows[row_index], list):
                 csv_rows[row_index].append([None]*len(additional_columns))
             else:
-                raise Exception(f"row #{row_index} in csv_rows should dict/list, got {type(csv_rows[row_index])}")
+                raise TypeError(f"row #{row_index} in csv_rows should dict/list, got {type(csv_rows[row_index])}")
 
     if isinstance(csv_schema, dict):
         for column_name in additional_columns:
@@ -365,7 +336,7 @@ def validate_csv_row(row: typing.Union[list, dict], csv_schema: dict,
     if isinstance(row, list):
         row = {column_index: column_value for column_index, column_value in enumerate(row)}
     elif not isinstance(row, dict):
-        raise Exception(f"Incoming agrument 'row' must be list or dict, but received {type(row)} '{row}'")
+        raise TypeError(f"Incoming agrument 'row' must be list or dict, but received {type(row)} '{row}'")
 
     the_whole_row_related_validations = None
     failed_validations = {the_whole_row_related_validations: []}

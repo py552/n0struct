@@ -12,7 +12,7 @@ def split_name_index(node_name: str) -> typing.Tuple[
                                                         ]
                                                     ]:
     if not isinstance(node_name, str):
-        raise Exception("node_name (%s)%s must be string" % (type(node_name), node_name))
+        raise TypeError("node_name (%s)%s must be string" % (type(node_name), node_name))
 
     node_index_tuple = None
     if '[' in node_name and node_name.endswith(']'):
@@ -38,7 +38,7 @@ def split_name_index(node_name: str) -> typing.Tuple[
                                 separator = '~~'
                             break
                     else:
-                        raise Exception("Never must be happend!")
+                        raise NameError("Never must be happend!")
 
                     expected_value_bool = False  # Default value, in real None was used, but mypy raised error
                     if expected_value.lower() == "true()":
