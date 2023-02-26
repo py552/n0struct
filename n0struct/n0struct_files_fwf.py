@@ -10,15 +10,15 @@ def load_fwf_format(file_path: str):
     #   #,name,offset,size,till
     loaded_format = load_csv(file_path)
     for i,column in enumerate(loaded_format):
-        if not (column_offset := column['offset']) is None and column_offset != "":
+        if (column_offset := column['offset']) is not None and column_offset != "":
             loaded_format[i]['offset'] = int(column_offset)
         else:
             loaded_format[i]['offset'] = None
-        if not (column_till := column['till']) is None and column_till != "":
+        if (column_till := column['till']) is not None and column_till != "":
             loaded_format[i]['till']   = int(column_till)
         else:
             loaded_format[i]['till']   = None
-        if not (column_size := column['size']) is None and column_size != "":
+        if (column_size := column['size']) is not None and column_size != "":
             loaded_format[i]['size']   = int(column_size)
         else:
             loaded_format[i]['size']   = None
@@ -31,8 +31,8 @@ def parse_fwf_line(incoming_row: str, fwf_format: dict, validate: bool = True, v
     for format_column in fwf_format:
         if format_column['name']:
             column_value = None
-            if not (format_column_offset := format_column['offset']) is None and \
-               not (format_column_till := format_column['till']) is None:
+            if (format_column_offset := format_column['offset']) is not None and \
+               (format_column_till := format_column['till']) is not None:
                 column_value = incoming_row[format_column_offset:format_column_till].strip()
             parsed_line.update({format_column['name']: column_value})
     if validate:

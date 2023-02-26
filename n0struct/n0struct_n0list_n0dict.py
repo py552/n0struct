@@ -477,7 +477,7 @@ class n0list(n0list_):
             except ValueError:
                 other_i = None
             # if composite_key in other_composite_keys:
-            if not other_i is None:
+            if other_i is not None:
                 # other_i = notmutable__other_not_exist_in_self.index(composite_key)
                 # other_i = other_not_exist_in_self[other_composite_keys.index(composite_key)][1]
                 # --- TRANSFORM: START -------------------------------------
@@ -1138,7 +1138,7 @@ class n0dict(n0dict_):
             # ..................................................................
             # Check key in dictionary
             # ..................................................................
-            if not node_name in parent_node:
+            if node_name not in parent_node:
                 #--------------------------------
                 # NOT FOUND: Node name in n0dict
                 #--------------------------------
@@ -1273,7 +1273,7 @@ class n0dict(n0dict_):
                         raise IndexError("If key '%s' is set then (%s)'%s' must be n0dict at '%s'" %
                             (node_index[0], type(parent_node), str(parent_node), xpath_found_str)
                         )
-                    if not node_index[0] in parent_node:
+                    if node_index[0] not in parent_node:
                         return parent_node, None, None, xpath_found_str, xpath_list
 
                     return self._find(
@@ -1342,7 +1342,7 @@ class n0dict(n0dict_):
                 pass
 
             if next_node_name:
-                if not next_node_name in parent_node:
+                if next_node_name not in parent_node:
                     # New node
                     if next_node_index:
                         # NEWFIX
@@ -1470,7 +1470,7 @@ class n0dict(n0dict_):
         if isinstance(xpath, dict) and new_value is None:
             for item_key in xpath:
                 multi_define(item_key, xpath[item_key])
-        elif isinstance(xpath, str) and not new_value is None:
+        elif isinstance(xpath, str) and new_value is not None:
             multi_define(xpath, new_value)
         else:
             raise Exception("Received (%s,%s) as argument, but expected (key,value) or (dict)." % (type(xpath), type(new_value)))

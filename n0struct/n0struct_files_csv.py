@@ -228,7 +228,6 @@ def generate_csv(root_node:dict, list_xpath:str, mapping_dict:dict = None, save_
         list_of_items = root_node
     else:
         list_of_items = root_node.get(list_xpath, tuple())
-    # n0debug("list_of_items")
 
     if save_to:
         out_filehandler = open(save_to, 'wt')
@@ -248,7 +247,6 @@ def generate_csv(root_node:dict, list_xpath:str, mapping_dict:dict = None, save_
             out_filehandler.write(generate_comlex_csv_row(header, separator))
 
         for found_item in list_of_items:  # found_item == row in case of CSV list or item node in case of XML structure
-            # n0debug("found_item")
             if isinstance(found_item, dict):
                 found_item = n0struct.n0dict(found_item) # to have ability to use .first(xpath)
             elif isinstance(found_item, list):
@@ -256,13 +254,10 @@ def generate_csv(root_node:dict, list_xpath:str, mapping_dict:dict = None, save_
 
             csv_row = []
             for column_name in mapping_dict:
-                # n0debug("column_name")
                 xpaths = mapping_dict[column_name]
-                # n0debug("xpaths")
                 if not isinstance(xpaths, (list, tuple)):
                     xpaths = [xpaths]
                 for xpath in xpaths:
-                    # n0debug("xpath")
                     found_value = found_item.first(xpath, "")
                     if found_value:
                         break
@@ -293,21 +288,14 @@ def remove_colums_in_csv(columns_to_remove: list, csv_rows: list = None, csv_sch
 
     if isinstance(csv_schema, dict):
         for column_name in columns_to_remove:
-            # Update schema: Delete columns
-            column_schema = csv_schema.get(f"items/[id={column_name}]")
-            # n0debug("column_schema")
             csv_schema.delete(f"items/[id={column_name}]")
-            # n0debug("csv_schema")
-
 
         csv_schema['maxItems'] = csv_schema.get('maxItems', 0) - (len__columns_to_remove:=len(columns_to_remove))
         if are_required:
             csv_schema['minItems'] = csv_schema.get('minItems', 0) - len__columns_to_remove
             if 'required' in csv_schema:
                 for column_to_remove in reversed(columns_to_remove):
-                    # n0debug_calc(csv_schema['required'], "csv_schema['required']")
                     for i in range(len(csv_schema['required'])-1, -1, -1):
-                        # n0debug("i")
                         if csv_schema['required'][i] == column_to_remove:
                             del csv_schema['required'][i]
                             break
@@ -334,7 +322,7 @@ def add_colums_into_csv(additional_columns: list, csv_rows: list = None, csv_sch
         csv_schema['maxItems'] = csv_schema.get('maxItems', 0) + (len__additional_columns:=len(additional_columns))
         if are_required:
             csv_schema['minItems'] = csv_schema.get('minItems', 0) + len__additional_columns
-            if not 'required' in csv_schema:
+            if 'required' not in csv_schema:
                 csv_schema['required'] = []
             csv_schema['required'].extend(additional_columns)
 
@@ -382,15 +370,15 @@ def validate_csv_row(row: typing.Union[list, dict], csv_schema: dict,
     the_whole_row_related_validations = None
     failed_validations = {the_whole_row_related_validations: []}
     columns_count = len(row)
-    if (minItems:=csv_schema.get("minItems")):
-        if columns_count < minItems:
-            failed_validations[the_whole_row_related_validations].append(f"Mimimum {minItems} columns expected, but got {columns_count}")
-    if (maxItems:=csv_schema.get("maxItems")):
-        if columns_count > maxItems:
-            failed_validations[the_whole_row_related_validations].append(f"Maximum {maxItems} columns expected, but got {columns_count}")
+    if (min_items:=csv_schema.get("minItems")):
+        if columns_count < min_items:
+            failed_validations[the_whole_row_related_validations].append(f"Mimimum {min_items} columns expected, but got {columns_count}")
+    if (max_items:=csv_schema.get("maxItems")):
+        if columns_count > max_items:
+            failed_validations[the_whole_row_related_validations].append(f"Maximum {max_items} columns expected, but got {columns_count}")
     if (required_columns:=csv_schema.get("required")):
         for required_column in required_columns:
-            if not required_column in row:
+            if required_column not in row:
                 failed_validations[the_whole_row_related_validations].append(f"Required column '{required_column}' doesn't exist in row")
     if not failed_validations[the_whole_row_related_validations]:
         del failed_validations[the_whole_row_related_validations]
@@ -399,19 +387,15 @@ def validate_csv_row(row: typing.Union[list, dict], csv_schema: dict,
 
     mapped_values = {**external_variables, **{f'value_{column_name}': row[column_name] for column_name in row}}
 
-    # n0debug("csv_schema")
     for column_name in row:
         column_value = row[column_name]
-        # n0debug("column_name")
         column_schema = csv_schema.first(f"items/[id={column_name}]")
-        # n0debug("column_schema")
 
         if column_schema.get('mandatory', False) and not column_value:
             failed_validations.update({column_name: f"mandatory column '{column_name}' is empty"})
             continue
 
         for validation in column_schema.get('validations', ()):
-            # n0debug("validation")
             validation_msg = None
             if isinstance(validation, (list,tuple)):
                 validation_lambda = validation[0]
@@ -435,7 +419,7 @@ def validate_csv_row(row: typing.Union[list, dict], csv_schema: dict,
                 n0error(f"{ex2=}")
 
             if not validation_result:
-                if not column_name in failed_validations:
+                if column_name not in failed_validations:
                     failed_validations.update({column_name: []})
 
                 try:

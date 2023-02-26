@@ -95,7 +95,7 @@ class n0dict_(n0dict__):
         Private function: recursively export n0dict into xml result string
         """
         result = ""
-        if not parent is None:
+        if parent is not None:
             if isinstance(parent, dict):
                 if not len(parent.items()):
                     return ""

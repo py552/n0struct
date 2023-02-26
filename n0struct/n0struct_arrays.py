@@ -46,11 +46,11 @@ def join_triplets(
     if isinstance(in_list, str) or in_list is None:
         return in_list or ""
     elif not isinstance(in_list, (tuple, list)):
-        raise Exception(f"{type(in_list)} '{in_list}' should be None|str|tuple|list")
+        raise TypeError(f"{type(in_list)} '{in_list}' should be None|str|tuple|list")
     elif not len(in_list):
         return ""
     elif len(in_list) > 3:
-        raise Exception(f"'{in_list}' should consist not more 3 elements")
+        raise TypeError(f"'{in_list}' should consist not more 3 elements")
     else:
         out_list = []
         for item in in_list:
@@ -60,8 +60,8 @@ def join_triplets(
             if isinstance(in_list[1], str):
                 result = out_list[0] +  (out_list[1] if out_list[0] and out_list[2] else "") + out_list[2]
             else:
-                if not isinstance(in_list[1], (tuple, list)) or not len(in_list[1]) in (1,2):
-                    raise Exception(f"{type(in_list[1])} '{in_list[1]}' is not correct separator")
+                if not isinstance(in_list[1], (tuple, list)) or len(in_list[1]) not in (1,2):
+                    raise TypeError(f"{type(in_list[1])} '{in_list[1]}' is not correct separator")
                 if len(in_list[1]) == 2 and not in_list[1][0]:
                     result = out_list[0] +  (out_list[1] if out_list[2] else "") + out_list[2]
                 else:

@@ -142,7 +142,7 @@ def n0pretty(
             if not isinstance(sub_item, dict) or len(sub_item) > 2:
                 return None # Sub element not dictionary with 2 or less elements
             for key in sub_item:
-                if not key in element_names:
+                if key not in element_names:
                     element_names.update({key: 0})
                 if len(element_names) > 2:
                     return None # Not more that 2 elems could be condensed into one line
@@ -296,7 +296,7 @@ def n0pretty(
                     else:
                         sub_item_value = "[.......]"
 
-                if not sub_item_value is None:
+                if sub_item_value is not None:
                     if result:
                         result += "," + indent()
                     result += sub_item_value
@@ -339,7 +339,7 @@ def n0pretty(
         if (show_type or (show_type is None and __debug_show_object_type)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
             result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", " ") + f"{len(item)}> "
-        if auto_quotes and '"' in item and not "'" in item:
+        if auto_quotes and '"' in item and "'" not in item:
                 result = result_type + f"'{item}'"
         else:
             result = result_type + __quotes + item.replace(__quotes, '\\"' if __quotes == '"' else "\\'") + __quotes
@@ -427,7 +427,7 @@ def n0debug(var_name: str, level: str = "DEBUG",
         raise Exception("incorrect call of n0debug(..): argument MUST BE string")
 
     __f_locals = inspect.currentframe().f_back.f_locals
-    if not var_name in __f_locals:
+    if var_name not in __f_locals:
         raise Exception("impossible to find object '%s'" % var_name)
     var_object = __f_locals.get(var_name)
     n0debug_calc(

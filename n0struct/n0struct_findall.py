@@ -161,7 +161,7 @@ def _findall(
             elif lower_child_index.startswith("last()"):
                 after_last = lower_child_index[6:]
                 child_index = eval("-1"
-                                   + after_last if not any(not ch in "-+01234567890" for ch in after_last) else ""
+                                   + after_last if not any(ch not in "-+01234567890" for ch in after_last) else ""
                 )
             elif lower_child_index.startswith("text()"):
                 after_text = lower_child_index[6:]

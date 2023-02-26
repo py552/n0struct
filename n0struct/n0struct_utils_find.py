@@ -55,7 +55,7 @@ def split_name_index(node_name: str) -> typing.Tuple[
                     node_index_tuple = (expected_node_name, separator, expected_value or expected_value_bool)
     else:
         node_index_str = None
-    return node_name, (node_index_tuple if not node_index_tuple is None else node_index_str)
+    return node_name, (node_index_tuple if node_index_tuple is not None else node_index_str)
 # ******************************************************************************
 # notemptyitems(item):
 #   Check item or recursively subitems of item.
