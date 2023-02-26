@@ -150,7 +150,6 @@ class n0dict_(n0dict__):
 
             return result
         else:
-            # return None
             return ""
     # **************************************************************************
     def to_xml(self, indent: int = 4, encoding: str = "utf-8") -> str:

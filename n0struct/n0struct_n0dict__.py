@@ -152,13 +152,10 @@ class n0dict__(dict):
                 recursively and
                 isinstance(cur_value, n0dict__) and not len(cur_value)
             ):
-                # n0debug("parent_node")
-                # n0debug("node_name_index")
                 if isinstance(parent_node, list) and not isinstance(node_name_index, int):
                     if not isinstance(node_name_index, str) or not node_name_index.startswith('[') or not node_name_index.endswith(']'):
                         raise IndexError(f"Not expactable index for list {node_name_index}")
                     node_name_index = n0eval(node_name_index[1:-1])
-                    # n0debug("node_name_index")
                 del parent_node[node_name_index]
         return self
     # **************************************************************************

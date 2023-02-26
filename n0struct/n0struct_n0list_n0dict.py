@@ -112,14 +112,7 @@ class n0list(n0list_):
             if node_index_str == "*":
                 cur_values = n0list()
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
-                # n0debug("parent_node")
                 for i,next_parent_node in enumerate(parent_node):
-                    # n0debug("i")
-                    # n0debug("next_parent_node")
-                    # n0debug_calc(["[%d]" % i] + xpath_list[1:])
-                    # n0debug("return_lists")
-                    # n0debug("xpath_found_str")
-
                     if isinstance(next_parent_node, dict):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                             cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists,  xpath_found_str + f"[{i}]")
@@ -134,6 +127,7 @@ class n0list(n0list_):
                         if not fst_found_xpath_str:
                             fst_parent_node, fst_node_name_index, fst_value, fst_found_xpath_str = \
                                 cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str
+
                 if not return_lists and len(cur_values) == 1:
                     cur_values = cur_values[0]
                 if fst_found_xpath_str:
@@ -1363,7 +1357,6 @@ class n0dict(n0dict_):
             # or (isinstance(parent_node, (list, tuple)) and n0eval(cur_node_index) == len(parent_node)) \
             # or (isinstance(parent_node[cur_node_name], (list, tuple)) and n0eval(cur_node_index) == len(parent_node)[cur_node_name]):
                 if cur_node_name and not isinstance(parent_node[cur_node_name], (list, tuple, n0list)):
-                # if not isinstance(parent_node[cur_node_name], (list, tuple, n0list)):
                     ####################################################################
                     # Convert not LIST into the list
                     ####################################################################

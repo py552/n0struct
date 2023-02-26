@@ -341,12 +341,10 @@ def validate_csv_row(row: typing.Union[list, dict], csv_schema: dict,
     the_whole_row_related_validations = None
     failed_validations = {the_whole_row_related_validations: []}
     columns_count = len(row)
-    if (min_items:=csv_schema.get("minItems")):
-        if columns_count < min_items:
-            failed_validations[the_whole_row_related_validations].append(f"Mimimum {min_items} columns expected, but got {columns_count}")
-    if (max_items:=csv_schema.get("maxItems")):
-        if columns_count > max_items:
-            failed_validations[the_whole_row_related_validations].append(f"Maximum {max_items} columns expected, but got {columns_count}")
+    if (min_items:=csv_schema.get("minItems")) and columns_count < min_items:
+        failed_validations[the_whole_row_related_validations].append(f"Mimimum {min_items} columns expected, but got {columns_count}")
+    if (max_items:=csv_schema.get("maxItems")) and columns_count > max_items:
+        failed_validations[the_whole_row_related_validations].append(f"Maximum {max_items} columns expected, but got {columns_count}")
     if (required_columns:=csv_schema.get("required")):
         for required_column in required_columns:
             if required_column not in row:

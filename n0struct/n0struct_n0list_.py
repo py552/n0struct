@@ -114,8 +114,7 @@ class n0list_(list):
         for itm in self:
             if (itm in other_list) == in_is_expected:
                 return True
-        else:
-            return False
+        return False
     # **************************************************************************
     def any_in(self, other_list):
         return self._in(other_list, True)
@@ -135,8 +134,7 @@ class n0list_(list):
         for itm in other_list:
             if super(n0list_, self).__contains__(itm) == in_is_expected:
                 return True
-        else:
-            return False
+        return False
     # **************************************************************************
     def consists_of_any(self, other_list):
         return self._consists_of(other_list, True)
