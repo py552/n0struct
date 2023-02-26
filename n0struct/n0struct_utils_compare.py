@@ -70,31 +70,24 @@ def xpath_match(xpath: str, xpath_list: typing.Union[str, list, tuple]) -> int:
         >0 matched
     """
     if isinstance(xpath_list, str):
-        # xpath_list = (xpath_list,)
         xpath_list = [xpath_list]  # 0.18 = 2020-10-22 workaround fix for Py38: changing (A,) into [A], because of generates NOT tuple, but initial A
     if not isinstance(xpath_list, (tuple, list)):
-        raise TypeError("xpath_match(..): unknown type of xpath_list = %s" % type(xpath_list))
+        raise TypeError(f"xpath_match(..): unknown type of xpath_list = {type(xpath_list)}")
 
     xpath_parts = xpath.split("/")
     for i, xpath_itm in enumerate(xpath_list):
         xpath_itm_parts = xpath_itm.split("/")
         for j, part in enumerate(reversed(xpath_itm_parts)):
             if not part:  # //
-                # n0print("MATCH: matched relative")
-                return i + 1
-            # n0debug("part")
+                return i + 1    # MATCH: matched relative
             if j >= len(xpath_parts):
-                # n0print("not matched: too short")
-                break
+                break           # not matched: too short
             if part != "*" and part.lower() != xpath_parts[-1 - j].lower():  # /*/
-                # n0print("not matched: not equal")
-                break
+                break           # not matched: not equal
         else:
-            # n0print("MATCH: matched full")
-            return i + 1
-        # n0print("Let's try new loop")
-    # n0print("not matched: not matched with all from list")
-    return 0
+            return i + 1        # MATCH: matched full
+        # Let's try new loop
+    return 0                    # not matched: not matched with all from list
 # ******************************************************************************
 def generate_composite_keys(
                             input_list: list,
@@ -118,7 +111,6 @@ def generate_composite_keys(
         attributes_to_transform = []
 
     for line_i, line in enumerate(input_list):
-        # if isinstance(line, (dict, OrderedDict, n0dict)):
         if isinstance(line, dict):
             created_composite_key = ""
             if elements_for_composite_key:
