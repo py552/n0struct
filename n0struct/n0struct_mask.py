@@ -10,8 +10,8 @@ def mask_number(not_masked_number: str):
                     .replace("0","o") \
                     .replace("1","i") \
                     .replace("2","Z") \
-                    .replace("3","?") \
-                    .replace("4","?") \
+                    .replace("3","E") \
+                    .replace("4","P") \
                     .replace("5","S") \
                     .replace("6","b") \
                     .replace("7","T") \
@@ -30,8 +30,8 @@ def unmask_number(masked_number: str):
                     .replace("l","1") \
                     .replace("z","2") \
                     .replace("Z","2") \
-                    .replace("?","3") \
-                    .replace("?","4") \
+                    .replace("E","3") \
+                    .replace("P","4") \
                     .replace("s","5") \
                     .replace("S","5") \
                     .replace("b","6") \
@@ -39,11 +39,12 @@ def unmask_number(masked_number: str):
                     .replace("B","8") \
                     .replace("g","9")
 # ******************************************************************************
-compiled_regexp_mask_pan = re.compile("(([^0-9]|^)?(000)?[456][0-9]{5})([0-9]{6})([0-9]{4})([^0-9]|$)?")
+# before sonarcloud.io: "(([^0-9]|^)?(000)?[456][0-9]{5})([0-9]{6})([0-9]{4})([^0-9]|$)?"
+compiled_regexp_mask_pan = re.compile("(0{3}|)(([456](\d{7}|\d{5}))(\d{6})(\d{5}|\d{4}))")
 def mask_pan(buffer: str):
     """
     Public function: mask PANs in buffer
     """
-    return compiled_regexp_mask_pan.sub(r"\1******\5\6", buffer)
+    return compiled_regexp_mask_pan.sub(r"\1\3******\6", buffer)  # # before sonarcloud.io: r"\1******\5\6"
 # ******************************************************************************
 # ******************************************************************************
