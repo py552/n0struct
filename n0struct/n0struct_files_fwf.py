@@ -76,7 +76,7 @@ def load_fwf(file_path:str, header_format: dict, body_format: dict = None, tail_
 # ******************************************************************************
 def generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler:str = ' '):
     if not fwf_format:
-        raise Exception("fwf_format is mandatory parameter")
+        raise SyntaxError("fwf_format is mandatory parameter")
 
     line_len = max([column['till'] for column in fwf_format])
     rendered_line = filler*line_len

@@ -47,7 +47,7 @@ class Git():
                                 encoding = "utf-8",
         )
         try:
-            # outs, errs = p.communicate(timeout=(timeout_sec:=600)) # Only for 3.8+
+            # Only for 3.8+: outs, errs = p.communicate(timeout=(timeout_sec:=600)) 
             timeout_sec = 600
             outs, errs = p.communicate(timeout = timeout_sec)
         except subprocess.TimeoutExpired:

@@ -84,29 +84,7 @@ def n0print(
     :param internal_call:
     :return: None
     """
-
-    '''
-    if internal_call:  # Called from n0debug|n0debug_calc|n0debug_object
-        try:
-            frameinfo = inspect.stack()[3]
-        except:
-            try:
-                frameinfo = inspect.stack()[2]
-            except:
-                try:
-                    frameinfo = inspect.stack()[1]
-                except:
-                    try:
-                        frameinfo = inspect.stack()[0]
-                    except:
-                        frameinfo = None
-    else:
-        frameinfo = inspect.getframeinfo(inspect.currentframe().f_back)
-    '''
-
-    logger.opt(depth=1+internal_call).log(level,
-        (text if text else "")
-    )
+    logger.opt(depth=1+internal_call).log(level, text or "")
 # ******************************************************************************
 def n0info(text: str, internal_call: int = 0):
     n0print(text, level = "INFO", internal_call = internal_call + 1)
@@ -163,7 +141,6 @@ def n0pretty(
                         if isinstance(sub_item_key_value, str)
                         else f"{str(sub_item_key_value)}"
                     )
-                # print(f"{len(presentation_string)} {presentation_string=}")
                 element_names.update({key: max(element_names[key], len(presentation_string))})
         return element_names  # Returns dict {"name of key": max length of presented (+type+len and etc) value assosiated with key}
     # ######################################################################
@@ -325,12 +302,6 @@ def n0pretty(
             else:
                 result = result_type + brackets[0] + result + brackets[1]
 
-        # I suppose never used
-        # if not result:
-        #     if json_convention:
-        #         result = "null"  # json.decoder.JSONDecodeError: Expecting value
-        #     else:
-        #         result = None
         if result is None and json_convention:
             result = "null"  # json.decoder.JSONDecodeError: Expecting value
 

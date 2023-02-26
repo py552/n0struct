@@ -687,10 +687,10 @@ class n0dict(n0dict_):
             _file = kw.pop("file", None)
             if _file:
                 with open(_file, "rb") as in_filehandler:
-                    buffer = in_filehandler.read()
-                    if buffer[:3] == b'\xEF\xBB\xBF': # UTF-8 BOM (Byte Order Mark)
-                        buffer = buffer[3:]
-                    self.__init__(buffer.decode('utf-8').strip(), **kw)
+                    buffer_bytes = in_filehandler.read()
+                    if buffer_bytes[:3] == b'\xEF\xBB\xBF': # UTF-8 BOM (Byte Order Mark)
+                        buffer_bytes = buffer_bytes[3:]
+                    self.__init__(buffer_bytes.decode('utf-8').strip(), **kw)
             else:
                 super(n0dict, self).__init__(*args, **kw)
         elif len__args == 1:
@@ -1318,8 +1318,6 @@ class n0dict(n0dict_):
                     if next_node_index:
                         # NEWFIX
                         if next_node_index != "new()" and next_node_index != "0":
-                            # raise Exception("Nonsence! Impossible to add %s[%s] to the list (%s)%s"
-                            #                 % (cur_node_name, cur_node_index, type(parent_node), str(parent_node)))
                             raise SyntaxError(f"Nonsence! Impossible to add {next_node_name}[{next_node_index}] to the {cur_node_name}"
                                             + (f"[{cur_node_index}]" if cur_node_index else "")
                                             + f" {str(parent_node)}"

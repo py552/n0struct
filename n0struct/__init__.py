@@ -183,7 +183,7 @@
 #                   added:
 #                       def mask_number(not_masked_number: str):
 #                       def unmask_number(masked_number: str):
-#                       def mask_pan(buffer: str):
+#                       def mask_pan(buffer_str: str):
 # 0.49 = 2021-07-23 fix for n0pretty()
 # 0.50 = 2021-08-04 Impossible easely adopt for 3.6, only for 3.7, because of some modules (for example: immutables)
 #                   are not precompiled for 3.6 at pypi.org. So installing of Visual C/C++ (or MinGW) is required.

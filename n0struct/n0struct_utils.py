@@ -66,27 +66,27 @@ def n0eval(_str: str) -> typing.Union[int, float, typing.Any]:
 def raise_in_lambda(ex): raise ex
 # ******************************************************************************
 def deserialize_list(
-                        buffer: str,
+                        buffer_str: str,
                         separator_tag: str = ",",
                         process_item = (lambda item: item),
 ) -> list:
-    if not buffer:
+    if not buffer_str:
         return []
     return [
             process_item(stripped_item)
-            for item in buffer.split(separator_tag)
+            for item in buffer_str.split(separator_tag)
             if (stripped_item := item.strip())
     ]
 # ******************************************************************************
 def deserialize_list_of_lists(
-                        buffer: str,
+                        buffer_str: str,
                         separator_tag: str = ",",
                         process_item = (lambda item: item),
 ) -> list:
-    return deserialize_list(buffer, ';', lambda item: deserialize_list(item, ',', process_item))
+    return deserialize_list(buffer_str, ';', lambda item: deserialize_list(item, ',', process_item))
 # ******************************************************************************
 def create_fixed_list(
-                        buffer: str,
+                        buffer_str: str,
                         dst_list_len: int,
                         default_value: int = None,
                         separator_tag: str = ",",
@@ -94,10 +94,10 @@ def create_fixed_list(
 ) -> list:
     '''
     generate list [value1, value2, ... valueN] with size of dst_list_len
-    from deserialized buffer
+    from deserialized buffer_str
     in case of value is not existed, then [value1, default_value, ... default_value]
     '''
-    src_list = deserialize_list(buffer, separator_tag)
+    src_list = deserialize_list(buffer_str, separator_tag)
     src_list_len = len(src_list)
     return [
         (
@@ -113,22 +113,22 @@ def create_fixed_list(
     ] 
 # ******************************************************************************
 def deserialize_dict(
-                        buffer: str,
+                        buffer_str: str,
                         separator_tag: str = ";",
                         equal_tag: str = "=",
 ) -> dict:
-    if not isinstance(buffer, str) or not buffer:
+    if not isinstance(buffer_str, str) or not buffer_str:
         return {}
 
     return {
         (tag_value:=pair.split(equal_tag, 1))[0]: (tag_value[1] if len(tag_value) > 1 else "")
-        for pair in buffer.split(separator_tag)     # split pairs by ';' in 'tag1=value1;tag2=value2'
+        for pair in buffer_str.split(separator_tag)     # split pairs by ';' in 'tag1=value1;tag2=value2'
         if pair                                     # mitigate ';;;' in 'tag1=value1;;;tag2=value2'
     }
 # ******************************************************************************
 def get_value_by_tag(
                         tag_name: str,
-                        buffer: str,
+                        buffer_str: str,
                         default_value: typing.Any = None,
                         separator_tag: str = ";",
                         equal_tag: str = "=",
@@ -136,7 +136,7 @@ def get_value_by_tag(
     if not isinstance(tag_name, str) or not tag_name:
         return default_value
 
-    return deserialize_dict(buffer, separator_tag, equal_tag).get(tag_name, default_value)
+    return deserialize_dict(buffer_str, separator_tag, equal_tag).get(tag_name, default_value)
 # ******************************************************************************
 def validate_str(value, default_value: str = "") -> str:
     return f"{default_value if not value else value}"
