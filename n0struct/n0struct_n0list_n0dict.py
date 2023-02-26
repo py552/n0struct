@@ -299,7 +299,6 @@ class n0list(n0list_):
                             )
                         )
                     else:
-                        # NOT TESTED! #1
                         if get__flag_compare_return_equal():
                             result["self_equal"].append(self)
                             result["other_equal"].append(other)
@@ -315,7 +314,6 @@ class n0list(n0list_):
                             exclude_xpaths=exclude_xpaths, transform=transform,
                         )
                     )
-                # elif isinstance(self[i], (n0dict, dict, OrderedDict)):
                 elif isinstance(self[i], dict):
                     result.update_extend(
                         n0dict(self[i]).direct_compare(
@@ -624,9 +622,6 @@ class n0list(n0list_):
                                 other_name, other_i, str(other[other_i])
                             )
                         )
-                # ######### if type(self[i]) == type(other[i]):
-                # self_not_exist_in_other.remove(composite_key)
-                # other_not_exist_in_self.remove(composite_key)
                 del self_not_exist_in_other[[itm[0] for itm in self_not_exist_in_other].index(composite_key)]
                 del other_not_exist_in_self[[itm[0] for itm in other_not_exist_in_self].index(composite_key)]
             # ######### if key in other_not_exist_in_self:
@@ -871,7 +866,6 @@ class n0dict(n0dict_):
                                     exclude_xpaths=exclude_xpaths, transform=transform,
                                 )
                             )
-                        # elif isinstance(self[key], (dict, OrderedDict)):
                         elif isinstance(self[key], dict):
                             result.update_extend(
                                 n0dict(self[key]).compare(
@@ -1001,7 +995,6 @@ class n0dict(n0dict_):
     # **************************************************************************
     # n0dict _find
     # **************************************************************************
-    # def _find(self, xpath_list: list, parent_node, return_lists, xpath_found_str: str = "/") -> list:
     def _find(self,
             xpath_list: typing.Union[str, list],
             parent_node,
@@ -1093,10 +1086,6 @@ class n0dict(n0dict_):
 
             # if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
             if not isinstance(parent_node, dict):
-                # raise IndexError("If key '%s' is set then (%s)'%s' must be n0dict at '%s'" %
-                    # (node_name, type(parent_node), str(parent_node), xpath_found_str)
-                # )
-                # raise IndexError(f"If key '{node_name}' is set then ({type(parent_node)})'{str(parent_node)}' must be n0dict at '{xpath_found_str}'")
                 raise IndexError(f"Internal error: Parent node '{xpath_found_str}' of '{node_name}' is redefined to ({type(parent_node)})'{str(parent_node)}', but must be n0dict")
             # ..................................................................
             # Try to check all [*] items in the loop
@@ -1157,33 +1146,23 @@ class n0dict(n0dict_):
             # Deeper
             #*******************************
             if node_index is None:
-                # # 0.51: NOT CORRECTLY FIXED
-                # if isinstance(parent_node[node_name], (dict, OrderedDict, n0dict)):
-                    return self._find(
-                                    xpath_list[1:],
-                                    parent_node[node_name],
-                                    return_lists,
-                                    xpath_found_str + '/' + node_name
-                    )
-                # # 0.51: NOT CORRECTLY FIXED
-                # else:
-                    # return parent_node, None, None, xpath_found_str, xpath_list # Impossible to go deeper
+                return self._find(
+                                xpath_list[1:],
+                                parent_node[node_name],
+                                return_lists,
+                                xpath_found_str + '/' + node_name
+                )
             else:
-                # # 0.51: NOT CORRECTLY FIXED
-                # if isinstance(parent_node[node_name], (list, tuple, n0list, dict, OrderedDict, n0dict)):
-                    return self._find(
-                                    [
-                                        "[%s%s'%s']" % (node_index[0], node_index[1], node_index[2]) \
-                                        if isinstance(node_index, tuple) else \
-                                        "[%s]" % str(node_index) # Because of mypy: error: Not all arguments converted during string formatting
-                                    ] + xpath_list[1:],
-                                    parent_node[node_name],
-                                    return_lists,
-                                    xpath_found_str + '/' + node_name
-                    )
-                # # 0.51: NOT CORRECTLY FIXED
-                # else:
-                    # return parent_node, None, None, xpath_found_str, xpath_list  # Impossible to go deeper
+                return self._find(
+                                [
+                                    "[%s%s'%s']" % (node_index[0], node_index[1], node_index[2]) \
+                                    if isinstance(node_index, tuple) else \
+                                    "[%s]" % str(node_index) # Because of mypy: error: Not all arguments converted during string formatting
+                                ] + xpath_list[1:],
+                                parent_node[node_name],
+                                return_lists,
+                                xpath_found_str + '/' + node_name
+                )
         # ##########################################################################################
         # Index in n0list (node_index is not None)
         # ##########################################################################################

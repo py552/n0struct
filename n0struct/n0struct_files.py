@@ -8,25 +8,24 @@ def load_file(file_name: str) -> str:
     with open(file_name, 'rt') as in_file:
         return in_file.read()
 # ******************************************************************************
-def load_lines(file_name: str) -> list:
+def load_lines(file_name: str) -> typing.Generator:
     with open(file_name, 'rt') as in_file:
-        # return [line.strip() for line in in_file.read().split("\n") if line.strip()]
         while True:
             if not (line:=in_file.readline()):
                 break
             yield line.rstrip('\n')
 # ******************************************************************************
-def save_file(file_name: str, lines: typing.Any):
+def save_file(file_name: str, lines: typing.Union[tuple, list, str]):
     Path(file_name).parent.mkdir(parents=True, exist_ok=True)
 
     if isinstance(lines, (list, tuple)):
-        buffer = "\n".join(lines)
+        buffer_str = "\n".join(lines)
     elif isinstance(lines, str):
-        buffer = lines
+        buffer_str = lines
     else:
-        buffer = str(lines)
+        buffer_str = str(lines)
     with open(file_name, 'wt') as out_filehandler:
-        out_filehandler.write(buffer)
+        out_filehandler.write(buffer_str)
 # ******************************************************************************
 def load_ini(file_name: str, default_value = None, equal_sign = '=') -> dict:
     ini_dict = {}

@@ -2,7 +2,6 @@ import typing
 # ******************************************************************************
 # ******************************************************************************
 def n0isnumeric(value: str) -> bool:
-    # return value.translate(str.maketrans("+-.", "000")).isnumeric() # Py3 dirty fix
     if isinstance(value, (int, float)):
         return True
     if not isinstance(value, str):

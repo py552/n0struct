@@ -52,29 +52,10 @@ def _findall(
                 seeked_xpath_str: node_ptr # if node_ptr is dict/list it's real node, else the final element
             }
     """
-    # # n0print("="*80)
-    # # n0debug("level")
-    # # n0print("="*80)
-    # # # n0debug("found_xpath_list")
-    # # n0debug_calc("//" + "/".join(found_xpath_list).replace('/[', '['), "found_xpath_list")
-    # # n0debug("parent_node")
-    # # # n0debug("seeked_xpath_list")
-    # # n0debug_calc("/".join(seeked_xpath_list).replace('/[', '['), "seeked_xpath_list")
-    # # n0debug("parent_nodes_stack")
-    # # n0print("-"*80)
-
     if not seeked_xpath_list:
-        # # n0print("*"*30 + f" FOUND!!! Force surface...")
-        # # n0debug_calc("//" + "/".join(found_xpath_list).replace('/[', '['), "found_xpath_list")
-        # # n0debug("parent_node")
         return {"//" + "/".join(found_xpath_list).replace('/[', '['): parent_node}
     # **************************************************************************
     # *** Arguments validation
-    ##if not isinstance(parent_node, (dict, list)):
-    ##    if raise_exception:
-    ##        raise TypeError(f"parent_node: expected dict/list, got other type: {type(parent_node)} '{str(parent_node)}'")
-    ##    else:
-    ##        return None
     if not isinstance(seeked_xpath_list, list):
         if raise_exception:
             raise TypeError(f"seeked_xpath_list: expected list, got other type: {type(seeked_xpath_list)} '{str(seeked_xpath_list)}'")
@@ -91,48 +72,12 @@ def _findall(
     child_name = None
     child_index = None
     if seeked_xpath_list[0].strip() == '..':
-        # # n0print("*"*30 + f" Surface...")
         if len(parent_nodes_stack) < 2:
             if raise_exception:
                 raise KeyError(f"Imposible to surface from {found_xpath_list+'/'+child_name}")
             else:
                 return None
-        '''
-        # **********************************************************************
-        # Surface
-        if child_name == "..":
-            # ******************************************************************
-            # Surface for one level
-            n0debug_calc(parent_nodes_stack,         "parent_nodes_stack")
-            n0debug_calc(parent_nodes_stack[-1],     "parent_nodes_stack[-1]")
-
-            n0debug_calc(seeked_xpath_list,             "seeked_xpath_list")
-            n0debug_calc(seeked_xpath_list[1:],         "seeked_xpath_list[1:]")
-
-            n0debug_calc(found_xpath_list,       "found_xpath_list")
-            n0debug_calc(found_xpath_list[-1],   "found_xpath_list[-1]")
-
-            n0debug_calc(parent_nodes_stack,         "parent_nodes_stack")
-            n0debug_calc(parent_nodes_stack[:-1],    "parent_nodes_stack[:-1]")
-
-            n0debug_calc(raise_exception,        "raise_exception")
-
-            return _findall(
-                            parent_nodes_stack[-1],
-                            seeked_xpath_list[1:],
-                            found_xpath_list[-1],
-                            parent_nodes_stack[:-1],
-                            raise_exception,
-                            level + 1,
-            )
-        '''
-        # n0debug("parent_nodes_stack")
         del parent_nodes_stack[list(parent_nodes_stack.keys())[-1]]
-        # n0debug("parent_nodes_stack")
-        # n0debug("found_xpath_list")
-        # # n0debug_calc("//" + "/".join(found_xpath_list[:-1]).replace('/[', '['), "found_xpath_list[:-1]")
-        # # n0debug_calc(parent_nodes_stack[list(parent_nodes_stack.keys())[-1]], "parent_nodes_stack[list(parent_nodes_stack.keys())[-1]]")
-        # # n0debug_calc("/".join(seeked_xpath_list[1:]).replace('/[', '['), "seeked_xpath_list[1:]")
         return _findall(
                         parent_nodes_stack[list(parent_nodes_stack.keys())[-1]],
                         # parent_nodes_stack,
@@ -208,31 +153,11 @@ def _findall(
                 raise TypeError(f"Unknown condition [{child_index}] in '{str(seeked_xpath_list[0])}'")
     else:
         child_name = seeked_xpath_list[0]
-        # # n0debug("child_name")
-        # # n0debug("parent_node")
     # **************************************************************************
     if isinstance(parent_node, list):
         # **********************************************************************
         # If we have NOT got index for the list, so try to check all items in the list
         if child_index is None:
-            # n0print("*"*30 + " NOT TESTED #0...")
-            # n0debug("parent_node")
-            # __seeked_xpath_list = "/".join(["[*]"] + seeked_xpath_list)
-            # n0print("FOUND: " + "/".join(found_xpath_list))
-            # n0print(f"========================= {level} -> {__seeked_xpath_list}")
-            # result = _findall(
-                            # parent_node,
-                            # ["[*]"] + seeked_xpath_list,
-                            # found_xpath_list,
-                            # parent_nodes_stack,
-                            # raise_exception,
-                            # level,
-            # )
-            # n0print(f"-------------------------")
-            # n0debug("result")
-            # n0print(f"-------------------------")
-            # exit()
-            # return result
             return _findall(
                             parent_node,
                             ["[*]"] + seeked_xpath_list,
@@ -254,10 +179,7 @@ def _findall(
                 return _findall(
                                 child_node,
                                 seeked_xpath_list[1:],
-                                # found_xpath_list + seeked_xpath_list[0:1],
-                                # found_xpath_list + [f"[{child_index}]"],
                                 found_xpath_list,
-                                # parent_nodes_stack + [(found_xpath_list, parent_node)],
                                 {**parent_nodes_stack, **{"//" + "/".join(found_xpath_list).replace('/[', '['): parent_node}},
                                 raise_exception,
                                 level + 1,
@@ -278,21 +200,13 @@ def _findall(
                     # # n0print("*"*25 + f" Multiple deep to index [{child_index}]...")
                     found_xpath_list[-1] = last_xpath + f"[{child_index}]"
                     found = _findall(
-                                    # child_node,
                                     __parent_node := parent_node[child_index],
                                     __seeked_xpth := seeked_xpath_list[1:],
-                                    # found_xpath_list + [f"[{child_index}]"],
                                     __found_xpath := found_xpath_list,
-                                    # parent_nodes_stack + [(found_xpath_list, parent_node)],
                                     __parent_stck := {**parent_nodes_stack, **{"//" + "/".join(found_xpath_list).replace('/[', '['): parent_node}},
                                     raise_exception,
                                     level,
                     )
-                    # n0debug("__parent_node")
-                    # n0print("seeked_xpath_list:" + "/".join(__seeked_xpth))
-                    # n0print("found_xpath_list:" + "/".join(__found_xpath))
-                    # n0debug("__parent_stck")
-                    # n0debug("found")
                     if found:
                         multi_found.update(found)
                 else:
@@ -324,7 +238,6 @@ def _findall(
             multi_found = {}
             # ******************************************************************
             # just skip * and check if the current node is satisfied to the xpath/conditions
-            ## n0print("*"*30 + " NOT TESTED #2...")
             found = _findall(
                             parent_node,
                             seeked_xpath_list[1:],
@@ -340,17 +253,13 @@ def _findall(
             for child_name in parent_node: # checking * sub-nodes
                 child_node = parent_node[child_name]
                 if isinstance(child_node, (dict, list)):
-                    ## n0print("*"*30 + " NOT TESTED #3...")
-                    # n0debug("child_node")
                     n0debug("seeked_xpath_list")
                     n0debug_calc(found_xpath_list + [child_name], "found_xpath_list + [child_name]") ## n0debug_calc(found_xpath_list + seeked_xpath_list[0:1], "found_xpath_list + seeked_xpath_list[0:1]")
                     n0debug_calc("/".join(found_xpath_list).replace('/[', '['), "parent_node")
                     found = _findall(
                                     child_node,
                                     seeked_xpath_list,
-                                    # found_xpath_list + [child_name],
                                     found_xpath_list + [child_name], ##found_xpath_list + seeked_xpath_list[0:1],
-                                    # parent_nodes_stack + [(found_xpath_list, parent_node)],
                                     {**parent_nodes_stack, **{"//" + "/".join(found_xpath_list).replace('/[', '['): parent_node}},
                                     raise_exception,
                                     level + 1,
@@ -361,11 +270,9 @@ def _findall(
         # **********************************************************************
         # Find by exact xpath
         if child_name in parent_node:
-            # # n0print("*"*30 + f" Deep to dict key [{child_name}]...")
             return _findall(
                             parent_node[child_name],
                             seeked_xpath_list[1:],
-                            # found_xpath_list + [child_name],
                             found_xpath_list + seeked_xpath_list[0:1],
                             {**parent_nodes_stack, **{"//" + "/".join(found_xpath_list).replace('/[', '['): parent_node}},
                             raise_exception,
@@ -378,12 +285,12 @@ def _findall(
         n0print("="*80)
         n0debug("level")
         n0print("="*80)
-        # n0debug("found_xpath_list")
+        n0debug("found_xpath_list")
         n0debug_calc("//" + "/".join(found_xpath_list).replace('/[', '['), "found_xpath_list")
         n0debug("parent_node")
-        # n0debug("seeked_xpath_list")
+        n0debug("seeked_xpath_list")
         n0debug_calc("/".join(seeked_xpath_list).replace('/[', '['), "seeked_xpath_list")
-        # n0debug("parent_nodes_stack")
+        n0debug("parent_nodes_stack")
         n0print("-"*80)
         raise KeyError(f"Internal error:: looking for {seeked_xpath_list} already found: {found_xpath_list} in {type(parent_node)}'{str(parent_node)}'")
 # ******************************************************************************

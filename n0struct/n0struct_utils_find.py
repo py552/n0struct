@@ -1,10 +1,8 @@
 import typing
-# import urllib # expected_value = urllib.parse.unquote(expected_value) # mypy: error: Module has no attribute "parse"
 from urllib.parse import unquote as urllib__parse__unquote
 # ******************************************************************************
 # ******************************************************************************
 def split_name_index(node_name: str) -> typing.Tuple[
-                                                        # typing.Any,
                                                         str,
                                                         typing.Union[
                                                             str,
@@ -50,7 +48,6 @@ def split_name_index(node_name: str) -> typing.Tuple[
                     elif (expected_value.startswith('"') and expected_value.endswith('"')) or \
                             (expected_value.startswith("'") and expected_value.endswith("'")):
                         expected_value = expected_value[1:-1]
-                        # expected_value = urllib.parse.unquote(expected_value) # mypy: error: Module has no attribute "parse"
                         expected_value = urllib__parse__unquote(expected_value)
                     node_index_tuple = (expected_node_name, separator, expected_value or expected_value_bool)
     else:

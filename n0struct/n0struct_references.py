@@ -11,10 +11,10 @@ class OrderedSet(MutableSet):
         if iterable is not None:
             self |= iterable
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.map)
 
-    def __contains__(self, key):
+    def __contains__(self, key) -> bool:
         return key in self.map
 
     def add(self, key):
@@ -29,33 +29,33 @@ class OrderedSet(MutableSet):
             prev[2] = next
             next[1] = prev
 
-    def __iter__(self):
+    def __iter__(self) -> typing.Generator:
         end = self.end
         curr = end[2]
         while curr is not end:
             yield curr[0]
             curr = curr[2]
 
-    def __reversed__(self):
+    def __reversed__(self) -> typing.Generator:
         end = self.end
         curr = end[1]
         while curr is not end:
             yield curr[0]
             curr = curr[1]
 
-    def pop(self, last=True):
+    def pop(self, last=True) -> typing.Any:
         if not self:
             raise KeyError('set is empty')
         key = self.end[1][0] if last else self.end[2][0]
         self.discard(key)
         return key
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         if not self:
             return '%s()' % (self.__class__.__name__,)
         return '%s(%r)' % (self.__class__.__name__, list(self))
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if isinstance(other, OrderedSet):
             return len(self) == len(other) and list(self) == list(other)
         return set(self) == set(other)
