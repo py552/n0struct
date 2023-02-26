@@ -21,7 +21,7 @@ def date_today() -> datetime.datetime:
 def date_only(input_date: datetime.datetime) -> datetime.date:
     return input_date.date()
 # ******************************************************************************
-def date_delta(input_date: typing.Union[datetime.datetime, datetime.date, None] = None, day_delta: int = 0, month_delta: int = 0) -> datetime.datetime:
+def date_delta(input_date: typing.Union[None, datetime.datetime, datetime.date] = None, day_delta: int = 0, month_delta: int = 0) -> datetime.datetime:
     """
     :param day_delta:
     :param month_delta:
@@ -43,7 +43,7 @@ def date_delta(input_date: typing.Union[datetime.datetime, datetime.date, None] 
     return result
 
 # ******************************************************************************
-def date_to_format(input_date: typing.Union[datetime.datetime, None], date_format: str, day_delta: int = 0, month_delta: int = 0) -> str:
+def date_to_format(input_date: typing.Union[None, datetime.datetime], date_format: str, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param date_format:
     :param input_date:
@@ -58,13 +58,13 @@ def date_to_format(input_date: typing.Union[datetime.datetime, None], date_forma
 # ******************************************************************************
 # LEGACY
 # ******************************************************************************
-def date_format(date_format: str, input_date: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
+def date_format(date_format: str, input_date: typing.Union[None, datetime.datetime] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     LEGACY
     """
     return date_to_format(input_date or date_today(), date_format, day_delta, month_delta)
 # ******************************************************************************
-def date_timestamp_full(input_date: typing.Union[datetime.datetime, None] = None, day_delta: int = 0, month_delta: int = 0) -> str:
+def date_timestamp_full(input_date: typing.Union[None, datetime.datetime] = None, day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
     :param day_delta:
@@ -75,14 +75,14 @@ def date_timestamp_full(input_date: typing.Union[datetime.datetime, None] = None
         input_date = date_today()
     return date_to_format(input_date, "%Y%m%d%H%M%S%f", day_delta, month_delta)
 # ******************************************************************************
-def date_timestamp(input_date: typing.Union[datetime.datetime, None] = None) -> str:
+def date_timestamp(input_date: typing.Union[None, datetime.datetime] = None) -> str:
     """
     :return: input_date -> str 13 characters YYMMDD_HHMMSS
     """
     timestamp = date_timestamp_full(input_date)
     return timestamp[2:8] + "_" + timestamp[8:14]
 # ******************************************************************************
-def date_iso(input_date: typing.Union[datetime.datetime, None], day_delta: int = 0, month_delta: int = 0) -> str:
+def date_iso(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
     :param day_delta:
@@ -91,7 +91,7 @@ def date_iso(input_date: typing.Union[datetime.datetime, None], day_delta: int =
     """
     return date_delta(input_date, day_delta, month_delta).isoformat(timespec='microseconds')
 # ******************************************************************************
-def date_yymmdd(input_date: typing.Union[datetime.datetime, None], day_delta: int = 0, month_delta: int = 0) -> str:
+def date_yymmdd(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
     :param day_delta:
@@ -100,7 +100,7 @@ def date_yymmdd(input_date: typing.Union[datetime.datetime, None], day_delta: in
     """
     return date_to_format(input_date, "%y%m%d", day_delta, month_delta)
 # ******************************************************************************
-def date_dash_yyyymmdd(input_date: typing.Union[datetime.datetime, None], day_delta: int = 0, month_delta: int = 0) -> str:
+def date_dash_yyyymmdd(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
     :param day_delta:
@@ -109,7 +109,7 @@ def date_dash_yyyymmdd(input_date: typing.Union[datetime.datetime, None], day_de
     """
     return date_to_format(input_date, pyformat_YYYYMMDD, day_delta, month_delta)
 # ******************************************************************************
-def date_slash_ddmmyyyy(input_date: typing.Union[datetime.datetime, None], day_delta: int = 0, month_delta: int = 0) -> str:
+def date_slash_ddmmyyyy(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
     :param day_delta:
@@ -118,7 +118,7 @@ def date_slash_ddmmyyyy(input_date: typing.Union[datetime.datetime, None], day_d
     """
     return date_to_format(input_date, "%d/%m/%Y", day_delta, month_delta)
 # ******************************************************************************
-def date_dash_ddmmyyyy(input_date: typing.Union[datetime.datetime, None], day_delta: int = 0, month_delta: int = 0) -> str:
+def date_dash_ddmmyyyy(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
     :param day_delta:
@@ -127,7 +127,7 @@ def date_dash_ddmmyyyy(input_date: typing.Union[datetime.datetime, None], day_de
     """
     return date_to_format(input_date, pyformat_DDMMYYYY, day_delta, month_delta)
 # ******************************************************************************
-def date_yymm(input_date: typing.Union[datetime.datetime, None], day_delta: int = 0, month_delta: int = 0) -> str:
+def date_yymm(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
     :param day_delta:
@@ -136,7 +136,7 @@ def date_yymm(input_date: typing.Union[datetime.datetime, None], day_delta: int 
     """
     return date_to_format(input_date, pyformat_YYMM, day_delta, month_delta)
 # ******************************************************************************
-def date_mmyy(input_date: typing.Union[datetime.datetime, None], day_delta: int = 0, month_delta: int = 0) -> str:
+def date_mmyy(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
     :param day_delta:
@@ -145,7 +145,7 @@ def date_mmyy(input_date: typing.Union[datetime.datetime, None], day_delta: int 
     """
     return date_to_format(input_date, pyformat_MMYY, day_delta, month_delta)
 # ******************************************************************************
-def date_julian(input_date: typing.Union[datetime.datetime, None], day_delta: int = 0, month_delta: int = 0) -> str:
+def date_julian(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
     :param input_date:
     :param day_delta:
@@ -154,21 +154,21 @@ def date_julian(input_date: typing.Union[datetime.datetime, None], day_delta: in
     """
     return date_to_format(input_date, "%j", day_delta, month_delta).zfill(3)
 # ******************************************************************************
-def time_hhmmss(input_date: typing.Union[datetime.datetime, None]) -> str:
+def time_hhmmss(input_date: typing.Union[None, datetime.datetime]) -> str:
     """
     :param input_date:
     :return: (input_date or today) -> str HHMMSS
     """
     return date_to_format(input_date, "%H%M%S")
 # ******************************************************************************
-def time_colon_hhmmss(input_date: typing.Union[datetime.datetime, None]) -> str:
+def time_colon_hhmmss(input_date: typing.Union[None, datetime.datetime]) -> str:
     """
     :param input_date:
     :return: (input_date or today) -> str HHMMSS
     """
     return date_to_format(input_date, "%H:%M:%S")
 # ******************************************************************************
-def to_date(input_date_str: str, date_format: str = None) -> typing.Union[datetime.datetime, str]:
+def to_date(input_date_str: str, date_format: str = None) -> typing.Union[None, datetime.datetime, str]:
     """
     :param input_date_str:
     :param date_format:
@@ -205,50 +205,50 @@ def to_date(input_date_str: str, date_format: str = None) -> typing.Union[dateti
 # ******************************************************************************
 # LEGACY
 # ******************************************************************************
-def from_date(input_date_str: str, date_format: str) -> typing.Union[datetime.datetime, str, None]:
+def from_date(input_date_str: str, date_format: str) -> typing.Union[None, datetime.datetime, str]:
     """
     LEGACY
     """
     return to_date(input_date_str, date_format)
 # ******************************************************************************
-def from_ddmmmyy(input_date_str: str) -> typing.Union[datetime.datetime, str, None]:
+def from_ddmmmyy(input_date_str: str) -> typing.Union[None, datetime.datetime, str]:
     """
     :param input_date_str: DD-MMM-YY # 16-JUL-20
     :return: str -> date
     """
     return to_date(input_date_str, pyformat_DDMMMYYYY)  # 16-JUL-20
 # ******************************************************************************
-def from_yyyymmdd(input_date_str: str) -> typing.Union[datetime.datetime, str, None]:
+def from_yyyymmdd(input_date_str: str) -> typing.Union[None, datetime.datetime, str]:
     """
     :param input_date_str: YYYY-MM-DD # 2020-07-16
     :return: str -> date
     """
     return to_date(input_date_str, pyformat_YYYYMMDD)  # 2020-07-16
 # ******************************************************************************
-def from_ddmmyyyy(input_date_str: str) -> typing.Union[datetime.datetime, str, None]:
+def from_ddmmyyyy(input_date_str: str) -> typing.Union[None, datetime.datetime, str]:
     """
     :param input_date_str: DD-MM-YYYY # 16-07-2020
     :return: str -> date
     """
     return to_date(input_date_str, pyformat_DDMMYYYY)  # 16-07-2020
 # ******************************************************************************
-def is_date_format(input_date_str: str, date_format: str) -> typing.Union[datetime.datetime, bool]:
+def is_date_format(input_date_str: str, date_format: str) -> typing.Union[None, datetime.datetime, bool]:
     result = to_date(input_date_str, date_format)
     if isinstance(result, datetime.datetime):
         return result
     else:
         return False
 # ******************************************************************************
-def is_date_yymm(input_date_str: str) -> typing.Union[datetime.datetime, bool]:
+def is_date_yymm(input_date_str: str) -> typing.Union[None, datetime.datetime, bool]:
     return is_date_to_format(input_date_str, pyformat_YYMM)
 # ******************************************************************************
-def is_date_mmyy(input_date_str: str) -> typing.Union[datetime.datetime, bool]:
+def is_date_mmyy(input_date_str: str) -> typing.Union[None, datetime.datetime, bool]:
     return is_date_to_format(input_date_str, pyformat_MMYY)
 # ******************************************************************************
-def first_day_of_yymm(input_date_str: str) -> typing.Union[datetime.datetime, bool]:
+def first_day_of_yymm(input_date_str: str) -> typing.Union[None, datetime.datetime, bool]:
     return is_date_yymm(input_date_str)
 # ******************************************************************************
-def last_day_of_yymm(input_date_str: str) -> typing.Union[datetime.datetime, bool]:
+def last_day_of_yymm(input_date_str: str) -> typing.Union[None, datetime.datetime, bool]:
     if not (date_datetime := is_date_yymm(input_date_str)):
         return date_datetime
     return date_delta(date_datetime, month_delta=1) - datetime.timedelta(microseconds=1)

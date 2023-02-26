@@ -66,11 +66,11 @@ class n0list(n0list_):
             return_lists,
             xpath_found_str: str = "/") \
         ->  typing.Tuple[
-                typing.Union[n0dict, n0list, None],
-                typing.Union[str, int, None],
-                typing.Union[typing.Any, None],
+                typing.Union[None, n0dict, n0list],
+                typing.Union[None, str, int],
+                typing.Union[None, typing.Any],
                 str,
-                typing.Union[list, None]
+                typing.Union[None, list]
             ]:
         """
         [0] = parent node: n0dict/n0list
@@ -989,11 +989,11 @@ class n0dict(n0dict_):
             return_lists,
             xpath_found_str: str = "/") \
         ->  typing.Tuple[
-                typing.Union[n0dict, n0list, None],
-                typing.Union[str, int, None],
-                typing.Union[typing.Any, None],
+                typing.Union[None, n0dict, n0list],
+                typing.Union[None, str, int],
+                typing.Union[typing.Any],
                 str,
-                typing.Union[list, None]
+                typing.Union[None, list]
             ]:
         """
         [0] = parent node: n0dict/n0list

@@ -3,7 +3,7 @@ from .n0struct_utils import n0isnumeric
 # from .n0struct_logging import *
 # ******************************************************************************
 # ******************************************************************************
-def findall(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise_exception = True) -> dict:
+def findall(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise_exception = True) -> typing.Union[None, dict]:
     if not isinstance(seeked_xpath_str, str):
         raise TypeError(f"seeked_xpath_str: expected str, got other type: {type(seeked_xpath_str)}{str(seeked_xpath_str)}")
     if seeked_xpath_str.startswith("./"):
@@ -44,7 +44,7 @@ def _findall(
 
             raise_exception = True,
             level = 0,
-) -> dict:
+) -> typing.Union[None, dict]:
     """
         returns:
             {
