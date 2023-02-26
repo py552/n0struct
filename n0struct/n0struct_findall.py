@@ -29,12 +29,11 @@ def findfirst(current_node: typing.Union[dict, list], seeked_xpath_str: str, rai
             raise IndexError(f"Not found item {seeked_xpath_str}")
         else:
             return None,None
-    elif len(found) != 1:
-        if raise_exception:
-            raise IndexError(f"Found more that single item {seeked_xpath_str}")
+    elif len(found) > 1 and raise_exception:
+        raise IndexError(f"Found more that single item {seeked_xpath_str}")  # In case of more than 1 found
             
-    found_keys = list(found.keys())
-    return found_keys[0], found[found_keys[0]]
+    found_key = list(found.keys())[0]  # Return first pair in any cases: key, value
+    return found_key, found[found_key]
 # ******************************************************************************
 def _findall(
             parent_node: typing.Union[dict, list],

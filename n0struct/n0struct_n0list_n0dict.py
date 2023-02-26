@@ -730,7 +730,6 @@ class n0dict(n0dict_):
                 if (len(args[0]) % 2) == 0 and all(isinstance(itm, str) for itm in args[0][0::2]):
                     for key, value in zip(args[0][0::2],args[0][1::2]):
                         self.update({key: value})
-                    # return None
                 # [(key1, value1), (key2, value2), ..., (keyN, valueN)]
                 elif all(isinstance(itm, (tuple,list)) and len(itm) == 2 and isinstance(itm[0], str) for itm in args[0]):
                     for pair in args[0]:
@@ -800,15 +799,12 @@ class n0dict(n0dict_):
             if key in other:
                 # fullxpath = prefix + "/" + key
                 fullxpath = "%s/%s" % (prefix, key)
-                # n0debug("fullxpath")
                 if not xpath_match(fullxpath, exclude_xpaths):
                     # --- TRANSFORM: START -------------------------------------
                     # Transform self and other linked values with function transform[]()
                     self_value = self[key]
                     other_value = other[key]
-                    # n0debug("transform")
                     transform_i = xpath_match(fullxpath, [itm[0] for itm in transform])
-                    # n0debug("transform_i")
                     if transform_i:
                         transform_i -= 1
                         transform_self = transform[transform_i][1]
@@ -821,7 +817,6 @@ class n0dict(n0dict_):
                     # --- TRANSFORM: END ---------------------------------------
                     if type(self_value) == type(other_value):
                         if isinstance(self_value, (str, int, float, datetime.date)):
-                            # if self_value != other_value:
                             if self_value != other_value \
                                 and (not compare_only or xpath_match(fullxpath, compare_only)):
                                 # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
@@ -873,8 +868,7 @@ class n0dict(n0dict_):
                                 )
                             )
                         elif self[key] is None:
-                            # type(self[key]) == type(other[key]) and self[key] is None
-                            # So both are None
+                            # Because of type(self[key]) == type(other[key]) and self[key] is None, so both are None
                             pass
                         else:
                             raise TypeError("Not expected type %s in %s[\"%s\"]" % (type(self[key]), key, self_name))
@@ -1085,7 +1079,6 @@ class n0dict(n0dict_):
             # Try to check all [*] items in the loop
             # ..................................................................
             if node_name == "*":
-                # cur_values = n0list([])
                 cur_values = n0list()
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 for next_node_name in parent_node:
@@ -1177,7 +1170,6 @@ class n0dict(n0dict_):
                 if not isinstance(parent_node, (list, tuple)):
                     # Hidden list. Convert single item into list
                     parent_node = [parent_node]
-                # cur_values = n0list([])
                 cur_values = n0list()
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
                 for i,cur_node in enumerate(parent_node):
@@ -1239,7 +1231,6 @@ class n0dict(n0dict_):
                         # *******************************
                         return self._find(["[*]"] + xpath_list, parent_node, return_lists, xpath_found_str)
 
-                    # if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
                     if not isinstance(parent_node, dict):
                         raise IndexError("If key '%s' is set then (%s)'%s' must be n0dict at '%s'" %
                             (node_index[0], type(parent_node), str(parent_node), xpath_found_str)
@@ -1273,7 +1264,6 @@ class n0dict(n0dict_):
                     # NOT FOUND: Element in n0list
                     #--------------------------------
                     return parent_node, "[%d]" % node_index_int, None, xpath_found_str, xpath_list
-                    # raise IndexError("If we are looking for element of list '%s[%s]', then parent node (%s)'%s' must be list" % (xpath_found_str, node_index, type(parent_node), str(parent_node)))
 
                 if len(xpath_list) == 1:
                     #================================
@@ -1297,7 +1287,6 @@ class n0dict(n0dict_):
 
         next_node_name, next_node_index = split_name_index(xpath_list[0])  # possible both could be NOT empty
 
-        # if not cur_node_index is None:
         if cur_node_index is None:
             ####################################################################
             # Parent is DICTIONARY
@@ -1361,7 +1350,6 @@ class n0dict(n0dict_):
                     if len(parent_node[cur_node_name]):
                         parent_node.update({cur_node_name: n0list([parent_node[cur_node_name]])})
                     else:
-                        # parent_node.update({cur_node_name: n0list([])})
                         parent_node.update({cur_node_name: n0list()})
                     parent_node = parent_node[cur_node_name]
                 if next_node_name:
@@ -1372,7 +1360,6 @@ class n0dict(n0dict_):
                         next_node_name_index = next_node_name
                     else:
                         # Next is list under dict
-                        # parent_node.append(n0dict({next_node_name: n0list([])}))
                         parent_node.append(n0dict({next_node_name: n0list()}))
                         next_node = parent_node[-1][next_node_name]
                         # Expected to have 'new()' in next_node_index, else it will be failed at the next step
@@ -1425,7 +1412,6 @@ class n0dict(n0dict_):
     def update(self, xpath: typing.Union[dict, str], new_value: str = None) -> n0dict__:
         # **********************************************************************
         def multi_define(xpath, new_value):
-            # if isinstance(new_value, (dict, OrderedDict, n0dict)):
             if isinstance(new_value, dict):
                 self[xpath] = n0dict(new_value, recursively=True)
             elif isinstance(new_value, (list, tuple)):
