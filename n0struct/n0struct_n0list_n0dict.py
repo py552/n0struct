@@ -797,8 +797,7 @@ class n0dict(n0dict_):
         # #############################################################
         for key in self_keys:
             if key in other:
-                # fullxpath = prefix + "/" + key
-                fullxpath = "%s/%s" % (prefix, key)
+                fullxpath = prefix + "/" + key
                 if not xpath_match(fullxpath, exclude_xpaths):
                     # --- TRANSFORM: START -------------------------------------
                     # Transform self and other linked values with function transform[]()
@@ -1313,7 +1312,6 @@ class n0dict(n0dict_):
                             )
                         parent_node.update({next_node_name: n0list([None])})
                         next_node = parent_node[next_node_name]
-                        # next_node_name_index = "[%s]" % next_node_index
                         next_node_name_index = "[last()]"
                         # item[0] == None, will be reused at the next step with last()
                     else:

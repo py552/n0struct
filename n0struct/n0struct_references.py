@@ -5,9 +5,9 @@ from collections.abc import MutableSet
 # https://code.activestate.com/recipes/576694/
 class OrderedSet(MutableSet):
     def __init__(self, iterable=None):
-        self.end = end = []
-        end += [None, end, end]         # sentinel node for doubly linked list
-        self.map = {}                   # key --> [key, prev, next]
+        self.end = __end = []
+        __end += [None, __end, __end]   # sentinel node for doubly linked list
+        self.map = {}                   # __key --> [__key, __prev, __next]
         if iterable is not None:
             self |= iterable
 
@@ -19,29 +19,29 @@ class OrderedSet(MutableSet):
 
     def add(self, key):
         if key not in self.map:
-            end = self.end
-            curr = end[1]
-            curr[2] = end[1] = self.map[key] = [key, curr, end]
+            __end = self.end
+            __curr = __end[1]
+            __curr[2] = __end[1] = self.map[key] = [key, __curr, __end]
 
     def discard(self, key):
         if key in self.map:
-            key, prev, next = self.map.pop(key)
-            prev[2] = next
-            next[1] = prev
+            key, __prev, __next = self.map.pop(key)
+            __prev[2] = __next
+            __next[1] = __prev
 
     def __iter__(self) -> typing.Generator:
-        end = self.end
-        curr = end[2]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[2]
+        __end = self.end
+        __curr = __end[2]
+        while __curr is not __end:
+            yield __curr[0]
+            __curr = __curr[2]
 
     def __reversed__(self) -> typing.Generator:
-        end = self.end
-        curr = end[1]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[1]
+        __end = self.end
+        __curr = __end[1]
+        while __curr is not __end:
+            yield __curr[0]
+            __curr = __curr[1]
 
     def pop(self, last=True) -> typing.Any:
         if not self:

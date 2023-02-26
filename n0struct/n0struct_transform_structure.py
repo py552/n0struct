@@ -9,15 +9,14 @@ keys_for_currency_convertion = {
     "currency":         lambda value: currency_converter[value] if value in currency_converter else value,
     "source_currency":  lambda value: currency_converter[value] if value in currency_converter else value,
 }
-def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
+sample: def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
 '''
 # ******************************************************************************
-def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = None):
+def convert_to_native_format(value, key = None, exception: set = None, transform_depends_of_key:dict = None):
     if key is not None:
-        if exception is not None:
-            if key in exception:
-                return value
-        if key in transform_depends_of_key:
+        if exception and key in exception:
+            return value
+        if transform_depends_of_key and key in transform_depends_of_key:
             return transform_depends_of_key[key](value)
     if isinstance(value, str):
         value = value.strip()
