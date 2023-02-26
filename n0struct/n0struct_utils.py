@@ -83,7 +83,7 @@ def deserialize_list_of_lists(
                         separator_tag_for_sublists: str = ",",
                         process_sublist = None,
 ) -> list:
-    # list1item1,list1item2;list2item1,list2item2;list3item1,list3item2
+    # Example of list of lists: list1item1,list1item2;list2item1,list2item2;list3item1,list3item2
     return deserialize_list(buffer_str, separator_tag, process_sublist or (lambda item: deserialize_list(item, separator_tag_for_sublists, process_item)))
 # ******************************************************************************
 def create_fixed_list(
