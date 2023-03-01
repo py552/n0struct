@@ -168,7 +168,7 @@ def time_colon_hhmmss(input_date: typing.Union[None, datetime.datetime]) -> str:
     """
     return date_to_format(input_date, "%H:%M:%S")
 # ******************************************************************************
-def to_date(input_date_str: str, date_format: str = None) -> typing.Union[None, datetime.datetime, str]:
+def to_date(input_date_str: str, date_format: str = None, raise_exception: bool = False) -> typing.Union[None, datetime.datetime, str]:
     """
     :param input_date_str:
     :param date_format:
@@ -183,8 +183,11 @@ def to_date(input_date_str: str, date_format: str = None) -> typing.Union[None, 
     if date_format:
         try:
             return datetime.datetime.strptime(input_date_str, date_format)
-        except (ValueError, TypeError):
-            return input_date_str
+        except (ValueError, TypeError) as ex:
+            if raise_exception:
+                raise ex
+            else:
+                return input_date_str
     else:
         try:
             return datetime.datetime.strptime(input_date_str, pyformat_YYYYMMDD).date()             # 2020-07-16
