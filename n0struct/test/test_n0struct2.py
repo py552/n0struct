@@ -13,7 +13,7 @@ from n0struct import (
     init_logger,
     
     deserialize_list,
-    create_fixed_list,
+    deserialize_fixed_list,
     deserialize_dict,
     get_value_by_tag,
     deserialize_list_of_lists,
@@ -40,7 +40,7 @@ def test_deserialization():
     
     serialized_list = ';'.join(my_list)
     n0debug("serialized_list")
-    deserialized_list = create_fixed_list(serialized_list, 4, default_value = "444")
+    deserialized_list = deserialize_fixed_list(serialized_list, 4, default_item = "444")
     n0debug("deserialized_list")
     assert deserialized_list[3] == "444"
 

@@ -1,6 +1,11 @@
 import typing
-from .n0struct_utils import n0isnumeric
-# from .n0struct_logging import *
+from .n0struct_utils import isnumber
+from .n0struct_logging import (
+    n0print,
+    n0debug,
+    n0debug_calc,
+    n0error,
+)
 # ******************************************************************************
 # ******************************************************************************
 def findall(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise_exception = True) -> typing.Union[None, dict]:
@@ -93,7 +98,7 @@ def _findall(
         if not seeked_xpath_list[0].endswith("]"):
             raise TypeError(f"Index or condition should be inside [], but '{str(seeked_xpath_list[0])}'")
         child_index = seeked_xpath_list[0][1:-1].strip() # Index or xpath condition/function
-        if n0isnumeric(child_index):
+        if isnumber(child_index):
             # Index
             child_index = int(child_index)
         else:

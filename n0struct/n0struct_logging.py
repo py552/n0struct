@@ -131,7 +131,11 @@ def n0pretty(
                 # construct presentation string
                 presentation_string = \
                     (
-                        (str(type(sub_item_key_value)) or "").replace("<class '", "<").replace("'>", " ") + str(len(sub_item_key_value)) + "> "
+                        (str(type(sub_item_key_value)) or "") \
+                            .replace("<class '", "<") \
+                            .replace("'>", " ") \
+                        + str(len(sub_item_key_value)) \
+                        + "> "
                         if (show_type or (show_type is None and __debug_show_object_type))
                         and (not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float)))
                         else ""
@@ -173,13 +177,17 @@ def n0pretty(
                         key_type = ""
                         value_type = ""
                         if show_type or (show_type is None and __debug_show_object_type):
-                            if not skip_simple_types or not isinstance(key, (str, int, float, complex, bool, list, tuple, set, frozenset, dict)):
-                                key_type = (str(type(key)) or "").replace("<class '", "<").replace("'>", "")
+                            if not skip_simple_types \
+                            or not isinstance(key, (str, int, float, complex, bool, list, tuple, set, frozenset, dict)):
+                                key_type = (str(type(key)) or "") \
+                                    .replace("<class '", "<") \
+                                    .replace("'>", "")
                                 if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
                                     key_type += f" {len(key)}"
                                 key_type += "> "
 
-                            if not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float, complex, bool, list, tuple, set, frozenset, dict)):
+                            if not skip_simple_types \
+                            or not isinstance(sub_item_key_value, (str, int, float, complex, bool, list, tuple, set, frozenset, dict)):
                                 value_type = (str(type(sub_item_key_value)) or "").replace("<class '", "<").replace("'>", "")
                                 if isinstance(sub_item_key_value, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
                                     value_type += f" {len(sub_item_key_value)}"
@@ -213,7 +221,7 @@ def n0pretty(
             for i_sub_item, sub_item in enumerate(item):
                 if isinstance(item, dict):
                     key = sub_item
-                    
+
                     if indent_ < 111:
                         sub_item_value = n0pretty(
                                                 item[key],
@@ -234,7 +242,9 @@ def n0pretty(
                     key_type = ""
                     if (show_type or (show_type is None and __debug_show_object_type)) \
                     and (not skip_simple_types or not isinstance(key, (str, int, float))):
-                        key_type = (str(type(key)) or "").replace("<class '", "<").replace("'>", "")
+                        key_type = (str(type(key)) or "") \
+                            .replace("<class '", "<") \
+                            .replace("'>", "")
                         if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
                             key_type += f" {len(key)}"
                         key_type += "> "
@@ -242,19 +252,19 @@ def n0pretty(
                         key = f"{__quotes}{key}{__quotes}"
                     else:
                         key = str(key)
-                        
+
                     if not sub_item_value:
                         sub_item_value = str(sub_item_value) # None
-                    
+
                     sub_item_value = f"{key_type}{key}:" + (" " if __indent_size else "") + sub_item_value
-                    
+
                 else:
                     # set, frozenset or list/tuple with complex or not paired structure
                     if show_item_count or (show_item_count is None and __debug_show_item_count):
                         sub_item_value = f"#{i_sub_item} ".ljust(5)
                     else:
                         sub_item_value = ""
-                    
+
                     if indent_ < 111:
                         sub_item_value += str(n0pretty(
                                                 sub_item,
@@ -308,7 +318,10 @@ def n0pretty(
     elif isinstance(item, str):
         if (show_type or (show_type is None and __debug_show_object_type)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", " ") + f"{len(item)}> "
+            result_type = (str(type(item)) or "") \
+                            .replace("<class '", "<") \
+                            .replace("'>", " ") \
+                          + f"{len(item)}> "
         if auto_quotes and '"' in item and "'" not in item:
                 result = result_type + f"'{item}'"
         else:
@@ -319,12 +332,15 @@ def n0pretty(
         result = str(item)
         if (show_type or (show_type is None and __debug_show_object_type)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            result_type = (str(type(item)) or "").replace("<class '", "<").replace("'>", ">") + " "
+            result_type = (str(type(item)) or "") \
+                            .replace("<class 'function'>", " ") \
+                            .replace("<class '", "<") \
+                            .replace("'>", "> ")
             result = result_type + result
-            
+
         if isinstance(item, bool) and json_convention:
             result = result.lower()
-            
+
     return result
 # ******************************************************************************
 def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_call: int = 0,

@@ -26,7 +26,7 @@ def convert_to_native_format(value, key = None, exception: set = None, transform
             return datetime.strptime(value, "%Y-%m-%d")
         if len(value) == 19 and value[4] == '-' and value[7] == '-' and value[10] == ' ' and value[13] == ':' and value[16] == ':':
             return datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
-        if n0isnumeric(value):
+        if isnumber(value):
             return abs(float(value))
         else:
             return value.upper()

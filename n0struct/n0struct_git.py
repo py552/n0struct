@@ -3,7 +3,12 @@ import typing
 # Used by class Git():
 import subprocess
 import signal
-# from .n0struct_logging import *
+from .n0struct_logging import (
+    n0print,
+    n0debug,
+    n0debug_calc,
+    n0error,
+)
 # ******************************************************************************
 # ******************************************************************************
 class Git():

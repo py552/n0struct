@@ -1,7 +1,16 @@
 import typing
 from pathlib import Path
-import n0struct
-from .n0struct_n0list_n0dict import n0dict
+# import n0struct
+from .n0struct_n0list_n0dict import (
+    n0dict,
+    n0list,
+)
+from .n0struct_logging import (
+    n0print,
+    n0debug,
+    n0debug_calc,
+    n0error,
+)
 # ******************************************************************************
 # ******************************************************************************
 def load_fwf_format(file_path: str):
@@ -86,9 +95,9 @@ def generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler:str = ' '):
         if format_column['name'] in struct_to_save:
             column_value = struct_to_save[format_column['name']]
         elif (format_column_mapping := format_column['mapping']):
-            # n0struct.n0debug("struct_to_save")
+            # n0debug("struct_to_save")
             lambda_function_for_mapping = eval("lambda incoming_row: " + format_column_mapping)
-            # n0struct.n0debug("format_column_mapping")
+            # n0debug("format_column_mapping")
             column_value = lambda_function_for_mapping(struct_to_save)
         else:
             continue
@@ -123,9 +132,9 @@ def generate_fwf(root_node:dict, list_xpath:str, mapping_dict:dict, fwf_format: 
 
         for found_item in list_of_items:  # found_item == row in case of CSV list or item node in case of XML structure
             if isinstance(found_item, dict):
-                found_item = n0struct.n0dict(found_item) # to have ability to use .first(xpath)
+                found_item = n0dict(found_item) # to have ability to use .first(xpath)
             elif isinstance(found_item, list):
-                found_item = n0struct.n0list(found_item) # to have ability to use .first(xpath)
+                found_item = n0list(found_item) # to have ability to use .first(xpath)
 
             fwf_row = {}
             for column_name in mapping_dict:

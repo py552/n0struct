@@ -6,12 +6,21 @@ import json
 import contextlib
 import datetime
 
-from .n0struct_utils_compare import get__flag_compare_check_different_types
-from .n0struct_utils_compare import get__flag_compare_return_difference_of_values
-from .n0struct_utils_compare import get__flag_compare_return_equal
-from .n0struct_utils_compare import get__flag_compare_return_place
-from .n0struct_utils_compare import xpath_match
-from .n0struct_utils_compare import generate_composite_keys
+from .n0struct_utils_compare import (
+    get__flag_compare_check_different_types,
+    get__flag_compare_return_difference_of_values,
+    get__flag_compare_return_equal,
+    get__flag_compare_return_place,
+    xpath_match,
+    generate_composite_keys,
+)
+
+from .n0struct_logging import (
+    n0print,
+    n0debug,
+    n0debug_calc,
+    n0error,
+)
 
 from .n0struct_utils import n0eval
 from .n0struct_utils_find import split_name_index
