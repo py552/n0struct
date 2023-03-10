@@ -40,7 +40,7 @@ def unmask_number(masked_number: str):
                     .replace("g","9")
 # ******************************************************************************
 # before sonarcloud.io: "(([^0-9]|^)?(000)?[456][0-9]{5})([0-9]{6})([0-9]{4})([^0-9]|$)?"
-compiled_regexp_mask_pan = re.compile("(0{3}|)(([456](\d{7}|\d{5}))(\d{6})(\d{5}|\d{4}))")
+compiled_regexp_mask_pan = re.compile("(0{3}|)(([456]([0-9]{7}|[0-9]{5}))([0-9]{6})([0-9]{5}|[0-9]{4}))")
 def mask_pan(buffer_str: str):
     """
     Public function: mask PANs in buffer_str

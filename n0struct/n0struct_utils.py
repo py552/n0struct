@@ -372,7 +372,8 @@ def validate_bool(
 # ******************************************************************************
 def validate_values(value: str,
                     possible_values_the_last_is_default: typing.Union[list, tuple],
-                    default_value: str = ""
+                    return_if_wrong_input: typing.Any = "",
+                    raise_if_not_found: typing.Union[Exception, None] = None
 ):
     '''
         value = "A"
@@ -383,9 +384,11 @@ def validate_values(value: str,
         validate_values(value.upper(), ("A", "B", "C")) == "C"
     '''
     if not isinstance(possible_values_the_last_is_default, (list, tuple)) or not possible_values_the_last_is_default:
-        return default_value
+        return return_if_wrong_input
     if value in possible_values_the_last_is_default:
         return value
+    if isinstance(raise_if_not_found, Exception):
+        raise raise_if_not_found
     return possible_values_the_last_is_default[-1]
 # ******************************************************************************
 # ******************************************************************************
