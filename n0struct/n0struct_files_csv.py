@@ -16,25 +16,27 @@ def parse_complex_csv_line(
     strip_column:callable = lambda column_value: column_value,
 ) -> list:
     fields_in_the_row = []
-    flag_delimiter_in_field = flag_expect_delimiter_or_quotes = False
+    flag_separator_in_field = flag_expect_separator_or_quotes = False
     field_value = ""
-    for i,ch in enumerate(line):
-        if ch == separator and (not flag_delimiter_in_field or flag_expect_delimiter_or_quotes):
+    for offset,ch in enumerate(line):
+        if ch == separator and (flag_separator_in_field == False or flag_expect_separator_or_quotes == True):
+            # The next field is started
             fields_in_the_row.append(strip_column(field_value))
-            flag_delimiter_in_field = flag_expect_delimiter_or_quotes = False
+            flag_separator_in_field = flag_expect_separator_or_quotes = False
             field_value = ""
             continue  # skip separator
         elif ch == '"':
-            if len(field_value) == 0:
-                flag_delimiter_in_field = True
+            if len(field_value) == 0 and flag_separator_in_field == False:
+                flag_separator_in_field = True
                 continue  # skip " in the begining of the field
-            elif flag_delimiter_in_field:
-                if not flag_expect_delimiter_or_quotes:
-                    flag_expect_delimiter_or_quotes = True
-                    continue  # skip first " in the middle of line
-                flag_expect_delimiter_or_quotes = False # Paired " is got, so save the second "
-        elif flag_expect_delimiter_or_quotes:
-            raise ValueError(f"Expected separator or second \", but received '{ch}' in offset {i} of '{line}'")
+            elif flag_separator_in_field:
+                flag_expect_separator_or_quotes = not flag_expect_separator_or_quotes # Switch flag_expect_separator_or_quotes
+                if flag_expect_separator_or_quotes == True:
+                    # skip first " in the middle of line
+                    continue  
+                # Got the second ", so save it
+        elif flag_expect_separator_or_quotes:
+            raise ValueError(f"Expected separator or second \", but received '{ch}' in offset {offset} of '{line}'")
         field_value += ch
     fields_in_the_row.append(strip_column(field_value))
     return fields_in_the_row
