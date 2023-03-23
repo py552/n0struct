@@ -21,7 +21,7 @@ def isnumber(value: str, max_len: typing.Union[int, None] = None) -> bool:
         value = value.replace('.','0')
     return value.isnumeric()
 def n0isnumeric(value: str) -> bool:
-    return isnumber(value, 10)
+    return isnumber(value, 12)
 # ******************************************************************************
 def get_key_by_value(dict_: dict, value_: typing.Any):
     """
