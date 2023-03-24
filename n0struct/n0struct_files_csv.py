@@ -1,13 +1,7 @@
 import typing
 from pathlib import Path
-import n0struct
 from .n0struct_n0list_n0dict import n0dict
-from .n0struct_logging import (
-    n0print,
-    n0debug,
-    n0debug_calc,
-    n0error,
-)
+from .n0struct_n0list_n0dict import n0list
 # ******************************************************************************
 # ******************************************************************************
 def parse_complex_csv_line(
@@ -33,7 +27,7 @@ def parse_complex_csv_line(
                 flag_expect_separator_or_quotes = not flag_expect_separator_or_quotes # Switch flag_expect_separator_or_quotes
                 if flag_expect_separator_or_quotes == True:
                     # skip first " in the middle of line
-                    continue  
+                    continue
                 # Got the second ", so save it
         elif flag_expect_separator_or_quotes:
             raise ValueError(f"Expected separator or second \", but received '{ch}' in offset {offset} of '{line}'")
@@ -227,9 +221,9 @@ def generate_csv(root_node:dict, list_xpath:str, mapping_dict:dict = None, save_
 
         for found_item in list_of_items:  # found_item == row in case of CSV list or item node in case of XML structure
             if isinstance(found_item, dict):
-                found_item = n0struct.n0dict(found_item) # to have ability to use .first(xpath)
+                found_item = n0dict(found_item) # to have ability to use .first(xpath)
             elif isinstance(found_item, list):
-                found_item = n0struct.n0list(found_item) # to have ability to use .first(xpath)
+                found_item = n0list(found_item) # to have ability to use .first(xpath)
 
             csv_row = []
             for column_name in mapping_dict:
@@ -309,7 +303,9 @@ def add_colums_into_csv(additional_columns: list, csv_rows: list = None, csv_sch
     else:
         return csv_rows
 # ******************************************************************************
-def validate_csv_row(row: typing.Union[list, dict], csv_schema: dict,
+def validate_csv_row(
+    row: typing.Union[list, dict], 
+    csv_schema: dict,
     external_variables = {},
     interrupt_after_first_fail: bool = False,
 ):
@@ -321,11 +317,11 @@ def validate_csv_row(row: typing.Union[list, dict], csv_schema: dict,
         //items[0..i]/id                     = column_name[i]
         //items[0..i]/mandatory              = true|false
         //items[0..i]/validations[0..j@i][0] = mandatory str, which could be processed with eval("lambda column_value, row:" + validations[0..j@i][0]),
-                                               for example: "column_value == __params__['ORG']"
+                                               for example: "column_value == {ORG}"
                                                in the lambda function body could be used variables:
                                                     column_value
                                                     row[column_name[0..i]]
-                                                    global variables
+                                                    external_variables
         //items[0..i]/validations[0..j@i][1] = optional f-str, message in case of validations[0..j@i][0] returned False,
                                                for example: "expected '{ORG}', but got '{value_ORG}'"
                                                in the failed message body could be used variables:
@@ -381,31 +377,30 @@ def validate_csv_row(row: typing.Union[list, dict], csv_schema: dict,
             else:
                 validation_lambda = validation
 
+            is_valid = False
             try:
-                lambda_function_for_validation = eval("lambda column_value, row: " + validation_lambda)
+                lambda_function_for_validation = eval("lambda column_value, row: " + validation_lambda.format(**mapped_values))
             except Exception as ex1:
-                n0error(f"{validation_lambda=}")
-                n0error(f"{ex1=}")
-
-            try:
-                validation_result = lambda_function_for_validation(column_value, row)
-            except Exception as ex2:
-                set_debug_show_object_type(True)
-                n0debug("external_variables")
-                n0error(f"{validation_lambda=}")
-                n0error(f"{ex2=}")
-
-            if not validation_result:
-                if column_name not in failed_validations:
-                    failed_validations.update({column_name: []})
-
+                validation_msg = f"Not passed validation #1 for '{column_name}': " + str(ex1)
+            else:
                 try:
-                    failed_validation_message = validation_msg.format(**mapped_values)
-                except:
-                    failed_validation_message = "not passed validation"
-                failed_validations[column_name].append(failed_validation_message)
-                if interrupt_after_first_fail:
-                    return failed_validations
+                    is_valid = lambda_function_for_validation(column_value, row)
+                except Exception as ex2:
+                    validation_msg = f"Not passed validation #2 for '{column_name}': " + str(ex2)
+            finally:
+                if is_valid == False:
+                    if column_name not in failed_validations:
+                        failed_validations.update({column_name: []})
+
+                    try:
+                        failed_validation_message = validation_msg.format(**mapped_values)
+                    except Exception as ex3:
+                        failed_validation_message = f"Not passed validation #3 for '{column_name}': " + str(ex3)
+
+                    finally:
+                        failed_validations[column_name].append(failed_validation_message)
+                        if interrupt_after_first_fail:
+                            return failed_validations
 
     return failed_validations
 # ******************************************************************************
