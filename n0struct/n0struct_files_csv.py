@@ -363,6 +363,11 @@ def validate_csv_row(
     for column_name in row:
         column_value = row[column_name]
         column_schema = csv_schema.first(f"items/[id={column_name}]")
+        mapped_values.update({
+            'column_name': column_name,
+            'column_value': column_value,
+            'column_schema': column_schema,
+        })
 
         if column_schema.get('mandatory', False) and not column_value:
             failed_validations.update({column_name: f"mandatory column '{column_name}' is empty"})
