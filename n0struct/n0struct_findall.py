@@ -117,19 +117,19 @@ def _findall(
                 equal_condition = None
                 if after_text.startswith('=='):
                     equal_condition = True
-                    condition_separator = '=='
+                    condition_delimiter = '=='
                 elif after_text.startswith('='):
                     equal_condition = True
-                    condition_separator = '='
+                    condition_delimiter = '='
                 elif after_text.startswith('!='):
                     equal_condition = False
-                    condition_separator = '!='
+                    condition_delimiter = '!='
                 elif after_text.startswith('<>'):
                     equal_condition = False
-                    condition_separator = '<>'
+                    condition_delimiter = '<>'
                 else:
                     raise TypeError(f"Unknown logic condition [{child_index}] in '{str(seeked_xpath_list[0])}'")
-                before_condition,after_condition = child_index.split(condition_separator, 1)
+                before_condition,after_condition = child_index.split(condition_delimiter, 1)
                 value_for_condition = after_condition.strip()
                 if len(value_for_condition) > 1 and \
                    (

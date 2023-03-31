@@ -23,16 +23,16 @@ def split_name_index(node_name: str) -> typing.Tuple[
                 if node_index_part1.lower().startswith('text'):
                     node_index_str = "text()~~" + node_index_part2
             if '=' in node_index_str or '~' in node_index_str:
-                separators = ("==","!=","~~","!~","~","=")
-                for separator in separators:
-                    if separator in node_index_str:
-                        expected_node_name, expected_value = node_index_str.split(separator,1)
+                delimiters = ("==","!=","~~","!~","~","=")
+                for delimiter in delimiters:
+                    if delimiter in node_index_str:
+                        expected_node_name, expected_value = node_index_str.split(delimiter,1)
                         expected_node_name = expected_node_name.strip()
                         expected_value = expected_value.strip()
-                        if separator == '=':
-                            separator = '=='
-                        if separator == '~':
-                            separator = '~~'
+                        if delimiter == '=':
+                            delimiter = '=='
+                        if delimiter == '~':
+                            delimiter = '~~'
                         break
                 else:
                     raise SyntaxError(f"Not expected condition in index [{node_index_str}]")
@@ -48,7 +48,7 @@ def split_name_index(node_name: str) -> typing.Tuple[
                         (expected_value.startswith("'") and expected_value.endswith("'")):
                     expected_value = expected_value[1:-1]
                     expected_value = urllib__parse__unquote(expected_value)
-                node_index_tuple = (expected_node_name, separator, expected_value or expected_value_bool)
+                node_index_tuple = (expected_node_name, delimiter, expected_value or expected_value_bool)
     else:
         node_index_str = None
     return node_name, (node_index_tuple if node_index_tuple is not None else node_index_str)

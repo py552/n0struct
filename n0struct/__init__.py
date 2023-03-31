@@ -202,7 +202,7 @@
 # 0.57 = 2022-01-24 added: 
 #                       def is_date_format(date: datetime.date, format: str) -> bool:
 #                       def load_ini(file_name: str, default_value = None, equal_sign = '=') -> dict:
-#                       def generate_csv(root_node:n0dict, list_xpath:str, mapping_dict:dict, file_path:str = None, separator:str = '|') -> list:
+#                       def generate_csv(root_node:n0dict, list_xpath:str, mapping_dict:dict, file_path:str = None, delimiter:str = '|') -> list:
 # ******************************************************************************
 # ******************************************************************************
 from .n0struct_date import *

@@ -65,7 +65,7 @@ class n0list(n0list_):
                         value = n0list(value, recursively = _recursively)
                 self.append(value)
         else:
-            raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple/n0list)")
+            raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple)")
     # **************************************************************************
     # n0list. _find()
     # **************************************************************************
@@ -91,7 +91,7 @@ class n0list(n0list_):
         if isinstance(xpath_list, str):
             xpath_list = [itm.strip() for itm in xpath_list.replace("][","]/[").split('/') if itm]
         if not isinstance(xpath_list, (list, tuple)):
-            raise IndexError("xpath (%s)'%s' must be list or string" % (type(xpath_list), str(xpath_list)))
+            raise IndexError(f"xpath ({type(xpath_list)})'{str(xpath_list)}' must be list or string")
         if not xpath_list:
             if xpath_found_str == '/':
                 #================================
@@ -129,7 +129,7 @@ class n0list(n0list_):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                             cur_not_found_xpath_list = self._find(xpath_list[1:], next_parent_node, return_lists, xpath_found_str + f"[{i}]")
                     else:
-                        raise TypeError("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
+                        raise TypeError(f"Unexpected type ({type(next_parent_node)}) of '{str(next_parent_node)}'")
 
                     if not cur_not_found_xpath_list:
                         cur_values.append(cur_value)
@@ -147,7 +147,7 @@ class n0list(n0list_):
                 try:
                     node_index_int = n0eval(node_index_str)
                 except:
-                    raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, node_index_str))
+                    raise IndexError(f"Unknown index '{xpath_found_str}[{node_index_str}]'")
 
                 if isinstance(parent_node, (list, tuple)):
                     len__parent_node = len(parent_node)
@@ -175,7 +175,7 @@ class n0list(n0list_):
                     if isinstance(next_parent_node, (list, tuple)):
                         return self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
                     else:
-                        raise TypeError("Unexpected type (%s) of %s" % (type(next_parent_node), str(next_parent_node)))
+                        raise TypeError(f"Unexpected type ({type(next_parent_node)}) of {str(next_parent_node)}")
     # **************************************************************************
     # * n0list. direct_compare(..): only n0dict. direct_compare/compare have one_of_list_compare
     # **************************************************************************
@@ -223,7 +223,7 @@ class n0list(n0list_):
         if continuity_check != "continuity_check":
             raise SyntaxError("Incorrect order of arguments")
         if not isinstance(other, n0list):
-            raise TypeError("n0list.direct_compare(): other (%s) must be n0list" % str(other))
+            raise TypeError(f"n0list.direct_compare(): other ({str(other)}) must be n0list")
 
         result = n0dict({
             "differences":  [],
@@ -335,14 +335,7 @@ class n0list(n0list_):
                     # So both are None
                     pass
                 else:
-                    raise TypeError(
-                        "Not expected type %s in %s[%d]/%s[%d]" %
-                        (
-                            type(self[i]),
-                            self_name, i,
-                            other_name, i
-                        )
-                    )
+                    raise TypeError(f"Not expected type {type(self[i])} in {self_name}[{i}]/{other_name}[{i}]")
             # ######### if type(self[i]) == type(other[i]):
             else:
                 if get__flag_compare_check_different_types():
@@ -449,7 +442,7 @@ class n0list(n0list_):
         if continuity_check != "continuity_check":
             raise SyntaxError("n0list. compare(..): incorrect order of arguments")
         if not isinstance(other, n0list):
-            raise TypeError("n0list. compare(..): other (%s) must be n0list" % str(other))
+            raise TypeError(f"n0list. compare(..): other ({str(other)}) must be n0list")
         result = n0dict({
             "differences":  [],
             "not_equal":    [],
@@ -571,14 +564,7 @@ class n0list(n0list_):
                         # So both are None
                         pass
                     else:
-                        raise TypeError(
-                            "Not expected type %s in %s[%d]/%s[%d]" %
-                            (
-                                type(self[self_i]),
-                                self_name, self_i,
-                                other_name, other_i
-                            )
-                        )
+                        raise TypeError(f"Not expected type {type(self[self_i])} in {self_name}[{self_i}]/{other_name}[{other_i}]")
                 # ######### if type(self[i]) == type(other[i]):
                 else:
                     if get__flag_compare_check_different_types():
@@ -744,12 +730,12 @@ class n0dict(n0dict_):
                     for pair in args[0]:
                         self.update({pair[0]: pair[1]})
                 else:
-                    raise TypeError("Expected even strings in the list [k1,v1,k2,v2] or list of pairs [[k1,v1],[k2,v2]] as argument for n0dict.__init__({args})")
+                    raise TypeError(f"Expected even strings in the list [k1,v1,k2,v2] or list of pairs [[k1,v1],[k2,v2]] as argument for n0dict.__init__({args})")
             elif isinstance(args[0], zip):
                 for key, value in args[0]:
                     self.update({key: value})
             else:
-                raise TypeError("Expected str/dict/list/tuple/zip, but received {type((args[0])} as first argument for n0dict.__init__({args})")
+                raise TypeError(f"Expected str/dict/list/tuple/zip, but received {type(args[0])} as first argument for n0dict.__init__({args})")
         else:
             raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/zip or paired tuple/list)")
     # **************************************************************************
@@ -783,7 +769,7 @@ class n0dict(n0dict_):
         if continuity_check != "continuity_check":
             raise SyntaxError("n0dict. compare(..): incorrect order of arguments")
         if not isinstance(other, n0dict):
-            raise TypeError("n0dict. compare(..): other ((%s)%s) must be n0dict" % (type(other), str(other)))
+            raise TypeError(f"n0dict. compare(..): other (({type(other)}){str(other)}) must be n0dict")
         result = n0dict({
             "differences":  [],
             "not_equal":    [],
@@ -879,7 +865,7 @@ class n0dict(n0dict_):
                             # Because of type(self[key]) == type(other[key]) and self[key] is None, so both are None
                             pass
                         else:
-                            raise TypeError("Not expected type %s in %s[\"%s\"]" % (type(self[key]), key, self_name))
+                            raise TypeError(f"Not expected type {type(self[key])} in {key}['{self_name}']")
                     else:
                         if not compare_only or xpath_match(fullxpath, compare_only):
                             is_still_equal = False
@@ -1014,7 +1000,7 @@ class n0dict(n0dict_):
         if isinstance(xpath_list, str):
             xpath_list = [itm.strip() for itm in xpath_list.replace("][","]/[").split('/') if itm]
         if not isinstance(xpath_list, (list, tuple)):
-            raise IndexError("xpath (%s)'%s' must be list or string" % (type(xpath_list), str(xpath_list)))
+            raise IndexError(f"xpath ({type(xpath_list)})'{str(xpath_list)}' must be list or string")
         if not xpath_list:
             if xpath_found_str == '/':
                 #================================
@@ -1051,13 +1037,7 @@ class n0dict(n0dict_):
                         if isinstance(cur_node_index, str):
                             nxt_parent_node = cur_parent_node[n0eval(cur_node_index)]
                         else:
-                            raise TypeError("If index is in '%s', then (%s)'%s' must be str" %
-                                                (
-                                                    cur_node_name_index,
-                                                    type(cur_node_index),
-                                                    cur_node_index
-                                                )
-                                            )
+                            raise TypeError(f"If index is in '{cur_node_name_index}', then ({type(cur_node_index)})'{cur_node_index}' must be str")
                 else:
                     nxt_parent_node = cur_parent_node
 
@@ -1215,12 +1195,12 @@ class n0dict(n0dict_):
                     elif node_index[1][1] == '~':
                         comparing_result = node_index[2] in parent_node  # expected_value
                     else:
-                        raise SyntaxError("Unknown comparing command in %s" % str(node_index))
+                        raise SyntaxError(f"Unknown comparing command in {str(node_index)}")
 
                     if node_index[1][0] == '!':
                         comparing_result = not comparing_result
                     elif node_index[1][0] != '=' and node_index[1][0] != '~':
-                        raise SyntaxError("Unknown comparing command in %s" % str(node_index))
+                        raise SyntaxError(f"Unknown comparing command in {str(node_index)}")
 
                     if comparing_result:
                         # *******************************
@@ -1240,9 +1220,7 @@ class n0dict(n0dict_):
                         return self._find(["[*]"] + xpath_list, parent_node, return_lists, xpath_found_str)
 
                     if not isinstance(parent_node, dict):
-                        raise IndexError("If key '%s' is set then (%s)'%s' must be n0dict at '%s'" %
-                            (node_index[0], type(parent_node), str(parent_node), xpath_found_str)
-                        )
+                        raise IndexError(f"If key '{node_index[0]}' is set, then ({type(parent_node)})'{str(parent_node)}' must be n0dict at '{xpath_found_str}'")
                     if node_index[0] not in parent_node:
                         return parent_node, None, None, xpath_found_str, xpath_list
 
@@ -1259,7 +1237,7 @@ class n0dict(n0dict_):
                 try:
                     node_index_int = n0eval(node_index)
                 except:
-                    raise IndexError("Unknown index '%s[%s]'" % (xpath_found_str, node_index))
+                    raise IndexError(f"Unknown index '{xpath_found_str}[{node_index}]'")
 
                 if isinstance(parent_node, (list, tuple)):
                     len__parent_node = len(parent_node)
@@ -1302,8 +1280,7 @@ class n0dict(n0dict_):
             if cur_node_name:
                 # if not isinstance(parent_node, (dict, OrderedDict, n0dict)):
                 if not isinstance(parent_node, dict):
-                    raise IndexError("If we are looking for key '%s' then parent (%s)'%s' must be dictionary"
-                                     % (cur_node_name, type(parent_node), str(parent_node)))
+                    raise IndexError(f"If we are looking for key '{cur_node_name}' then parent ({type(parent_node)})'{str(parent_node)}' must be dictionary")
                 parent_node = parent_node[cur_node_name]
             else:
                 # It could happen, then just to add key into dictionary
@@ -1334,10 +1311,10 @@ class n0dict(n0dict_):
                         next_node = parent_node[next_node_name]
                         next_node_name_index = "[%s]" % next_node_index
                     else:
-                        raise IndexError("Nonsense! How to create already existed node '%s'?" % next_node_name)
+                        raise IndexError(f"Nonsense! How to create already existed node '{next_node_name}'?")
             else:
                 if next_node_index != "new()":
-                    raise IndexError("Expect new() for adding index, but got '%s'" % next_node_index)
+                    raise IndexError(f"Expect new() for adding index, but got '{next_node_index}'")
                 parent_node.append(None)
                 next_node = parent_node
                 next_node_name_index = "[last()]"
@@ -1382,8 +1359,7 @@ class n0dict(n0dict_):
             elif cur_node_index == "last()":
                 # Came from previous level: we create [None] and point to [last()] for exchange
                 if not isinstance(parent_node, (list, tuple, n0list)):
-                    raise ValueError("Nonsence! if index '%s' is set then (%s)%s must be n0list"
-                                    % (cur_node_index, type(parent_node), str(parent_node)))
+                    raise ValueError(f"Nonsence! if index '{cur_node_index}' is set, then ({type(parent_node)}){str(parent_node)} must be n0list")
                 if next_node_name:
                     if not next_node_index:
                         # Next is pure dict
@@ -1432,7 +1408,7 @@ class n0dict(n0dict_):
         elif isinstance(xpath, str) and new_value is not None:
             multi_define(xpath, new_value)
         else:
-            raise TypeError("Received (%s,%s) as argument, but expected (key,value) or (dict)." % (type(xpath), type(new_value)))
+            raise TypeError(f"Received (type(xpath),{type(new_value)}) as argument, but expected (key,value) or (dict).")
         return self
 # ******************************************************************************
 # ******************************************************************************

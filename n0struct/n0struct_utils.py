@@ -32,10 +32,10 @@ def get_key_by_value(dict_: dict, value_: typing.Any):
     return {value: key for key, value in dict_.items()}[value_]
 # ******************************************************************************
 def n0eval(_str: str) -> typing.Union[int, float, typing.Any]:
-    def my_split(_str: str, _separator: str) -> typing.List:
+    def my_split(_str: str, _delimiter: str) -> typing.List:
         return [
-                (_separator if _separator != '+' and i else "") + itm.strip()
-                for i, itm in enumerate(_str.split(_separator))
+                (_delimiter if _delimiter != '+' and i else "") + itm.strip()
+                for i, itm in enumerate(_str.split(_delimiter))
                 if itm.strip()
         ]
 
@@ -74,7 +74,7 @@ def raise_in_lambda(ex): raise ex
 # ******************************************************************************
 def deserialize_list(
                         buffer_str: str,
-                        separator_tag: str = ";",
+                        delimiter: str = ";",
                         parse_item = lambda item, item_index, separated_items, previous_items: item,
                         parse_empty = False,
                         default_list_result = None,
@@ -86,92 +86,13 @@ def deserialize_list(
     if not isinstance(buffer_str, str):
         return default_list_result or []
 
-    separated_items = buffer_str.split(separator_tag)
-    '''
-    deserialized_list = []
-    for item_index,item in enumerate(separated_items):
-        if item or parse_empty:
-            parsed_item = parse_item(item, item_index = item_index, separated_items = separated_items)
-            deserialized_list.append(parsed_item)
-    return deserialized_list
-    '''
-    '''
-    return [
-        parse_item(item, item_index = item_index, separated_items = separated_items)
-        for item_index,item in enumerate(separated_items)
-        if item or parse_empty
-    ]
-    '''
+    separated_items = buffer_str.split(delimiter)
     deserialized_list = []
     for item_index,item in enumerate(separated_items):
         if item or parse_empty:
             parsed_item = parse_item(item, item_index = item_index, separated_items = separated_items, previous_items = deserialized_list)
             deserialized_list.append(parsed_item)
     return deserialized_list
-# ******************************************************************************
-def deserialize_list_of_lists(
-                        buffer_str: str,
-                        separator_tag: str = ";",
-                        parse_item = lambda item, item_index, separated_items, previous_items: item,
-                        separator_tag_for_sublists: str = ",",
-                        parse_sublist = None,
-                        parse_empty = False,
-                        default_list_result = None,
-) -> list:
-    '''
-        buffer_str = "list1item1,list1item2;list2item1,list2item2;list3item1,list3item2"
-        deserialize_list_of_lists(buffer_str) == [
-                                                    ["list1item1", "list1item2"],
-                                                    ["list2item1", "list2item2"],
-                                                    ["list3item1", "list3item2"]
-                                                 ]
-    '''
-    deserialized_list_of_list = deserialize_list(
-                            buffer_str,
-                            separator_tag = separator_tag,
-                            parse_item = parse_sublist or (
-                                            lambda item, item_index, separated_items, previous_items:
-                                                deserialize_list(
-                                                    item,
-                                                    separator_tag = separator_tag_for_sublists,
-                                                    parse_item = parse_item,
-                                                    default_list_result = default_list_result,
-                                                )
-                                         )
-                            ,
-                            parse_empty = parse_empty,
-                            default_list_result = default_list_result,
-    )
-    return deserialized_list_of_list
-# ******************************************************************************
-def deserialize_fixed_list(
-                        buffer_str: str,
-                        fixed_list_len: int,
-                        separator_tag: str = ";",
-                        default_item: typing.Any = None,
-                        parse_item = lambda item, item_index, separated_items, previous_items: item,
-                        parse_empty = False,
-                        default_list_result = None,
-) -> list:
-    '''
-    generate list [value1, value2, ... value[fixed_list_len]] with size of fixed_list_len from deserialized buffer_str
-    in case of values are not enough to fill fixed_list_len list, then [value1, default_item, ... default_item]
-        buffer_str = "TAG1;TAG2"
-        deserialize_fixed_list(buffer_str, 2) == ("TAG1", "TAG2")
-        deserialize_fixed_list(buffer_str, 4) == ("TAG1", "TAG2", None, None)
-        deserialize_fixed_list(buffer_str, 4, default_item = "DEFAULT_TAG") == ("TAG1", "TAG2", "DEFAULT_TAG", "DEFAULT_TAG")
-    '''
-    deserialized_fixed_list = (
-        deserialize_list(
-            buffer_str,
-            separator_tag = separator_tag,
-            parse_item = parse_item,
-            parse_empty = parse_empty,
-            default_list_result = default_list_result,
-        )
-        + [default_item]*fixed_list_len
-    )[0:fixed_list_len]
-    return deserialized_fixed_list
 # ******************************************************************************
 def deserialize_key_value(
                         buffer_str: str,
@@ -230,7 +151,7 @@ def deserialize_key_value(
 # ******************************************************************************
 def deserialize_dict(
                         buffer_str: str,
-                        separator_tag: str = ";",
+                        delimiter: str = ";",
 # Sample of definition:
 #   parse_item = lambda item, item_index, separated_items, previous_items: item
                         parse_item: typing.Union[typing.Callable, None] = None,
@@ -250,7 +171,7 @@ def deserialize_dict(
     '''
     deserialized_list = deserialize_list(
                             buffer_str,
-                            separator_tag,
+                            delimiter,
                             parse_item = parse_item or (
                                             lambda item, item_index, separated_items, previous_items: 
                                                 deserialize_key_value(
@@ -271,7 +192,7 @@ def deserialize_dict(
 def get_value_by_tag(
                         tag_name: str,
                         buffer_str: str,
-                        separator_tag: str = ";",
+                        delimiter: str = ";",
                         equal_tag: str = "=",
                         parse_key: typing.Callable = lambda key_value, default_key: key_value[0],
                         default_key: typing.Any = None,
@@ -287,7 +208,7 @@ def get_value_by_tag(
     '''
     deserialized_dict = deserialize_dict(
                         buffer_str,
-                        separator_tag = separator_tag,
+                        delimiter = delimiter,
                         equal_tag = equal_tag,
                         parse_key = parse_key,
                         default_key = default_key,
@@ -298,6 +219,70 @@ def get_value_by_tag(
     )
     value_by_tag = deserialized_dict.get(tag_name)
     return value_by_tag or default_value  # default VALUE will returned, in case of VALUE is None or "" assosiated with KEY
+# ******************************************************************************
+def deserialize_list_of_lists(
+                        buffer_str: str,
+                        delimiter: str = ";",
+                        parse_item = lambda item, item_index, separated_items, previous_items: item,
+                        delimiter_for_sublists: str = ",",
+                        parse_sublist = None,
+                        parse_empty = False,
+                        default_list_result = None,
+) -> list:
+    '''
+        buffer_str = "list1item1,list1item2;list2item1,list2item2;list3item1,list3item2"
+        deserialize_list_of_lists(buffer_str) == [
+                                                    ["list1item1", "list1item2"],
+                                                    ["list2item1", "list2item2"],
+                                                    ["list3item1", "list3item2"]
+                                                 ]
+    '''
+    deserialized_list_of_list = deserialize_list(
+                            buffer_str,
+                            delimiter = delimiter,
+                            parse_item = parse_sublist or (
+                                            lambda item, item_index, separated_items, previous_items:
+                                                deserialize_list(
+                                                    item,
+                                                    delimiter = delimiter_for_sublists,
+                                                    parse_item = parse_item,
+                                                    default_list_result = default_list_result,
+                                                )
+                                         )
+                            ,
+                            parse_empty = parse_empty,
+                            default_list_result = default_list_result,
+    )
+    return deserialized_list_of_list
+# ******************************************************************************
+def deserialize_fixed_list(
+                        buffer_str: str,
+                        fixed_list_len: int,
+                        delimiter: str = ";",
+                        default_item: typing.Any = None,
+                        parse_item = lambda item, item_index, separated_items, previous_items: item,
+                        parse_empty = False,
+                        default_list_result = None,
+) -> list:
+    '''
+    generate list [value1, value2, ... value[fixed_list_len]] with size of fixed_list_len from deserialized buffer_str
+    in case of values are not enough to fill fixed_list_len list, then [value1, default_item, ... default_item]
+        buffer_str = "TAG1;TAG2"
+        deserialize_fixed_list(buffer_str, 2) == ("TAG1", "TAG2")
+        deserialize_fixed_list(buffer_str, 4) == ("TAG1", "TAG2", None, None)
+        deserialize_fixed_list(buffer_str, 4, default_item = "DEFAULT_TAG") == ("TAG1", "TAG2", "DEFAULT_TAG", "DEFAULT_TAG")
+    '''
+    deserialized_fixed_list = (
+        deserialize_list(
+            buffer_str,
+            delimiter = delimiter,
+            parse_item = parse_item,
+            parse_empty = parse_empty,
+            default_list_result = default_list_result,
+        )
+        + [default_item]*fixed_list_len
+    )[0:fixed_list_len]
+    return deserialized_fixed_list
 # ******************************************************************************
 def validate_str(
                     value,
