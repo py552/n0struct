@@ -7,6 +7,11 @@ from .n0struct_logging import (
 )
 # ******************************************************************************
 # ******************************************************************************
+def to_int(value: str, max_len: typing.Union[int, None] = None, default_value: typing.Any = None) -> typing.Any:
+    if isnumber(value, max_len):
+        return int(value)
+    else:
+        return default_value
 def isnumber(value: str, max_len: typing.Union[int, None] = None) -> bool:
     if isinstance(value, (int, float)):
         return True
@@ -131,7 +136,7 @@ def deserialize_key_value(
         if default_key:
             # key_value == (single_item) -> {default_key: single_item}
             key_value = (
-                            parsed_key:=(default_key((key_value[0], None), key_value[0]) if callable(default_key) else default_key),
+                            default_key((key_value[0], None), key_value[0]) if callable(default_key) else default_key,       # parsed_key
                             key_value[0]
             )
             # Skip more one manipulation with the key, because of it's already default
@@ -140,7 +145,7 @@ def deserialize_key_value(
             # key_value == (single_item) -> {single_item: default_value}
             key_value = (
                             key_value[0],
-                            parsed_value:=default_value((None, key_value[0]), key_value[0]) if callable(default_value) else default_value
+                            default_value((None, key_value[0]), key_value[0]) if callable(default_value) else default_value  # parsed_value
             )
             # Skip more one manipulation with the value, because of it's already default
             parse_value = lambda key_value, default_value: key_value[1]

@@ -214,6 +214,7 @@ DESCRIPTION
 
 PACKAGE CONTENTS
     n0struct_arrays
+    n0struct_comprehensions
     n0struct_date
     n0struct_files
     n0struct_files_csv

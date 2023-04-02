@@ -72,7 +72,7 @@ def load_csv(
             process_line = strip_line
         else:
             process_line = lambda line: line
-            
+
     if not isinstance(contains_header, (str, bool)):
         raise ValueError(f"Not expectable value in {contains_header=}. Should be bool or str")
 
@@ -85,7 +85,8 @@ def load_csv(
         if contains_header:
             while True:  # skip empty lines at the begining of the file
                 file_offset = in_file.tell()
-                if not (line:=in_file.readline()):
+                line = in_file.readline()  # removed walrus operator for compatibility with 3.7
+                if not line:
                     return [] # Empty file or file only with spaces
                 header_line = process_line(line.rstrip(EOL))
                 if header_line:
@@ -112,7 +113,8 @@ def load_csv(
                         column_names = possible_column_names
 
         while True:
-            if not (line:=in_file.readline()):
+            line = in_file.readline()  # removed walrus operator for compatibility with 3.7
+            if not line:
                 return None  # EOF
             stripped_line = process_line(line.rstrip(EOL))
             if skip_empty_lines and not stripped_line:
@@ -125,7 +127,7 @@ def load_csv(
                     yield field_values
             else:
                 if return_original_line:
-                    yield n0dict(zip(column_names, field_values)), stripped_line 
+                    yield n0dict(zip(column_names, field_values)), stripped_line
                 else:
                     yield n0dict(zip(column_names, field_values))
 # ******************************************************************************
@@ -180,11 +182,11 @@ def generate_comlex_csv_row(
     return generated_csv_row[:-len(delimiter)] + EOL
 # ******************************************************************************
 def generate_csv(
-    root_node:dict, 
-    list_xpath:str, 
-    mapping_dict:dict = None, 
-    save_to:str = None, 
-    delimiter:str = ',', 
+    root_node:dict,
+    list_xpath:str,
+    mapping_dict:dict = None,
+    save_to:str = None,
+    delimiter:str = ',',
     show_header:bool = True
 ) -> list:
     '''
@@ -288,9 +290,9 @@ def generate_csv(
     return csv_table
 # ******************************************************************************
 def remove_colums_in_csv(
-    columns_to_remove: list, 
-    csv_rows: list = None, 
-    csv_schema: dict = None, 
+    columns_to_remove: list,
+    csv_rows: list = None,
+    csv_schema: dict = None,
     are_required: bool = False
 ):
     if all([isinstance(column_to_remove,int) for column_to_remove in columns_to_remove]) \
@@ -310,7 +312,8 @@ def remove_colums_in_csv(
         for column_name in columns_to_remove:
             csv_schema.delete(f"items/[id={column_name}]")
 
-        csv_schema['maxItems'] = csv_schema.get('maxItems', 0) - (len__columns_to_remove:=len(columns_to_remove))
+        len__columns_to_remove = len(columns_to_remove)  # removed walrus operator for compatibility with 3.7
+        csv_schema['maxItems'] = csv_schema.get('maxItems', 0) - len__columns_to_remove
         if are_required:
             csv_schema['minItems'] = csv_schema.get('minItems', 0) - len__columns_to_remove
             if 'required' in csv_schema:
@@ -339,7 +342,8 @@ def add_colums_into_csv(additional_columns: list, csv_rows: list = None, csv_sch
             # Update schema: Add additional columns
             csv_schema['items'].append({'id': column_name})
 
-        csv_schema['maxItems'] = csv_schema.get('maxItems', 0) + (len__additional_columns:=len(additional_columns))
+        len__additional_columns = len(additional_columns)  # removed walrus operator for compatibility with 3.7
+        csv_schema['maxItems'] = csv_schema.get('maxItems', 0) + len__additional_columns
         if are_required:
             csv_schema['minItems'] = csv_schema.get('minItems', 0) + len__additional_columns
             if 'required' not in csv_schema:
@@ -392,11 +396,15 @@ def validate_csv_row(
     the_whole_row_related_validations = None
     failed_validations = {the_whole_row_related_validations: []}
     columns_count = len(row)
-    if (min_items:=csv_schema.get("minItems")) and columns_count < min_items:
+    min_items = int(csv_schema.get("minItems", -1))     # removed walrus operator for compatibility with 3.7
+    if columns_count < min_items:
         failed_validations[the_whole_row_related_validations].append(f"Mimimum {min_items} columns expected, but got {columns_count}")
-    if (max_items:=csv_schema.get("maxItems")) and columns_count > max_items:
+    max_items = int(csv_schema.get("maxItems", 9999))   # removed walrus operator for compatibility with 3.7
+    if columns_count > max_items:
         failed_validations[the_whole_row_related_validations].append(f"Maximum {max_items} columns expected, but got {columns_count}")
-    if (required_columns:=csv_schema.get("required")):
+        
+    required_columns = csv_schema.get("required")       # removed walrus operator for compatibility with 3.7
+    if required_columns and isinstance(required_columns, (list, tuple)):
         for required_column in required_columns:
             if required_column not in row:
                 failed_validations[the_whole_row_related_validations].append(f"Required column '{required_column}' doesn't exist in row")

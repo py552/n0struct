@@ -18,12 +18,12 @@ def findall(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise
     if seeked_xpath_str.startswith("/"):
         seeked_xpath_str = seeked_xpath_str[1:]
     seeked_xpath_list = [
-                        stripped_item
+                        itm
                         for itm in seeked_xpath_str \
                                                     .replace("[", '/[') \
                                                     .replace("//", "/") \
                                                     .split('/')
-                        if (stripped_item:=itm.strip())
+                        if itm
     ]
     return _findall(current_node, seeked_xpath_list)
 # ******************************************************************************
@@ -204,10 +204,10 @@ def _findall(
                     # # n0print("*"*25 + f" Multiple deep to index [{child_index}]...")
                     found_xpath_list[-1] = last_xpath + f"[{child_index}]"
                     found = _findall(
-                                    __parent_node := parent_node[child_index],
-                                    __seeked_xpth := seeked_xpath_list[1:],
-                                    __found_xpath := found_xpath_list,
-                                    __parent_stck := {**parent_nodes_stack, **{"//" + "/".join(found_xpath_list).replace('/[', '['): parent_node}},
+                                    parent_node[child_index],
+                                    seeked_xpath_list[1:],
+                                    found_xpath_list,
+                                    {**parent_nodes_stack, **{"//" + "/".join(found_xpath_list).replace('/[', '['): parent_node}},
                                     raise_exception,
                                     level,
                     )

@@ -163,7 +163,8 @@ def n0pretty(
             brackets = "()"
         result = ""
 
-        if pairs_in_one_line and isinstance(item, (list, tuple)) and (keys_and_max_len_of_value := is_list_with_pairs(item)):
+        keys_and_max_len_of_value = is_list_with_pairs(item)  # removed walrus operator for compatibility with 3.7
+        if pairs_in_one_line and isinstance(item, (list, tuple)) and keys_and_max_len_of_value:
             # Sturcture contains 2 items together
             for sub_item in item:
                 if result:
@@ -289,18 +290,13 @@ def n0pretty(
 
         if (show_type or (show_type is None and __debug_show_object_type)) \
         and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            result_type =   (
-                                (
-                                    class_type
-                                    if len(class_type_parts := class_type.split('.')) == 1
-                                    else ".".join((class_type_parts[0],class_type_parts[-1]))
-                                )
-                                if (class_type := str(type(item)))
-                                else ""
-                            ) \
-                                .replace("<class '", "<") \
-                                .replace("'>", " ") \
-
+            # removed walrus operator for compatibility with 3.7
+            result_type = str(type(item)).replace("<class '", "<").replace("'>", " ")
+            if result_type:
+                class_type_parts = result_type.split('.')
+                if len(class_type_parts) > 2:
+                    # leave just only first and last class names
+                    result_type = ".".join((class_type_parts[0],class_type_parts[-1]))
 
             if isinstance(item, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
                 result_type += f" {len(item)}"

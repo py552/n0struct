@@ -221,5 +221,9 @@ from .n0struct_utils_find import *
 from .n0struct_utils_compare import *
 from .n0struct_findall import *
 from .n0struct_n0list_n0dict import *
+
+import sys
+if sys.version_info > (3, 7):
+    from .n0struct_comprehensions import *
 # ******************************************************************************
 # ******************************************************************************

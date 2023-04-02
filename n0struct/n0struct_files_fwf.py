@@ -11,6 +11,9 @@ from .n0struct_logging import (
     n0debug_calc,
     n0error,
 )
+from .n0struct_utils import (
+    to_int,
+)
 # ******************************************************************************
 # ******************************************************************************
 def load_fwf_format(file_path: str):
@@ -18,18 +21,9 @@ def load_fwf_format(file_path: str):
     #   #,name,offset,size,till
     loaded_format = load_csv(file_path)
     for i,column in enumerate(loaded_format):
-        if (column_offset := column['offset']) is not None and column_offset != "":
-            loaded_format[i]['offset'] = int(column_offset)
-        else:
-            loaded_format[i]['offset'] = None
-        if (column_till := column['till']) is not None and column_till != "":
-            loaded_format[i]['till']   = int(column_till)
-        else:
-            loaded_format[i]['till']   = None
-        if (column_size := column['size']) is not None and column_size != "":
-            loaded_format[i]['size']   = int(column_size)
-        else:
-            loaded_format[i]['size']   = None
+        loaded_format[i]['offset'] = to_int(column['offset'], default_value = None)
+        loaded_format[i]['till']   = to_int(column['till'], default_value = None)
+        loaded_format[i]['size']   = to_int(column['size'], default_value = None)
     return loaded_format
 # ******************************************************************************
 def parse_fwf_line(incoming_row: str, fwf_format: dict, validate: bool = True, validate_empty: bool = True):
@@ -39,14 +33,16 @@ def parse_fwf_line(incoming_row: str, fwf_format: dict, validate: bool = True, v
     for format_column in fwf_format:
         if format_column['name']:
             column_value = None
-            if (format_column_offset := format_column['offset']) is not None and \
-               (format_column_till := format_column['till']) is not None:
+            format_column_offset = format_column['offset']  # removed walrus operator for compatibility with 3.7
+            format_column_till = format_column['till']      # removed walrus operator for compatibility with 3.7
+            if format_column_offset and format_column_till:
                 column_value = incoming_row[format_column_offset:format_column_till].strip()
             parsed_line.update({format_column['name']: column_value})
     if validate:
         error_messages =  []
         for format_column in fwf_format:
-            if (format_column_validation := format_column['validation']):
+            format_column_validation = format_column['validation']  # removed walrus operator for compatibility with 3.7
+            if format_column_validation:
                 lambda_function_for_validation = eval("lambda column_value, row: " + format_column_validation)
                 if not lambda_function_for_validation(column_value, parsed_line):
                     error_messages.append(format_column['error_message'])
@@ -91,13 +87,11 @@ def generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler:str = ' '):
     rendered_line = filler*line_len
 
     for format_column in fwf_format:
-        format_column_mapping = None
+        format_column_mapping = format_column.get('mapping')    # removed walrus operator for compatibility with 3.7
         if format_column['name'] in struct_to_save:
             column_value = struct_to_save[format_column['name']]
-        elif (format_column_mapping := format_column['mapping']):
-            # n0debug("struct_to_save")
+        elif format_column_mapping:
             lambda_function_for_mapping = eval("lambda incoming_row: " + format_column_mapping)
-            # n0debug("format_column_mapping")
             column_value = lambda_function_for_mapping(struct_to_save)
         else:
             continue

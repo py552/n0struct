@@ -42,9 +42,8 @@ class Git():
         if isinstance(git_arguments, str):
             git_arguments = git_arguments.split(" ")
         n0print("*** git %s" % " ".join(git_arguments))
-        # p = subprocess.Popen(   (command_line:=["git",] + git_arguments), # Only for 3.8+
-        command_line = ["git",]
-        p = subprocess.Popen(   (command_line + git_arguments),
+        command_line = ["git",] + git_arguments  # removed walrus operator for compatibility with 3.7
+        p = subprocess.Popen(   command_line,
                                 cwd = self._repository_path,
                                 stdout = subprocess.PIPE,
                                 stderr = subprocess.PIPE,
@@ -52,8 +51,7 @@ class Git():
                                 encoding = "utf-8",
         )
         try:
-            # Only for 3.8+: outs, errs = p.communicate(timeout=(timeout_sec:=600)) 
-            timeout_sec = 600
+            timeout_sec = 600  # removed walrus operator for compatibility with 3.7
             outs, errs = p.communicate(timeout = timeout_sec)
         except subprocess.TimeoutExpired:
             raise TimeoutError("Timeout %d seconds were happened during execution:\n%s>%s" % (timeout_sec, self._repository_path, " ".join(command_line)))

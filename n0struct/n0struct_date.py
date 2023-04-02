@@ -252,7 +252,8 @@ def first_day_of_yymm(input_date_str: str) -> typing.Union[None, datetime.dateti
     return is_date_yymm(input_date_str)
 # ******************************************************************************
 def last_day_of_yymm(input_date_str: str) -> typing.Union[None, datetime.datetime, bool]:
-    if not (date_datetime := is_date_yymm(input_date_str)):
+    date_datetime = is_date_yymm(input_date_str)  # removed walrus operator for compatibility with 3.7
+    if not date_datetime:
         return date_datetime
     return date_delta(date_datetime, month_delta=1) - datetime.timedelta(microseconds=1)
 # ******************************************************************************

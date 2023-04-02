@@ -3,7 +3,7 @@ import typing
 from .n0struct_utils_find import split_name_index
 from .n0struct_findall import findall as n0struct_findall__findall
 from .n0struct_findall import findfirst as n0struct_findall__findfirst
-from .n0struct_files import n0eval
+from .n0struct_utils import n0eval
 # ******************************************************************************
 # ******************************************************************************
 class n0dict__(dict):
