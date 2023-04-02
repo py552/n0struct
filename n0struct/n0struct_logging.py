@@ -55,17 +55,17 @@ def init_logger(
     set_debug_show_object_id(debug_show_object_id)
     set_debug_show_item_count(debug_show_item_count)
 
-    format = ""
+    logger_format = ""
     if debug_timeformat:
-        format += "<green>{time:" + debug_timeformat + "}</green> |"
-    format += "<level> {level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | <level>{message}</level>"
+        logger_format += "<green>{time:" + debug_timeformat + "}</green> |"
+    logger_format += "<level> {level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | <level>{message}</level>"
 
     handlers = [
-        dict(sink = debug_output, level = debug_level, format = format),
+        dict(sink = debug_output, level = debug_level, format = logger_format),
     ]
     if debug_logtofile:
         handlers.append(
-            dict(sink = __main_log_filename, enqueue = True, level = debug_level, format = format),
+            dict(sink = __main_log_filename, enqueue = True, level = debug_level, format = logger_format),
         )
     logger.configure(handlers = handlers)
 # ******************************************************************************
@@ -357,23 +357,23 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
     :param level:
     :return:
     """
-    # prefix = (
-                 # (str(type(var_object)) or "").replace("<class '", "<").replace("'>", ">")
-                 # if __debug_show_object_type
-                 # else ""
-             # ) + (" id=%s" % id(var_object) if __debug_show_object_id else "")
-    # if prefix:
-        # prefix += " "
+    ## prefix = (
+    ##             (str(type(var_object)) or "").replace("<class '", "<").replace("'>", ">")
+    ##             if __debug_show_object_type
+    ##             else ""
+    ##          ) + (
+    ##             f" id={id(var_object)}" 
+    ##             if __debug_show_object_id 
+    ##             else ""
+    ##          )
+    ## if prefix:
+    ##     prefix += " "
     prefix = ""
 
     n0print(
-        "%s%s%s%s" % (
-            prefix,
-            var_name,
-            " == " if prefix or var_name else "",
+        f"{prefix}{var_name}{' == ' if prefix or var_name else ''}" +
             n0pretty(
                 var_object,
-
                 show_type = show_type,
                 pairs_in_one_line = pairs_in_one_line,
                 json_convention = json_convention,
@@ -382,7 +382,7 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
                 auto_quotes = auto_quotes,
                 show_item_count = show_item_count,
             )
-        ),
+        ,
         level = level,
         internal_call = internal_call + 1,
     )
@@ -410,7 +410,7 @@ def n0debug(var_name: str, level: str = "DEBUG",
 
     __f_locals = inspect.currentframe().f_back.f_locals
     if var_name not in __f_locals:
-        raise NameError("impossible to find object '%s'" % var_name)
+        raise NameError(f"impossible to find object '{var_name}'")
     var_object = __f_locals.get(var_name)
     n0debug_calc(
         var_object, var_name,
@@ -431,11 +431,16 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
     class_attribs = set()
     class_methods = set()
 
-    prefix = str(type(class_object)) if __debug_show_object_type else "" + \
-             " id=%s" % id(class_object) if __debug_show_object_id else ""
+    prefix = str(type(class_object)) \
+             if __debug_show_object_type \
+             else (
+                 f" id={id(class_object)}"
+                 if __debug_show_object_id
+                 else ""
+             )
     if prefix:
         prefix = "(" + prefix + ")"
-    to_print = "%s%s = \n" % (prefix, object_name)
+    to_print = f"{prefix}{object_name} == \n"
 
     for attrib_name in class_attribs_methods:
         attrib = getattr(class_object, attrib_name)

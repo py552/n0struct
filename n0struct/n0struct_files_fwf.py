@@ -1,6 +1,5 @@
 import typing
 from pathlib import Path
-# import n0struct
 from .n0struct_n0list_n0dict import (
     n0dict,
     n0list,
@@ -26,7 +25,7 @@ def load_fwf_format(file_path: str):
         loaded_format[i]['size']   = to_int(column['size'], default_value = None)
     return loaded_format
 # ******************************************************************************
-def parse_fwf_line(incoming_row: str, fwf_format: dict, validate: bool = True, validate_empty: bool = True):
+def parse_fwf_line(incoming_row: str, fwf_format: dict, validate: bool = True):
     if not fwf_format:
         raise SyntaxError("fwf_format is mandatory parameter")
     parsed_line = {}
@@ -51,7 +50,7 @@ def parse_fwf_line(incoming_row: str, fwf_format: dict, validate: bool = True, v
             
     return parsed_line
 # ******************************************************************************
-def load_fwf(file_path:str, header_format: dict, body_format: dict = None, tail_format: dict = None, validate: bool = True, validate_empty: bool = True):
+def load_fwf(file_path:str, header_format: dict, body_format: dict = None, tail_format: dict = None, validate: bool = True):
     success_parsed_lines = []
     failed_lines = []
     if not header_format:
@@ -65,14 +64,14 @@ def load_fwf(file_path:str, header_format: dict, body_format: dict = None, tail_
         previous_line = None
         for i, line in enumerate(filehandler.read().split('\n')):
             if previous_line:
-                parsed_line = parse_fwf_line(previous_line, header_format if i == 1 else body_format, validate, validate_empty)
+                parsed_line = parse_fwf_line(previous_line, header_format if i == 1 else body_format, validate)
                 if isinstance(parsed_line, dict):
                     success_parsed_lines.append(parsed_line)
                 else:
                     failed_lines.append(parsed_line)
             previous_line = line
         if previous_line:
-            parsed_line = parse_fwf_line(previous_line, tail_format, validate, validate_empty)
+            parsed_line = parse_fwf_line(previous_line, tail_format, validate)
             if isinstance(parsed_line, dict):
                 success_parsed_lines.append(parsed_line)
             else:

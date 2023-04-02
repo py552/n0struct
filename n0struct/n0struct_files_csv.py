@@ -158,7 +158,7 @@ def load_simple_csv(
         skip_empty_lines        = skip_empty_lines,
         strip_line              = strip_line,
         strip_field             = strip_field,
-        return_only_list        = return_only_list,
+        return_always_list      = return_always_list,
         return_original_line    = return_original_line,
         parse_csv_line          = lambda line, delimiter, process_field: [process_field(field_value) for field_value in line.split(delimiter)],
     )
@@ -448,20 +448,19 @@ def validate_csv_row(
                     is_valid = lambda_function_for_validation(field_value, row)
                 except Exception as ex2:
                     validation_msg = f"Not passed validation #2 for '{column_name}': " + str(ex2)
-            finally:
-                if is_valid == False:
-                    if column_name not in failed_validations:
-                        failed_validations.update({column_name: []})
+                    
+            if is_valid == False:
+                if column_name not in failed_validations:
+                    failed_validations.update({column_name: []})
 
-                    try:
-                        failed_validation_message = validation_msg.format(**mapped_values)
-                    except Exception as ex3:
-                        failed_validation_message = f"Not passed validation #3 for '{column_name}': " + str(ex3)
+                try:
+                    failed_validation_message = validation_msg.format(**mapped_values)
+                except Exception as ex3:
+                    failed_validation_message = f"Not passed validation #3 for '{column_name}': " + str(ex3)
 
-                    finally:
-                        failed_validations[column_name].append(failed_validation_message)
-                        if interrupt_after_first_fail:
-                            return failed_validations
+                failed_validations[column_name].append(failed_validation_message)
+                if interrupt_after_first_fail:
+                    break
 
     return failed_validations
 # ******************************************************************************

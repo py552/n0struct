@@ -1,3 +1,4 @@
+import typing
 from .n0struct_n0dict__ import n0dict__
 from .n0struct_logging import n0pretty
 
@@ -90,7 +91,7 @@ class n0dict_(n0dict__):
     # **************************************************************************
     # XML
     # **************************************************************************
-    def __xml(self, parent: dict, indent: int, inc_indent: int) -> str:
+    def __xml(self, parent: dict, indent: int, inc_indent: int) -> typing.Union[str, None]:
         """
         Private function: recursively export n0dict into xml result string
         """
