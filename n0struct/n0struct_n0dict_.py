@@ -57,10 +57,10 @@ class n0dict_(n0dict__):
         result = []
         if isinstance(value, (list, tuple)):
             for i, subitm in enumerate(value):
-                result += self.__xpath(subitm, "%s[%d]" % (path, i), mode)
+                result += self.__xpath(subitm, f"{path}[{i}]", mode)
         elif isinstance(value, dict):
             for key, value in value.items():
-                result += self.__xpath(value, "%s/%s" % (path, key), mode)
+                result += self.__xpath(value, f"{path}/{key}", mode)
         elif isinstance(value, (str, int, float)) or value is None:
             result.append((path, value))
         else:
@@ -107,47 +107,47 @@ class n0dict_(n0dict__):
                         for i, subitm in enumerate(value):
                             if i:
                                 result += "\n"
-                            sub_result = self.__xml(subitm, indent + inc_indent, inc_indent)
+                            sub_result = self.__xml(subitm, indent+inc_indent, inc_indent)
                             if not sub_result:
                                 if isinstance(sub_result, str):
-                                    result += " " * indent + "<%s></%s>" % (key,key)
+                                    result += " "*indent + f"<{key}></{key}>"
                                 else:
-                                    result += " " * indent + "<%s/>" % key
+                                    result += " "*indent + f"<{key}/>"
                             else:
                                 if '>' in sub_result:
-                                    result += (" " * indent + "<%s>\n%s\n" + " " * indent + "</%s>") % (key, sub_result, key)
+                                    result += " "*indent + f"<{key}>\n{sub_result}\n" + " "*indent + f"</{key}>"
                                 else:
-                                    result += (" " * indent + "<%s>%s</%s>") % (key, sub_result, key)
+                                    result += " "*indent + f"<{key}>{sub_result}</{key}>"
                     elif isinstance(value, (str, int, float)):
                         if not key.startswith("@"):
-                            result += " " * indent + ("<%s>%s</%s>" % (key, str(value).translate(html_entities), key))
+                            result += " "*indent + f"<{key}>{str(value).translate(html_entities)}</{key}>"
                     elif isinstance(value, dict):
-                        sub_result = self.__xml(value, indent + inc_indent, inc_indent)
+                        sub_result = self.__xml(value, indent+inc_indent, inc_indent)
 
                         attribs = ""
                         attribs_of_current_key = [(__key[1:], __value) for __key,__value in value.items() if __key.startswith("@")]
                         if len(attribs_of_current_key):
                             for __key, __value in attribs_of_current_key:
-                                attribs += " %s=\"%s\"" % (__key, __value)
+                                attribs += f' {__key}="{__value}"'
                         if sub_result:
-                            result += (" " * indent + "<%s%s>\n%s\n" + " " * indent + "</%s>") % (key, attribs, sub_result, key)
+                            result += " "*indent + f"<{key}{attribs}>\n{sub_result}\n" + " "*indent + f"</{key}>"
                         else:
-                            result += " " * indent + "<%s%s/>" % (key, attribs)
+                            result += " "*indent + f"<{key}{attribs}/>"
                     elif value is None:
-                        result += " " * indent + "<%s/>" % key
+                        result += " "*indent + f"<{key}/>"
                     else:
-                        raise TypeError("__xml(..): Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
+                        raise TypeError(f"__xml(..): Unknown type ({type(value)}) {key} == {value}")
             elif isinstance(parent, (list, tuple)):
                 if not len(parent):
                     return None
                 for i, itm in enumerate(parent):
                     if i:
                         result += "\n"
-                    result += self.__xml(itm, indent + inc_indent, inc_indent)
+                    result += self.__xml(itm, indent+inc_indent, inc_indent)
             elif isinstance(parent, (str, int, float)):
                 result += str(parent)
             else:
-                raise TypeError("__xml(..): Unknown type (%s) ==  %s" % (type(parent), str(parent)))
+                raise TypeError(f"__xml(..): Unknown type ({type(parent)}) == {parent}")
 
             return result
         else:
@@ -157,10 +157,8 @@ class n0dict_(n0dict__):
         """
         Public function: export self into xml result string
         """
-        result = ""
-        if encoding:
-            result = "<?xml version=\"1.0\" encoding=\"%s\"?>\n" % encoding
-        return result + self.__xml(self, 0, indent)
+        return (f'<?xml version="1.0" encoding="{encoding}"?>\n' if encoding else '') + \
+            self.__xml(self, 0, indent)
     # **************************************************************************
     # JSON
     # **************************************************************************
@@ -177,33 +175,31 @@ class n0dict_(n0dict__):
                 for i, subitm in enumerate(value):
                     if sub_result:
                         sub_result += ",\n"
-                    sub_sub_result = self.__json(subitm, indent + inc_indent * 2, inc_indent)
+                    sub_sub_result = self.__json(subitm, (indent+inc_indent)*2, inc_indent)
                     if sub_sub_result:
                         if isinstance(subitm, dict):
-                            sub_result += (" " * (indent + inc_indent) + "{\n%s\n" + " " * (
-                                    indent + inc_indent) + "}") % sub_sub_result
+                            sub_result += " "*(indent+inc_indent) + "{" + f"\n{sub_sub_result}\n" + " "*(indent+inc_indent) + "}"
                         elif isinstance(subitm, (list, tuple)):
-                            sub_result += (" " * (indent + inc_indent) + "[\n%s\n" + " " * (
-                                    indent + inc_indent) + "]") % sub_sub_result
+                            sub_result += " "*(indent+inc_indent) + f"[\n{sub_sub_result}\n" + " "*(indent+inc_indent) + "]"
                 if sub_result:
-                    result += (" " * indent + '"%s": [\n%s\n' + " " * indent + "]") % (key, sub_result)
+                    result += " "*indent + f'"{key}": [\n{sub_result}\n' + " "*indent + "]"
                 else:
-                    result += " " * indent + '"%s": null' % key
+                    result += " "*indent + f'"{key}": null'
             elif isinstance(value, str):
-                result += " " * indent + ('"%s": "%s"' % (key, value))
+                result += " "*indent + f'"{key}": "{value}"'
             elif isinstance(value, dict):
-                sub_result = self.__json(value, indent + inc_indent, inc_indent)
+                sub_result = self.__json(value, indent+inc_indent, inc_indent)
                 if sub_result:
-                    result += (" " * indent + '"%s": {\n%s\n' + " " * indent + "}") % (key, sub_result)
+                    result += " "*indent + f'"{key}": ' + "{" + f"\n{sub_result}\n" + " "*indent + "}"
                 else:
-                    result +=  " " * indent + '"%s": null' % key
+                    result += " "*indent + f'"{key}": null'
             elif value is None:
-                result += " " * indent + '"%s": null' % key
+                result += " "*indent + '"%s": null' % key
             else:
-                raise TypeError("Unknown type (%s) %s ==  %s" % (type(value), key, str(value)))
+                raise TypeError(f"Unknown type ({type(value)}) {key} == {value}")
         return result
     # **************************************************************************
-    def to_json(self, 
+    def to_json(self,
                 indent: int = 4,
                 pairs_in_one_line = True,
                 json_convention: bool = True,
@@ -215,7 +211,7 @@ class n0dict_(n0dict__):
         """
         if compress:
             indent = 0
-        
+
         return n0pretty(self,
                         show_type=False,
                         auto_quotes=False,

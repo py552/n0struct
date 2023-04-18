@@ -36,9 +36,9 @@ def load_lines(
 # ******************************************************************************
 def save_file(
                 file_path: str,
-                lines: typing.Union[tuple, list, dict, str],
+                lines: typing.Union[tuple, list, dict, str, bytes, bytearray],
                 mode: str = 't',
-                encoding: str = 'utf-8',
+                encoding: str = "utf-8",
                 EOL: str = '\n',
                 equal_tag: str = "=",
 ):
@@ -50,13 +50,18 @@ def save_file(
         output_buffer = EOL.join([key+equal_tag+lines[key] for key in lines])
     elif isinstance(lines, str):
         output_buffer = lines
+    elif isinstance(lines, (bytes, bytearray)):
+        output_buffer = lines
+        mode = 'b' + ('+' if '+' in mode else '')
     else:
         output_buffer = str(lines)
 
     if 'b' in mode:
-        output_buffer = output_buffer.encode(encoding)
+        if isinstance(output_buffer, str):
+            output_buffer = output_buffer.encode(encoding)
+        encoding = None
 
-    with open(file_path, 'w'+mode) as out_filehandler:
+    with open(file_path, 'w'+mode, encoding=encoding) as out_filehandler:
         out_filehandler.write(output_buffer)
 # ******************************************************************************
 # ******************************************************************************

@@ -257,9 +257,9 @@ def _findall(
             for child_name in parent_node: # checking * sub-nodes
                 child_node = parent_node[child_name]
                 if isinstance(child_node, (dict, list)):
-                    n0debug("seeked_xpath_list")
-                    n0debug_calc(found_xpath_list + [child_name], "found_xpath_list + [child_name]") ## n0debug_calc(found_xpath_list + seeked_xpath_list[0:1], "found_xpath_list + seeked_xpath_list[0:1]")
-                    n0debug_calc("/".join(found_xpath_list).replace('/[', '['), "parent_node")
+                    # n0debug("seeked_xpath_list")
+                    # n0debug_calc(found_xpath_list + [child_name], "found_xpath_list + [child_name]") ## n0debug_calc(found_xpath_list + seeked_xpath_list[0:1], "found_xpath_list + seeked_xpath_list[0:1]")
+                    # n0debug_calc("/".join(found_xpath_list).replace('/[', '['), "parent_node")
                     found = _findall(
                                     child_node,
                                     seeked_xpath_list,
