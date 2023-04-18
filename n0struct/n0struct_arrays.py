@@ -4,32 +4,34 @@ import typing
 def split_pair(
                 in_str: str,
                 delimiter: str,
-                transform1: callable = lambda x:x,
-                transform2: callable = lambda x:x,
-                default_element: int = 1
+                transform_left: callable = lambda x:x,
+                transform_right: callable = lambda x:x,
+                default_element: int = 1,
+                default_left: typing.Any = None,
+                default_right: typing.Any = None,
 ) -> tuple:
     """
-    split_pair(in_str: str, delimiter: str, transform1: callable = lambda x:x, transform2: callable = lambda x:x, default_element: int = 1) -> tuple:
+    split_pair(in_str: str, delimiter: str, transform_left: callable = lambda x:x, transform_right: callable = lambda x:x, default_element: int = 1) -> tuple:
 
     split string into 2 sub strings in any cases:
-        '' by '://'                                     => (None,   None)
-        'www.aaa.com' by '://'                          => (None,   'www.aaa.com')
+        '' by '://'                                     => (default_left, default_right)
+        'www.aaa.com' by '://'                          => (default_left, 'www.aaa.com')
         'https://www.aaa.com' by '://'                  => ('http', 'www.aaa.com')
         'www.aaa.com',default_element = 0 by '/'        => ('www.aaa.com')
         'www.aaa.com/path',default_element = 0 by '/'   => ('www.aaa.com', 'path')
     """
     if not in_str:
-        return transform1(None), transform2(None)
+        return transform_left(default_left), transform_right(default_right)
 
     str_parts = in_str.split(delimiter, 1)
     if len(str_parts) == 1:
         if default_element:
             # second (right) element is default
-            return transform1(None), transform2(str_parts[0])
+            return transform_left(default_left), transform_right(str_parts[0])
         else:
             # first (left) element is default
-            return transform1(str_parts[0]), transform2(None)
-    return transform1(str_parts[0]), transform2(str_parts[1])
+            return transform_left(str_parts[0]), transform_right(default_right)
+    return transform_left(str_parts[0]), transform_right(str_parts[1])
 # ******************************************************************************
 def join_triplets(
                     in_list: typing.Union[None, str, tuple, list],
