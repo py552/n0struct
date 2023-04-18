@@ -450,15 +450,15 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
             class_attribs.add(attrib_name)
 
     for attrib_name in class_methods:
-        to_print += "=*= function %s()\n" % attrib_name
+        to_print += f"=*= function {attrib_name}()\n"
 
     for attrib_name in class_attribs:
         attrib = getattr(class_object, attrib_name)
         prefix = str(type(attrib)) if __debug_show_object_type else "" + \
-                 " id=%s" % id(attrib) if __debug_show_object_id else ""
+                 f" id={id(attrib)}" if __debug_show_object_id else ""
         if prefix:
             prefix = "(" + prefix + ")"
-        to_print += "=== %s%s = %s\n" % (prefix, attrib_name, n0pretty(attrib))
+        to_print += f"=== {prefix}{attrib_name} = {n0pretty(attrib)}\n"
 
     n0print(to_print, level = level, internal_call = True)
 # ******************************************************************************

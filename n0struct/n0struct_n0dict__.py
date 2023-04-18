@@ -23,7 +23,7 @@ class n0dict__(dict):
         If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
         if not xpath:
-            raise IndexError("xpath '%s' is not valid" % str(xpath))
+            raise IndexError(f"xpath '{xpath}' is not valid")
         if xpath.startswith('?'):
             xpath = xpath[1:]
             raise_exception = False
@@ -34,7 +34,7 @@ class n0dict__(dict):
                 return cur_value
             else:
                 if raise_exception:
-                    raise IndexError("not found '%s' in '%s'" % ('/'.join(not_found_xpath_list), xpath_found_str))
+                    raise IndexError(f"not found '{'/'.join(not_found_xpath_list)}' in '{xpath_found_str}'")
                 else:
                     return if_not_found
         else:
@@ -128,15 +128,15 @@ class n0dict__(dict):
             node_name, node_index = split_name_index(node_name_index)
             if isinstance(parent_node, dict):
                 if node_index:
-                    raise IndexError("How is it possible: index '%s' for dictionary (%s)'%s'?"% (node_index, type(parent_node), parent_node))
+                    raise IndexError(f"How is it possible: index '{node_index}' for dictionary ({type(parent_node)})'{parent_node}'?")
                 parent_node.update({node_name_index: new_value})
             elif isinstance(parent_node, (list, tuple)):
                 if node_name:
-                    raise IndexError("How is it possible: key '%s' for list (%s)'%s'?" % (node_name, type(parent_node), parent_node))
+                    raise IndexError(f"How is it possible: key '{node_name}' for list ({type(parent_node)})'{parent_node}'?")
                 eval_node_index = n0eval(node_index)
                 parent_node[n0eval(node_index)] = new_value
             else:
-                raise TypeError("How is it possible: unknown type of parent node (%s) of '%s'" % (type(parent_node), parent_node))
+                raise TypeError(f"How is it possible: unknown type of parent node ({type(parent_node)}) of '{parent_node}'")
         else:
             super(n0dict__, self).__setitem__(xpath, new_value)
 
@@ -279,7 +279,7 @@ class n0dict__(dict):
                 return validation_results
         except:
             pass
-        validation_results["differences"].append("[%s] doesn't exist" % xpath)
+        validation_results["differences"].append(f"[{xpath}] doesn't exist")
         validation_results["other_unique"].append((xpath, None))
         return validation_results
     # **************************************************************************
@@ -329,7 +329,7 @@ class n0dict__(dict):
                 return []
         except:
             pass
-        validation_results["differences"].append("[%s]=='%s' != '%s'" % (xpath, self[xpath], value))
+        validation_results["differences"].append(f"[{xpath}]=='{self[xpath]}' != '{value}'")
         validation_results["not_equal"].append((xpath, (self[xpath], value)))
         return validation_results
     # **************************************************************************
@@ -349,11 +349,9 @@ class n0dict__(dict):
         except:
             # n0print("EXCEPTION in 'if transformation(self[xpath]) == transformation(other_n0dict[other_xpath]):'")
             pass
-        validation_results["differences"].append("[%s]=='%s' != [%s]=='%s'" % (
-            xpath, transformation(self[xpath]),
-            other_xpath, transformation(other_n0dict[other_xpath])
+        validation_results["differences"].append(
+            f"[{xpath}]=='{transformation(self[xpath])}' != [{other_xpath}]=='{transformation(other_n0dict[other_xpath])}'"
         )
-                                              )
         validation_results["not_equal"].append((xpath, (self[xpath], other_n0dict[other_xpath])))
         return validation_results
 # ******************************************************************************

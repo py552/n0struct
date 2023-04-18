@@ -159,21 +159,21 @@ class n0list(n0list_):
                     #--------------------------------
                     # NOT FOUND: Element in n0list
                     #--------------------------------
-                    return parent_node, "[%s]" % str(node_index_int), None, xpath_found_str, xpath_list
+                    return parent_node, f"[{node_index_int}]", None, xpath_found_str, xpath_list
                 if len(xpath_list) == 1:
                     #================================
                     # FOUND: the last is n0list
                     #================================
-                    return parent_node, "[%s]" % str(node_index_int), parent_node[node_index_int], xpath_found_str, None
+                    return parent_node, f"[{node_index_int}]", parent_node[node_index_int], xpath_found_str, None
                 else:
                     #*******************************
                     # Deeper: any type under n0dict
                     #*******************************
                     next_parent_node =  parent_node[node_index_int]
                     if isinstance(next_parent_node, dict):
-                        return n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
+                        return n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists, f"{xpath_found_str}[{node_index_int}]")
                     if isinstance(next_parent_node, (list, tuple)):
-                        return self._find(xpath_list[1:], next_parent_node, return_lists, "%s[%d]" % (xpath_found_str, node_index_int))
+                        return self._find(xpath_list[1:], next_parent_node, return_lists, f"{xpath_found_str}[{node_index_int}]")
                     else:
                         raise TypeError(f"Unexpected type ({type(next_parent_node)}) of {str(next_parent_node)}")
     # **************************************************************************
@@ -253,7 +253,7 @@ class n0list(n0list_):
                     )
                 )
                 if get__flag_compare_return_place():
-                    result["self_unique"].append(("%s[%i]" % (prefix, i), self[i]))
+                    result["self_unique"].append((f"{prefix}[{i}]", self[i]))
                 else:
                     result["self_unique"].append(self[i])
                 continue
@@ -279,7 +279,7 @@ class n0list(n0list_):
                         # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
                         result["not_equal"].append(
                             (
-                                "%s[%i]" % (prefix, i),
+                                f"{prefix}[{i}]",
                                 [
                                     self[i],
                                     other[i]
@@ -309,9 +309,9 @@ class n0list(n0list_):
                     result.update_extend(
                         self[i].direct_compare(
                             other[i],
-                            "%s[%i]" % (self_name, i),
-                            "%s[%i]" % (other_name, i),
-                            "%s[%i]" % (prefix, i),
+                            f"{self_name}[{i}]",
+                            f"{other_name}[{i}]",
+                            f"{prefix}[{i}]",
                             # Not used in real, just for compatibility with compare(..)
                             composite_key=composite_key, compare_only=compare_only,
                             exclude_xpaths=exclude_xpaths, transform=transform,
@@ -321,9 +321,9 @@ class n0list(n0list_):
                     result.update_extend(
                         n0dict(self[i]).direct_compare(
                             n0dict(other[i]),
-                            "%s[%i]" % (self_name, i),
-                            "%s[%i]" % (other_name, i),
-                            "%s[%i]" % (prefix, i),
+                            f"{self_name}[{i}]",
+                            f"{other_name}[{i}]",
+                            f"{prefix}[{i}]",
                             one_of_list_compare=self.direct_compare,
                             composite_key=composite_key, compare_only=compare_only,
                             # Not used in real, just for compatibility
@@ -341,7 +341,7 @@ class n0list(n0list_):
                 if get__flag_compare_check_different_types():
                     result["difftypes"].append(
                         (
-                            "%s[%i]" % (prefix, i),
+                            f"{prefix}[{i}]",
                             (
                                 type(self[i]),
                                 self[i],
@@ -351,16 +351,12 @@ class n0list(n0list_):
                         )
                     )
                     result["differences"].append(
-                        "!!Types are different: %s[%d]=(%s)%s != %s[%d]=(%s)%s" %
-                        (
-                            self_name, i, type(self[i]), str(self[i]),
-                            other_name, i, type(other[i]), str(other[i]),
-                        )
+                        f"!!Types are different: {self_name}[{i}]=({type(self[i])}){self[i]} != {other_name}[{i}]=({type(other[i])}){other[i]}"
                     )
                 else:
                     result["not_equal"].append(
                         (
-                            "%s[%i]" % (prefix, i),
+                            f"{prefix}[{i}]",
                             (
                                 self[i],
                                 other[i]

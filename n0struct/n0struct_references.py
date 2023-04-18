@@ -53,8 +53,8 @@ class OrderedSet(MutableSet):
 
     def __repr__(self) -> str:
         if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self))
+            return f"{self.__class__.__name__}()"
+        return f"{self.__class__.__name__}({list(self)})"
 
     def __eq__(self, other) -> bool:
         if isinstance(other, OrderedSet):

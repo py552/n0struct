@@ -118,7 +118,7 @@ def generate_composite_keys(
                     if key in line:
                         if created_composite_key:
                             created_composite_key += ";"
-                        fullxpath = "%s/%s" % (prefix, key)
+                        fullxpath = f"{prefix}/{key}"
                         transform_i = xpath_match(fullxpath, attributes_to_transform)
                         if transform_i:
                             transform_i -= 1
@@ -127,7 +127,7 @@ def generate_composite_keys(
                             tranformed = str(line[key])
                         created_composite_key += key + "=" + tranformed
         else:
-            raise TypeError("generate_composite_keys(..): expected element dict inside list, but got (%s)%s" % (type(line), line))
+            raise TypeError(f"generate_composite_keys(..): expected element dict inside list, but got ({type(line)}){line}")
         composite_keys_for_all_lines.append((created_composite_key, line_i))
     return composite_keys_for_all_lines
 # ******************************************************************************

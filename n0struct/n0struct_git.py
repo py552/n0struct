@@ -30,7 +30,7 @@ class Git():
             self._repository_path = os.path.join(self._repository_path, self._repository_name)
         else:
             self._repository_name = os.path.split(self._repository_path)[1]
-            n0print("Other repository '%s' is already existed" % self._repository_name)
+            n0print(f"Other repository '{self._repository_name}' is already existed")
 
         if errs and "already exists and is not an empty directory." in errs:
             outs, errs = self.run("pull")
@@ -41,7 +41,7 @@ class Git():
     def run(self, git_arguments: typing.Union[str, list], show_result = True) -> tuple:
         if isinstance(git_arguments, str):
             git_arguments = git_arguments.split(" ")
-        n0print("*** git %s" % " ".join(git_arguments))
+        n0print(f"*** git {' '.join(git_arguments)}")
         command_line = ["git",] + git_arguments  # removed walrus operator for compatibility with 3.7
         p = subprocess.Popen(   command_line,
                                 cwd = self._repository_path,
@@ -54,7 +54,10 @@ class Git():
             timeout_sec = 600  # removed walrus operator for compatibility with 3.7
             outs, errs = p.communicate(timeout = timeout_sec)
         except subprocess.TimeoutExpired:
-            raise TimeoutError("Timeout %d seconds were happened during execution:\n%s>%s" % (timeout_sec, self._repository_path, " ".join(command_line)))
+            raise TimeoutError(
+                f"Timeout {timeout_sec} seconds were happened during execution:\n" +
+                f"{self._repository_path}>{' '.join(command_line)}"
+            )
 
         if show_result:
             n0debug_calc(outs.strip(), "outs")

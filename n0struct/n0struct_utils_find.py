@@ -10,7 +10,7 @@ def split_name_index(node_name: str) -> typing.Tuple[
                                                         ]
                                                     ]:
     if not isinstance(node_name, str):
-        raise TypeError("node_name (%s)%s must be string" % (type(node_name), node_name))
+        raise TypeError(f"node_name ({type(node_name)}){node_name} must be string")
 
     node_index_tuple = None
     if '[' in node_name and node_name.endswith(']'):

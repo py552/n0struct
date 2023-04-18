@@ -194,7 +194,7 @@ class n0dict_(n0dict__):
                 else:
                     result += " "*indent + f'"{key}": null'
             elif value is None:
-                result += " "*indent + '"%s": null' % key
+                result += " "*indent + f'"{key}": null'
             else:
                 raise TypeError(f"Unknown type ({type(value)}) {key} == {value}")
         return result

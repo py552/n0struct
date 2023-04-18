@@ -40,7 +40,7 @@ class n0list_(list):
                 return cur_value
             else:
                 if raise_exception:
-                    raise IndexError("not found '%s' in '%s'" % ('/'.join(not_found_xpath_list), xpath_found_str))
+                    raise IndexError(f"not found '{'/'.join(not_found_xpath_list)}' in '{xpath_found_str}'")
                 else:
                     return if_not_found
         else:
@@ -95,19 +95,19 @@ class n0list_(list):
             return self._get(xpath, raise_exception = True)
         else:
             return super(n0list_, self).__getitem__(xpath)
-    # **************************************************************************
-    # def append(self, sigle_item):
-    # if isinstance(sigle_item, (list,n0list_)):
-    # raise (TypeError, '(%s)%s must be scalar' % (type(sigle_item), sigle_item))
-    # super(n0list_, self).append(sigle_item)  #append the item to itself (the list)
-    # return self
-    # **************************************************************************
-    # def extend(self, other_list):
-    # if not isinstance(other_list, (list,n0list_)):
-    # raise (TypeError, '(%s)%s must be list' % (type(sigle_item), sigle_item))
-    # super(n0list_, self).extend(other_list)
-    # return self
-    # **************************************************************************
+    # # **************************************************************************
+    # # def append(self, sigle_item):
+    # # if isinstance(sigle_item, (list,n0list_)):
+    # # raise (TypeError, '(%s)%s must be scalar' % (type(sigle_item), sigle_item))
+    # # super(n0list_, self).append(sigle_item)  #append the item to itself (the list)
+    # # return self
+    # # **************************************************************************
+    # # def extend(self, other_list):
+    # # if not isinstance(other_list, (list,n0list_)):
+    # # raise (TypeError, '(%s)%s must be list' % (type(sigle_item), sigle_item))
+    # # super(n0list_, self).extend(other_list)
+    # # return self
+    # # **************************************************************************
     def _in(self, other_list, in_is_expected: bool):
         if not isinstance(other_list, (list, tuple)):
             other_list = [other_list]
