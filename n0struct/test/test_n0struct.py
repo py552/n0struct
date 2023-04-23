@@ -72,20 +72,22 @@ def test_sorted_lists():
     n0print("="*80)
     n0debug("differences1_direct_compare")
     n0debug_calc(notemptyitems(differences1_direct_compare["differences"]), 'notemptyitems(differences1_direct_compare["differences"])')
-    assert notemptyitems(differences1_direct_compare["differences"]) == 1
+    assert notemptyitems(differences1_direct_compare["differences"])        == 1
     n0debug_calc(notemptyitems(differences1_direct_compare["not_equal"]), 'notemptyitems(differences1_direct_compare["not_equal"])')
-    assert notemptyitems(differences1_direct_compare["not_equal"]) == 4
-    assert notemptyitems(differences1_direct_compare["difftypes"]) == 0
-    assert notemptyitems(differences1_direct_compare["other_unique"]) == 0
-    assert notemptyitems(differences1_direct_compare["self_unique"]) == 0
+    assert notemptyitems(differences1_direct_compare["not_equal"])          == 4
+    assert notemptyitems(differences1_direct_compare["difftypes"])          == 0
+    assert notemptyitems(differences1_direct_compare["other_unique"])       == 0
+    assert notemptyitems(differences1_direct_compare["self_unique"])        == 0
 
     n0print("="*80)
     n0debug("differences2_wise_compare")
-    assert differences1_direct_compare["differences"]     == differences2_wise_compare["differences"]
-    assert differences1_direct_compare["not_equal"]     == differences2_wise_compare["not_equal"]
+    assert differences1_direct_compare["differences"]  == differences2_wise_compare["differences"]
+    # n0debug_calc(differences1_direct_compare["not_equal"],  'differences1_direct_compare["not_equal"]')
+    # n0debug_calc(differences2_wise_compare["not_equal"],    'differences2_wise_compare["not_equal"]')
+    assert differences1_direct_compare["not_equal"]    == differences2_wise_compare["not_equal"]
     assert differences1_direct_compare["difftypes"]    == differences2_wise_compare["difftypes"]
     assert differences1_direct_compare["other_unique"] == differences2_wise_compare["other_unique"]
-    assert differences1_direct_compare["self_unique"]== differences2_wise_compare["self_unique"]
+    assert differences1_direct_compare["self_unique"]  == differences2_wise_compare["self_unique"]
 # ******************************************************************************
 def test_unsorted_lists():
     n0print("*"*80 + " 3 = Unsorted list in dictionary = direct_compare")
@@ -108,26 +110,26 @@ def test_unsorted_lists():
     n0print("="*80)
     n0debug("differences1_direct_compare")
     n0debug_calc(notemptyitems(differences1_direct_compare["differences"]), 'notemptyitems(differences1_direct_compare["differences"]')
-    assert notemptyitems(differences1_direct_compare["differences"]) == 12
+    assert notemptyitems(differences1_direct_compare["differences"])        == 12
     n0debug_calc(notemptyitems(differences1_direct_compare["not_equal"]), 'differences1_direct_compare["not_equal"]')
-    assert notemptyitems(differences1_direct_compare["not_equal"]) == 44
-    assert notemptyitems(differences1_direct_compare["difftypes"]) == 0
+    assert notemptyitems(differences1_direct_compare["not_equal"])          == 44
+    assert notemptyitems(differences1_direct_compare["difftypes"])          == 0
     n0debug_calc(notemptyitems(differences1_direct_compare["other_unique"]), 'notemptyitems(differences1_direct_compare["other_unique"])')
-    assert notemptyitems(differences1_direct_compare["other_unique"]) == 6
+    assert notemptyitems(differences1_direct_compare["other_unique"])       == 6
     n0debug_calc(notemptyitems(differences1_direct_compare["self_unique"]), 'notemptyitems(differences1_direct_compare["self_unique"])')
-    assert notemptyitems(differences1_direct_compare["self_unique"]) == 0
+    assert notemptyitems(differences1_direct_compare["self_unique"])        == 0
 
     n0print("="*80)
     n0debug("differences2_wise_compare")
     n0debug_calc(notemptyitems(differences2_wise_compare["differences"]), 'notemptyitems(differences2_wise_compare["differences"]')
-    assert notemptyitems(differences2_wise_compare["differences"]) == 2
+    assert notemptyitems(differences2_wise_compare["differences"])          == 2
     n0debug_calc(notemptyitems(differences2_wise_compare["not_equal"]), 'differences2_wise_compare["not_equal"]')
-    assert notemptyitems(differences2_wise_compare["not_equal"]) == 4
-    assert notemptyitems(differences2_wise_compare["difftypes"]) == 0
+    assert notemptyitems(differences2_wise_compare["not_equal"])            == 4
+    assert notemptyitems(differences2_wise_compare["difftypes"])            == 0
     n0debug_calc(notemptyitems(differences2_wise_compare["other_unique"]), 'notemptyitems(differences2_wise_compare["other_unique"])')
-    assert notemptyitems(differences2_wise_compare["other_unique"]) == 6
+    assert notemptyitems(differences2_wise_compare["other_unique"])         == 6
     n0debug_calc(notemptyitems(differences2_wise_compare["self_unique"]), 'notemptyitems(differences2_wise_compare["self_unique"])')
-    assert notemptyitems(differences2_wise_compare["self_unique"]) == 0
+    assert notemptyitems(differences2_wise_compare["self_unique"])          == 0
 # ******************************************************************************
 def main():
     n0print("="*80)
@@ -156,54 +158,54 @@ def main():
     dict1["moreone/node[-1]/value"] = 4
     dict1["moreone/node[-1]/code"] = "four"
 
-    assert isinstance(dict1["moreone/node[0]/value"],n0dict) == True
-    assert (dict1["moreone/node[1]/value"] is None) == True
-    assert isinstance(dict1["moreone/node[2]/value"],str) == True
-    assert (not dict1["moreone/node[2]/value"]) == True
-    assert dict1["moreone/node[3]/value"] == 2
-    assert dict1["moreone/node[4]/value"] == 4
+    assert isinstance(dict1["moreone/node[0]/value"],n0dict)                == True
+    assert (dict1["moreone/node[1]/value"] is None)                         == True
+    assert isinstance(dict1["moreone/node[2]/value"],str)                   == True
+    assert (not dict1["moreone/node[2]/value"])                             == True
+    assert dict1["moreone/node[3]/value"]                                   == 2
+    assert dict1["moreone/node[4]/value"]                                   == 4
 
     n0print(dict1.to_json())
     n0print(dict1.to_xml())
 
     n0print(dict1["moreone/node"])
 
-    assert len(dict1["moreone/node"]) == 5
-    assert len(dict1["moreone/node[*]"]) == 5
+    assert len(dict1["moreone/node"])                                       == 5
+    assert len(dict1["moreone/node[*]"])                                    == 5
 
     n0print(dict1["moreone"])
     assert len(dict1["moreone"]) == 1
 
     n0print(dict1["moreone/node/code[text()='four']/../value"])
-    assert dict1["moreone/node/code[text()='four']/../value"][0] == 4
-    assert dict1["moreone/node/code[text()='four']/../value"] == [4]
+    assert dict1["moreone/node/code[text()='four']/../value"][0]            == 4
+    assert dict1["moreone/node/code[text()='four']/../value"]               == [4]
 
 
     n0print(dict1["moreone/node/code[text()='two']/../value"])
-    assert dict1["moreone/node/code[text()='two']/../value"] == [2]
+    assert dict1["moreone/node/code[text()='two']/../value"]                == [2]
 
     dict1["moreone/node/code[text()='two']/../value"] = 6
     n0print(dict1["moreone/node/code[text()='two']/../value"])
-    assert dict1["moreone/node/code[text()='two']/../value"] == [6]
-    assert dict1["moreone/node/code[text()=two]/../value"] == [6]
-    assert dict1['moreone/node/code[text()="two"]/../value'] == [6]
+    assert dict1["moreone/node/code[text()='two']/../value"]                == [6]
+    assert dict1["moreone/node/code[text()=two]/../value"]                  == [6]
+    assert dict1['moreone/node/code[text()="two"]/../value']                == [6]
 
     n0print(dict1["moreone/node[code='two']/value"])
-    assert dict1["moreone/node[code='two']/value"] == [6]
+    assert dict1["moreone/node[code='two']/value"]                          == [6]
 
     dict1["moretwo/node/code"] = "seven"
     dict1["moretwo/node/value"] = 7
     n0print(dict1["moretwo/node/code[text()='seven']/../value"])
-    assert dict1["moretwo/node/code[text()='seven']/../value"] == 7
+    assert dict1["moretwo/node/code[text()='seven']/../value"]              == 7
 
     n0print(dict1["moretwo/node[code='seven']/value"])
-    assert dict1["moretwo/node[code='seven']/value"] == 7
+    assert dict1["moretwo/node[code='seven']/value"]                        == 7
 
     n0print(dict1.get("moretwo/node/code[text()='eight']/../value"))
-    assert dict1.get("moretwo/node/code[text()='eight']/../value") is None
+    assert dict1.get("moretwo/node/code[text()='eight']/../value")          is None
 
     n0print(dict1["?moretwo/node/code[text()='eight']/../value"] or None)
-    assert (dict1["?moretwo/node/code[text()='eight']/../value"] or None) is None
+    assert (dict1["?moretwo/node/code[text()='eight']/../value"] or None)   is None
 
     # set__debug_output(sys.stdout.write)
 
@@ -235,82 +237,82 @@ def main():
     """
     dict_from_json_default = n0dict(str_json)
     n0debug("dict_from_json_default")
-    assert isinstance(dict_from_json_default, n0dict) == True
-    assert isinstance(dict_from_json_default["root"], dict) == True
-    assert isinstance(dict_from_json_default["root/a"], float) == True # XML supports only str, for JSON float
-    assert isinstance(dict_from_json_default["root/b"], dict) == True
-    assert isinstance(dict_from_json_default["root/b/d"], dict) == True
-    assert isinstance(dict_from_json_default["root/b/d/e"], dict) == True
-    assert isinstance(dict_from_json_default["root/b/d/g"], list) == True # For recursively=False
-    assert isinstance(dict_from_json_default["root/b/d/g[0]"], str) == True
-    assert isinstance(dict_from_json_default["root/b/d/g[1]"], dict) == True
-    assert isinstance(dict_from_json_default["root/b/d/g[1]/h"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_default["root/b/d/i"], list) == True # For JSON list
-    assert isinstance(dict_from_json_default["root/b/d/i[0]"], dict) == True
-    assert isinstance(dict_from_json_default["root/b/d/i[0]/j"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_default["root/k"], list) == True # For recursively=False
-    assert isinstance(dict_from_json_default["root/k[0]"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_default["root/k[1]"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_default, n0dict)                                   == True
+    assert isinstance(dict_from_json_default["root"], dict)                             == True
+    assert isinstance(dict_from_json_default["root/a"], float)                          == True # XML supports only str, for JSON float
+    assert isinstance(dict_from_json_default["root/b"], dict)                           == True
+    assert isinstance(dict_from_json_default["root/b/d"], dict)                         == True
+    assert isinstance(dict_from_json_default["root/b/d/e"], dict)                       == True
+    assert isinstance(dict_from_json_default["root/b/d/g"], list)                       == True # For recursively=False
+    assert isinstance(dict_from_json_default["root/b/d/g[0]"], str)                     == True
+    assert isinstance(dict_from_json_default["root/b/d/g[1]"], dict)                    == True
+    assert isinstance(dict_from_json_default["root/b/d/g[1]/h"], int)                   == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_default["root/b/d/i"], list)                       == True # For JSON list
+    assert isinstance(dict_from_json_default["root/b/d/i[0]"], dict)                    == True
+    assert isinstance(dict_from_json_default["root/b/d/i[0]/j"], int)                   == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_default["root/k"], list)                           == True # For recursively=False
+    assert isinstance(dict_from_json_default["root/k[0]"], int)                         == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_default["root/k[1]"], int)                         == True # XML supports only str, for JSON int
     dict_from_json_default.to_json(); dict_from_json_default.to_xml(); dict_from_json_default.to_xpath()
 
     dict_from_json_force_n0dict = n0dict(str_json, force_n0dict = True)
     n0debug("dict_from_json_force_n0dict")
-    assert isinstance(dict_from_json_force_n0dict, n0dict) == True
-    assert isinstance(dict_from_json_force_n0dict["root"], n0dict) == True
-    assert isinstance(dict_from_json_force_n0dict["root/a"], float) == True # XML supports only str, for JSON float
-    assert isinstance(dict_from_json_force_n0dict["root/b"], n0dict) == True
-    assert isinstance(dict_from_json_force_n0dict["root/b/d"], n0dict) == True
-    assert isinstance(dict_from_json_force_n0dict["root/b/d/e"], n0dict) == True
-    assert isinstance(dict_from_json_force_n0dict["root/b/d/g"], list) == True # For recursively n0list
-    assert isinstance(dict_from_json_force_n0dict["root/b/d/g[0]"], str) == True
-    assert isinstance(dict_from_json_force_n0dict["root/b/d/g[1]"], n0dict) == True
-    assert isinstance(dict_from_json_force_n0dict["root/b/d/g[1]/h"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_force_n0dict["root/b/d/i"], list) == True # For JSON list, for JSON recursively n0list
-    assert isinstance(dict_from_json_force_n0dict["root/b/d/i[0]"], n0dict) == True
-    assert isinstance(dict_from_json_force_n0dict["root/b/d/i[0]/j"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_force_n0dict["root/k"], list) == True # For recursively n0list
-    assert isinstance(dict_from_json_force_n0dict["root/k[0]"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_force_n0dict["root/k[1]"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_force_n0dict, n0dict)                              == True
+    assert isinstance(dict_from_json_force_n0dict["root"], n0dict)                      == True
+    assert isinstance(dict_from_json_force_n0dict["root/a"], float)                     == True # XML supports only str, for JSON float
+    assert isinstance(dict_from_json_force_n0dict["root/b"], n0dict)                    == True
+    assert isinstance(dict_from_json_force_n0dict["root/b/d"], n0dict)                  == True
+    assert isinstance(dict_from_json_force_n0dict["root/b/d/e"], n0dict)                == True
+    assert isinstance(dict_from_json_force_n0dict["root/b/d/g"], list)                  == True # For recursively n0list
+    assert isinstance(dict_from_json_force_n0dict["root/b/d/g[0]"], str)                == True
+    assert isinstance(dict_from_json_force_n0dict["root/b/d/g[1]"], n0dict)             == True
+    assert isinstance(dict_from_json_force_n0dict["root/b/d/g[1]/h"], int)              == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_force_n0dict["root/b/d/i"], list)                  == True # For JSON list, for JSON recursively n0list
+    assert isinstance(dict_from_json_force_n0dict["root/b/d/i[0]"], n0dict)             == True
+    assert isinstance(dict_from_json_force_n0dict["root/b/d/i[0]/j"], int)              == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_force_n0dict["root/k"], list)                      == True # For recursively n0list
+    assert isinstance(dict_from_json_force_n0dict["root/k[0]"], int)                    == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_force_n0dict["root/k[1]"], int)                    == True # XML supports only str, for JSON int
     dict_from_json_force_n0dict.to_json(); dict_from_json_force_n0dict.to_xml(); dict_from_json_force_n0dict.to_xpath()
 
     dict_from_json_recursevely = n0dict(str_json, recursively=True)
     n0debug("dict_from_json_recursevely")
-    assert isinstance(dict_from_json_recursevely, n0dict) == True
-    assert isinstance(dict_from_json_recursevely["root"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely["root/a"], float) == True # XML supports only str, for JSON float
-    assert isinstance(dict_from_json_recursevely["root/b"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely["root/b/d"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely["root/b/d/e"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely["root/b/d/g"], n0list) == True # For recursively=True
-    assert isinstance(dict_from_json_recursevely["root/b/d/g[0]"], str) == True
-    assert isinstance(dict_from_json_recursevely["root/b/d/g[1]"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely["root/b/d/g[1]/h"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_recursevely["root/b/d/i"], n0list) == True # For JSON list, for JSON recursively n0list
-    assert isinstance(dict_from_json_recursevely["root/b/d/i[0]"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely["root/b/d/i[0]/j"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_recursevely["root/k"], n0list) == True # For recursively=True
-    assert isinstance(dict_from_json_recursevely["root/k[0]"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_recursevely["root/k[1]"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_recursevely, n0dict)                               == True
+    assert isinstance(dict_from_json_recursevely["root"], n0dict)                       == True
+    assert isinstance(dict_from_json_recursevely["root/a"], float)                      == True # XML supports only str, for JSON float
+    assert isinstance(dict_from_json_recursevely["root/b"], n0dict)                     == True
+    assert isinstance(dict_from_json_recursevely["root/b/d"], n0dict)                   == True
+    assert isinstance(dict_from_json_recursevely["root/b/d/e"], n0dict)                 == True
+    assert isinstance(dict_from_json_recursevely["root/b/d/g"], n0list)                 == True # For recursively=True
+    assert isinstance(dict_from_json_recursevely["root/b/d/g[0]"], str)                 == True
+    assert isinstance(dict_from_json_recursevely["root/b/d/g[1]"], n0dict)              == True
+    assert isinstance(dict_from_json_recursevely["root/b/d/g[1]/h"], int)               == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_recursevely["root/b/d/i"], n0list)                 == True # For JSON list, for JSON recursively n0list
+    assert isinstance(dict_from_json_recursevely["root/b/d/i[0]"], n0dict)              == True
+    assert isinstance(dict_from_json_recursevely["root/b/d/i[0]/j"], int)               == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_recursevely["root/k"], n0list)                     == True # For recursively=True
+    assert isinstance(dict_from_json_recursevely["root/k[0]"], int)                     == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_recursevely["root/k[1]"], int)                     == True # XML supports only str, for JSON int
     dict_from_json_recursevely.to_json(); dict_from_json_recursevely.to_xml(); dict_from_json_recursevely.to_xpath()
 
     dict_from_json_recursevely_force_n0dict = n0dict(str_json, recursively=True, force_n0dict = True)
     n0debug("dict_from_json_recursevely_force_n0dict")
-    assert isinstance(dict_from_json_recursevely_force_n0dict, n0dict) == True
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/a"], float) == True # XML supports only str, for JSON float
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/e"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/g"], n0list) == True # For recursively=True
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/g[0]"], str) == True
+    assert isinstance(dict_from_json_recursevely_force_n0dict, n0dict)                  == True
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root"], n0dict)          == True
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/a"], float)         == True # XML supports only str, for JSON float
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b"], n0dict)        == True
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d"], n0dict)      == True
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/e"], n0dict)    == True
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/g"], n0list)    == True # For recursively=True
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/g[0]"], str)    == True
     assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/g[1]"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/g[1]/h"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/i"], n0list) == True # For JSON list, for JSON recursively n0list
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/g[1]/h"], int)  == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/i"], n0list)    == True # For JSON list, for JSON recursively n0list
     assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/i[0]"], n0dict) == True
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/i[0]/j"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/k"], n0list) == True # For recursively=True
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/k[0]"], int) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_json_recursevely_force_n0dict["root/k[1]"], int) == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/b/d/i[0]/j"], int)  == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/k"], n0list)        == True # For recursively=True
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/k[0]"], int)        == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_json_recursevely_force_n0dict["root/k[1]"], int)        == True # XML supports only str, for JSON int
     dict_from_json_recursevely_force_n0dict.to_json(); dict_from_json_recursevely_force_n0dict.to_xml(); dict_from_json_recursevely_force_n0dict.to_xpath()
 
     str_xml = """
@@ -339,83 +341,83 @@ def main():
     """
     dict_from_xml_default = n0dict(str_xml)
     n0debug("dict_from_xml_default")
-    assert isinstance(dict_from_xml_default, n0dict) == True
-    assert isinstance(dict_from_xml_default["root"], n0dict) == True
-    assert isinstance(dict_from_xml_default["root/a"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_default["root/b"], n0dict) == True
-    assert isinstance(dict_from_xml_default["root/b/d"], n0dict) == True
-    assert isinstance(dict_from_xml_default["root/b/d/e"], n0dict) == True
-    assert isinstance(dict_from_xml_default["root/b/d/g"], list) == True # For recursively=False
-    assert isinstance(dict_from_xml_default["root/b/d/g[0]"], str) == True
-    assert isinstance(dict_from_xml_default["root/b/d/g[1]"], n0dict) == True
-    assert isinstance(dict_from_xml_default["root/b/d/g[1]/h"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_default["root/b/d/i"], n0dict) == True # For JSON list, for JSON recursively n0list
-    assert isinstance(dict_from_xml_default["root/b/d/i[0]"], n0dict) == True
-    assert isinstance(dict_from_xml_default["root/b/d/i[0]/j"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_default["root/k"], list) == True # For recursively=False
-    assert isinstance(dict_from_xml_default["root/k[0]"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_default["root/k[1]"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_default, n0dict)                                    == True
+    assert isinstance(dict_from_xml_default["root"], n0dict)                            == True
+    assert isinstance(dict_from_xml_default["root/a"], str)                             == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_default["root/b"], n0dict)                          == True
+    assert isinstance(dict_from_xml_default["root/b/d"], n0dict)                        == True
+    assert isinstance(dict_from_xml_default["root/b/d/e"], n0dict)                      == True
+    assert isinstance(dict_from_xml_default["root/b/d/g"], list)                        == True # For recursively=False
+    assert isinstance(dict_from_xml_default["root/b/d/g[0]"], str)                      == True
+    assert isinstance(dict_from_xml_default["root/b/d/g[1]"], n0dict)                   == True
+    assert isinstance(dict_from_xml_default["root/b/d/g[1]/h"], str)                    == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_default["root/b/d/i"], n0dict)                      == True # For JSON list, for JSON recursively n0list
+    assert isinstance(dict_from_xml_default["root/b/d/i[0]"], n0dict)                   == True
+    assert isinstance(dict_from_xml_default["root/b/d/i[0]/j"], str)                    == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_default["root/k"], list)                            == True # For recursively=False
+    assert isinstance(dict_from_xml_default["root/k[0]"], str)                          == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_default["root/k[1]"], str)                          == True # XML supports only str, for JSON int
     dict_from_xml_default.to_json(); dict_from_xml_default.to_xml(); dict_from_xml_default.to_xpath()
 
     # force_n0dict = True for XML is useless, in any cases dictionaries will be n0dict
     dict_from_xml_force_n0dict = n0dict(str_xml, force_n0dict = True)
     n0debug("dict_from_xml_force_n0dict")
-    assert isinstance(dict_from_xml_force_n0dict, n0dict) == True
-    assert isinstance(dict_from_xml_force_n0dict["root"], n0dict) == True
-    assert isinstance(dict_from_xml_force_n0dict["root/a"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_force_n0dict["root/b"], n0dict) == True
-    assert isinstance(dict_from_xml_force_n0dict["root/b/d"], n0dict) == True
-    assert isinstance(dict_from_xml_force_n0dict["root/b/d/e"], n0dict) == True
-    assert isinstance(dict_from_xml_force_n0dict["root/b/d/g"], list) == True # For recursively=False
-    assert isinstance(dict_from_xml_force_n0dict["root/b/d/g[0]"], str) == True
-    assert isinstance(dict_from_xml_force_n0dict["root/b/d/g[1]"], n0dict) == True
-    assert isinstance(dict_from_xml_force_n0dict["root/b/d/g[1]/h"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_force_n0dict["root/b/d/i"], n0dict) == True # For JSON list
-    assert isinstance(dict_from_xml_force_n0dict["root/b/d/i[0]"], n0dict) == True
-    assert isinstance(dict_from_xml_force_n0dict["root/b/d/i[0]/j"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_force_n0dict["root/k"], list) == True # For recursively=False
-    assert isinstance(dict_from_xml_force_n0dict["root/k[0]"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_force_n0dict["root/k[1]"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_force_n0dict, n0dict)                               == True
+    assert isinstance(dict_from_xml_force_n0dict["root"], n0dict)                       == True
+    assert isinstance(dict_from_xml_force_n0dict["root/a"], str)                        == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_force_n0dict["root/b"], n0dict)                     == True
+    assert isinstance(dict_from_xml_force_n0dict["root/b/d"], n0dict)                   == True
+    assert isinstance(dict_from_xml_force_n0dict["root/b/d/e"], n0dict)                 == True
+    assert isinstance(dict_from_xml_force_n0dict["root/b/d/g"], list)                   == True # For recursively=False
+    assert isinstance(dict_from_xml_force_n0dict["root/b/d/g[0]"], str)                 == True
+    assert isinstance(dict_from_xml_force_n0dict["root/b/d/g[1]"], n0dict)              == True
+    assert isinstance(dict_from_xml_force_n0dict["root/b/d/g[1]/h"], str)               == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_force_n0dict["root/b/d/i"], n0dict)                 == True # For JSON list
+    assert isinstance(dict_from_xml_force_n0dict["root/b/d/i[0]"], n0dict)              == True
+    assert isinstance(dict_from_xml_force_n0dict["root/b/d/i[0]/j"], str)               == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_force_n0dict["root/k"], list)                       == True # For recursively=False
+    assert isinstance(dict_from_xml_force_n0dict["root/k[0]"], str)                     == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_force_n0dict["root/k[1]"], str)                     == True # XML supports only str, for JSON int
     dict_from_xml_force_n0dict.to_json(); dict_from_xml_force_n0dict.to_xml(); dict_from_xml_force_n0dict.to_xpath()
 
     dict_from_xml_recursevely = n0dict(str_xml, recursively=True)
     n0debug("dict_from_xml_recursevely")
-    assert isinstance(dict_from_xml_recursevely, n0dict) == True
-    assert isinstance(dict_from_xml_recursevely["root"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely["root/a"], str) == True # XML supports only str
-    assert isinstance(dict_from_xml_recursevely["root/b"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely["root/b/d"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely["root/b/d/e"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely["root/b/d/g"], n0list) == True
-    assert isinstance(dict_from_xml_recursevely["root/b/d/g[0]"], str) == True
-    assert isinstance(dict_from_xml_recursevely["root/b/d/g[1]"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely["root/b/d/g[1]/h"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_recursevely["root/b/d/i"], n0dict) == True # For JSON list
-    assert isinstance(dict_from_xml_recursevely["root/b/d/i[0]"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely["root/b/d/i[0]/j"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_recursevely["root/k"], n0list) == True
-    assert isinstance(dict_from_xml_recursevely["root/k[0]"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_recursevely["root/k[1]"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_recursevely, n0dict)                                == True
+    assert isinstance(dict_from_xml_recursevely["root"], n0dict)                        == True
+    assert isinstance(dict_from_xml_recursevely["root/a"], str)                         == True # XML supports only str
+    assert isinstance(dict_from_xml_recursevely["root/b"], n0dict)                      == True
+    assert isinstance(dict_from_xml_recursevely["root/b/d"], n0dict)                    == True
+    assert isinstance(dict_from_xml_recursevely["root/b/d/e"], n0dict)                  == True
+    assert isinstance(dict_from_xml_recursevely["root/b/d/g"], n0list)                  == True
+    assert isinstance(dict_from_xml_recursevely["root/b/d/g[0]"], str)                  == True
+    assert isinstance(dict_from_xml_recursevely["root/b/d/g[1]"], n0dict)               == True
+    assert isinstance(dict_from_xml_recursevely["root/b/d/g[1]/h"], str)                == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_recursevely["root/b/d/i"], n0dict)                  == True # For JSON list
+    assert isinstance(dict_from_xml_recursevely["root/b/d/i[0]"], n0dict)               == True
+    assert isinstance(dict_from_xml_recursevely["root/b/d/i[0]/j"], str)                == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_recursevely["root/k"], n0list)                      == True
+    assert isinstance(dict_from_xml_recursevely["root/k[0]"], str)                      == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_recursevely["root/k[1]"], str)                      == True # XML supports only str, for JSON int
     dict_from_xml_recursevely.to_json(); dict_from_xml_recursevely.to_xml(); dict_from_xml_recursevely.to_xpath()
 
     dict_from_xml_recursevely_force_n0dict = n0dict(str_xml, recursively=True, force_n0dict = True)
     n0debug("dict_from_xml_recursevely_force_n0dict")
-    assert isinstance(dict_from_xml_recursevely_force_n0dict, n0dict) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/a"], str) == True # XML supports only str
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/e"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/g"], n0list) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/g[0]"], str) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/g[1]"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/g[1]/h"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/i"], n0dict) == True # For JSON list
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/i[0]"], n0dict) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/i[0]/j"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/k"], n0list) == True
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/k[0]"], str) == True # XML supports only str, for JSON int
-    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/k[1]"], str) == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_recursevely_force_n0dict, n0dict)                   == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root"], n0dict)           == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/a"], str)            == True # XML supports only str
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b"], n0dict)         == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d"], n0dict)       == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/e"], n0dict)     == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/g"], n0list)     == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/g[0]"], str)     == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/g[1]"], n0dict)  == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/g[1]/h"], str)   == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/i"], n0dict)     == True # For JSON list
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/i[0]"], n0dict)  == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/b/d/i[0]/j"], str)   == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/k"], n0list)         == True
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/k[0]"], str)         == True # XML supports only str, for JSON int
+    assert isinstance(dict_from_xml_recursevely_force_n0dict["root/k[1]"], str)         == True # XML supports only str, for JSON int
     dict_from_xml_recursevely_force_n0dict.to_json(); dict_from_xml_recursevely_force_n0dict.to_xml(); dict_from_xml_recursevely_force_n0dict.to_xpath()
 
     str_xml_empty = "<root/>"
@@ -437,17 +439,17 @@ def main():
         }
     )
     n0debug("dict4")
-    assert isinstance(dict4, n0dict) == True
-    assert dict4["a"] == 1
-    assert dict4["b/c"] == 2
-    assert dict4["b/d/e"] == 3
-    assert dict4.get("b/d/e", "ALREADY_DELETED") == 3
-    assert dict4.pop("b/d/e") == 3
-    assert dict4.get("b/d/e", "ALREADY_DELETED") == "ALREADY_DELETED"
-    assert dict4.delete("b/c")["a"] == 1
-    assert dict4.get("b/c", "ALREADY_DELETED") == "ALREADY_DELETED"
+    assert isinstance(dict4, n0dict)                                                    == True
+    assert dict4["a"]                                                                   == 1
+    assert dict4["b/c"]                                                                 == 2
+    assert dict4["b/d/e"]                                                               == 3
+    assert dict4.get("b/d/e", "ALREADY_DELETED")                                        == 3
+    assert dict4.pop("b/d/e")                                                           == 3
+    assert dict4.get("b/d/e", "ALREADY_DELETED")                                        == "ALREADY_DELETED"
+    assert dict4.delete("b/c")["a"]                                                     == 1
+    assert dict4.get("b/c", "ALREADY_DELETED")                                          == "ALREADY_DELETED"
     assert dict4.delete("b/d", recursively=True)
-    assert dict4.get("b", "ALREADY_DELETED") == "ALREADY_DELETED"
+    assert dict4.get("b", "ALREADY_DELETED")                                            == "ALREADY_DELETED"
     n0debug("dict4")
 
     dict5 = n0dict().update(
@@ -495,8 +497,8 @@ def main():
     n0debug("dict6")
     n0debug_calc(dict6.findall("//Root/Node1"))
     n0debug_calc(dict6.findall("//Root/Node2/Subnode2_1/tag[text()==PARAM1]/../value"))
-    assert list(dict6.findall("//Root/Node2/Subnode2_1/tag[text()==PARAM1]/../value").keys())[0] == "//Root/Node2/Subnode2_1[0]/value"
-    assert list(dict6.findall("//Root/Node2/Subnode2_1/tag[text()==PARAM1]/../value").values())[0] == "VALUE1 from subnode2_1"
+    assert list(dict6.findall("//Root/Node2/Subnode2_1/tag[text()==PARAM1]/../value").keys())[0]    == "//Root/Node2/Subnode2_1[0]/value"
+    assert list(dict6.findall("//Root/Node2/Subnode2_1/tag[text()==PARAM1]/../value").values())[0]  == "VALUE1 from subnode2_1"
 
     dict7 = n0dict({
         "Root": {
@@ -523,8 +525,8 @@ def main():
     n0print("\n" + list(dict7.findall("//").values())[0].to_xpath())
     found = dict7.findall("//Root/Nodes/tag[text()==PARAM1]/../value")
     n0debug_calc(found, '"//Root/Nodes/tag[text()==PARAM1]/../value"')
-    assert len(found) == 4
-    assert list(found.values())[2] == "VALUE1 from subnode2_0"
+    assert len(found)                                                                               == 4
+    assert list(found.values())[2]                                                                  == "VALUE1 from subnode2_0"
 
 if __name__ == '__main__':
     main()

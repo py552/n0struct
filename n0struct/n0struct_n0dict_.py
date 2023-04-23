@@ -84,7 +84,7 @@ class n0dict_(n0dict__):
             for itm in xpath_list:
                 result += ("['%-" + str(xpath_maxlen) + "s = %s\n") % \
                             (
-                                itm[0] + "']",  # Don't move to the main
+                                itm[0] + "']",  # Don't move to the main part
                                 ('"' + str(itm[1]) + '"') if itm[1] else "None"
                             )
         return result

@@ -203,8 +203,11 @@ def to_date(input_date_str: str, date_format: str = None, raise_exception: bool 
                     except (ValueError, TypeError):
                         try:
                             return datetime.datetime.strptime(input_date_str, "%m/%d/%Y").date()    # 07/16/2020
-                        except (ValueError, TypeError):
-                            return input_date_str
+                        except (ValueError, TypeError) as ex:
+                            if raise_exception:
+                                raise ex
+                            else:
+                                return input_date_str
 # ******************************************************************************
 # LEGACY
 # ******************************************************************************
