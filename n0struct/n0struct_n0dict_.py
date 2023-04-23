@@ -103,6 +103,7 @@ class n0dict_(n0dict__):
                 for key, value in parent.items():
                     if result:
                         result += "\n"
+                        
                     if isinstance(value, (list, tuple)):
                         for i, subitm in enumerate(value):
                             if i:
@@ -118,9 +119,17 @@ class n0dict_(n0dict__):
                                     result += " "*indent + f"<{key}>\n{sub_result}\n" + " "*indent + f"</{key}>"
                                 else:
                                     result += " "*indent + f"<{key}>{sub_result}</{key}>"
-                    elif isinstance(value, (str, int, float)):
+                    elif isinstance(value, (int, float)):
                         if not key.startswith("@"):
-                            result += " "*indent + f"<{key}>{str(value).translate(html_entities)}</{key}>"
+                            result += " "*indent + f"<{key}>{value}</{key}>"
+                    elif isinstance(value, str):
+                        if not key.startswith("@"):
+                            result += " "*indent + f"<{key}>"
+                            if value.lstrip().upper().startswith("<![CDATA[") and value.rstrip().endswith("]]>"):
+                                result += value
+                            else:
+                                result += value.translate(html_entities)
+                            result += f"</{key}>"
                     elif isinstance(value, dict):
                         sub_result = self.__xml(value, indent+inc_indent, inc_indent)
 
@@ -153,11 +162,11 @@ class n0dict_(n0dict__):
         else:
             return ""
     # **************************************************************************
-    def to_xml(self, indent: int = 4, encoding: str = "utf-8") -> str:
+    def to_xml(self, indent: int = 4, encoding: str = "utf-8", quote: str = '"') -> str:
         """
         Public function: export self into xml result string
         """
-        return (f'<?xml version="1.0" encoding="{encoding}"?>\n' if encoding else '') + \
+        return (f'<?xml version={quote}1.0{quote} encoding={quote}{encoding}{quote}?>\n' if encoding else '') + \
             self.__xml(self, 0, indent)
     # **************************************************************************
     # JSON
