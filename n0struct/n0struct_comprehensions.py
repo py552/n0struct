@@ -3,26 +3,29 @@ import typing
 from .n0struct_utils import isnumber
 from .n0struct_files import load_lines
 # ******************************************************************************
+def default_parse_value(key_value, default_value):
+    stripped_value = key_value[1].strip()
+    if isnumber(stripped_value):
+        if '.' in stripped_value:
+            return round(float(stripped_value), 7)
+        else:
+            return int(stripped_value)
+    else:
+        if len(stripped_value) >=2 and (
+                    ( stripped_value.startswith('"') and stripped_value.endswith('"') )
+                 or ( stripped_value.startswith("'") and stripped_value.endswith("'") )
+        ):
+            return stripped_value[1:-1]
+        else:
+            return stripped_value
+
 def load_ini(
                 file_path: str,
                 default_value = None,
                 equal_tag: str = '=',
                 comment_tags: typing.Union[tuple, list] = ("#", "//"),
                 parse_key: typing.Callable = lambda key_value, default_key: key_value[0].strip().upper(),
-                parse_value: typing.Callable = lambda key_value, default_value:
-                                                        (
-                                                            round(float(stripped_value), 7)
-                                                            if '.' in stripped_value
-                                                            else int(stripped_value)
-                                                        )
-                                                        if isnumber(stripped_value:=key_value[1].strip())
-                                                        else (
-                                                            stripped_value[1:-1]
-                                                            if len(stripped_value) >=2 and (
-                                                                (stripped_value.startswith('"') and stripped_value.endswith('"'))
-                                                                or (stripped_value.startswith("'") and stripped_value.endswith("'"))
-                                                            ) else stripped_value
-                                                        ),
+                parse_value: typing.Callable = default_parse_value,
 ) -> dict:
     """
         load ini file as:

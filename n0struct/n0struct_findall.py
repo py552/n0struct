@@ -129,7 +129,7 @@ def _findall(
                     condition_delimiter = '<>'
                 else:
                     raise TypeError(f"Unknown logic condition [{child_index}] in '{str(seeked_xpath_list[0])}'")
-                before_condition, after_condition = child_index.split(condition_delimiter, 1)
+                _before_condition, after_condition = child_index.split(condition_delimiter, 1)
                 value_for_condition = after_condition.strip()
                 if len(value_for_condition) > 1 and \
                    (

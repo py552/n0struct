@@ -29,7 +29,7 @@ class n0dict__(dict):
             raise_exception = False
             if_not_found = ''
         if any(char in xpath for char in "/["):
-            parent_node, node_name_index, cur_value, xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists)
+            _parent_node, _node_name_index, cur_value, xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists)
             if not not_found_xpath_list:
                 return cur_value
             else:
@@ -121,7 +121,7 @@ class n0dict__(dict):
             xpath = xpath[1:]
 
         if any(char in xpath for char in "/["):
-            parent_node, node_name_index, cur_value, xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists = True)
+            parent_node, node_name_index, _cur_value, _xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists = True)
             if not_found_xpath_list:
                 parent_node, node_name_index = self._add(parent_node, node_name_index, not_found_xpath_list)
 
@@ -133,7 +133,6 @@ class n0dict__(dict):
             elif isinstance(parent_node, (list, tuple)):
                 if node_name:
                     raise IndexError(f"How is it possible: key '{node_name}' for list ({type(parent_node)})'{parent_node}'?")
-                eval_node_index = n0eval(node_index)
                 parent_node[n0eval(node_index)] = new_value
             else:
                 raise TypeError(f"How is it possible: unknown type of parent node ({type(parent_node)}) of '{parent_node}'")
@@ -145,7 +144,7 @@ class n0dict__(dict):
     def delete(self, xpath: str, recursively: bool = False) -> n0dict__:
         xpath_list = xpath.split('/')
         for i, last_xpath_index in enumerate(range(len(xpath_list), 0, -1)):
-            parent_node, node_name_index, cur_value, xpath_found_str, not_found_xpath_list = \
+            parent_node, node_name_index, cur_value, _xpath_found_str, _not_found_xpath_list = \
                 self._find(xpath_list[0:last_xpath_index], self, return_lists=True)
             if i == 0 or (
                 recursively and

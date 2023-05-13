@@ -183,9 +183,6 @@ def load_csv(
                 break
 
         possible_column_names = parse_csv_line(header_line, delimiter, process_field)
-        # n0debug("possible_column_names")
-        # n0debug("contains_header")
-        # n0debug("header_is_mandatory")
 
         first_line_is_header = False
         if contains_header:
@@ -205,7 +202,6 @@ def load_csv(
             if header_is_mandatory and not column_names:
                 first_line_is_header = True
 
-        # n0debug("first_line_is_header")
         if not first_line_is_header:
             in_file.seek(file_offset) # first line is NOT header, re-read first line as data line
             if column_names:
@@ -218,8 +214,6 @@ def load_csv(
             if not column_names:
                 column_names = possible_column_names
         len_possible_column_names = len(possible_column_names)
-        # n0debug("column_names")
-        # n0debug("possible_column_names")
 
         while True:
             line = in_file.readline()  # removed walrus operator for compatibility with 3.7
@@ -234,17 +228,13 @@ def load_csv(
             dict_field_values = n0dict( zip(
                                     possible_column_names,
                                     list_field_values
-                                    + [None for i in range(len_possible_column_names - len(list_field_values))]
+                                    + ([None] * (len_possible_column_names - len(list_field_values)))
             ))
             if column_names != possible_column_names:
-                # n0debug("column_names")
-                # n0debug("possible_column_names")
                 dict_field_values = n0dict({
                     key: dict_field_values[key]
                     for key in column_names
                 })
-            # n0debug("dict_field_values")
-            # n0debug("return_original_line")
             if return_original_line:
                 yield dict_field_values, stripped_line
             else:

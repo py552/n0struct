@@ -1102,7 +1102,7 @@ class n0dict(n0dict_):
             #--------------------------------
             if node_index == "new()":
                 parent_node, node_name_index, cur_value, xpath_found_str, \
-                    not_found_xpath_list = self._find(xpath_found_str, self, return_lists)
+                    _not_found_xpath_list = self._find(xpath_found_str, self, return_lists)
                 if not isinstance(parent_node[node_name_index], (list, tuple)):
                     parent_node[node_name_index] = n0list([parent_node[node_name_index]])
                 return parent_node[node_name_index], None, None, xpath_found_str, ["[new()]"] + xpath_list[1:]

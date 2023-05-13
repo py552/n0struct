@@ -35,7 +35,7 @@ class n0list_(list):
             raise_exception = False
             if_not_found = ''
         if any(char in xpath for char in "/["):
-            parent_node, node_name_index, cur_value, xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists)
+            _parent_node, _node_name_index, cur_value, xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists)
             if not not_found_xpath_list:
                 return cur_value
             else:
