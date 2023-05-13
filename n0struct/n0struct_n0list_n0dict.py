@@ -1279,7 +1279,7 @@ class n0dict(n0dict_):
             ####################################################################
             # Original code
             if cur_node_index == "new()":
-            # FIXME
+            # FIX ME
             # or (isinstance(parent_node, (list, tuple)) and n0eval(cur_node_index) == len(parent_node)) \
             # or (isinstance(parent_node[cur_node_name], (list, tuple)) and n0eval(cur_node_index) == len(parent_node)[cur_node_name]):
                 if cur_node_name and not isinstance(parent_node[cur_node_name], (list, tuple, n0list)):

@@ -215,7 +215,7 @@ class n0dict__(dict):
                 validate_result = node_value in validate
             else:
                 validate_result = node_value == validate
-        except:
+        except Exception:
             validate_result = False
 
         if validate_result == expected_result_for_error:

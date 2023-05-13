@@ -400,7 +400,7 @@ def catch_exception(func: callable, result_in_case_of_exception: typing.Any = No
         if "result" in kw:
             result = kw.get("result")
         return result
-    except:
+    except Exception:
         return result_in_case_of_exception
 # ******************************************************************************
 # ******************************************************************************
