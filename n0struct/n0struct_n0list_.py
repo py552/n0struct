@@ -97,13 +97,13 @@ class n0list_(list):
             return super(n0list_, self).__getitem__(xpath)
     # # **************************************************************************
     # # def append(self, sigle_item):
-    # # if isinstance(sigle_item, (list,n0list_)):
+    # # if isinstance(sigle_item, (list, n0list_)):
     # # raise (TypeError, f"({type(sigle_item)}){sigle_item} must be scalar")
     # # super(n0list_, self).append(sigle_item)  #append the item to itself (the list)
     # # return self
     # # **************************************************************************
     # # def extend(self, other_list):
-    # # if not isinstance(other_list, (list,n0list_)):
+    # # if not isinstance(other_list, (list, n0list_)):
     # # raise (TypeError, f"({type(sigle_item)}){sigle_item} must be list")
     # # super(n0list_, self).extend(other_list)
     # # return self

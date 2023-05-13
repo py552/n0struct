@@ -2,18 +2,19 @@ import typing
 from pathlib import Path
 from .n0struct_n0list_n0dict import n0dict
 from .n0struct_n0list_n0dict import n0list
+from n0struct import * # required to use external functions in validate_csv_row()
 # ******************************************************************************
 # ******************************************************************************
 def parse_complex_csv_line(
-    line:str,
-    delimiter:str = ',',
-    process_field:callable = lambda field_value: field_value,  # possible to field_value.strip()
-    EOL:str = '\n',
+    line: str,
+    delimiter: str = ',',
+    process_field: callable = lambda field_value: field_value,  # possible to field_value.strip()
+    EOL: str = '\n',
 ) -> list:
     fields_in_the_row = []
     flag_quotes_in_the_begining = flag_expect_delimiter_or_quotes = False
     field_value = ""
-    for offset,ch in enumerate(line.strip(EOL)):
+    for offset, ch in enumerate(line.strip(EOL)):
         if ch == delimiter and (flag_quotes_in_the_begining == False or flag_expect_delimiter_or_quotes == True):
             # The next field is started
             fields_in_the_row.append(process_field(field_value))
@@ -39,24 +40,119 @@ def parse_complex_csv_line(
 # ******************************************************************************
 def load_csv(
     file_name: str,
-    column_names: list = None,
+    column_names: typing.Union[list, tuple, None] = None,
     delimiter: str = ',',
     process_field: typing.Union[callable, None] = None,
+    # process_field == None
+    #   strip_field == False                    lambda field_value: field_value
+    #   strip_field == True                     lambda field_value: field_value.strip()
     EOL: str = '\n',
-    contains_header: typing.Union[bool,str] = False,
-    process_line: typing.Union[callable, None] = None,
+    contains_header: typing.Union[bool, str, list, tuple, None] = None,
+    # contains_header == True || False          ***LEGACY***
+    #   header_is_mandatory == None             Copy value from contains_header into header_is_mandatory
+    #   header_is_mandatory != contains_header  Exception
+    #
+    # contains_header == "???"
+    #   contains_header == row[0]
+    #       column_names == []                  First row is header: column_names as is
+    #       column_names == None                First row is header: column_names = row
+    #   contains_header != row[0]
+    #       header_is_mandatory == False        First row is data
+    #       header_is_mandatory == True         Exception
+    #
+    # contains_header == []
+    #   all(contains_header[i] in row)
+    #       column_names == []                  First row is header: column_names as is
+    #       column_names == None                First row is header: column_names = row
+    #   any(contains_header[i] not in row)
+    #       header_is_mandatory == False        First row is data
+    #       header_is_mandatory == True         Exception
+    #
+    # contains_header == None
+    #   column_names == []
+    #       all(column_names[i] in row)         First row is header: column_names as is
+    #       any(column_names[i] not in row)
+    #           header_is_mandatory == True     Exception
+    #           header_is_mandatory == False    First row is data
+    #   column_names == None
+    #       header_is_mandatory == True         First row is header: column_names = row
+    #       header_is_mandatory == False        First row is data
+    process_line: typing.Union[callable, bool, None] = None,
+    # process_line == None
+    #   strip_line == False                 line_value: line_value.strip()
+    #   strip_line == True                  line_value: line_value
     skip_empty_lines: bool = True,
-    strip_line: typing.Union[bool,callable] = False,
-    strip_field: typing.Union[bool,callable] = False,
-    return_always_list: bool = False,
+    strip_line: typing.Union[bool, callable] = False,
+    strip_field: typing.Union[bool, callable] = False,
     return_original_line: bool = False,
+    # return_original_line == False         Return list/dict of fields
+    # return_original_line == True          Return tuple(list/dict of fields, read line)
     parse_csv_line: callable = parse_complex_csv_line,
-    encoding: str = "utf-8",
-) -> typing.Generator:  # list, typing.Tuple[list, str], dict, typing.Tuple[dict, str]
+    encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
+    read_mode: str = "t",
+    header_is_mandatory: typing.Union[bool, None] = None,
+    # header_is_mandatory == None
+    #   contains_header == True || False    Copy value from contains_header in header_is_mandatory
+    #   contains_header == None             header_is_mandatory = False
+    # header_is_mandatory == False          The first row is header or data row, depends of contains_header/column_names
+    # header_is_mandatory == True
+    #   contains_header == None
+    #       column_names == None            Exception
+    #       column_names == []              All column names from column_names are mandatory
+    #   contains_header == []               All column names from contains_header are mandatory
+    #       column_names == None            The first row is header, column_names = first row
+    #       column_names == []              The first row is header
+) -> typing.Generator:
+    # dict                                  dict of fields got from current read line
+    # typing.Tuple[dict, str]               dict of fields got from current read line, current read line
 
-    if column_names and len(column_names) != len(set(column_names)):
-        raise KeyError(f"Column names {column_names} contains not unique names of columns")
+    ## header_is_mandatory
+    if header_is_mandatory is None:
+        header_is_mandatory = False
+    elif not isinstance(header_is_mandatory, bool):
+        raise SyntaxError(f"Not expectable value in {header_is_mandatory=}. Should be bool or None")
 
+    ## column_names
+    if isinstance(column_names, (list, tuple)):
+        if not column_names:
+            column_names = None
+        else:
+            if len(column_names) != len(set(column_names)):
+                raise SyntaxError(f"Column names {column_names} contains not unique names of columns")
+            elif contains_header:
+                if isinstance(contains_header, str) and column_names[0] != contains_header:
+                    raise SyntaxError(f"Column names {column_names} contains not unique names of columns")
+                elif isinstance(contains_header, (list, tuple)) \
+                     and any(mandatory_column_name not in column_names for mandatory_column_name in contains_header):
+                    raise SyntaxError(f"Mandatory column names {contains_header} are not in expected column names {column_names}")
+    elif column_names is not None:
+        raise SyntaxError(f"Not expectable value in {column_names=}. Should be list/tuple/None")
+
+    ## contains_header
+    if isinstance(contains_header, (str, list, tuple)) and not contains_header:
+        contains_header = None
+    if isinstance(contains_header, bool):
+        ## LEGACY
+        if header_is_mandatory is None:
+            header_is_mandatory = contains_header
+        elif isinstance(header_is_mandatory, bool):
+            if header_is_mandatory != contains_header:
+                raise SyntaxError(f"{contains_header=} must be equal {header_is_mandatory=} if it's bool")
+        contains_header = column_names
+    elif isinstance(contains_header, str):
+        pass
+    elif isinstance(contains_header, (list, tuple)):
+        if len(contains_header) != len(set(contains_header)):
+            raise SyntaxError(f"Column names {contains_header} contains not unique names of columns")
+    elif contains_header is None:
+        contains_header = column_names
+    else:
+        raise SyntaxError(f"Not expectable type of {type(contains_header)} {contains_header=}."
+                         " Should be str (first column name) or list/tuple (mandatory column names) or bool (LEGACY) or None"
+        )
+
+
+    ## process_field
     if not callable(process_field):
         if isinstance(strip_field, bool) and strip_field == True:
             process_field = lambda field_value: field_value.strip()
@@ -65,52 +161,65 @@ def load_csv(
         else:
             process_field = lambda field_value: field_value
 
+    ## process_line
     if not callable(process_line):
         if isinstance(strip_line, bool) and strip_line == True:
-            process_line = lambda field_value: field_value.strip()
+            process_line = lambda line_value: line_value.strip()
         elif callable(strip_line):
             process_line = strip_line
         else:
-            process_line = lambda line: line
+            process_line = lambda line_value: line_value
 
-    if not isinstance(contains_header, (str, bool)):
-        raise ValueError(f"Not expectable value in {contains_header=}. Should be bool or str")
 
-    if not process_line:
-        process_line = lambda line_value: line_value
-    elif isinstance(process_line, bool) and process_line == True:
-        process_line = lambda line_value: line_value.strip()
+    with open(file_name, mode='r'+read_mode, encoding=encoding) as in_file:
+        # skip empty lines at the begining of the file
+        while True:
+            file_offset = in_file.tell()
+            line = in_file.readline()  # removed walrus operator for compatibility with 3.7
+            if not line:
+                raise EOFError("Empty file or file only with spaces")
+            header_line = process_line(line.rstrip(EOL))
+            if header_line:
+                break
 
-    with open(file_name, 'rt', encoding=encoding) as in_file:
+        possible_column_names = parse_csv_line(header_line, delimiter, process_field)
+        # n0debug("possible_column_names")
+        # n0debug("contains_header")
+        # n0debug("header_is_mandatory")
+
+        first_line_is_header = False
         if contains_header:
-            while True:  # skip empty lines at the begining of the file
-                file_offset = in_file.tell()
-                line = in_file.readline()  # removed walrus operator for compatibility with 3.7
-                if not line:
-                    return [] # Empty file or file only with spaces
-                header_line = process_line(line.rstrip(EOL))
-                if header_line:
-                    break
-            possible_column_names = parse_csv_line(header_line, delimiter, process_field)
             if isinstance(contains_header, str):
-                # if contains_header is not boolean, then first line could be header or not
-                # to check if the first line is header, check value of first column
-                # if it's like expected, then the first line is header
                 if possible_column_names[0] != contains_header:
-                    in_file.seek(file_offset) # first line is NOT header, re-read first line as data line
-                    possible_column_names = None
-            else:
-                if column_names:
-                    if isinstance(contains_header, bool):
-                        if set(possible_column_names) != set(column_names):
-                            raise KeyError(f"Expected column names {column_names}, but read {possible_column_names}")
+                    if header_is_mandatory:
+                        raise ReferenceError(f"First line is not header {possible_column_names}. Expected first column '{contains_header}'")
                 else:
-                    if possible_column_names:
-                        # Only in case of
-                        #   contains_header = "first column name",
-                        #   first line contains the header
-                        #   column_names = None
-                        column_names = possible_column_names
+                    first_line_is_header = True
+            elif isinstance(contains_header, (list, tuple)):
+                if any(mandatory_column_name not in possible_column_names for mandatory_column_name in contains_header):
+                    if header_is_mandatory:
+                        raise ReferenceError(f"First line is not header {possible_column_names}. Expected {contains_header}")
+                else:
+                    first_line_is_header = True
+        else:
+            if header_is_mandatory and not column_names:
+                first_line_is_header = True
+
+        # n0debug("first_line_is_header")
+        if not first_line_is_header:
+            in_file.seek(file_offset) # first line is NOT header, re-read first line as data line
+            if column_names:
+                possible_column_names = column_names
+            else:
+                column_names = possible_column_names = [i for i in range(len(possible_column_names))]
+        else:
+            if header_is_mandatory and len(possible_column_names) != len(set(possible_column_names)):
+                raise KeyError(f"Read header {possible_column_names} contains not unique names of columns")
+            if not column_names:
+                column_names = possible_column_names
+        len_possible_column_names = len(possible_column_names)
+        # n0debug("column_names")
+        # n0debug("possible_column_names")
 
         while True:
             line = in_file.readline()  # removed walrus operator for compatibility with 3.7
@@ -119,54 +228,71 @@ def load_csv(
             stripped_line = process_line(line.rstrip(EOL))
             if skip_empty_lines and not stripped_line:
                 continue
-            field_values = parse_csv_line(stripped_line, delimiter, process_field, EOL)
-            if not column_names or return_always_list:
-                if return_original_line:
-                    yield field_values, stripped_line
-                else:
-                    yield field_values
+
+            # removed walrus operator for compatibility with 3.7
+            list_field_values = parse_csv_line(stripped_line, delimiter, process_field, EOL)
+            dict_field_values = n0dict( zip(
+                                    possible_column_names,
+                                    list_field_values
+                                    + [None for i in range(len_possible_column_names - len(list_field_values))]
+            ))
+            if column_names != possible_column_names:
+                # n0debug("column_names")
+                # n0debug("possible_column_names")
+                dict_field_values = n0dict({
+                    key: dict_field_values[key]
+                    for key in column_names
+                })
+            # n0debug("dict_field_values")
+            # n0debug("return_original_line")
+            if return_original_line:
+                yield dict_field_values, stripped_line
             else:
-                if return_original_line:
-                    yield n0dict(zip(column_names, field_values)), stripped_line
-                else:
-                    yield n0dict(zip(column_names, field_values))
+                yield dict_field_values
 # ******************************************************************************
 load_complex_csv = load_csv  # Synonym
 # ******************************************************************************
 def load_simple_csv(
     file_name: str,
-    column_names: list = None,
+    column_names: typing.Union[list, tuple, None] = None,
     delimiter: str = ',',
     process_field: typing.Union[callable, None] = None,
     EOL: str = '\n',
-    contains_header: typing.Union[bool,str] = False,
-    process_line: typing.Union[callable, None] = None,
+    contains_header: typing.Union[bool, str, list, tuple, None] = None,
+    process_line: typing.Union[callable, bool, None] = None,
     skip_empty_lines: bool = True,
-    strip_line: typing.Union[bool,callable] = False,
-    strip_field: typing.Union[bool,callable] = False,
-    return_always_list: bool = False,
+    strip_line: typing.Union[bool, callable] = False,
+    strip_field: typing.Union[bool, callable] = False,
     return_original_line: bool = False,
-) -> typing.Generator:  # list, typing.Tuple[list, str], dict, typing.Tuple[dict, str]
+    parse_csv_line: callable = lambda line, delimiter, process_field: [process_field(field_value) for field_value in line.split(delimiter)],
+    encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
+    read_mode: str = "t",
+    header_is_mandatory: typing.Union[bool, None] = None,
+) -> typing.Generator:
+    # dict                                  dict of fields got from current read line
+    # typing.Tuple[dict, str]               dict of fields got from current read line, current read line
     return load_csv(
-        file_name               = file_name,
-        column_names            = column_names,
-        delimiter               = delimiter,
-        process_field           = process_field,
-        EOL                     = EOL,
-        contains_header         = contains_header,
-        process_line            = process_line,
-        skip_empty_lines        = skip_empty_lines,
-        strip_line              = strip_line,
-        strip_field             = strip_field,
-        return_always_list      = return_always_list,
-        return_original_line    = return_original_line,
-        parse_csv_line          = lambda line, delimiter, process_field: [process_field(field_value) for field_value in line.split(delimiter)],
+        file_name            = file_name,
+        column_names         = column_names,
+        delimiter            = delimiter,
+        process_field        = process_field,
+        EOL                  = EOL,
+        contains_header      = contains_header,
+        process_line         = process_line,
+        skip_empty_lines     = skip_empty_lines,
+        strip_line           = strip_line,
+        strip_field          = strip_field,
+        return_original_line = return_original_line,
+        parse_csv_line       = parse_csv_line,
+        encoding             = encoding,
+        read_mode            = read_mode,
+        header_is_mandatory  = header_is_mandatory,
     )
 # ******************************************************************************
 def generate_comlex_csv_row(
-    row:list,
-    delimiter:str = ',',
-    EOL:str = '\n',
+    row: list,
+    delimiter: str = ',',
+    EOL: str = '\n',
 ) -> str:
     generated_csv_row = ""
     for field_value in row:
@@ -182,12 +308,12 @@ def generate_comlex_csv_row(
     return generated_csv_row[:-len(delimiter)] + EOL
 # ******************************************************************************
 def generate_csv(
-    root_node:dict,
-    list_xpath:str,
-    mapping_dict:dict = None,
-    save_to:str = None,
-    delimiter:str = ',',
-    show_header:bool = True
+    root_node: dict,
+    list_xpath: str,
+    mapping_dict: dict = None,
+    save_to: str = None,
+    delimiter: str = ',',
+    show_header: bool = True
 ) -> list:
     '''
     Samples:
@@ -253,7 +379,7 @@ def generate_csv(
     if list_of_items:
         if mapping_dict is None:
             if isinstance(list_of_items[0], list):
-                header = [str(i) for i in range(0,len(list_of_items[0]))]
+                header = [str(i) for i in range(0, len(list_of_items[0]))]
             elif isinstance(list_of_items[0], dict):
                 header = list(list_of_items[0].keys())
             mapping_dict = {column_name: column_name for column_name in header}
@@ -295,7 +421,7 @@ def remove_colums_in_csv(
     csv_schema: dict = None,
     are_required: bool = False
 ):
-    if all([isinstance(column_to_remove,int) for column_to_remove in columns_to_remove]) \
+    if all([isinstance(column_to_remove, int) for column_to_remove in columns_to_remove]) \
        and len(csv_rows) and isinstance(csv_rows[0], list):
         columns_to_remove.sort(reverse=True) # delete firstly last elements in the list
 
@@ -359,6 +485,8 @@ def validate_csv_row(
     csv_schema: dict,
     external_variables = {},
     interrupt_after_first_fail: bool = False,
+    row_i: int = None,
+    rows_count: int = 0,
 ):
     '''
     row:
@@ -402,7 +530,7 @@ def validate_csv_row(
     max_items = int(csv_schema.get("maxItems", 9999))   # removed walrus operator for compatibility with 3.7
     if columns_count > max_items:
         failed_validations[the_whole_row_related_validations].append(f"Maximum {max_items} columns expected, but got {columns_count}")
-        
+
     required_columns = csv_schema.get("required")       # removed walrus operator for compatibility with 3.7
     if required_columns and isinstance(required_columns, (list, tuple)):
         for required_column in required_columns:
@@ -415,14 +543,18 @@ def validate_csv_row(
 
     mapped_values = {**external_variables, **{f'value_{column_name}': row[column_name] for column_name in row}}
 
+    row_last = rows_count - 1
     for column_name in row:
         field_value = row[column_name]
         column_schema = csv_schema.first(f"items/[id={column_name}]")
-        mapped_values.update({
+        mapped_values.update({  # Used in validation_lambda/validation_msg
             'column_name': column_name,
             'column_value': field_value,  # Legacy
             'field_value': field_value,
             'column_schema': column_schema,
+            'row_i': row_i,
+            'rows_count': rows_count,
+            'row_last': row_last,
         })
 
         if column_schema.get('mandatory', False) and not field_value:
@@ -431,7 +563,7 @@ def validate_csv_row(
 
         for validation in column_schema.get('validations', ()):
             validation_msg = None
-            if isinstance(validation, (list,tuple)):
+            if isinstance(validation, (list, tuple)):
                 validation_lambda = validation[0]
                 if len(validation) >= 2:
                     validation_msg = validation[1]
@@ -440,16 +572,18 @@ def validate_csv_row(
 
             is_valid = False
             try:
-                lambda_function_for_validation = eval("lambda field_value, row: " + validation_lambda.format(**mapped_values))
+                lambda_function_for_validation = eval(
+                    "lambda column_name, field_value, row, row_i, row_last: " + validation_lambda.format(**mapped_values)
+                )
             except Exception as ex1:
                 validation_msg = f"Not passed validation #1 for '{column_name}': " + str(ex1)
             else:
                 try:
-                    is_valid = lambda_function_for_validation(field_value, row)
+                    is_valid = lambda_function_for_validation(column_name, field_value, row, row_i, row_last)
                 except Exception as ex2:
                     validation_msg = f"Not passed validation #2 for '{column_name}': " + str(ex2)
-                    
-            if is_valid == False:
+
+            if not is_valid:
                 if column_name not in failed_validations:
                     failed_validations.update({column_name: []})
 

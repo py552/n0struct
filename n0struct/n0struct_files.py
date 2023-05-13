@@ -9,7 +9,7 @@ from .n0struct_utils import isnumber
 def load_file(
                 file_path: str,
                 mode: str = 't',
-                encoding: str = "utf-8",
+                encoding: typing.Union[str, bytes] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
 ) -> str:
     if mode == 'b':
         encoding = None
@@ -19,14 +19,22 @@ def load_file(
 def load_lines(
                 file_path: str,
                 mode: str = 't',
-                encoding: str = "utf-8",
+                encoding: str = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
                 EOL: str = '\n',
 ) -> typing.Generator:
     if mode == 'b':
         # Impossible to mix return and yield under single function
-        for line in load_file(file_path, mode=mode).split(bytes(EOL, encoding=encoding)):
+        if isinstance(EOL, str):
+            EOL = bytes(EOL, encoding="utf-8")
+        elif not isinstance(EOL, bytes):
+            raise TypeError(f"{EOL=} could be str or bytes for {mode=}")
+        for line in load_file(file_path, mode=mode, encoding=encoding).split(EOL):
             yield line
     else:
+        if isinstance(EOL, bytes):
+            EOL = EOL.decode("utf-8-sig")
+        elif not isinstance(EOL, str):
+            raise TypeError(f"{EOL=} could be str or bytes for {mode=}")
         with open(file_path, 'rt', encoding=encoding) as in_filehandler:
             while True:
                 line = in_filehandler.readline()
@@ -38,7 +46,7 @@ def save_file(
                 file_path: str,
                 lines: typing.Union[tuple, list, dict, str, bytes, bytearray],
                 mode: str = 't',
-                encoding: str = "utf-8",
+                encoding: str = "utf-8",  # without UTF-8 BOM (Byte Order Mark)
                 EOL: str = '\n',
                 equal_tag: str = "=",
 ):

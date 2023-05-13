@@ -33,7 +33,7 @@ def findfirst(current_node: typing.Union[dict, list], seeked_xpath_str: str, rai
         if raise_exception:
             raise IndexError(f"Not found item {seeked_xpath_str}")
         else:
-            return None,None
+            return None, None
     elif len(found) > 1 and raise_exception:
         raise IndexError(f"Found more that single item {seeked_xpath_str}")  # In case of more than 1 found
             
@@ -129,7 +129,7 @@ def _findall(
                     condition_delimiter = '<>'
                 else:
                     raise TypeError(f"Unknown logic condition [{child_index}] in '{str(seeked_xpath_list[0])}'")
-                before_condition,after_condition = child_index.split(condition_delimiter, 1)
+                before_condition, after_condition = child_index.split(condition_delimiter, 1)
                 value_for_condition = after_condition.strip()
                 if len(value_for_condition) > 1 and \
                    (

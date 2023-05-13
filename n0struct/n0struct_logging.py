@@ -10,19 +10,19 @@ from .n0struct_date import date_timestamp
 # __prev_end = "\n"
 
 __debug_show_object_type = True
-def set_debug_show_object_type(debug_show_object_type:bool):
+def set_debug_show_object_type(debug_show_object_type: bool):
     global __debug_show_object_type
     __debug_show_object_type = debug_show_object_type
 
 
 __debug_show_object_id = True
-def set_debug_show_object_id(debug_show_object_id:bool):
+def set_debug_show_object_id(debug_show_object_id: bool):
     global __debug_show_object_id
     __debug_show_object_id = debug_show_object_id
 
 
 __debug_show_item_count = True
-def set_debug_show_item_count(debug_show_item_count:bool):
+def set_debug_show_item_count(debug_show_item_count: bool):
     global __debug_show_item_count
     __debug_show_item_count = debug_show_item_count
 
@@ -95,15 +95,15 @@ def n0error(text: str, internal_call: int = 0):
 def n0pretty(
             item: typing.Any,
             indent_: int = 0,
-            show_type:bool = None,
+            show_type: bool = None,
             __indent_size: int = 4,
-            __quotes:str = '"',
-            pairs_in_one_line:bool = True,
-            json_convention:bool = False,
-            skip_empty_arrays:bool = False,
-            skip_simple_types:bool = True,
-            auto_quotes:bool = True,
-            show_item_count:bool = None,
+            __quotes: str = '"',
+            pairs_in_one_line: bool = True,
+            json_convention: bool = False,
+            skip_empty_arrays: bool = False,
+            skip_simple_types: bool = True,
+            auto_quotes: bool = True,
+            show_item_count: bool = None,
 ):
     """
     :param item:
@@ -296,7 +296,7 @@ def n0pretty(
                 class_type_parts = result_type.split('.')
                 if len(class_type_parts) > 2:
                     # leave just only first and last class names
-                    result_type = ".".join((class_type_parts[0],class_type_parts[-1]))
+                    result_type = ".".join((class_type_parts[0], class_type_parts[-1]))
 
             if isinstance(item, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
                 result_type += f" {len(item)}"
@@ -340,13 +340,13 @@ def n0pretty(
     return result
 # ******************************************************************************
 def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_call: int = 0,
-            show_type:bool = None,
-            pairs_in_one_line:bool = True,
-            json_convention:bool = False,
-            skip_empty_arrays:bool = False,
-            skip_simple_types:bool = True,
-            auto_quotes:bool = True,
-            show_item_count:bool = None,
+            show_type: bool = None,
+            pairs_in_one_line: bool = True,
+            json_convention: bool = False,
+            skip_empty_arrays: bool = False,
+            skip_simple_types: bool = True,
+            auto_quotes: bool = True,
+            show_item_count: bool = None,
 ):
     """
     Print  calculated value (for example returned by function),
@@ -389,13 +389,13 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
 # ******************************************************************************
 def n0debug(var_name: str, level: str = "DEBUG",
 
-            show_type:bool = None,
-            pairs_in_one_line:bool = True,
-            json_convention:bool = False,
-            skip_empty_arrays:bool = False,
-            skip_simple_types:bool = True,
-            auto_quotes:bool = True,
-            show_item_count:bool = None,
+            show_type: bool = None,
+            pairs_in_one_line: bool = True,
+            json_convention: bool = False,
+            skip_empty_arrays: bool = False,
+            skip_simple_types: bool = True,
+            auto_quotes: bool = True,
+            show_item_count: bool = None,
 ):
     """
     Print value of the variable with name {var_name},
@@ -405,7 +405,7 @@ def n0debug(var_name: str, level: str = "DEBUG",
     :param level:
     :return:
     """
-    if not isinstance(var_name,str):
+    if not isinstance(var_name, str):
         raise TypeError("incorrect call of n0debug(..): argument MUST BE string")
 
     __f_locals = inspect.currentframe().f_back.f_locals

@@ -11,7 +11,7 @@ def load_ini(
                 parse_key: typing.Callable = lambda key_value, default_key: key_value[0].strip().upper(),
                 parse_value: typing.Callable = lambda key_value, default_value:
                                                         (
-                                                            round(float(stripped_value),7)
+                                                            round(float(stripped_value), 7)
                                                             if '.' in stripped_value
                                                             else int(stripped_value)
                                                         )

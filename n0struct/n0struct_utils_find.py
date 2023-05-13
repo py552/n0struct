@@ -19,14 +19,14 @@ def split_name_index(node_name: str) -> typing.Tuple[
         node_index_str = node_index_str.strip()
         if node_index_str:
             if node_index_str.lower().startswith('contains') and node_index_str.endswith(')'):
-                node_index_part1, node_index_part2 = node_index_str[8:-1].strip().split('(',1)[1].split(',',1)
+                node_index_part1, node_index_part2 = node_index_str[8:-1].strip().split('(', 1)[1].split(',', 1)
                 if node_index_part1.lower().startswith('text'):
                     node_index_str = "text()~~" + node_index_part2
             if '=' in node_index_str or '~' in node_index_str:
                 delimiters = ("==","!=","~~","!~","~","=")
                 for delimiter in delimiters:
                     if delimiter in node_index_str:
-                        expected_node_name, expected_value = node_index_str.split(delimiter,1)
+                        expected_node_name, expected_value = node_index_str.split(delimiter, 1)
                         expected_node_name = expected_node_name.strip()
                         expected_value = expected_value.strip()
                         if delimiter == '=':

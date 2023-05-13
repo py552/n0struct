@@ -93,7 +93,7 @@ def deserialize_list(
 
     separated_items = buffer_str.split(delimiter)
     deserialized_list = []
-    for item_index,item in enumerate(separated_items):
+    for item_index, item in enumerate(separated_items):
         if item or parse_empty:
             parsed_item = parse_item(item, item_index = item_index, separated_items = separated_items, previous_items = deserialized_list)
             deserialized_list.append(parsed_item)
@@ -108,7 +108,7 @@ def deserialize_key_value(
 # Sample of definition:
 #   lambda key_value, parsed_value: parsed_value.get('SQL_FILE') if isinstance(parsed_value, dict) else key_value
                         default_key: typing.Union[typing.Callable, typing.Any, None] = None,
-                        
+
                         parse_value: typing.Callable = lambda key_value, default_value: key_value[1],
 # Sample of calling:
 #   default_value(key_value, parsed_key)
@@ -129,7 +129,7 @@ def deserialize_key_value(
         return default_tuple_result or tuple()
 
     key_value = buffer_str.split(equal_tag, 1)
-    
+
     parsed_key = None
     parsed_value = None
     if len(key_value) < 2:
@@ -151,7 +151,7 @@ def deserialize_key_value(
             parse_value = lambda key_value, default_value: key_value[1]
     parsed_key = parse_key(key_value, (default_key(key_value, key_value[1]) if callable(default_key) else default_key) )
     parsed_value = parse_value(key_value, default_value(key_value, parsed_key) if callable(default_value) else default_value)
-    
+
     return parsed_key, parsed_value
 # ******************************************************************************
 def deserialize_dict(
@@ -178,7 +178,7 @@ def deserialize_dict(
                             buffer_str,
                             delimiter,
                             parse_item = parse_item or (
-                                            lambda item, item_index, separated_items, previous_items: 
+                                            lambda item, item_index, separated_items, previous_items:
                                                 deserialize_key_value(
                                                     item,
                                                     equal_tag = equal_tag,
@@ -380,5 +380,27 @@ def validate_values(value: str,
     if isinstance(raise_if_not_found, Exception):
         raise raise_if_not_found
     return possible_values_the_last_is_default[-1]
+# ******************************************************************************
+def raise_exception(ex: Exception):
+    raise ex
+# ******************************************************************************
+def catch_exception(func: callable, result_in_case_of_exception: typing.Any = None, **kw):
+    """
+    args == tuple, kw == mapping(dictionary)
+
+    * == convert from tuple into list of arguments
+    ** == convert from mapping into list of named arguments
+
+    :param args:
+    :param kw:
+        result:typing.Any => if defined, return {result} in case of no exception
+    """
+    try:
+        result = func()
+        if "result" in kw:
+            result = kw.get("result")
+        return result
+    except:
+        return result_in_case_of_exception
 # ******************************************************************************
 # ******************************************************************************

@@ -144,7 +144,7 @@ class n0dict__(dict):
     # **************************************************************************
     def delete(self, xpath: str, recursively: bool = False) -> n0dict__:
         xpath_list = xpath.split('/')
-        for i,last_xpath_index in enumerate(range(len(xpath_list), 0, -1)):
+        for i, last_xpath_index in enumerate(range(len(xpath_list), 0, -1)):
             parent_node, node_name_index, cur_value, xpath_found_str, not_found_xpath_list = \
                 self._find(xpath_list[0:last_xpath_index], self, return_lists=True)
             if i == 0 or (
@@ -182,7 +182,7 @@ class n0dict__(dict):
     def all_not_valid(self, validate):
         return not self._consists_of(validate, True)
     # **************************************************************************
-    def valid(self, node_xpath:str, validate, expected_result_for_error: bool = False, msg:str = None):
+    def valid(self, node_xpath: str, validate, expected_result_for_error: bool = False, msg: str = None):
         """
         :param node_xpath:
             xpath to the node inside self
@@ -195,17 +195,17 @@ class n0dict__(dict):
         :return:
 
         Examples:
-            xml.valid('node/subnode', ["",None], True, "ERROR")
+            xml.valid('node/subnode', ["", None], True, "ERROR")
                 If xml['node/subnode'] is equal "" or None (result of comparising is True), then return ERROR, else ""
-            xml.valid('node/subnode', ["",None], True)
+            xml.valid('node/subnode', ["", None], True)
                 If xml['node/subnode'] is equal "" or None (result of comparising is True), then return False (not valid), else True
             xml.valid('node/subnode', "", True)
                 If xml['node/subnode'] is equal "" (result of comparising is True), then return False (not valid), else True
-            xml.valid('node/subnode', [1,2], False, "ERROR")
+            xml.valid('node/subnode', [1, 2], False, "ERROR")
                 If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return ERROR, else ""
-            xml.valid('node/subnode', [1,2], False)
+            xml.valid('node/subnode', [1, 2], False)
                 If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
-            xml.valid('node/subnode', [1,2])
+            xml.valid('node/subnode', [1, 2])
                 If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
         """
         try:

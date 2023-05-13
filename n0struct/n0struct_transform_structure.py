@@ -1,7 +1,7 @@
 from .n0struct_utils import isnumber
 # ******************************************************************************
 # ******************************************************************************
-strip_ns = lambda key: key.split(':',1)[1] if ':' in key else key
+strip_ns = lambda key: key.split(':', 1)[1] if ':' in key else key
 # ******************************************************************************
 '''
 # Sample
@@ -13,7 +13,7 @@ keys_for_currency_convertion = {
 sample: def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
 '''
 # ******************************************************************************
-def convert_to_native_format(value, key = None, exception: set = None, transform_depends_of_key:dict = None):
+def convert_to_native_format(value, key = None, exception: set = None, transform_depends_of_key: dict = None):
     if key is not None:
         if exception and key in exception:
             return value

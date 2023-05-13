@@ -4,14 +4,14 @@ import typing
 def split_pair(
                 in_str: str,
                 delimiter: str,
-                transform_left: callable = lambda x:x,
-                transform_right: callable = lambda x:x,
+                transform_left: callable = lambda x: x,
+                transform_right: callable = lambda x: x,
                 default_element: int = 1,
                 default_left: typing.Any = None,
                 default_right: typing.Any = None,
 ) -> tuple:
     """
-    split_pair(in_str: str, delimiter: str, transform_left: callable = lambda x:x, transform_right: callable = lambda x:x, default_element: int = 1) -> tuple:
+    split_pair(in_str: str, delimiter: str, transform_left: callable = lambda x: x, transform_right: callable = lambda x: x, default_element: int = 1) -> tuple:
 
     split string into 2 sub strings in any cases:
         '' by '://'                                     => (default_left, default_right)
@@ -35,7 +35,7 @@ def split_pair(
 # ******************************************************************************
 def join_triplets(
                     in_list: typing.Union[None, str, tuple, list],
-                    level:int = 0
+                    level: int = 0
 ) -> str:
     """
     join_triplets(in_list: typing.Union[None, str, tuple, list], level = 0) -> str:
@@ -62,7 +62,7 @@ def join_triplets(
             if isinstance(in_list[1], str):
                 result = out_list[0] +  (out_list[1] if out_list[0] and out_list[2] else "") + out_list[2]
             else:
-                if not isinstance(in_list[1], (tuple, list)) or len(in_list[1]) not in (1,2):
+                if not isinstance(in_list[1], (tuple, list)) or len(in_list[1]) not in (1, 2):
                     raise TypeError(f"{type(in_list[1])} '{in_list[1]}' is not correct delimiter")
                 if len(in_list[1]) == 2 and not in_list[1][0]:
                     result = out_list[0] +  (out_list[1] if out_list[2] else "") + out_list[2]

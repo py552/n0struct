@@ -121,7 +121,7 @@ class n0list(n0list_):
             if node_index_str == "*":
                 cur_values = n0list()
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
-                for i,next_parent_node in enumerate(parent_node):
+                for i, next_parent_node in enumerate(parent_node):
                     if isinstance(next_parent_node, dict):
                         cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                             cur_not_found_xpath_list = n0dict._find(next_parent_node, xpath_list[1:], next_parent_node, return_lists,  xpath_found_str + f"[{i}]")
@@ -653,11 +653,9 @@ class n0dict(n0dict_):
         if not len__args:
             _file = kw.pop("file", None)
             if _file:
-                with open(_file, "rb") as in_filehandler:
-                    buffer_bytes = in_filehandler.read()
-                    if buffer_bytes[:3] == b'\xEF\xBB\xBF': # UTF-8 BOM (Byte Order Mark)
-                        buffer_bytes = buffer_bytes[3:]
-                    self.__init__(buffer_bytes.decode('utf-8').strip(), **kw)
+                _encoding = kw.pop("encoding", "utf-8-sig") # with possible UTF-8 BOM (Byte Order Mark)
+                with open(_file, "rt", encoding=_encoding) as in_filehandler:
+                    self.__init__(in_filehandler.read().strip(), **kw)
             else:
                 super(n0dict, self).__init__(*args, **kw)
         elif len__args == 1:
@@ -695,14 +693,14 @@ class n0dict(n0dict_):
             elif isinstance(args[0], (list, tuple)):
                 # [key1, value1, key2, value2, ..., keyN, valueN]
                 if (len(args[0]) % 2) == 0 and all(isinstance(itm, str) for itm in args[0][0::2]):
-                    for key, value in zip(args[0][0::2],args[0][1::2]):
+                    for key, value in zip(args[0][0::2], args[0][1::2]):
                         self.update({key: value})
                 # [(key1, value1), (key2, value2), ..., (keyN, valueN)]
-                elif all(isinstance(itm, (tuple,list)) and len(itm) == 2 and isinstance(itm[0], str) for itm in args[0]):
+                elif all(isinstance(itm, (tuple, list)) and len(itm) == 2 and isinstance(itm[0], str) for itm in args[0]):
                     for pair in args[0]:
                         self.update({pair[0]: pair[1]})
                 else:
-                    raise TypeError(f"Expected even strings in the list [k1,v1,k2,v2] or list of pairs [[k1,v1],[k2,v2]] as argument for n0dict.__init__({args})")
+                    raise TypeError(f"Expected even strings in the list [k1, v1, k2, v2] or list of pairs [[k1, v1],[k2, v2]] as argument for n0dict.__init__({args})")
             elif isinstance(args[0], zip):
                 for key, value in args[0]:
                     self.update({key: value})
@@ -1117,7 +1115,7 @@ class n0dict(n0dict_):
                     parent_node = [parent_node]
                 cur_values = n0list()
                 fst_parent_node = fst_node_name_index = fst_value = fst_found_xpath_str = None
-                for i,cur_node in enumerate(parent_node):
+                for i, cur_node in enumerate(parent_node):
                     cur_parent_node, cur_node_name_index, cur_value, cur_found_xpath_str, \
                         cur_not_found_xpath_list = self._find([f"[{i}]"] + xpath_list[1:], parent_node, return_lists, xpath_found_str)
                     if not cur_not_found_xpath_list:
@@ -1365,7 +1363,7 @@ class n0dict(n0dict_):
         elif isinstance(xpath, str) and new_value is not None:
             multi_define(xpath, new_value)
         else:
-            raise TypeError(f"Received (type(xpath),{type(new_value)}) as argument, but expected (key,value) or (dict).")
+            raise TypeError(f"Received (type(xpath),{type(new_value)}) as argument, but expected (key, value) or (dict).")
         return self
 # ******************************************************************************
 # ******************************************************************************

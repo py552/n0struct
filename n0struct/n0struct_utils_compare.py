@@ -19,7 +19,7 @@ __flag_compare_return_difference_of_values = False
 def set__flag_compare_return_difference_of_values(value: bool):
     """
     if __flag_compare_return_difference_of_values == True, then
-    if values of attributes are different and are int,float,
+    if values of attributes are different and are int, float,
     return additional element in result["not_equal"] with difference
     """
     global __flag_compare_return_difference_of_values

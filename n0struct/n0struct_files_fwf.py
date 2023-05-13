@@ -19,7 +19,7 @@ def load_fwf_format(file_path: str):
     # fwf_format file is csv file, contains columns:
     #   #,name,offset,size,till
     loaded_format = load_csv(file_path)
-    for i,column in enumerate(loaded_format):
+    for i, column in enumerate(loaded_format):
         loaded_format[i]['offset'] = to_int(column['offset'], default_value = None)
         loaded_format[i]['till']   = to_int(column['till'], default_value = None)
         loaded_format[i]['size']   = to_int(column['size'], default_value = None)
@@ -50,7 +50,7 @@ def parse_fwf_line(incoming_row: str, fwf_format: dict, validate: bool = True):
             
     return parsed_line
 # ******************************************************************************
-def load_fwf(file_path:str, header_format: dict, body_format: dict = None, tail_format: dict = None, validate: bool = True):
+def load_fwf(file_path: str, header_format: dict, body_format: dict = None, tail_format: dict = None, validate: bool = True):
     success_parsed_lines = []
     failed_lines = []
     if not header_format:
@@ -78,7 +78,7 @@ def load_fwf(file_path:str, header_format: dict, body_format: dict = None, tail_
                 failed_lines.append(parsed_line)
     return success_parsed_lines, failed_lines
 # ******************************************************************************
-def generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler:str = ' '):
+def generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler: str = ' '):
     if not fwf_format:
         raise SyntaxError("fwf_format is mandatory parameter")
 
@@ -103,7 +103,7 @@ def generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler:str = ' '):
 
     return rendered_line
 # ******************************************************************************
-def generate_fwf(root_node:dict, list_xpath:str, mapping_dict:dict, fwf_format: dict, save_to:str = None, filler:str = ' ') -> list:
+def generate_fwf(root_node: dict, list_xpath: str, mapping_dict: dict, fwf_format: dict, save_to: str = None, filler: str = ' ') -> list:
     if isinstance(root_node, (list, tuple)):
         list_of_items = root_node
     else:
@@ -116,7 +116,7 @@ def generate_fwf(root_node:dict, list_xpath:str, mapping_dict:dict, fwf_format: 
     if list_of_items:
         if mapping_dict is None:
             if isinstance(list_of_items[0], list):
-                header = [str(i) for i in range(0,len(list_of_items[0]))]
+                header = [str(i) for i in range(0, len(list_of_items[0]))]
             elif isinstance(list_of_items[0], dict):
                 header = list(list_of_items[0].keys())
             mapping_dict = {column_name: column_name for column_name in header}
