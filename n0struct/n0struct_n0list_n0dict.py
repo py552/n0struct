@@ -146,7 +146,7 @@ class n0list(n0list_):
             else:
                 try:
                     node_index_int = n0eval(node_index_str)
-                except:
+                except Exception:
                     raise IndexError(f"Unknown index '{xpath_found_str}[{node_index_str}]'")
 
                 if isinstance(parent_node, (list, tuple)):

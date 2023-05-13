@@ -273,11 +273,10 @@ class n0dict__(dict):
             validation_results.update({"difftypes": []})
 
         # TO DO: redo with 'in'
-        try:
+        with contextlib.suppress(Exception):
             if self[xpath]:
                 return validation_results
-        except:
-            pass
+
         validation_results["differences"].append(f"[{xpath}] doesn't exist")
         validation_results["other_unique"].append((xpath, None))
         return validation_results
@@ -315,11 +314,11 @@ class n0dict__(dict):
         validation_results = self.isExist(xpath)
         if notemptyitems(validation_results):
             return validation_results
-        try:
+
+        with contextlib.suppress(Exception):
             if self[xpath] == value:
                 return []
-        except:
-            pass
+
         validation_results["differences"].append(f"[{xpath}]=='{self[xpath]}' != '{value}'")
         validation_results["not_equal"].append((xpath, (self[xpath], value)))
         return validation_results
@@ -334,12 +333,12 @@ class n0dict__(dict):
         validation_results = self.isExist(xpath).update_extend(other_n0dict.isExist(other_xpath))
         if notemptyitems(validation_results):
             return validation_results
-            
+
         with contextlib.suppress(Exception):
             if transformation(self[xpath]) == transformation(other_n0dict[other_xpath]):
                 return validation_results
         ## n0print("EXCEPTION in 'if transformation(self[xpath]) == (other_n0dict[other_xpath]):'")
-            
+
         validation_results["differences"].append(
             f"[{xpath}]=='{transformation(self[xpath])}' != [{other_xpath}]=='{transformation(other_n0dict[other_xpath])}'"
         )
