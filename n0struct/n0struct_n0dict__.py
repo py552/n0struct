@@ -288,14 +288,6 @@ class n0dict__(dict):
         Public function: return True, if self[xpath] exists
         """
         # TO DO: redo with 'in'
-        '''
-        try:
-            if self[xpath]:
-                return True
-        except:
-            pass
-        return False
-        '''
         with contextlib.suppress(Exception):
             if self[xpath]:
                 return True
@@ -342,12 +334,12 @@ class n0dict__(dict):
         validation_results = self.isExist(xpath).update_extend(other_n0dict.isExist(other_xpath))
         if notemptyitems(validation_results):
             return validation_results
-        try:
+            
+        with contextlib.suppress(Exception):
             if transformation(self[xpath]) == transformation(other_n0dict[other_xpath]):
                 return validation_results
-        except:
-            # n0print("EXCEPTION in 'if transformation(self[xpath]) == transformation(other_n0dict[other_xpath]):'")
-            pass
+        ## n0print("EXCEPTION in 'if transformation(self[xpath]) == (other_n0dict[other_xpath]):'")
+            
         validation_results["differences"].append(
             f"[{xpath}]=='{transformation(self[xpath])}' != [{other_xpath}]=='{transformation(other_n0dict[other_xpath])}'"
         )

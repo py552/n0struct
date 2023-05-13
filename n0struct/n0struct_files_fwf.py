@@ -120,8 +120,6 @@ def generate_fwf(root_node: dict, list_xpath: str, mapping_dict: dict, fwf_forma
             elif isinstance(list_of_items[0], dict):
                 header = list(list_of_items[0].keys())
             mapping_dict = {column_name: column_name for column_name in header}
-        else:
-            header = list(mapping_dict.keys())
 
         for found_item in list_of_items:  # found_item == row in case of CSV list or item node in case of XML structure
             if isinstance(found_item, dict):

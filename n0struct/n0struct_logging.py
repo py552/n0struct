@@ -357,18 +357,17 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
     :param level:
     :return:
     """
-    ## prefix = (
-    ##             (str(type(var_object)) or "").replace("<class '", "<").replace("'>", ">")
-    ##             if __debug_show_object_type
-    ##             else ""
-    ##          ) + (
-    ##             f" id={id(var_object)}" 
-    ##             if __debug_show_object_id 
-    ##             else ""
-    ##          )
-    ## if prefix:
-    ##     prefix += " "
-    prefix = ""
+    prefix = (
+                (str(type(var_object)) or "").replace("<class '", "<").replace("'>", ">")
+                if __debug_show_object_type
+                else ""
+             ) + (
+                f" id={id(var_object)}"
+                if __debug_show_object_id
+                else ""
+             )
+    if prefix:
+        prefix += " "
 
     n0print(
         f"{prefix}{var_name}{' == ' if prefix or var_name else ''}" +
@@ -431,13 +430,15 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
     class_attribs = set()
     class_methods = set()
 
-    prefix = str(type(class_object)) \
-             if __debug_show_object_type \
-             else (
-                 f" id={id(class_object)}"
-                 if __debug_show_object_id
-                 else ""
-             )
+    prefix = (
+        str(type(class_object))
+        if __debug_show_object_type
+        else (
+             f" id={id(class_object)}"
+             if __debug_show_object_id
+             else ""
+        )
+    )
     if prefix:
         prefix = "(" + prefix + ")"
     to_print = f"{prefix}{object_name} == \n"

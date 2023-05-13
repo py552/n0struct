@@ -4,23 +4,12 @@ mydir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, mydir)
 sys.path.insert(0, mydir+"/../")
 sys.path.insert(0, mydir+"/../../")
-from n0struct import *
-# from n0struct import (
-    # n0print,
-    # n0debug,
-    # # n0debug_calc,
-    # # set__flag_compare_check_different_types,
-    # # set__flag_compare_return_difference_of_values,
-    # # init_logger,
-    
-    # # deserialize_list,
-    # # deserialize_fixed_list,
-    # # deserialize_dict,
-    # # get_value_by_tag,
-    # # deserialize_list_of_lists,
-    # load_ini,
-    # save_file,
-# )
+# from n0struct import *
+from n0struct import (
+    n0dict,
+    n0print,
+    n0debug,
+)
 
 # ******************************************************************************
 dict1 = n0dict({

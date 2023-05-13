@@ -82,8 +82,6 @@ def test_sorted_lists():
     n0print("="*80)
     n0debug("differences2_wise_compare")
     assert differences1_direct_compare["differences"]  == differences2_wise_compare["differences"]
-    # n0debug_calc(differences1_direct_compare["not_equal"],  'differences1_direct_compare["not_equal"]')
-    # n0debug_calc(differences2_wise_compare["not_equal"],    'differences2_wise_compare["not_equal"]')
     assert differences1_direct_compare["not_equal"]    == differences2_wise_compare["not_equal"]
     assert differences1_direct_compare["difftypes"]    == differences2_wise_compare["difftypes"]
     assert differences1_direct_compare["other_unique"] == differences2_wise_compare["other_unique"]

@@ -139,14 +139,12 @@ def load_csv(
             if header_is_mandatory != contains_header:
                 raise SyntaxError(f"{contains_header=} must be equal {header_is_mandatory=} if it's bool")
         contains_header = column_names
-    elif isinstance(contains_header, str):
-        pass
     elif isinstance(contains_header, (list, tuple)):
         if len(contains_header) != len(set(contains_header)):
             raise SyntaxError(f"Column names {contains_header} contains not unique names of columns")
     elif contains_header is None:
         contains_header = column_names
-    else:
+    elif not isinstance(contains_header, str):
         raise SyntaxError(f"Not expectable type of {type(contains_header)} {contains_header=}."
                          " Should be str (first column name) or list/tuple (mandatory column names) or bool (LEGACY) or None"
         )
