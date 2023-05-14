@@ -277,7 +277,7 @@ def load_simple_csv(
         header_is_mandatory  = header_is_mandatory,
     )
 # ******************************************************************************
-def generate_comlex_csv_row(
+def generate_complex_csv_row(
     row: list,
     delimiter: str = ',',
     EOL: str = '\n',
@@ -375,7 +375,7 @@ def generate_csv(
             header = list(mapping_dict.keys())
 
         if save_to and show_header:
-            out_filehandler.write(generate_comlex_csv_row(header, delimiter))
+            out_filehandler.write(generate_complex_csv_row(header, delimiter))
 
         for found_item in list_of_items:  # found_item == row in case of CSV list or item node in case of XML structure
             if isinstance(found_item, dict):
@@ -396,7 +396,7 @@ def generate_csv(
             csv_table.append(csv_row)
 
             if save_to:
-                out_filehandler.write(generate_comlex_csv_row(csv_row, delimiter))
+                out_filehandler.write(generate_complex_csv_row(csv_row, delimiter))
 
     if save_to:
         out_filehandler.close

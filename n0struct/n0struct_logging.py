@@ -32,8 +32,8 @@ def init_logger(
         debug_level: str = "TRACE",
         debug_output = sys.stderr,
         debug_timeformat: str = "YYYY-MM-DD HH:mm:ss.SSS",
-        debug_show_object_type = True,
-        debug_show_object_id = True,
+        debug_show_object_type = False,
+        debug_show_object_id = False,
         debug_show_item_count = True,
         debug_logtofile = False,
         log_file_name: str = None,
@@ -362,7 +362,9 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
                 if __debug_show_object_type
                 else ""
              ) + (
-                f" id={id(var_object)}"
+                (
+                    (" " if __debug_show_object_type else "") + f"id={id(var_object)}"
+                )
                 if __debug_show_object_id
                 else ""
              )

@@ -373,12 +373,17 @@ def validate_values(value: str,
         value = "D"
         validate_values(value.upper(), ("A", "B", "C")) == "C"
     '''
-    if not isinstance(possible_values_the_last_is_default, (list, tuple)) or not possible_values_the_last_is_default:
-        return return_if_wrong_input
+    if not possible_values_the_last_is_default or not isinstance(possible_values_the_last_is_default, (list, tuple)):
+        if return_if_wrong_input:
+            return return_if_wrong_input
+        raise ValueError(f"{possible_values_the_last_is_default=} must be not empty list/tuple")
+
     if value in possible_values_the_last_is_default:
         return value
+        
     if isinstance(raise_if_not_found, Exception):
         raise raise_if_not_found
+
     return possible_values_the_last_is_default[-1]
 # ******************************************************************************
 def raise_exception(ex: Exception):

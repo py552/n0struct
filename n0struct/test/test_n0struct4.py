@@ -4,7 +4,6 @@ mydir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, mydir)
 sys.path.insert(0, mydir+"/../")
 sys.path.insert(0, mydir+"/../../")
-# from n0struct import *
 from n0struct import (
     n0dict,
     n0print,
