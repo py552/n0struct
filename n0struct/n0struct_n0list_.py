@@ -2,6 +2,7 @@ import typing
 from .n0struct_utils import n0eval
 from .n0struct_findall import findall as n0struct_findall__findall
 from .n0struct_findall import findfirst as n0struct_findall__findfirst
+from .n0struct_logging import n0pretty
 # ******************************************************************************
 # ******************************************************************************
 class n0list_(list):
@@ -147,5 +148,31 @@ class n0list_(list):
     # **************************************************************************
     def not_consists_of_any(self, other_list):
         return not self._consists_of(other_list, True)
+    # **************************************************************************
+    # JSON
+    # **************************************************************************
+    def to_json(self,
+                indent: int = 4,
+                pairs_in_one_line = True,
+                json_convention: bool = True,
+                skip_empty_arrays: bool = False,
+                compress: bool = False,
+    ) -> str:
+        """
+        Public function: export self into json result string
+        """
+        if compress:
+            indent = 0
+
+        return n0pretty(self,
+                        show_type=False,
+                        auto_quotes=False,
+                        __quotes='"',
+                        __indent_size=indent,
+                        pairs_in_one_line=pairs_in_one_line,
+                        json_convention=json_convention,
+                        skip_empty_arrays=skip_empty_arrays,
+                        show_item_count=False,
+        )
 # ******************************************************************************
 # ******************************************************************************

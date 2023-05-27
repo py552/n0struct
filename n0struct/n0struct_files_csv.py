@@ -6,15 +6,17 @@ from n0struct import * # required to use external functions in validate_csv_row(
 # ******************************************************************************
 # ******************************************************************************
 def parse_complex_csv_line(
-    line: str,
-    delimiter: str = ',',
+    line: typing.Union[str, bytes],
+    delimiter: typing.Union[str, bytes] = ',',
     process_field: callable = lambda field_value: field_value,  # possible to field_value.strip()
-    EOL: str = '\n',
+    EOL: typing.Union[str, bytes] = '\n',
 ) -> list:
     fields_in_the_row = []
     flag_quotes_in_the_begining = flag_expect_delimiter_or_quotes = False
     field_value = ""
     for offset, ch in enumerate(line.strip(EOL)):
+        if isinstance(ch, int):
+            ch = chr(ch)
         if ch == delimiter and (flag_quotes_in_the_begining == False or flag_expect_delimiter_or_quotes == True):
             # The next field is started
             fields_in_the_row.append(process_field(field_value))
@@ -46,7 +48,7 @@ def load_csv(
     # process_field == None
     #   strip_field == False                    lambda field_value: field_value
     #   strip_field == True                     lambda field_value: field_value.strip()
-    EOL: str = '\n',
+    EOL: str = None,   # AUTO # EOL: str = '\r\n',  # FOR WINDOWS ONLY!!!
     contains_header: typing.Union[bool, str, list, tuple, None] = None,
     # contains_header == True || False          ***LEGACY***
     #   header_is_mandatory == None             Copy value from contains_header into header_is_mandatory
@@ -168,8 +170,15 @@ def load_csv(
         else:
             process_line = lambda line_value: line_value
 
+    if read_mode == 'b':
+        EOL = EOL.encode('cp1251')
 
-    with open(file_name, mode='r'+read_mode, encoding=encoding) as in_file:
+    with open(
+        file_name,
+        mode='r'+read_mode,
+        encoding=encoding if read_mode == 't' else None,
+        newline=EOL if read_mode == 't' else None
+    ) as in_file:
         # skip empty lines at the begining of the file
         while True:
             file_offset = in_file.tell()
@@ -180,7 +189,7 @@ def load_csv(
             if header_line:
                 break
 
-        possible_column_names = parse_csv_line(header_line, delimiter, process_field)
+        possible_column_names = parse_csv_line(header_line, delimiter, process_field, EOL)
 
         first_line_is_header = False
         if contains_header:

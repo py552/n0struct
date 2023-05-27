@@ -105,31 +105,28 @@ class n0dict_(n0dict__):
                         result += "\n"
                         
                     if isinstance(value, (list, tuple)):
-                        for i, subitm in enumerate(value):
-                            if i:
-                                result += "\n"
-                            sub_result = self.__xml(subitm, indent+inc_indent, inc_indent)
-                            if not sub_result:
-                                if isinstance(sub_result, str):
-                                    result += " "*indent + f"<{key}></{key}>"
-                                else:
-                                    result += " "*indent + f"<{key}/>"
-                            else:
-                                if '>' in sub_result:
-                                    result += " "*indent + f"<{key}>\n{sub_result}\n" + " "*indent + f"</{key}>"
-                                else:
-                                    result += " "*indent + f"<{key}>{sub_result}</{key}>"
+                        if not value:
+                            result += " "*indent + f"<{key}/>"
+                        else:
+                            result += " "*indent + f"<{key}>"
+                            for i, subitm in enumerate(value):
+                                result += "\n" + self.__xml(subitm, indent+inc_indent, inc_indent)
+                            result += "\n" +" "*indent + f"</{key}>"
                     elif isinstance(value, (int, float)):
                         if not key.startswith("@"):
                             result += " "*indent + f"<{key}>{value}</{key}>"
+                        else:
+                            raise NotImplementedError(f"Export of attibtures ({key}) is not supported yet")
                     elif isinstance(value, str):
                         if not key.startswith("@"):
                             result += " "*indent + f"<{key}>"
                             if value.lstrip().upper().startswith("<![CDATA[") and value.rstrip().endswith("]]>"):
-                                result += value
+                                result += "\n" + " "*(indent+inc_indent) + value + "\n" + " "*indent
                             else:
                                 result += value.translate(html_entities)
                             result += f"</{key}>"
+                        else:
+                            raise NotImplementedError(f"Export of attibtures ({key}) is not supported yet")
                     elif isinstance(value, dict):
                         sub_result = self.__xml(value, indent+inc_indent, inc_indent)
 
@@ -170,43 +167,6 @@ class n0dict_(n0dict__):
             self.__xml(self, 0, indent)
     # **************************************************************************
     # JSON
-    # **************************************************************************
-    def __json(self, parent: dict, indent: int, inc_indent: int) -> str:
-        """
-        Private function: recursively export n0dict into json result string
-        """
-        result = ""
-        for key, value in parent.items():
-            if result:
-                result += ",\n"
-            if isinstance(value, list):
-                sub_result = ""
-                for i, subitm in enumerate(value):
-                    if sub_result:
-                        sub_result += ",\n"
-                    sub_sub_result = self.__json(subitm, (indent+inc_indent)*2, inc_indent)
-                    if sub_sub_result:
-                        if isinstance(subitm, dict):
-                            sub_result += " "*(indent+inc_indent) + "{" + f"\n{sub_sub_result}\n" + " "*(indent+inc_indent) + "}"
-                        elif isinstance(subitm, (list, tuple)):
-                            sub_result += " "*(indent+inc_indent) + f"[\n{sub_sub_result}\n" + " "*(indent+inc_indent) + "]"
-                if sub_result:
-                    result += " "*indent + f'"{key}": [\n{sub_result}\n' + " "*indent + "]"
-                else:
-                    result += " "*indent + f'"{key}": null'
-            elif isinstance(value, str):
-                result += " "*indent + f'"{key}": "{value}"'
-            elif isinstance(value, dict):
-                sub_result = self.__json(value, indent+inc_indent, inc_indent)
-                if sub_result:
-                    result += " "*indent + f'"{key}": ' + "{" + f"\n{sub_result}\n" + " "*indent + "}"
-                else:
-                    result += " "*indent + f'"{key}": null'
-            elif value is None:
-                result += " "*indent + f'"{key}": null'
-            else:
-                raise TypeError(f"Unknown type ({type(value)}) {key} == {value}")
-        return result
     # **************************************************************************
     def to_json(self,
                 indent: int = 4,

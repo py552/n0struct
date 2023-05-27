@@ -15,7 +15,7 @@ def set_debug_show_object_type(debug_show_object_type: bool):
     __debug_show_object_type = debug_show_object_type
 
 
-__debug_show_object_id = True
+__debug_show_object_id = False
 def set_debug_show_object_id(debug_show_object_id: bool):
     global __debug_show_object_id
     __debug_show_object_id = debug_show_object_id
@@ -357,33 +357,19 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
     :param level:
     :return:
     """
-    prefix = (
-                (str(type(var_object)) or "").replace("<class '", "<").replace("'>", ">")
-                if __debug_show_object_type
-                else ""
-             ) + (
-                (
-                    (" " if __debug_show_object_type else "") + f"id={id(var_object)}"
-                )
-                if __debug_show_object_id
-                else ""
-             )
-    if prefix:
-        prefix += " "
-
     n0print(
-        f"{prefix}{var_name}{' == ' if prefix or var_name else ''}" +
-            n0pretty(
-                var_object,
-                show_type = show_type,
-                pairs_in_one_line = pairs_in_one_line,
-                json_convention = json_convention,
-                skip_empty_arrays = skip_empty_arrays,
-                skip_simple_types = skip_simple_types,
-                auto_quotes = auto_quotes,
-                show_item_count = show_item_count,
-            )
-        ,
+        (f"id={id(var_object)} " if __debug_show_object_id else "")
+        + (f"{var_name} == " if var_name else "")
+        + n0pretty(
+            var_object,
+            show_type = show_type,
+            pairs_in_one_line = pairs_in_one_line,
+            json_convention = json_convention,
+            skip_empty_arrays = skip_empty_arrays,
+            skip_simple_types = skip_simple_types,
+            auto_quotes = auto_quotes,
+            show_item_count = show_item_count,
+        ),
         level = level,
         internal_call = internal_call + 1,
     )
