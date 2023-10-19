@@ -31,6 +31,12 @@ PACKAGE CONTENTS
     n0struct_utils_find
     test (package)
 
+FUNCTIONS
+    getsizeof(...)
+        getsizeof(object [, default]) -> int
+        
+        Return the size of object in bytes.
+
 DATA
     annotations = _Feature((3, 7, 0, 'beta', 1), (4, 0, 0, 'alpha', 0), 16...
     compiled_regexp_mask_pan = re.compile('(0{3}|)(([456]([0-9]{7}|[0-9]{5...
@@ -40,6 +46,7 @@ DATA
     pyformat_MMYY = '%m%y'
     pyformat_YYMM = '%y%m'
     pyformat_YYYYMMDD = '%Y-%m-%d'
+    stderr = <_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>
 
 FILE
     c:\repo\n0struct062\n0struct\__init__.py

@@ -1,10 +1,6 @@
 import typing
-from .n0struct_logging import (
-    n0print,
-    n0debug,
-    n0debug_calc,
-    n0error,
-)
+import itertools
+## from .n0struct_logging import n0debug, n0debug_calc
 # ******************************************************************************
 # ******************************************************************************
 def to_int(value: str, max_len: typing.Union[int, None] = None, default_value: typing.Any = None) -> typing.Any:
@@ -77,21 +73,85 @@ def n0eval(_str: str) -> typing.Union[int, float, typing.Any]:
 # ******************************************************************************
 def raise_in_lambda(ex): raise ex
 # ******************************************************************************
+def split_with_escape(
+    buffer_str: str,
+    delimiter: str,
+    maxsplit: typing.Union[int, None] = None, # None == no limit of splitted parts
+    escape_character:str = '\\',
+    trim_trailing_double_escape_characters: bool = True
+):
+    '''
+        buffer_str = "AAAA1;BBBB2;CCCC3;DDDD4"
+        split_with_escape(buffer_str) == ["ITEM1", "ITEM2", "ITEM3", "ITEM4"]
+
+        trim_trailing_double_escape_characters = True
+        buffer_str = r"\\IT\EM1\;\\IT\EM2;\ITE\\M3\\;ITE\M4\\"
+        split_with_escape(buffer_str) == [r"\\IT\EM1;\\ITE\M2", r"\ITE\\M3\", r"ITE\M4\"]
+        
+        trim_trailing_double_escape_characters = False
+        buffer_str = r"\\IT\EM1\;\\IT\EM2;\ITE\\M3\\;ITE\M4\\"
+        split_with_escape(buffer_str) == [r"\\IT\EM1;\\ITE\M2", r"\ITE\\M3\\", r"ITE\M4\\"]
+        
+        The reason of ONLY trailing escape characters: because of inside splitted parts could be subparts with termination of own unknown delimiters.
+    '''
+    separated_items = buffer_str.split(delimiter, maxsplit if maxsplit else -1)
+        
+    if escape_character:
+        # Re-arrange list of separated_items in case of delimiter is terminated with '\'
+        start_from_item = 0
+        while True:
+            for i,item in enumerate(separated_items[start_from_item:-1]):
+                if item.endswith(escape_character):
+                    count_of_trailing_escape_characters = sum( 1 for _ in itertools.takewhile(lambda ch: ch == escape_character, reversed(item)) )
+                    if trim_trailing_double_escape_characters and (count_of_double_escape_characters:=count_of_trailing_escape_characters // 2):
+                        # Trim double escape charaters before delimiter
+                        separated_items[start_from_item+i] = item[:-count_of_double_escape_characters*2] + '\\'*count_of_double_escape_characters
+                    if count_of_trailing_escape_characters % 2:
+                        # Odd count_of_trailing_escape_characters, so last escape charater terminates delimiter
+                        separated_items[start_from_item+i] = item[:-1] + delimiter + separated_items.pop(start_from_item+i+1)
+                        if maxsplit and maxsplit+1 < len(separated_items) and delimiter in separated_items[-1]:
+                            separated_items.extend(split_with_escape(separated_items.pop(-1), delimiter, 1, escape_character, trim_trailing_double_escape_characters))
+                        start_from_item = start_from_item+i
+                        break # repeat loop from the start_from_item, because of separated_items is changed
+            else:
+                if trim_trailing_double_escape_characters and separated_items[-1].endswith(escape_character):
+                    count_of_trailing_escape_characters = sum( 1 for _ in itertools.takewhile(lambda ch: ch == escape_character, reversed(item)) )
+                    if  (count_of_double_escape_characters:=count_of_trailing_escape_characters // 2):
+                        # Trim double escape charaters of the last element, like it was done for previous elements
+                        separated_items[-1] = separated_items[-1][:-count_of_double_escape_characters*2] + '\\'*count_of_double_escape_characters
+                break # no more/no one trailing escape charaters found
+    return separated_items
+# ******************************************************************************
+def unescape(in_elem: typing.Union[str, list, dict, typing.Any]) -> typing.Union[str, list, dict, typing.Any]:
+    if isinstance(in_elem, str):
+        return in_elem.encode().decode('unicode_escape')
+    out_elem = in_elem.copy() # because of not possible to predict the complex types
+    if isinstance(out_elem, list):
+        for i, value in enumerate(out_elem):
+            out_elem[i] = unescape(value)
+    elif isinstance(out_elem, dict):
+        for key, value in out_elem.items():
+            out_elem[key] = unescape(value)
+    return out_elem
+# ******************************************************************************
 def deserialize_list(
                         buffer_str: str,
                         delimiter: str = ";",
                         parse_item = lambda item, item_index, separated_items, previous_items: item,
                         parse_empty = False,
                         default_list_result = None,
+                        escape_character = None,
 ) -> list:
     '''
         buffer_str = "ITEM1;ITEM2;ITEM3"
         deserialize_list_of_lists(buffer_str) == ["ITEM1", "ITEM2", "ITEM3"]
     '''
-    if not isinstance(buffer_str, str):
+    if isinstance(buffer_str, (list, tuple)):
+        return buffer_str
+    elif not isinstance(buffer_str, str):
         return default_list_result or []
 
-    separated_items = buffer_str.split(delimiter)
+    separated_items = split_with_escape(buffer_str, delimiter, escape_character=escape_character)
     deserialized_list = []
     for item_index, item in enumerate(separated_items):
         if item or parse_empty:
@@ -174,6 +234,11 @@ def deserialize_dict(
         buffer_str = "TAG1=VALUE1;TAG2=VALUE2"
         deserialize_dict(buffer_str) == {"TAG1": "VALUE1", "TAG2": "VALUE2"}
     '''
+    if isinstance(buffer_str, dict):
+        return buffer_str
+    elif not isinstance(buffer_str, str):
+        return default_dict_result or {}
+
     deserialized_list = deserialize_list(
                             buffer_str,
                             delimiter,
@@ -223,7 +288,7 @@ def get_value_by_tag(
                         default_dict_result = {},
     )
     value_by_tag = deserialized_dict.get(tag_name)
-    return value_by_tag or default_value  # default VALUE will returned, in case of VALUE is None or "" assosiated with KEY
+    return value_by_tag or default_value  # default VALUE will returned, in case of KEY is not found or VALUE is None or "" assosiated with KEY
 # ******************************************************************************
 def deserialize_list_of_lists(
                         buffer_str: str,
@@ -380,7 +445,7 @@ def validate_values(value: str,
 
     if value in possible_values_the_last_is_default:
         return value
-        
+
     if isinstance(raise_if_not_found, Exception):
         raise raise_if_not_found
 
@@ -407,5 +472,122 @@ def catch_exception(func: callable, result_in_case_of_exception: typing.Any = No
         return result
     except Exception:
         return result_in_case_of_exception
+
+# ******************************************************************************
+def key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@DataElement', value_tag: str = '@Value') -> dict:
+    '''
+        input_dict = {
+            xpath: [
+                {"@DataElement": key1, "@Value": value1},
+                {"@DataElement": key2, "@Value": value2},
+            ]
+        }
+        ->
+        output_dict = {
+            key1: value1,
+            key2: value2,
+        }
+    '''
+    output_dict = {}
+    for input_list in input_dict.get(xpath):
+        ## n0debug("input_list")
+        if isinstance(input_list, (list, tuple)):
+            for key_value_dict in input_list:
+                ## n0debug("key_value_dict")
+                if isinstance(key_value_dict, (list, tuple)):
+                    for key_value_subdict in key_value_dict:
+                        ## n0debug("key_value_subdict")
+                        if isinstance(key_value_subdict, dict):
+                            output_dict.update({key_value_subdict[key_tag]: key_value_subdict[value_tag]})
+                        else:
+                            raise TypeError(f"Expected {key_value_subdict=} as dict, but got {type(key_value_subdict)}")
+                elif isinstance(key_value_dict, dict):
+                    output_dict.update({key_value_dict[key_tag]: key_value_dict[value_tag]})
+                else:
+                    raise TypeError(f"Expected {key_value_dict=} as list/dict, but got {type(key_value_dict)}")
+        elif isinstance(input_list, dict):
+            ## n0debug("input_list")
+            output_dict.update({input_list[key_tag]: input_list[value_tag]})
+        else:
+            raise TypeError(f"Expected {input_list=} as list/dict, but got {type(input_list)}")
+    return output_dict
+
+
+# ******************************************************************************
+def merge_dict(dict1: dict, dict2: dict) -> dict:
+    output_dict = dict(**dict1)
+    output_dict.update(dict2)
+    return output_dict
+
+# ******************************************************************************
+from collections.abc import Iterable
+def iterable(obj):
+    '''
+        "abc"   -> ["abc"]
+        ["abc"] -> ["abc"]
+    '''
+    if not isinstance(obj, str) and isinstance(obj, Iterable):
+        yield from obj
+    else:
+        yield obj
+
+def isiterable(obj, item_type = str):
+    return isinstance(obj, item_type) or isinstance(obj, Iterable)
+
+# ******************************************************************************
+# https://code.activestate.com/recipes/577504/
+# from __future__ import print_function
+from sys import getsizeof, stderr
+from itertools import chain
+from collections import deque
+try:
+    from reprlib import repr
+except ImportError:
+    pass
+
+def total_size(o, handlers={}, verbose=False):
+    """ Returns the approximate memory footprint an object and all of its contents.
+
+    Automatically finds the contents of the following builtin containers and
+    their subclasses:  tuple, list, deque, dict, set and frozenset.
+    To search other containers, add handlers to iterate over their contents:
+
+        handlers = {SomeContainerClass: iter,
+                    OtherContainerClass: OtherContainerClass.get_elements}
+
+    ##### Example call #####
+        d = dict(a=1, b=2, c=3, d=[4,5,6,7], e='a string of chars')
+        print(total_size(d, verbose=True))
+    """
+    dict_handler = lambda d: chain.from_iterable(d.items())
+    all_handlers = {tuple: iter,
+                    list: iter,
+                    deque: iter,
+                    dict: dict_handler,
+                    set: iter,
+                    frozenset: iter,
+                   }
+    all_handlers.update(handlers)     # user handlers take precedence
+    seen = set()                      # track which object id's have already been seen
+    default_size = getsizeof(0)       # estimate sizeof object without __sizeof__
+
+    def sizeof(o):
+        if id(o) in seen:       # do not double count the same object
+            return 0
+        seen.add(id(o))
+        s = getsizeof(o, default_size)
+
+        if verbose:
+            print(s, type(o), repr(o), file=stderr)
+
+        for typ, handler in all_handlers.items():
+            if isinstance(o, typ):
+                s += sum(map(sizeof, handler(o)))
+                break
+        return s
+
+    return sizeof(o)
+
+
 # ******************************************************************************
 # ******************************************************************************

@@ -1,9 +1,10 @@
 import typing
+from .n0struct_utils import iterable
 # ******************************************************************************
 # ******************************************************************************
 def split_pair(
                 in_str: str,
-                delimiter: str,
+                delimiter: typing.Union[str, typing.Iterable],
                 transform_left: callable = lambda x: x,
                 transform_right: callable = lambda x: x,
                 default_element: int = 1,
@@ -22,16 +23,17 @@ def split_pair(
     """
     if not in_str:
         return transform_left(default_left), transform_right(default_right)
-
-    str_parts = in_str.split(delimiter, 1)
-    if len(str_parts) == 1:
-        if default_element:
-            # second (right) element is default
-            return transform_left(default_left), transform_right(str_parts[0])
-        else:
-            # first (left) element is default
-            return transform_left(str_parts[0]), transform_right(default_right)
-    return transform_left(str_parts[0]), transform_right(str_parts[1])
+        
+    for _delimiter in iterable(delimiter):
+        if _delimiter in in_str:
+            str_parts = in_str.split(_delimiter, 1)
+            return transform_left(str_parts[0]), transform_right(str_parts[1])
+    if default_element:
+        # second (right) element is default
+        return transform_left(default_left), transform_right(in_str)
+    else:
+        # first (left) element is default
+        return transform_left(in_str), transform_right(default_right)
 # ******************************************************************************
 def join_triplets(
                     in_list: typing.Union[None, str, tuple, list],

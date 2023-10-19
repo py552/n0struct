@@ -72,4 +72,16 @@ def save_file(
     with open(file_path, 'w'+mode, encoding=encoding) as out_filehandler:
         out_filehandler.write(output_buffer)
 # ******************************************************************************
+
+
+def unique_file_path(file_path: str, purpose: str = "") -> Path:
+    for i in range(1000):
+        unique_file_path = Path(str(file_path) + (f".{i:03}" if i else ""))
+        if not unique_file_path.exists():
+            return unique_file_path
+    else:
+        raise FileExistsError("Impossible to find unique name for {purpose}'{file_path}'")
 # ******************************************************************************
+# ******************************************************************************
+
+
