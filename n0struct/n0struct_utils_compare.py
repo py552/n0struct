@@ -29,17 +29,63 @@ def get__flag_compare_return_difference_of_values() -> bool:
     return __flag_compare_return_difference_of_values
 # ******************************************************************************
 __flag_compare_return_equal = False
+__flag_compare_return_equal_records = False
+__flag_compare_return_equal_elements = False
 def set__flag_compare_return_equal(value: bool):
     """
     if __flag_compare_return_equal == True, then
-    if records are the same, 
-    then return additional element in result["equal"] with equal records
+    if records are the same,
+    then return additional element in result["equal"] with equal sub nodes
     """
-    global __flag_compare_return_equal
+    global __flag_compare_return_equal, __flag_compare_return_equal_records, __flag_compare_return_equal_elements
     __flag_compare_return_equal = value
+    if __flag_compare_return_equal:
+        if not (__flag_compare_return_equal_records or __flag_compare_return_equal_elements):
+            __flag_compare_return_equal_records = True
+    else:
+        __flag_compare_return_equal_records = __flag_compare_return_equal_elements = False
+
 def get__flag_compare_return_equal() -> bool:
     global __flag_compare_return_equal
     return __flag_compare_return_equal
+# ******************************************************************************
+def set__flag_compare_return_equal_records(value: bool):
+    """
+    if __flag_compare_return_equal_records == True, then
+    if records are the same,
+    then return additional element in result["equal"] with equal records
+    """
+    global __flag_compare_return_equal, __flag_compare_return_equal_records, __flag_compare_return_equal_elements
+    __flag_compare_return_equal_records = value
+    if __flag_compare_return_equal_records:
+        __flag_compare_return_equal = True
+        __flag_compare_return_equal_elements = False
+    else:
+        __flag_compare_return_equal = __flag_compare_return_equal_elements
+
+
+def get__flag_compare_return_equal_records() -> bool:
+    global __flag_compare_return_equal_records
+    return __flag_compare_return_equal_records
+# ******************************************************************************
+def set__flag_compare_return_equal_elements(value: bool):
+    """
+    if __flag_compare_return_equal_elements == True, then
+    if records are the same,
+    then return additional element in result["equal"] with equal elements
+    """
+    global __flag_compare_return_equal, __flag_compare_return_equal_records, __flag_compare_return_equal_elements
+    __flag_compare_return_equal_elements = value
+    if __flag_compare_return_equal_elements:
+        __flag_compare_return_equal = True
+        __flag_compare_return_equal_records = False
+    else:
+        __flag_compare_return_equal = __flag_compare_return_equal_records
+
+
+def get__flag_compare_return_equal_elements() -> bool:
+    global __flag_compare_return_equal_elements
+    return __flag_compare_return_equal_elements
 # ******************************************************************************
 __flag_compare_return_place = True
 def set__flag_compare_return_place(value: bool):
@@ -127,7 +173,8 @@ def generate_composite_keys(
                             tranformed = str(line[key])
                         created_composite_key += key + "=" + tranformed
         else:
-            raise TypeError(f"generate_composite_keys(..): expected element dict inside list, but got ({type(line)}){line}")
+            ## raise TypeError(f"generate_composite_keys(..): expected element dict inside list, but got ({type(line)}){line}")
+            created_composite_key = str(line)
         composite_keys_for_all_lines.append((created_composite_key, line_i))
     return composite_keys_for_all_lines
 # ******************************************************************************

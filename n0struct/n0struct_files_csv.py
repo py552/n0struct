@@ -1,3 +1,4 @@
+import os
 import typing
 from pathlib import Path
 from .n0struct_n0list_n0dict import n0dict
@@ -9,12 +10,12 @@ def parse_complex_csv_line(
     line: typing.Union[str, bytes],
     delimiter: typing.Union[str, bytes] = ',',
     process_field: callable = lambda field_value: field_value,  # possible to field_value.strip()
-    EOL: typing.Union[str, bytes] = '\n',
+    EOL: typing.Union[str, bytes] = os.linesep,
 ) -> list:
     fields_in_the_row = []
     flag_quotes_in_the_begining = flag_expect_delimiter_or_quotes = False
     field_value = ""
-    for offset, ch in enumerate(line.strip(EOL)):
+    for offset, ch in enumerate(line.rstrip(EOL)):
         if isinstance(ch, int):
             ch = chr(ch)
         if ch == delimiter and (flag_quotes_in_the_begining == False or flag_expect_delimiter_or_quotes == True):
@@ -48,7 +49,7 @@ def load_csv(
     # process_field == None
     #   strip_field == False                    lambda field_value: field_value
     #   strip_field == True                     lambda field_value: field_value.strip()
-    EOL: str = None,   # AUTO # EOL: str = '\r\n',  # FOR WINDOWS ONLY!!!
+    EOL: str = os.linesep,                      # AUTO # EOL: str = '\r\n',  # FOR WINDOWS ONLY!!!
     contains_header: typing.Union[bool, str, list, tuple, None] = None,
     # contains_header == True || False          ***LEGACY***
     #   header_is_mandatory == None             Copy value from contains_header into header_is_mandatory
@@ -170,8 +171,9 @@ def load_csv(
         else:
             process_line = lambda line_value: line_value
 
-    if read_mode == 'b':
+    if read_mode == 'b' and isinstance(EOL, str):
         EOL = EOL.encode('cp1251')
+    # n0debug("file_name")
 
     with open(
         file_name,
@@ -183,12 +185,16 @@ def load_csv(
         while True:
             file_offset = in_file.tell()
             line = in_file.readline()  # removed walrus operator for compatibility with 3.7
+            # n0debug("line")
             if not line:
                 raise EOFError("Empty file or file only with spaces")
+            # n0debug("EOL")
+            # n0debug_calc(line.rstrip(EOL), "line.rstrip(EOL)")
             header_line = process_line(line.rstrip(EOL))
+            # n0debug("header_line")
             if header_line:
                 break
-
+        # n0debug("header_line")
         possible_column_names = parse_csv_line(header_line, delimiter, process_field, EOL)
 
         first_line_is_header = False
@@ -254,7 +260,7 @@ def load_simple_csv(
     column_names: typing.Union[list, tuple, None] = None,
     delimiter: str = ',',
     process_field: typing.Union[callable, None] = None,
-    EOL: str = '\n',
+    EOL: str = os.linesep,
     contains_header: typing.Union[bool, str, list, tuple, None] = None,
     process_line: typing.Union[callable, bool, None] = None,
     skip_empty_lines: bool = True,
@@ -289,7 +295,7 @@ def load_simple_csv(
 def generate_complex_csv_row(
     row: list,
     delimiter: str = ',',
-    EOL: str = '\n',
+    EOL: str = os.linesep,
 ) -> str:
     generated_csv_row = ""
     for field_value in row:

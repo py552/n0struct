@@ -10,6 +10,8 @@ from .n0struct_utils_compare import (
     get__flag_compare_check_different_types,
     get__flag_compare_return_difference_of_values,
     get__flag_compare_return_equal,
+    get__flag_compare_return_equal_records,
+    get__flag_compare_return_equal_elements,
     get__flag_compare_return_place,
     xpath_match,
     generate_composite_keys,
@@ -296,7 +298,7 @@ class n0list(n0list_):
                             f"{other_name}['{i}']='{other[i]}'"
                         )
                     else:
-                        if get__flag_compare_return_equal():
+                        if get__flag_compare_return_equal_records():
                             result["self_equal"].append(self)
                             result["other_equal"].append(other)
                 elif isinstance(self[i], (list, tuple)):
@@ -513,7 +515,7 @@ class n0list(n0list_):
                             )
                         else:
                             # NOT TESTED! #2
-                            if get__flag_compare_return_equal():
+                            if get__flag_compare_return_equal_records():
                                 result["self_equal"].append(self)
                                 result["other_equal"].append(other)
                     elif isinstance(self[self_i], (list, tuple)):
@@ -755,13 +757,14 @@ class n0dict(n0dict_):
         self_keys = list(self.keys())
         self_not_exist_in_other = list(self.keys())
         other_not_exist_in_self = list(other.keys())
-        is_still_equal = True
+        whole_dict_is_equal = True
 
         # #############################################################
         # NEVER fetch data from the mutable list in the loop !!!
         # #############################################################
         for key in self_keys:
             if key in other:
+                element_is_equal = True
                 fullxpath = prefix + "/" + key
                 if not xpath_match(fullxpath, exclude_xpaths):
                     # --- TRANSFORM: START -------------------------------------
@@ -780,33 +783,7 @@ class n0dict(n0dict_):
                         other_value = transform_other(other_value)
                     # --- TRANSFORM: END ---------------------------------------
                     if type(self_value) == type(other_value):
-                        if isinstance(self_value, (str, int, float, datetime.date)):
-                            if self_value != other_value \
-                                and (not compare_only or xpath_match(fullxpath, compare_only)):
-                                # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
-                                result["not_equal"].append(
-                                    (
-                                        f"{prefix}/{key}",
-                                        [
-                                            self[key],
-                                            other[key]
-                                        ]
-                                    )
-                                )
-                                if get__flag_compare_return_difference_of_values():
-                                    try:
-                                        difference = round(float(other_value) - float(self_value), 7)
-                                    except ValueError:  # self_value or other_value could not be converted to float
-                                        difference = None
-                                    result["not_equal"][-1][1].append(difference)
-                                result["differences"].append(
-                                    "Values are different: " +
-                                    f"{self_name}['{key}']={self[key]}" +
-                                    " != " +
-                                    f"{other_name}['{key}']={other[key]}"
-                                )
-                                is_still_equal = False
-                        elif isinstance(self[key], (list, tuple)):
+                        if isinstance(self[key], (list, tuple)):
                             result.update_extend(
                                 one_of_list_compare(
                                     n0list(self[key]),
@@ -834,10 +811,36 @@ class n0dict(n0dict_):
                             # Because of type(self[key]) == type(other[key]) and self[key] is None, so both are None
                             pass
                         else:
-                            raise TypeError(f"Not expected type {type(self[key])} in {key}['{self_name}']")
+                            # raise TypeError(f"Not expected type {type(self[key])} in {key}['{self_name}']")
+                        # if isinstance(self_value, (str, int, float, datetime.date)):
+                            if self_value != other_value \
+                                and (not compare_only or xpath_match(fullxpath, compare_only)):
+                                # VERY IMPORTANT TO SHOW ORIGINAL VALUES, NOT TRANSFORMED
+                                result["not_equal"].append(
+                                    (
+                                        f"{prefix}/{key}",
+                                        [
+                                            self[key],
+                                            other[key]
+                                        ]
+                                    )
+                                )
+                                if get__flag_compare_return_difference_of_values():
+                                    try:
+                                        difference = round(float(other_value) - float(self_value), 7)
+                                    except ValueError:  # self_value or other_value could not be converted to float
+                                        difference = None
+                                    result["not_equal"][-1][1].append(difference)
+                                result["differences"].append(
+                                    "Values are different: " +
+                                    f"{self_name}['{key}']={self[key]}" +
+                                    " != " +
+                                    f"{other_name}['{key}']={other[key]}"
+                                )
+                                element_is_equal = whole_dict_is_equal = False
                     else:
                         if not compare_only or xpath_match(fullxpath, compare_only):
-                            is_still_equal = False
+                            element_is_equal = whole_dict_is_equal = False
                             if get__flag_compare_check_different_types():
                                 result["difftypes"].append(
                                     (
@@ -864,13 +867,16 @@ class n0dict(n0dict_):
                                 )
                 self_not_exist_in_other.remove(key)
                 other_not_exist_in_self.remove(key)
+                if element_is_equal and get__flag_compare_return_equal_elements():
+                    result["self_equal"].append((key, self[key]))
+                    result["other_equal"].append((key, other[key]))
 
         if self_not_exist_in_other:
             for key in self_not_exist_in_other:
                 fullxpath = f"{prefix}/{key}"
                 if not xpath_match(fullxpath, exclude_xpaths) \
                    and (not compare_only or xpath_match(fullxpath, compare_only)):
-                    is_still_equal = False
+                    whole_dict_is_equal = False
                     result["differences"].append(
                         f"Element {self_name}['{key}']='{self[key]}' doesn't exist in {other_name}"
                     )
@@ -884,7 +890,7 @@ class n0dict(n0dict_):
                 fullxpath = f"{prefix}/{key}"
                 if not xpath_match(fullxpath, exclude_xpaths) \
                    and (not compare_only or xpath_match(fullxpath, compare_only)):
-                    is_still_equal = False
+                    whole_dict_is_equal = False
                     result["differences"].append(
                         f"Element {other_name}['{key}']='{other[key]}' doesn't exist in {self_name}"
                     )
@@ -893,7 +899,7 @@ class n0dict(n0dict_):
                     else:
                         result["other_unique"].append(other[key])
 
-        if is_still_equal and get__flag_compare_return_equal():
+        if whole_dict_is_equal and get__flag_compare_return_equal_records():
             result["self_equal"].append(self)
             result["other_equal"].append(other)
 
@@ -1350,6 +1356,8 @@ class n0dict(n0dict_):
     def update(self, xpath: typing.Union[dict, str], new_value: str = None) -> n0dict__:
         # **********************************************************************
         def multi_define(xpath, new_value):
+            # n0debug("xpath")
+            # n0debug("new_value")
             if isinstance(new_value, dict):
                 self[xpath] = n0dict(new_value, recursively=True)
             elif isinstance(new_value, (list, tuple)):
