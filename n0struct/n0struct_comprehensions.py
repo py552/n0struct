@@ -4,8 +4,10 @@ from .n0struct_utils import isnumber
 from .n0struct_utils import iterable
 from .n0struct_files import load_lines
 from .n0struct_arrays import split_pair
+## from .n0struct_logging import n0debug, n0debug_calc
 # ******************************************************************************
 def default_parse_value(key_value, default_value):
+    # n0debug("key_value")
     stripped_value = key_value[1].strip()
     if isnumber(stripped_value):
         if '.' in stripped_value:
@@ -23,7 +25,7 @@ def default_parse_value(key_value, default_value):
 
 def load_ini(
                 file_path: str,
-                default_value = None,
+                default_value = '',
                 equal_tag: typing.Union[str, typing.Iterable] = '=',
                 comment_tags: typing.Union[str, typing.Iterable] = ("#", "//"),
                 parse_key: typing.Callable = lambda key_value, default_key: key_value[0].strip().upper(),
@@ -46,11 +48,12 @@ def load_ini(
     for line in load_lines(file_path):
         if (stripped_line:=line.strip()) \
         and not any(stripped_line.startswith(comment_tag) for comment_tag in iterable(comment_tags)):
+            # n0debug("default_value")
             key, value = split_pair(
                 stripped_line,
                 delimiter = equal_tag,
-                transform_left = lambda x: parse_key((x, None), None),
-                transform_right = lambda x: parse_value((None, x), default_value),
+                transform_left = lambda x: parse_key((x, ''), ''),
+                transform_right = lambda x: parse_value(('', x), default_value),
                 default_element = 0,
                 default_right = default_value
             )

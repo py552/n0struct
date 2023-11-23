@@ -179,7 +179,7 @@ def n0pretty(
                         value_type = ""
                         if show_type or (show_type is None and __debug_show_object_type):
                             if not skip_simple_types \
-                            or not isinstance(key, (str, int, float, complex, bool, list, tuple, set, frozenset, dict)):
+                            or not isinstance(key, (str, int, float, complex, bool, list, tuple, set, frozenset, dict, type(None))):
                                 key_type = (str(type(key)) or "") \
                                     .replace("<class '", "<") \
                                     .replace("'>", "")
@@ -188,7 +188,7 @@ def n0pretty(
                                 key_type += "> "
 
                             if not skip_simple_types \
-                            or not isinstance(sub_item_key_value, (str, int, float, complex, bool, list, tuple, set, frozenset, dict)):
+                            or not isinstance(sub_item_key_value, (str, int, float, complex, bool, list, tuple, set, frozenset, dict, type(None))):
                                 value_type = (str(type(sub_item_key_value)) or "").replace("<class '", "<").replace("'>", "")
                                 if isinstance(sub_item_key_value, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
                                     value_type += f" {len(sub_item_key_value)}"
@@ -242,7 +242,7 @@ def n0pretty(
 
                     key_type = ""
                     if (show_type or (show_type is None and __debug_show_object_type)) \
-                    and (not skip_simple_types or not isinstance(key, (str, int, float))):
+                    and (not skip_simple_types or not isinstance(key, (str, int, float, type(None)))):
                         key_type = (str(type(key)) or "") \
                             .replace("<class '", "<") \
                             .replace("'>", "")
@@ -308,8 +308,11 @@ def n0pretty(
             else:
                 result = result_type + brackets[0] + result + brackets[1]
 
-        if result is None and json_convention:
-            result = "null"  # json.decoder.JSONDecodeError: Expecting value
+        if result is None:
+            if json_convention:
+                result = "null"  # json.decoder.JSONDecodeError: Expecting value
+            else:
+                result = "None"
 
     elif isinstance(item, str):
         if (show_type or (show_type is None and __debug_show_object_type)) \
@@ -322,8 +325,11 @@ def n0pretty(
                 result = result_type + f"'{item}'"
         else:
             result = result_type + __quotes + item.replace(__quotes, '\\"' if __quotes == '"' else "\\'") + __quotes
-    elif item is None and json_convention:
-        result = "null"  # json.decoder.JSONDecodeError: Expecting value
+    elif item is None:
+        if json_convention:
+            result = "null"  # json.decoder.JSONDecodeError: Expecting value
+        else:
+            result = "None"
     else:
         result = str(item)
         if (show_type or (show_type is None and __debug_show_object_type)) \
@@ -359,8 +365,8 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
     """
     n0print(
         (f"id={id(var_object)} " if __debug_show_object_id else "")
-        + (f"{var_name} == " if var_name else "")
-        + n0pretty(
+      + (f"{var_name} == " if var_name else "")
+      + n0pretty(
             var_object,
             show_type = show_type,
             pairs_in_one_line = pairs_in_one_line,

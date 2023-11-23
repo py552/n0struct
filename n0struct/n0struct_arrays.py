@@ -8,8 +8,8 @@ def split_pair(
                 transform_left: callable = lambda x: x,
                 transform_right: callable = lambda x: x,
                 default_element: int = 1,
-                default_left: typing.Any = None,
-                default_right: typing.Any = None,
+                default_left: typing.Any = '',
+                default_right: typing.Any = '',
 ) -> tuple:
     """
     split_pair(in_str: str, delimiter: str, transform_left: callable = lambda x: x, transform_right: callable = lambda x: x, default_element: int = 1) -> tuple:
