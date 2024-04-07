@@ -38,7 +38,6 @@ FUNCTIONS
         Return the size of object in bytes.
 
 DATA
-    annotations = _Feature((3, 7, 0, 'beta', 1), (4, 0, 0, 'alpha', 0), 16...
     compiled_regexp_mask_pan = re.compile('(0{3}|)(([456]([0-9]{7}|[0-9]{5...
     logger = <loguru.logger handlers=[(id=0, level=10, sink=<stderr>)]>
     pyformat_DDMMMYYYY = '%d-%b-%y'
@@ -49,6 +48,6 @@ DATA
     stderr = <_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>
 
 FILE
-    c:\repo\n0struct062\n0struct\__init__.py
+    c:\repo\n0struct\n0struct\__init__.py
 
 

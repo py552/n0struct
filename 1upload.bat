@@ -3,8 +3,10 @@
 REM python -m pip install --upgrade pip
 REM python -m pip install --upgrade setuptools wheel
 REM python -m pip install twine
-REM echo XXX | keyring set pypi pythonist552-test
-REM echo YYY | keyring set pypi pythonist552
+REM https://pypi.org/manage/account/token/ -> C:\Users\{UserName}\.pypirc 
+REM [pypi]
+REM   username = __token__
+REM   password = pypi-???????????????
 REM python -m pip install pytest
 REM python -m pip install -r requirements.txt 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -43,13 +45,13 @@ REM python setup.py sdist
 REM Modern: source + wheel
 python setup.py sdist bdist_wheel
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Upload
+:: Upload only if 2FA is enabled!!!
 call :init_credentials
 echo **********************************************************************
-echo *** twine upload --username %USERNAME% --password XXX %test_upload% dist/*
+echo *** twine upload %test_upload% dist/*
 echo **********************************************************************
 if "%PASSWORD%"=="" echo PASSWORD for pypi is not set. Continue is terminated. && exit
-python -m twine upload --username %USERNAME% --password %PASSWORD% %test_upload% dist/*
+python -m twine upload --verbose %test_upload% dist/*
 call :clean
 
 echo Mission acomplished
@@ -74,11 +76,11 @@ goto :eof
 if not "%TEST_MODE%"=="" (
     set "USERNAME=pythonist552-test"
     set "test_dnload=-i https://test.pypi.org/simple/"
-    set "test_upload=--repository testpypi"
+    set "test_upload=--repository testpypi --repository-url https://test.pypi.org/legacy/"
 ) else (
     set "USERNAME=pythonist552"
     set "test_dnload="
-    set "test_upload="
+    set "test_upload=--repository-url https://upload.pypi.org/legacy/"
 )
 REM How to save the password into the vault:
 REM echo y0uRpA$$w0rD | keyring set pypi %USERNAME%

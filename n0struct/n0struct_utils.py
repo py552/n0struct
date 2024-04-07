@@ -84,18 +84,22 @@ def split_with_escape(
         buffer_str = "AAAA1;BBBB2;CCCC3;DDDD4"
         split_with_escape(buffer_str) == ["ITEM1", "ITEM2", "ITEM3", "ITEM4"]
 
+    Pay attention: '\\' is '\' in samples, because of r".." is not used:
+
         trim_trailing_double_escape_characters = True
-        buffer_str = r"\\IT\EM1\;\\IT\EM2;\ITE\\M3\\;ITE\M4\\"
-        split_with_escape(buffer_str) == [r"\\IT\EM1;\\ITE\M2", r"\ITE\\M3\", r"ITE\M4\"]
-        
+        buffer_str = "\\\\IT\\EM1\\;\\\\IT\\EM2;\\ITE\\\\M3\\\\;ITE\\M4\\\\"
+        split_with_escape(buffer_str) ==
+            ["\\\\IT\\EM1;\\\\ITE\\M2", "\\ITE\\\\M3\\", "ITE\\M4\\"]
+
         trim_trailing_double_escape_characters = False
-        buffer_str = r"\\IT\EM1\;\\IT\EM2;\ITE\\M3\\;ITE\M4\\"
-        split_with_escape(buffer_str) == [r"\\IT\EM1;\\ITE\M2", r"\ITE\\M3\\", r"ITE\M4\\"]
-        
+        buffer_str = "\\\\IT\\EM1\\;\\\\IT\\EM2;\\ITE\\\\M3\\\\;ITE\\M4\\\\"
+        split_with_escape(buffer_str) ==
+            ["\\\\IT\\EM1;\\\\ITE\\M2", "\\ITE\\\\M3\\\\", "ITE\\M4\\\\"]
+
         The reason of ONLY trailing escape characters: because of inside splitted parts could be subparts with termination of own unknown delimiters.
     '''
     separated_items = buffer_str.split(delimiter, maxsplit if maxsplit else -1)
-        
+
     if escape_character:
         # Re-arrange list of separated_items in case of delimiter is terminated with '\'
         start_from_item = 0
@@ -369,7 +373,7 @@ def validate_str(
         value = "."
         validate_path(value, default_value = "C:\\ETC") == ""
     '''
-    return default_value if not value else parse_str(str)
+    return default_value if not value else parse_str(value)
 # ******************************************************************************
 def validate_path(
                     value,

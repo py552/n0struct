@@ -22,13 +22,15 @@ class n0dict__(dict):
 
         If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
-        if not xpath:
+        if xpath is None or xpath == '':
             raise IndexError(f"xpath '{xpath}' is not valid")
-        if xpath.startswith('?'):
+
+        if isinstance(xpath, str) and xpath.startswith('?'):
             xpath = xpath[1:]
             raise_exception = False
             if_not_found = ''
-        if any(char in xpath for char in "/["):
+
+        if isinstance(xpath, str) and any(char in xpath for char in "/["):
             _parent_node, _node_name_index, cur_value, xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists)
             if not not_found_xpath_list:
                 return cur_value
@@ -87,7 +89,7 @@ class n0dict__(dict):
         return self._get(xpath, raise_exception = True)
     # **************************************************************************
     # **************************************************************************
-    def __setitem__(self, xpath: str, new_value):
+    def __setitem__(self, xpath: typing.Union[str, int], new_value):
         """
         Public function:
         self[where1/where2/.../whereN] = value
@@ -115,12 +117,12 @@ class n0dict__(dict):
         or commands for creating (convertion into list) new node
             [new()]
         """
-        if xpath.startswith('?'):
+        if isinstance(xpath, str) and xpath.startswith('?'):
             if new_value is None or (isinstance(new_value, str) and new_value == ""):
                 return None
             xpath = xpath[1:]
 
-        if any(char in xpath for char in "/["):
+        if isinstance(xpath, str) and any(char in xpath for char in "/["):
             parent_node, node_name_index, _cur_value, _xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists = True)
             if not_found_xpath_list:
                 parent_node, node_name_index = self._add(parent_node, node_name_index, not_found_xpath_list)

@@ -1,9 +1,21 @@
 import os
 import typing
 from pathlib import Path
+import csv
 from .n0struct_n0list_n0dict import n0dict
 from .n0struct_n0list_n0dict import n0list
-from n0struct import * # required to use external functions in validate_csv_row()
+from .n0struct_utils import ( # required to use external functions in validate_csv_row()
+    validate_values,
+)
+from .n0struct_files import (
+    save_file,
+)
+from .n0struct_logging import (
+    n0print,
+    n0debug,
+    n0debug_calc,
+    n0error,
+)
 # ******************************************************************************
 # ******************************************************************************
 def parse_complex_csv_line(
@@ -42,7 +54,7 @@ def parse_complex_csv_line(
     return fields_in_the_row
 # ******************************************************************************
 def load_csv(
-    file_name: str,
+    file_path: str,
     column_names: typing.Union[list, tuple, None] = None,
     delimiter: str = ',',
     process_field: typing.Union[callable, None] = None,
@@ -105,6 +117,7 @@ def load_csv(
     #   contains_header == []               All column names from contains_header are mandatory
     #       column_names == None            The first row is header, column_names = first row
     #       column_names == []              The first row is header
+    return_unknown_fields: bool = False,
 ) -> typing.Generator:
     # dict                                  dict of fields got from current read line
     # typing.Tuple[dict, str]               dict of fields got from current read line, current read line
@@ -149,7 +162,7 @@ def load_csv(
         contains_header = column_names
     elif not isinstance(contains_header, str):
         raise SyntaxError(f"Not expectable type of {type(contains_header)} {contains_header=}."
-                         " Should be str (first column name) or list/tuple (mandatory column names) or bool (LEGACY) or None"
+                          " Should be str (first column name) or list/tuple (mandatory column names) or bool (LEGACY) or None"
         )
 
 
@@ -172,43 +185,42 @@ def load_csv(
             process_line = lambda line_value: line_value
 
     if read_mode == 'b' and isinstance(EOL, str):
-        EOL = EOL.encode('cp1251')
-    # n0debug("file_name")
+        EOL = EOL.encode(encoding)  # EOL = EOL.encode('cp1251')
 
     with open(
-        file_name,
+        file_path,
         mode='r'+read_mode,
         encoding=encoding if read_mode == 't' else None,
         newline=EOL if read_mode == 't' else None
     ) as in_file:
+        ########################################################################
         # skip empty lines at the begining of the file
+        ########################################################################
         while True:
             file_offset = in_file.tell()
             line = in_file.readline()  # removed walrus operator for compatibility with 3.7
-            # n0debug("line")
             if not line:
                 raise EOFError("Empty file or file only with spaces")
-            # n0debug("EOL")
-            # n0debug_calc(line.rstrip(EOL), "line.rstrip(EOL)")
             header_line = process_line(line.rstrip(EOL))
-            # n0debug("header_line")
             if header_line:
                 break
-        # n0debug("header_line")
-        possible_column_names = parse_csv_line(header_line, delimiter, process_field, EOL)
 
+        ########################################################################
+        # determine if the first row is header
+        ########################################################################
+        first_line_column_names = parse_csv_line(header_line, delimiter, process_field, EOL)
         first_line_is_header = False
         if contains_header:
             if isinstance(contains_header, str):
-                if possible_column_names[0] != contains_header:
+                if first_line_column_names[0] != contains_header:
                     if header_is_mandatory:
-                        raise ReferenceError(f"First line is not header {possible_column_names}. Expected first column '{contains_header}'")
+                        raise ReferenceError(f"First line is not header {first_line_column_names}. Expected first column '{contains_header}'")
                 else:
                     first_line_is_header = True
             elif isinstance(contains_header, (list, tuple)):
-                if any(mandatory_column_name not in possible_column_names for mandatory_column_name in contains_header):
+                if any(mandatory_column_name not in first_line_column_names for mandatory_column_name in contains_header):
                     if header_is_mandatory:
-                        raise ReferenceError(f"First line is not header {possible_column_names}. Expected {contains_header}")
+                        raise ReferenceError(f"First line is not header {first_line_column_names}. Expected {contains_header}")
                 else:
                     first_line_is_header = True
         else:
@@ -218,16 +230,19 @@ def load_csv(
         if not first_line_is_header:
             in_file.seek(file_offset) # first line is NOT header, re-read first line as data line
             if column_names:
-                possible_column_names = column_names
+                first_line_column_names = column_names
             else:
-                column_names = possible_column_names = [i for i in range(len(possible_column_names))]
+                column_names = first_line_column_names = [i for i in range(len(first_line_column_names))]
         else:
-            if header_is_mandatory and len(possible_column_names) != len(set(possible_column_names)):
-                raise KeyError(f"Read header {possible_column_names} contains not unique names of columns")
+            if header_is_mandatory and len(first_line_column_names) != len(set(first_line_column_names)):
+                raise KeyError(f"Read header {first_line_column_names} contains not unique names of columns")
             if not column_names:
-                column_names = possible_column_names
-        len_possible_column_names = len(possible_column_names)
+                column_names = first_line_column_names
+        len_first_line_column_names = len(first_line_column_names)
 
+        ########################################################################
+        # own realization for binary support, sorting of columns, removing redundant columns and etc.
+        ########################################################################
         while True:
             line = in_file.readline()  # removed walrus operator for compatibility with 3.7
             if not line:
@@ -238,14 +253,16 @@ def load_csv(
 
             # removed walrus operator for compatibility with 3.7
             list_field_values = parse_csv_line(stripped_line, delimiter, process_field, EOL)
+            # n0debug("list_field_values")
             dict_field_values = n0dict( zip(
-                                    possible_column_names,
+                                    first_line_column_names,
                                     list_field_values
-                                    + ([None] * (len_possible_column_names - len(list_field_values)))
+                                    + ([None] * (len_first_line_column_names - len(list_field_values)))
             ))
-            if column_names != possible_column_names:
+            # n0debug("dict_field_values")
+            if not return_unknown_fields and column_names != first_line_column_names:
                 dict_field_values = n0dict({
-                    key: dict_field_values[key]
+                    key: dict_field_values.get(key) # If optional column doesn't exist, then it will be None
                     for key in column_names
                 })
             if return_original_line:
@@ -253,10 +270,35 @@ def load_csv(
             else:
                 yield dict_field_values
 # ******************************************************************************
-load_complex_csv = load_csv  # Synonym
+def load_native_csv(
+    file_path: str,
+    column_names: typing.Union[list, tuple, None] = None,
+    delimiter: str = ',',
+    EOL: str = os.linesep,                      # AUTO # EOL: str = '\r\n',  # FOR WINDOWS ONLY!!!
+    contains_header: typing.Union[list, tuple, None] = None,
+    encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
+) -> typing.Generator:
+    if column_names is not None:
+        if not isinstance(column_names, (list, tuple)):
+            raise SyntaxError(f"Not expectable value in {column_names=}. Should be list/tupleNone")
+        elif len(column_names) != len(set(column_names)):
+            raise SyntaxError(f"Column names {column_names} contains not unique names of columns")
+
+    with open(file_path, 'rt', encoding=encoding, newline='') as in_filehandler:
+        csv_reader = csv.DictReader(
+            in_filehandler,
+            fieldnames=column_names,
+            delimiter=delimiter,
+            lineterminator=EOL,
+            strict=True
+        )
+        for row in csv_reader:
+            yield row
+# ******************************************************************************
+load_complex_csv = load_csv # Synonym
 # ******************************************************************************
 def load_simple_csv(
-    file_name: str,
+    file_path: str,
     column_names: typing.Union[list, tuple, None] = None,
     delimiter: str = ',',
     process_field: typing.Union[callable, None] = None,
@@ -275,7 +317,7 @@ def load_simple_csv(
     # dict                                  dict of fields got from current read line
     # typing.Tuple[dict, str]               dict of fields got from current read line, current read line
     return load_csv(
-        file_name            = file_name,
+        file_path            = file_path,
         column_names         = column_names,
         delimiter            = delimiter,
         process_field        = process_field,
@@ -310,13 +352,52 @@ def generate_complex_csv_row(
         generated_csv_row += field_value + delimiter
     return generated_csv_row[:-len(delimiter)] + EOL
 # ******************************************************************************
+def save_csv(
+                file_path: str,
+                rows: typing.Union[list, tuple, None],
+                header: typing.Union[list, tuple, None] = None,
+                # mode: str = 't', # binary is not supported by csv module
+                encoding: str = "utf-8",  # without UTF-8 BOM (Byte Order Mark)
+                EOL: str = os.linesep,
+                delimiter: str = ',',
+):
+    if rows is None:
+        return
+    if not isinstance(rows, (list, tuple)):
+        raise TypeError(f"Expected rows as list or tuple, but got ({typing(rows)}) {rows}")
+    if not isinstance(rows[0], (list, tuple)):
+        raise TypeError(f"Expected rows as list/tuples of lists/tuples, but got ({typing(rows[0])}) {rows[0]}")
+
+    '''
+    if header:
+        if not isinstance(header, (list, tuple)):
+            raise TypeError(f"Expected header as list or tuple, but got ({typing(rows)}) {rows}")
+        rows = [header] + rows
+    # n0debug("rows")
+    save_file(file_path, [generate_complex_csv_row(row, delimiter, EOL='') for row in rows], mode=mode, encoding=encoding, EOL=EOL)
+    '''
+    Path(file_path).parent.mkdir(parents=True, exist_ok=True)
+    with open(file_path, 'wt', encoding=encoding, newline='') as out_filehandler:
+        csv_writer = csv.writer(
+            out_filehandler,
+            delimiter=delimiter,
+            lineterminator=EOL,
+        )
+        if header:
+            if not isinstance(header, (list, tuple)):
+                raise TypeError(f"Expected header as list or tuple, but got ({typing(rows)}) {rows}")
+            csv_writer.writerow(header)
+        csv_writer.writerows(rows)
+
+# ******************************************************************************
 def generate_csv(
     root_node: dict,
     list_xpath: str,
     mapping_dict: dict = None,
     save_to: str = None,
     delimiter: str = ',',
-    show_header: bool = True
+    show_header: bool = True,
+    EOL: str = os.linesep,
 ) -> list:
     '''
     Samples:
@@ -375,8 +456,8 @@ def generate_csv(
     else:
         list_of_items = root_node.get(list_xpath, tuple())
 
-    if save_to:
-        out_filehandler = open(save_to, 'wt')
+    ## if save_to:
+    ##     out_filehandler = open(save_to, 'wt')
 
     csv_table = []
     if list_of_items:
@@ -389,8 +470,8 @@ def generate_csv(
         else:
             header = list(mapping_dict.keys())
 
-        if save_to and show_header:
-            out_filehandler.write(generate_complex_csv_row(header, delimiter))
+        ## if save_to and show_header:
+        ##     out_filehandler.write(generate_complex_csv_row(header, delimiter))
 
         for found_item in list_of_items:  # found_item == row in case of CSV list or item node in case of XML structure
             if isinstance(found_item, dict):
@@ -410,11 +491,12 @@ def generate_csv(
                 csv_row.append(found_value)
             csv_table.append(csv_row)
 
-            if save_to:
-                out_filehandler.write(generate_complex_csv_row(csv_row, delimiter))
+            ## if save_to:
+            ##     out_filehandler.write(generate_complex_csv_row(csv_row, delimiter))
 
     if save_to:
-        out_filehandler.close
+        save_csv(save_to, csv_table, header if show_header else None, delimiter=delimiter, EOL=EOL)
+    ##    out_filehandler.close
 
     return csv_table
 # ******************************************************************************
@@ -490,7 +572,7 @@ def validate_csv_row(
     interrupt_after_first_fail: bool = False,
     row_i: int = None,
     rows_count: int = 0,
-):
+) -> tuple:  # ( validation_result: str = SKIP|NOWAIT|VALID|REJECT, failed_validations: dict = {column_name: [error message#n,...])
     '''
     row:
         list: [field_value[0], field_value[1], ... field_value[i]]
@@ -545,11 +627,17 @@ def validate_csv_row(
         return failed_validations
 
     mapped_values = {**external_variables, **{f'value_{column_name}': row[column_name] for column_name in row}}
+    validation_result = "VALID"
 
     row_last = rows_count - 1
     for column_name in row:
         field_value = row[column_name]
-        column_schema = csv_schema.first(f"items/[id={column_name}]")
+        # column_schema = csv_schema.first(f"items/[id={column_name}]")
+        column_schema = csv_schema.first(f"items/id[text()={column_name}]/../")
+        if not column_schema:
+            continue
+            # raise Exception(f"Incorrect csv_schema={csv_schema},\nexpected: {{'items':[{{'id':<column_name>,...}},...]}}")
+
         mapped_values.update({  # Used in validation_lambda/validation_msg
             'column_name': column_name,
             'column_value': field_value,  # Legacy
@@ -564,29 +652,69 @@ def validate_csv_row(
             failed_validations.update({column_name: f"mandatory column '{column_name}' is empty"})
             continue
 
-        for validation in column_schema.get('validations', ()):
+        for validation_i,validation in enumerate(column_schema.get('validations', ())):
             validation_msg = None
+            validation_action = "REJECT"
+            validation_next = "CONTINUE"
             if isinstance(validation, (list, tuple)):
-                validation_lambda = validation[0]
+                validation_lambda_txt = validation[0]
                 if len(validation) >= 2:
                     validation_msg = validation[1]
+                if len(validation) >= 3:
+                    validation_action = validation[2].upper()  # SKIP/NOWAIT/VALID/REJECT (default)
+                    ## if validation_action not in {"SKIP", "NOWAIT", "VALID", "REJECT"}:
+                    ##     raise Exception(f"Validation rule #{validation_i} is incorrect."
+                    ##                     " Action is expected as SKIP or NOWAIT or VALID or REJECT"
+                    ##                     f", but received '{validation_action}'"
+                    ##     )
+                    validation_action = validate_values(
+                        validation_action,
+                        ("SKIP", "NOWAIT", "VALID", "REJECT"),
+                        raise_if_not_found = Exception(f"Validation rule #{validation_i} is incorrect."
+                                                       " Action is expected as SKIP or NOWAIT or VALID or REJECT"
+                                                       f", but received '{validation_action}'"
+                                             )
+                    )
+                if len(validation) >= 4:
+                    validation_next = validation[3].upper()  # BREAK/CONTINUE (default)
+                    validation_next = validate_values(
+                        validation_next,
+                        ("BREAK", "CONTINUE"),
+                        raise_if_not_found = Exception(f"Validation rule #{validation_i} is incorrect."
+                                                       " Action is expected as BREAK or CONTINUE"
+                                                       f", but received '{validation_next}'"
+                                             )
+                    )
+            elif isinstance(validation, str):
+                validation_lambda_txt = validation
             else:
-                validation_lambda = validation
+                raise TypeError(f"Validation rule #{validation_i} is incorrect."
+                                " validation is expected as list/tuple/str"
+                                f", but received ({type(validation)}) '{validation}'"
+                )
 
             is_valid = False
             try:
                 lambda_function_for_validation = eval(
-                    "lambda column_name, field_value, row, row_i, row_last: " + validation_lambda.format(**mapped_values)
+                    "lambda column_name, field_value, row, row_i, row_last: "
+                    + validation_lambda_txt.format(**mapped_values)
                 )
             except Exception as ex1:
                 validation_msg = f"Not passed validation #1 for '{column_name}': " + str(ex1)
             else:
                 try:
                     is_valid = lambda_function_for_validation(column_name, field_value, row, row_i, row_last)
+                    if validation_action == "VALID":
+                        is_valid = not is_valid
                 except Exception as ex2:
                     validation_msg = f"Not passed validation #2 for '{column_name}': " + str(ex2)
 
             if not is_valid:
+                if validation_action == "VALID":
+                    validation_result = "REJECT"
+                else:
+                    validation_result = validation_action
+
                 if column_name not in failed_validations:
                     failed_validations.update({column_name: []})
 
@@ -599,6 +727,9 @@ def validate_csv_row(
                 if interrupt_after_first_fail:
                     break
 
-    return failed_validations
+            if validation_next == "BREAK":
+                break
+
+    return validation_result, failed_validations
 # ******************************************************************************
 # ******************************************************************************

@@ -3,7 +3,7 @@ from .n0struct_utils import n0eval
 from .n0struct_findall import findall as n0struct_findall__findall
 from .n0struct_findall import findfirst as n0struct_findall__findfirst
 from .n0struct_logging import n0pretty
-## from .n0struct_logging import n0debug, n0debug_calc
+from .n0struct_logging import n0debug, n0debug_calc, n0print, n0error
 # ******************************************************************************
 # ******************************************************************************
 class n0list_(list):
@@ -54,14 +54,9 @@ class n0list_(list):
                 else:
                     return if_not_found
             except TypeError as ex:
-                ## n0debug("self")
-                ## n0debug("xpath")
-                ## n0debug_calc(n0eval(xpath), "n0eval(xpath)")
-                print("*"*50)
-                print(f"{self=}")
-                print(f"{xpath=}")
-                print(f"{n0eval(xpath)=}")
-                print("*"*50)
+                n0error(ex)
+                n0debug("self")
+                n0debug_calc(n0eval(xpath), f"n0eval('{xpath}')")
                 raise ex
     # **************************************************************************
     # n0list_. get()

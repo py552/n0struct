@@ -4,6 +4,12 @@ import typing
 from pathlib import Path
 from .n0struct_utils import n0eval
 from .n0struct_utils import isnumber
+# from .n0struct_logging import (
+    # n0print,
+    # n0debug,
+    # n0debug_calc,
+    # n0error,
+# )
 # ******************************************************************************
 # ******************************************************************************
 def load_file(
@@ -44,7 +50,7 @@ def load_lines(
 # ******************************************************************************
 def save_file(
                 file_path: str,
-                lines: typing.Union[tuple, list, dict, str, bytes, bytearray],
+                lines: typing.Union[tuple, list, dict, str, bytes, bytearray, typing.Generator],
                 mode: str = 't',
                 encoding: str = "utf-8",  # without UTF-8 BOM (Byte Order Mark)
                 EOL: str = '\n',
@@ -52,9 +58,10 @@ def save_file(
 ):
     Path(file_path).parent.mkdir(parents=True, exist_ok=True)
 
+    # n0debug("lines")
     if isinstance(lines, (list, tuple)):
         output_buffer = EOL.join(lines)
-    if isinstance(lines, dict):
+    elif isinstance(lines, dict):
         output_buffer = EOL.join([key+equal_tag+lines[key] for key in lines])
     elif isinstance(lines, str):
         output_buffer = lines
@@ -70,6 +77,7 @@ def save_file(
         encoding = None
 
     with open(file_path, 'w'+mode, encoding=encoding) as out_filehandler:
+        # n0debug("output_buffer")
         out_filehandler.write(output_buffer)
 # ******************************************************************************
 
