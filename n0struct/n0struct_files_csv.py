@@ -4,9 +4,11 @@ from pathlib import Path
 import csv
 from .n0struct_n0list_n0dict import n0dict
 from .n0struct_n0list_n0dict import n0list
-from .n0struct_utils import ( # required to use external functions in validate_csv_row()
-    validate_values,
-)
+
+# required to use external functions in validate_csv_row()
+from .n0struct_date import *
+from .n0struct_utils import *
+
 from .n0struct_files import (
     save_file,
 )
@@ -16,6 +18,7 @@ from .n0struct_logging import (
     n0debug_calc,
     n0error,
 )
+
 # ******************************************************************************
 # ******************************************************************************
 def parse_complex_csv_line(
