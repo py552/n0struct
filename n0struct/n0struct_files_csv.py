@@ -609,6 +609,9 @@ def validate_csv_row(
     elif not isinstance(row, dict):
         raise TypeError(f"Incoming agrument 'row' must be list or dict, but received {type(row)} '{row}'")
 
+    if not isinstance(csv_schema, n0dict):
+        csv_schema = n0dict(csv_schema)
+
     the_whole_row_related_validations = None
     failed_validations = {the_whole_row_related_validations: []}
     columns_count = len(row)

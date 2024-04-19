@@ -13,7 +13,7 @@ class n0dict__(dict):
         return n0struct_findall__findfirst(self, xpath, raise_exception)
     # **************************************************************************
     # **************************************************************************
-    def _get(self, xpath: str, raise_exception = True, if_not_found = None, return_lists = True):
+    def _get(self, xpath: str, if_not_found = None, raise_exception = True, return_lists = True):
         """
         Private function:
         return self[where1/where2/.../whereN]
@@ -58,7 +58,7 @@ class n0dict__(dict):
 
         If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
         """
-        return self._get(xpath, raise_exception = False, if_not_found = if_not_found)
+        return self._get(xpath, if_not_found = if_not_found, raise_exception = False)
     # **************************************************************************
     # **************************************************************************
     def first(self, xpath: str, if_not_found = None):
@@ -159,9 +159,13 @@ class n0dict__(dict):
                 del parent_node[node_name_index]
         return self
     # **************************************************************************
-    def pop(self, xpath: str, recursively: bool = False) -> typing.Any:
-        result = self[xpath]
-        self.delete(xpath, recursively)
+    def pop(self, xpath: str, if_not_found = None, recursively: bool = False) -> typing.Any:
+        result = if_not_found
+        try:
+            result = self[xpath]
+            self.delete(xpath, recursively)
+        except KeyError:
+            pass
         return result
     # **************************************************************************
     # **************************************************************************
