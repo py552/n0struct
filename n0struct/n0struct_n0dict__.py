@@ -164,7 +164,9 @@ class n0dict__(dict):
         try:
             result = self[xpath]
             self.delete(xpath, recursively)
-        except KeyError:
+        # except KeyError:
+        # except IndexError:
+        except:
             pass
         return result
     # **************************************************************************

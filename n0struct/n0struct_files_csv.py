@@ -25,7 +25,7 @@ def parse_complex_csv_line(
     line: typing.Union[str, bytes],
     delimiter: typing.Union[str, bytes] = ',',
     process_field: callable = lambda field_value: field_value,  # possible to field_value.strip()
-    EOL: typing.Union[str, bytes] = os.linesep,
+    EOL: typing.Union[str, bytes] = '\n',  # '\n' should be universal for Linux and Windows in case of 'rt' mode
 ) -> list:
     fields_in_the_row = []
     flag_quotes_in_the_begining = flag_expect_delimiter_or_quotes = False
@@ -64,7 +64,7 @@ def load_csv(
     # process_field == None
     #   strip_field == False                    lambda field_value: field_value
     #   strip_field == True                     lambda field_value: field_value.strip()
-    EOL: str = os.linesep,                      # AUTO # EOL: str = '\r\n',  # FOR WINDOWS ONLY!!!
+    EOL: str = '\n',                            # '\n' should be universal for Linux and Windows in case of 'rt' mode
     contains_header: typing.Union[bool, str, list, tuple, None] = None,
     # contains_header == True || False          ***LEGACY***
     #   header_is_mandatory == None             Copy value from contains_header into header_is_mandatory
@@ -277,7 +277,7 @@ def load_native_csv(
     file_path: str,
     column_names: typing.Union[list, tuple, None] = None,
     delimiter: str = ',',
-    EOL: str = os.linesep,                      # AUTO # EOL: str = '\r\n',  # FOR WINDOWS ONLY!!!
+    EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'rt' mode
     contains_header: typing.Union[list, tuple, None] = None,
     encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
 ) -> typing.Generator:
@@ -305,7 +305,7 @@ def load_simple_csv(
     column_names: typing.Union[list, tuple, None] = None,
     delimiter: str = ',',
     process_field: typing.Union[callable, None] = None,
-    EOL: str = os.linesep,
+    EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'rt' mode
     contains_header: typing.Union[bool, str, list, tuple, None] = None,
     process_line: typing.Union[callable, bool, None] = None,
     skip_empty_lines: bool = True,
@@ -314,7 +314,7 @@ def load_simple_csv(
     return_original_line: bool = False,
     parse_csv_line: callable = lambda line, delimiter, process_field: [process_field(field_value) for field_value in line.split(delimiter)],
     encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
-    read_mode: str = "t",
+    read_mode: str = 't',
     header_is_mandatory: typing.Union[bool, None] = None,
 ) -> typing.Generator:
     # dict                                  dict of fields got from current read line
@@ -340,7 +340,7 @@ def load_simple_csv(
 def generate_complex_csv_row(
     row: list,
     delimiter: str = ',',
-    EOL: str = os.linesep,
+    EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'wt' mode
 ) -> str:
     generated_csv_row = ""
     for field_value in row:
@@ -361,7 +361,7 @@ def save_csv(
                 header: typing.Union[list, tuple, None] = None,
                 # mode: str = 't', # binary is not supported by csv module
                 encoding: str = "utf-8",  # without UTF-8 BOM (Byte Order Mark)
-                EOL: str = os.linesep,
+                EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'wt' mode
                 delimiter: str = ',',
 ):
     if rows is None:
@@ -400,7 +400,7 @@ def generate_csv(
     save_to: str = None,
     delimiter: str = ',',
     show_header: bool = True,
-    EOL: str = os.linesep,
+    EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'wt' mode
 ) -> list:
     '''
     Samples:
