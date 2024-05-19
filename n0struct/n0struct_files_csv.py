@@ -6,6 +6,10 @@ from .n0struct_n0list_n0dict import n0dict
 from .n0struct_n0list_n0dict import n0list
 
 # required to use external functions in validate_csv_row()
+from . import *
+import re
+
+'''
 from .n0struct_date import *
 from .n0struct_utils import *
 
@@ -18,6 +22,7 @@ from .n0struct_logging import (
     n0debug_calc,
     n0error,
 )
+'''
 
 # ******************************************************************************
 # ******************************************************************************
