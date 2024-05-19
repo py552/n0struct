@@ -25,19 +25,31 @@ def parse_complex_csv_line(
     line: typing.Union[str, bytes],
     delimiter: typing.Union[str, bytes] = ',',
     process_field: callable = lambda field_value: field_value,  # possible to field_value.strip()
-    EOL: typing.Union[str, bytes] = '\n',  # '\n' should be universal for Linux and Windows in case of 'rt' mode
+    EOL: typing.Any = None,  # Left for back compatibility
 ) -> list:
+    if isinstance(line, str):
+        CRLF = '\r\n'
+        empty_field_value = ''
+        if isinstance(delimiter, bytes):
+            delimiter = delimiter.decode("utf-8-sig")
+    else:
+        CRLF = b'\r\n'
+        empty_field_value = b''
+        if isinstance(delimiter, str):
+            delimiter = delimiter.encode("utf-8")
+
+    field_value = empty_field_value
     fields_in_the_row = []
     flag_quotes_in_the_begining = flag_expect_delimiter_or_quotes = False
-    field_value = ""
-    for offset, ch in enumerate(line.rstrip(EOL)):
-        if isinstance(ch, int):
-            ch = chr(ch)
+
+    for offset, ch in enumerate(line.rstrip(CRLF)):
+        if isinstance(ch, int):  # if line is bytes, each fetched item will be int
+            ch = ch.to_bytes()
         if ch == delimiter and (flag_quotes_in_the_begining == False or flag_expect_delimiter_or_quotes == True):
             # The next field is started
             fields_in_the_row.append(process_field(field_value))
             flag_quotes_in_the_begining = flag_expect_delimiter_or_quotes = False
-            field_value = ""
+            field_value = empty_field_value
             continue  # skip delimiter
         elif ch == '"':
             if len(field_value) == 0:
@@ -64,7 +76,7 @@ def load_csv(
     # process_field == None
     #   strip_field == False                    lambda field_value: field_value
     #   strip_field == True                     lambda field_value: field_value.strip()
-    EOL: str = '\n',                            # '\n' should be universal for Linux and Windows in case of 'rt' mode
+    EOL: typing.Any = None,                     # Left for back compatibility
     contains_header: typing.Union[bool, str, list, tuple, None] = None,
     # contains_header == True || False          ***LEGACY***
     #   header_is_mandatory == None             Copy value from contains_header into header_is_mandatory
@@ -187,31 +199,33 @@ def load_csv(
         else:
             process_line = lambda line_value: line_value
 
-    if read_mode == 'b' and isinstance(EOL, str):
-        EOL = EOL.encode(encoding)  # EOL = EOL.encode('cp1251')
+    if read_mode == 't':
+        CRLF = '\r\n'
+    else:
+        CRLF = b'\r\n'
 
     with open(
         file_path,
         mode='r'+read_mode,
-        encoding=encoding if read_mode == 't' else None,
-        newline=EOL if read_mode == 't' else None
+        encoding=encoding if read_mode == 't' else None
     ) as in_file:
         ########################################################################
         # skip empty lines at the begining of the file
         ########################################################################
+        # FIXME: .readline() doesn't support \r in binary and \n\r in binary and text read modes
         while True:
             file_offset = in_file.tell()
             line = in_file.readline()  # removed walrus operator for compatibility with 3.7
             if not line:
                 raise EOFError("Empty file or file only with spaces")
-            header_line = process_line(line.rstrip(EOL))
+            header_line = process_line(line.rstrip(CRLF))
             if header_line:
                 break
 
         ########################################################################
         # determine if the first row is header
         ########################################################################
-        first_line_column_names = parse_csv_line(header_line, delimiter, process_field, EOL)
+        first_line_column_names = parse_csv_line(header_line, delimiter, process_field)
         first_line_is_header = False
         if contains_header:
             if isinstance(contains_header, str):
@@ -250,12 +264,12 @@ def load_csv(
             line = in_file.readline()  # removed walrus operator for compatibility with 3.7
             if not line:
                 return None  # EOF
-            stripped_line = process_line(line.rstrip(EOL))
+            stripped_line = process_line(line.rstrip(CRLF))
             if skip_empty_lines and not stripped_line:
                 continue
 
             # removed walrus operator for compatibility with 3.7
-            list_field_values = parse_csv_line(stripped_line, delimiter, process_field, EOL)
+            list_field_values = parse_csv_line(stripped_line, delimiter, process_field)
             # n0debug("list_field_values")
             dict_field_values = n0dict( zip(
                                     first_line_column_names,
@@ -312,7 +326,18 @@ def load_simple_csv(
     strip_line: typing.Union[bool, callable] = False,
     strip_field: typing.Union[bool, callable] = False,
     return_original_line: bool = False,
-    parse_csv_line: callable = lambda line, delimiter, process_field: [process_field(field_value) for field_value in line.split(delimiter)],
+    parse_csv_line: callable =
+        lambda
+            line,
+            delimiter,
+            process_field:
+        [
+            process_field(field_value)
+            for field_value in line
+                .rstrip('\r\n')
+                .split(delimiter)
+        ]
+    ,
     encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
     read_mode: str = 't',
     header_is_mandatory: typing.Union[bool, None] = None,

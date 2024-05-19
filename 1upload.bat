@@ -60,6 +60,8 @@ goto :eof
 :clean
 :: Safe version ::
 if "%fromdir%"=="" set "fromdir=%~dp0"
+echo Looking for "%fromdir%\*.tmp"
+for /f %%i in ('cmd.exe /c dir /s /b /a:-d "%fromdir%\*.tmp"') do if "%%~xi"==".tmp" (echo *** %%i&&cmd /c del %%i) else (echo SOMETHING WRONG: Try to remove '%%i'&&exit)
 echo Looking for "%fromdir%\*.pyc"
 for /f %%i in ('cmd.exe /c dir /s /b /a:-d "%fromdir%\*.pyc"') do if "%%~xi"==".pyc" (echo *** %%i&&cmd /c del %%i) else (echo SOMETHING WRONG: Try to remove '%%i'&&exit)
 echo Looking for "%fromdir%\__pycache__"

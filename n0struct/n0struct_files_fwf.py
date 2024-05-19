@@ -1,3 +1,4 @@
+import os
 import typing
 from pathlib import Path
 from .n0struct_n0list_n0dict import (
@@ -53,7 +54,17 @@ def parse_fwf_row(incoming_row: str, fwf_format: dict, validate: bool = True) ->
 
     return parsed_row
 # ******************************************************************************
-def load_fwf(file_path: str, header_format: dict, body_format: dict = None, footer_format: dict = None, validate: bool = True, EOL: str = '\n', return_original_row = None):
+def load_fwf(
+        file_path: str,
+        header_format: dict,
+        body_format: dict = None,
+        footer_format: dict = None,
+        validate: bool = True,
+        EOL: str = os.linesep,
+        return_original_row = None,
+        read_mode = 't',
+        encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
+):
     successfully_parsed_rows = []
     failed_rows = []
     if not header_format:
@@ -63,32 +74,36 @@ def load_fwf(file_path: str, header_format: dict, body_format: dict = None, foot
     if not footer_format:
         footer_format = body_format
 
-    with open(file_path, 'rt') as filehandler:
-        previous_row = None
-        for i, row in enumerate(filehandler.read().split(EOL)):
-            if previous_row:
-                parsed_row = parse_fwf_row(previous_row, header_format if i == 1 else body_format, validate)
-                if isinstance(parsed_row, dict):
-                    if return_original_row:
-                        parsed_row[return_original_row] = previous_row
-                    successfully_parsed_rows.append(parsed_row)
-                else:
-                    failed_rows.append(i, *parsed_row)
-            previous_row = row
+    previous_row = None
+    for i, row in enumerate(load_lines(file_path, read_mode, encoding, EOL)):
         if previous_row:
-            parsed_row = parse_fwf_row(previous_row, footer_format, validate)
+            parsed_row = parse_fwf_row(previous_row, header_format if i == 1 else body_format, validate)
             if isinstance(parsed_row, dict):
                 if return_original_row:
                     parsed_row[return_original_row] = previous_row
                 successfully_parsed_rows.append(parsed_row)
             else:
-                failed_rows.append(parsed_row)
+                failed_rows.append(i, *parsed_row)
+        previous_row = row
+    if previous_row:
+        parsed_row = parse_fwf_row(previous_row, footer_format, validate)
+        if isinstance(parsed_row, dict):
+            if return_original_row:
+                parsed_row[return_original_row] = previous_row
+            successfully_parsed_rows.append(parsed_row)
+        else:
+            failed_rows.append(parsed_row)
+
     if validate:
         return successfully_parsed_rows, failed_rows
     else:
         return successfully_parsed_rows
 # ******************************************************************************
-def generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler: str = ' '):
+def generate_fwf_row(
+        struct_to_save: dict,
+        fwf_format: dict,
+        filler: str = ' '
+):
     if not fwf_format:
         raise SyntaxError("fwf_format is mandatory parameter")
 
@@ -113,7 +128,14 @@ def generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler: str = ' '):
 
     return rendered_row
 # ******************************************************************************
-def generate_fwf(root_node: dict, list_xpath: str, mapping_dict: dict, fwf_format: dict, save_to: str = None, filler: str = ' ') -> list:
+def generate_fwf(
+        root_node: dict,
+        list_xpath: str,
+        mapping_dict: dict,
+        fwf_format: dict,
+        save_to: str = None,
+        filler: str = ' ',
+) -> list:
     if isinstance(root_node, (list, tuple)):
         list_of_items = root_node
     else:
