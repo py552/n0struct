@@ -17,11 +17,28 @@ def load_file(
         file_path: str,
         read_mode: str = 't',
         encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
+        EOL: str = os.linesep,
 ) -> str:
-    if read_mode == 'b':
-        encoding = None
-    with open(file_path, 'r'+read_mode, encoding=encoding) as in_filehandler:
-        return in_filehandler.read()
+    if 'b' in read_mode or EOL not in ('\r\n', '\n', '\r'):
+        # n0debug("read_mode")
+        with open(file_path, f"rb{read_mode[1:]}") as in_filehandler:
+            if 't' in read_mode:
+                if isinstance(EOL, str):
+                    EOL = EOL.encode("utf-8")
+                elif not isinstance(EOL, bytes):
+                    raise TypeError(f"{EOL=} could be str or bytes for {read_mode=}")
+                return in_filehandler.read().replace(EOL, b'\n').decode(encoding)
+            else:
+                return in_filehandler.read()
+    else:
+        # n0debug("read_mode")
+        # n0debug("encoding")
+        # n0debug_calc(EOL.encode(), "EOL.encode()")
+
+        # with open(file_path, 'r'+read_mode, encoding=encoding, newline=EOL) as in_filehandler:
+        # no newline parameter for auto decoding
+        with open(file_path, f"rt{read_mode[1:]}", encoding=encoding) as in_filehandler:
+            return in_filehandler.read()
 # ******************************************************************************
 def load_lines(
         file_path: str,
@@ -29,7 +46,7 @@ def load_lines(
         encoding: str = "utf-8-sig",    # with possible UTF-8 BOM (Byte Order Mark)
         EOL: str = '\r\n',              # used only for read_mode == 'b'
 ) -> typing.Generator:
-    if read_mode == 'b':
+    if 'b' in read_mode or EOL not in ('\r\n', '\n', '\r'):
         if isinstance(EOL, str):
             EOL = EOL.encode("utf-8")
         elif not isinstance(EOL, bytes):
@@ -46,36 +63,61 @@ def load_lines(
 # ******************************************************************************
 def save_file(
         file_path: str,
-        lines: typing.Union[tuple, list, dict, str, bytes, bytearray, typing.Generator],
+        output_buffer: typing.Union[str, bytes, bytearray, dict, list, tuple, typing.Generator, set, frozenset],
         mode: str = 'wt',           # or 'at' for append
         encoding: str = "utf-8",    # without UTF-8 BOM (Byte Order Mark)
         EOL: str = os.linesep,
         equal_tag: str = "=",
+        convert_EOL: bool = True,
 ):
+    if mode in ('t', 'b', 't+', 'b+'):
+        mode = f"w{mode}"
+    if isinstance(output_buffer, (bytes, bytearray)):
+        mode = f"{mode[0]}b{mode[2:]}"
+
+    if isinstance(output_buffer, dict):
+        output_buffer = '\n'.join([f"{key}{equal_tag}{value}" for key,value in output_buffer.items()])
+    elif not isinstance(output_buffer, (str, bytes, bytearray, list, tuple, typing.Generator, set, frozenset)):
+        output_buffer = str(output_buffer)
+
     Path(file_path).parent.mkdir(parents=True, exist_ok=True)
-
-    if mode in ('t', 'b'):
-        mode = 'w' + mode
-
-    if isinstance(lines, (list, tuple)):
-        output_buffer = EOL.join(lines)
-    elif isinstance(lines, dict):
-        output_buffer = EOL.join([key+equal_tag+lines[key] for key in lines])
-    elif isinstance(lines, str):
-        output_buffer = lines
-    elif isinstance(lines, (bytes, bytearray)):
-        output_buffer = lines
-        mode = mode[0] + 'b'
-    else:
-        output_buffer = str(lines)
-
-    if 'b' in mode:
+    if 'b' in mode or EOL not in ('\r\n', '\n', '\r'):
+        mode = f"{mode[0]}b{mode[2:]}"
         if isinstance(output_buffer, str):
-            output_buffer = output_buffer.encode(encoding)
-        encoding = None
+            # n0debug_calc(EOL.encode(), "not standard EOL")
+            output_buffer = output_buffer.replace('\n', EOL).encode(encoding)
+        if isinstance(EOL, str):
+            EOL = EOL.encode(encoding)
+        out_filehandler = open(file_path, mode)
+    else:
+        out_filehandler = open(file_path, mode, encoding=encoding, newline=EOL)
+        EOL = '\n'
 
-    with open(file_path, mode, encoding=encoding) as out_filehandler:
+    # n0debug("file_path")
+    # n0debug("mode")
+    # n0debug("encoding")
+    # n0debug("output_buffer")
+
+    if isinstance(output_buffer, (list, tuple, typing.Generator, set, frozenset)):
+        # n0debug("EOL")
+        for line in output_buffer:
+            # n0debug("line")
+            if 'b' in mode:
+                if not isinstance(line, (bytes, bytearray)):
+                    line = str(line).encode(encoding)
+                    # n0debug("line")
+            else:
+                if isinstance(line, (bytes, bytearray)):
+                    line = line.decode(encoding)
+                elif not isinstance(line, str):
+                    line = str(line)
+                # n0debug("line")
+            out_filehandler.write(line)
+            out_filehandler.write(EOL)
+    else:
         out_filehandler.write(output_buffer)
+    out_filehandler.close
+
 # ******************************************************************************
 
 
