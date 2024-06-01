@@ -14,6 +14,7 @@ from .n0struct_n0list_n0dict import (
 from .n0struct_utils import (
     to_int,
 )
+from .n0struct_files import load_lines
 # ******************************************************************************
 # ******************************************************************************
 def load_fwf_format(file_path: str) -> dict:
