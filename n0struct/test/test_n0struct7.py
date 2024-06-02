@@ -9,7 +9,9 @@ from n0struct import (
     split_with_escape,
     n0print,
     n0debug,
+    init_logger,
 )
+init_logger(debug_timeformat = None, debug_show_object_id = False, debug_logtofile = False)
 
 
 def test_split_with_escape():

@@ -8,10 +8,11 @@ sys.path.insert(0, mydir+"/../../")
 from n0struct import (
     save_file,
     load_file,
-    n0error,
+    n0info,
     n0print,
     n0debug,
     n0debug_calc,
+    init_logger,
 )
 
 
@@ -59,7 +60,7 @@ def test_save_load_file():
             read_as_txt_result = load_file(tmp_file)
             n0debug_calc(read_as_txt_result.encode(), "read_as_txt_result")
             if optional_linesep >= 5:
-                n0error(f'Autoconvert is impossible with not standard EOL {linesep.encode()}')
+                n0info(f'Autoconvert is impossible with not standard EOL {linesep.encode()}')
             else:
                 assert read_as_txt_result == expected_txt_result
 
@@ -90,7 +91,7 @@ def test_save_load_file():
             read_as_txt_result = load_file(tmp_file)
             n0debug_calc(read_as_txt_result.encode(), "read_as_txt_result")
             if optional_linesep >= 5:
-                n0error(f'Autoconvert is impossible with not standard EOL {linesep.encode()}')
+                n0info(f'Autoconvert is impossible with not standard EOL {linesep.encode()}')
             else:
                 assert read_as_txt_result == expected_txt_result
 
@@ -155,5 +156,6 @@ def main():
 # ******************************************************************************
 
 if __name__ == '__main__':
+    init_logger(debug_timeformat=None)
     main()
     n0print("Mission acomplished")

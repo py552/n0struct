@@ -3,7 +3,7 @@ set "fromdir=%1"
 if "%fromdir%"=="" set "fromdir=%~dp0"
 
 echo fromdir=%fromdir%
-call :seek_and_destroy  .pytest_cache\v\cache "nodeids,stepwise"
+call :seek_and_destroy  .pytest_cache\v\cache "nodeids,stepwise,lastfailed"
 call :seek_and_destroy  .pytest_cache\v
 call :seek_and_destroy  .pytest_cache ".gitignore,CACHEDIR.TAG,README.md"
 call :seek_and_destroy  __pycache__ .pyc

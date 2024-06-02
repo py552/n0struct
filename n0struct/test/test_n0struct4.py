@@ -8,7 +8,9 @@ from n0struct import (
     n0dict,
     n0print,
     n0debug,
+    init_logger,
 )
+init_logger(debug_timeformat = None, debug_show_object_id = False, debug_logtofile = False)
 
 # ******************************************************************************
 dict1 = n0dict({
@@ -40,7 +42,7 @@ def test_n0dict():
 [\'//C[2]/value1\'] = "3"
 [\'//C[2]/value2\'] = "6"
 '''
-    # n0debug("to_xpath_expected_result")
+    n0debug("to_xpath_expected_result")
 
     assert to_xpath_result == to_xpath_expected_result
 
