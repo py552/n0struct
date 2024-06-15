@@ -493,7 +493,7 @@ def key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@Data
         }
     '''
     output_dict = {}
-    for input_list in input_dict.get(xpath):
+    for input_list in (input_dict.get(xpath) or tuple()):
         ## n0debug("input_list")
         if isinstance(input_list, (list, tuple)):
             for key_value_dict in input_list:
@@ -523,6 +523,53 @@ def merge_dict(dict1: dict, dict2: dict) -> dict:
     output_dict.update(dict2)
     return output_dict
 
+
+# ******************************************************************************
+def remove_void_elements(
+    structure: typing.Union[list, dict],
+    remove_empty_arrays: bool = False,
+    remove_empty_strings: bool = False,
+    xpath: str = "/",
+    level: int = 0,
+    remove_empty_elements: set = {},
+) -> typing.Union[list, dict]:
+    if isinstance(structure, list):
+        index = len(structure)
+        while index:
+            index -= 1
+            value = structure[index]
+            element_xpath = f"{xpath}[{index}]"
+            if value is None:
+                structure.pop(index)
+            elif not value:
+                if remove_empty_elements and element_xpath in remove_empty_elements:
+                    structure.pop(index)
+                elif isinstance(value, str) and remove_empty_strings:
+                    structure.pop(index)
+                elif isinstance(value, (list, dict)) and remove_empty_arrays:
+                    structure.pop(index)
+            else:
+                if isinstance(value, (list, dict)):
+                    remove_void_elements(value, remove_empty_arrays, remove_empty_strings, element_xpath, level+1)
+    elif isinstance(structure, dict):
+        for key in tuple(structure.keys()):
+            value = structure[key]
+            element_xpath =f"{xpath}/{key}"
+            if value is None:
+                structure.pop(key)
+            elif not value:
+                if remove_empty_elements and element_xpath in remove_empty_elements:
+                    structure.pop(key)
+                elif isinstance(value, str) and remove_empty_strings:
+                    structure.pop(key)
+                elif isinstance(value, (list, dict)) and remove_empty_arrays:
+                    structure.pop(key)
+            else:
+                if isinstance(value, (list, dict)):
+                    remove_void_elements(value, remove_empty_arrays, remove_empty_strings, element_xpath, level+1)
+    return structure
+
+
 # ******************************************************************************
 from collections.abc import Iterable
 def iterable(obj):
@@ -535,8 +582,10 @@ def iterable(obj):
     else:
         yield obj
 
+
 def isiterable(obj, item_type = str):
     return isinstance(obj, item_type) or isinstance(obj, Iterable)
+
 
 # ******************************************************************************
 # https://code.activestate.com/recipes/577504/

@@ -666,13 +666,18 @@ def validate_csv_row(
     validation_result = "VALID"
 
     row_last = rows_count - 1
-    for column_name in row:
-        field_value = row[column_name]
-        # column_schema = csv_schema.first(f"items/[id={column_name}]")
-        column_schema = csv_schema.first(f"items/id[text()={column_name}]/../")
-        if not column_schema:
-            continue
-            # raise Exception(f"Incorrect csv_schema={csv_schema},\nexpected: {{'items':[{{'id':<column_name>,...}},...]}}")
+    for column_schema in csv_schema.get('items'):
+        column_name = column_schema['id']
+        field_value = row.get(column_name, "$N0t_F0uNd$")
+        if column_name != 'common_validations':
+            if field_value == "$N0t_F0uNd$":
+                if column_schema.get('mandatory'):
+                    failed_validations.update({column_name: f"mandatory field '{column_name}' doesn't exist"})
+                continue # ALL validations will be skipped without error message mandatory==False and field doesn't exist
+            elif not field_value:
+                if column_schema.get('mandatory'):
+                    failed_validations.update({column_name: f"mandatory field '{column_name}' is empty"})
+                continue # ALL validations will be skipped without error message mandatory==False and field is empty/None
 
         mapped_values.update({  # Used in validation_lambda/validation_msg
             'column_name': column_name,
@@ -682,11 +687,8 @@ def validate_csv_row(
             'row_i': row_i,
             'rows_count': rows_count,
             'row_last': row_last,
+            'row': row,
         })
-
-        if column_schema.get('mandatory', False) and not field_value:
-            failed_validations.update({column_name: f"mandatory column '{column_name}' is empty"})
-            continue
 
         for validation_i,validation in enumerate(column_schema.get('validations', ())):
             validation_msg = None
