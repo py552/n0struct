@@ -275,13 +275,11 @@ def load_csv(
 
             # removed walrus operator for compatibility with 3.7
             list_field_values = parse_csv_line(stripped_line, delimiter, process_field)
-            # n0debug("list_field_values")
             dict_field_values = n0dict( zip(
                                     first_line_column_names,
                                     list_field_values
                                     + ([None] * (len_first_line_column_names - len(list_field_values)))
             ))
-            # n0debug("dict_field_values")
             if not return_unknown_fields and column_names != first_line_column_names:
                 dict_field_values = n0dict({
                     key: dict_field_values.get(key) # If optional column doesn't exist, then it will be None
@@ -708,7 +706,7 @@ def validate_csv_row(
                     validation_action = validate_values(
                         validation_action,
                         ("SKIP", "NOWAIT", "VALID", "REJECT"),
-                        raise_if_not_found = Exception(f"Validation rule #{validation_i} is incorrect."
+                        raise_if_not_found = Exception(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
                                                        " Action is expected as SKIP or NOWAIT or VALID or REJECT"
                                                        f", but received '{validation_action}'"
                                              )
@@ -718,7 +716,7 @@ def validate_csv_row(
                     validation_next = validate_values(
                         validation_next,
                         ("BREAK", "CONTINUE"),
-                        raise_if_not_found = Exception(f"Validation rule #{validation_i} is incorrect."
+                        raise_if_not_found = Exception(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
                                                        " Action is expected as BREAK or CONTINUE"
                                                        f", but received '{validation_next}'"
                                              )
@@ -726,7 +724,7 @@ def validate_csv_row(
             elif isinstance(validation, str):
                 validation_lambda_txt = validation
             else:
-                raise TypeError(f"Validation rule #{validation_i} is incorrect."
+                raise TypeError(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
                                 " validation is expected as list/tuple/str"
                                 f", but received ({type(validation)}) '{validation}'"
                 )
@@ -738,14 +736,14 @@ def validate_csv_row(
                     + validation_lambda_txt.format(**mapped_values)
                 )
             except Exception as ex1:
-                validation_msg = f"Not passed validation #1 for '{column_name}': " + str(ex1)
+                validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex1)
             else:
                 try:
                     is_valid = lambda_function_for_validation(column_name, field_value, row, row_i, row_last)
                     if validation_action == "VALID":
                         is_valid = not is_valid
                 except Exception as ex2:
-                    validation_msg = f"Not passed validation #2 for '{column_name}': " + str(ex2)
+                    validation_msg = f"Failed validation rule #{validation_i} for '{column_name}': " + str(ex2)
 
             if not is_valid:
                 if validation_action == "VALID":
@@ -759,7 +757,7 @@ def validate_csv_row(
                 try:
                     failed_validation_message = validation_msg.format(**mapped_values)
                 except Exception as ex3:
-                    failed_validation_message = f"Not passed validation #3 for '{column_name}': " + str(ex3)
+                    failed_validation_message = f"Incorrect validation message #{validation_i} for '{column_name}': " + str(ex3)
 
                 failed_validations[column_name].append(failed_validation_message)
                 if interrupt_after_first_fail:
