@@ -19,7 +19,13 @@ from .n0struct_logging import (
     n0print,
     n0debug,
     n0debug_calc,
+    # n0debug_object,
     n0error,
+    n0info,
+)
+
+from .n0struct_files import (
+    load_file,
 )
 
 from .n0struct_utils import n0eval
@@ -45,27 +51,50 @@ class n0list(n0list_):
 
         :param args:
         :param kw:
-            recursively = None/False/0 => don't convert subnodes into n0list/n0dict
+            force_dict=True     =>  leave JSON subnodes as dict.
+                                    by default all dictionaries will be converted into n0dict,
+                                               but all lists will stay lists. lists could be
+                                               converted into n0list only with recursively=True.
+            force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
+
+            recursively=True    =>  convert all list/JSON-text subnodes into n0dict/n0list.
+                                    in case of incoming dict by default all subnodes are dict/list, only the root node is n0dict.
+                                    in case of incoming JSON-text by default all subnodes are n0dict/list.
+            recursively=True is required to have ability to apply n0dict/n0list specific methods to all subnodes,
+            not only to the root node. This option will impact to performance and memory consumation.
+
+            file=f"{file_path}" =>  load JSON-text from {file_path}
         """
-        len__args = len(args)
-        if not len__args:
-            super(n0list, self).__init__(*args, **kw)
-        elif isinstance(args, tuple):
-            if len__args == 1:
-                from_tuple = args[0]
-            else:
-                from_tuple = args
-            _recursively = kw.get("recursively") or False
-            for value in from_tuple:
-                if _recursively:
-                    # if isinstance(value, (dict, OrderedDict)):
-                    if isinstance(value, dict):
-                        value = n0dict(value, recursively = _recursively)
-                    elif isinstance(value, (list, tuple)):
-                        value = n0list(value, recursively = _recursively)
-                self.append(value)
+        _incoming = None
+        _force_dict =  None if kw.pop("force_dict", None) else n0dict
+        _recursively = kw.pop("recursively", False)
+        _args_len = len(args)
+        _file = kw.pop("file", None)
+        if not _args_len and _file:
+            _incoming = load_file(_file, encoding=kw.pop("encoding", "utf-8-sig")) # with possible UTF-8 BOM (Byte Order Mark)
+            if not _incoming:
+                raise TypeError(f"'{_file}' must be XML or JSON structure, but it is empty")
+        elif _args_len == 1:
+            _incoming = args[0]
         else:
-            raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (list/tuple)")
+            raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/zip or list of paired tuples)")
+
+        if not _incoming:
+            super(n0list, self).__init__(*args, **kw)
+
+        if isinstance(_incoming, str):
+            _incoming = _incoming.strip()
+            if _incoming.startswith('['):
+                # By default all JSON dictinaries will be converted into n0dict
+                _incoming = json.loads(_incoming, object_pairs_hook = _force_dict)
+            else:
+                raise TypeError(f"Expected JSON as text argument for n0list.__init__({args})")
+        super(n0list, self).__init__(_incoming, **kw)
+
+        if _recursively:
+            for i,value in enumerate(self):
+                n0dict.convert_recursively(self, i, f"//[i]", 1)
+
     # **************************************************************************
     # n0list. _find()
     # **************************************************************************
@@ -627,6 +656,21 @@ class n0dict(n0dict_):
     """
     # **************************************************************************
     # **************************************************************************
+    @staticmethod
+    def convert_recursively(node: Union[dict, list, tuple], key_index: Any, xpath: str, level: int):
+        value_type = ""
+        if isinstance(node[key_index], dict):
+            if not isinstance(node[key_index], n0dict):
+                node[key_index] = n0dict(node[key_index])
+            for key,value in node[key_index].items():
+                n0dict.convert_recursively(node[key_index], key, f"{xpath}{value_type}/{key}", level+1)
+        elif isinstance(node[key_index], (list, tuple)):
+            if isinstance(node[key_index], list) and not isinstance(node[key_index], n0list):
+                node[key_index] = n0list(node[key_index])
+            for i,value in enumerate(node[key_index]):
+                n0dict.convert_recursively(node[key_index], i, f"{xpath}{value_type}[{i}]", level+1)
+    # **************************************************************************
+    # **************************************************************************
     def __init__(self, *args, **kw):
         """
         args == tuple, kw == mapping(dictionary)
@@ -642,76 +686,60 @@ class n0dict(n0dict_):
                                                converted into n0list only with recursively=True.
             force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
 
-            recursively=True    =>  convert all dict/list/XML-text/JSON-text subnodes into n0dict/n0list.
-                                    by default all subnodes are dict/list, only the root node is n0dict/n0list.
-            recursively=True is required to have ability to apply n0dict/n0list speci-fic methods to all subnodes,
-            not only to the root node. This option will impact to memory consumation.
+            recursively=True    =>  convert all dict/XML-text/JSON-text subnodes into n0dict/n0list.
+                                    in case of incoming dict by default all subnodes are dict/list, only the root node is n0dict.
+                                    in case of incoming XML-text/JSON-text by default all subnodes are n0dict/list.
+            recursively=True is required to have ability to apply n0dict/n0list specific methods to all subnodes,
+            not only to the root node. This option will impact to performance and memory consumation.
 
             file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
         """
-        len__args = len(args)
-        if not len__args:
-            _file = kw.pop("file", None)
-            if _file:
-                _encoding = kw.pop("encoding", "utf-8-sig") # with possible UTF-8 BOM (Byte Order Mark)
-                with open(_file, "rt", encoding=_encoding) as in_filehandler:
-                    self.__init__(in_filehandler.read().strip(), **kw)
-            else:
-                super(n0dict, self).__init__(*args, **kw)
-        elif len__args == 1:
-            # Not kw.pop()! Because of in case of .get "recursively" will be provided deeper into _constructor(..)
-            _recursively = kw.get("recursively", False)
-            if isinstance(args[0], str):
-                if _recursively:
-                    _constructor = self.__init__
-                else:
-                    _constructor = super(n0dict, self).__init__
-
-                striped_args0 = args[0].strip()
-                if striped_args0.startswith('<'):
-                    # https://github.com/martinblech/xmltodict/issues/252
-                    # The main function parse has a force_n0dict keyword argument useful for this purpose.
-                    _constructor(
-                        xmltodict.parse(args[0], dict_constructor = n0dict),
-                        **kw
-                    )
-                elif striped_args0.startswith('{'):
-                    # By default all JSON dictinaries will be converted into n0dict
-                    _object_pairs_hook = None if kw.pop("force_dict", None) else n0dict
-                    _constructor(
-                        json.loads(args[0], object_pairs_hook = _object_pairs_hook),
-                        **kw
-                    )
-                else:
-                    # raise TypeError(f"Expected XML or JSON as text argument for n0dict.__init__({args})")
-                    super(n0dict, self).__init__(*args, **kw)
-            elif isinstance(args[0], dict):
-                for key in args[0]:
-                    value = args[0][key]
-                    if _recursively:
-                        if isinstance(value, dict):
-                            value = n0dict(value, recursively = _recursively)
-                        elif isinstance(value, (list, tuple)):
-                            value = n0list(value, recursively = _recursively)
-                    self.update({key: value})
-            elif isinstance(args[0], (list, tuple)):
-                # [key1, value1, key2, value2, ..., keyN, valueN]
-                if (len(args[0]) % 2) == 0 and all(isinstance(itm, str) for itm in args[0][0::2]):
-                    for key, value in zip(args[0][0::2], args[0][1::2]):
-                        self.update({key: value})
-                # [(key1, value1), (key2, value2), ..., (keyN, valueN)]
-                elif all(isinstance(itm, (tuple, list)) and len(itm) == 2 and isinstance(itm[0], str) for itm in args[0]):
-                    for pair in args[0]:
-                        self.update({pair[0]: pair[1]})
-                else:
-                    raise TypeError(f"Expected even strings in the list [k1, v1, k2, v2] or list of pairs [[k1, v1],[k2, v2]] as argument for n0dict.__init__({args})")
-            elif isinstance(args[0], zip):
-                for key, value in args[0]:
-                    self.update({key: value})
-            else:
-                raise TypeError(f"Expected str/dict/list/tuple/zip, but received {type(args[0])} as first argument for n0dict.__init__({args})")
+        _incoming = None
+        _force_dict =  None if kw.pop("force_dict", None) else n0dict
+        _recursively = kw.pop("recursively", False)
+        _args_len = len(args)
+        _file = kw.pop("file", None)
+        if not _args_len and _file:
+            _incoming = load_file(_file, encoding=kw.pop("encoding", "utf-8-sig")) # with possible UTF-8 BOM (Byte Order Mark)
+            if not _incoming:
+                raise TypeError(f"'{_file}' must be XML or JSON structure, but it is empty")
+        elif _args_len == 1:
+            _incoming = args[0]
         else:
-            raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/zip or paired tuple/list)")
+            raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/zip or list of paired tuples)")
+
+        if not _incoming:
+            super(n0dict, self).__init__(*args, **kw)
+
+        if isinstance(_incoming, str):
+            _incoming = _incoming.strip()
+            if _incoming.startswith('<'):
+                # https://github.com/martinblech/xmltodict/issues/252
+                # The main function parse has a force_n0dict keyword argument useful for this purpose.
+                _incoming = xmltodict.parse(_incoming, dict_constructor = _force_dict)
+            elif _incoming.startswith('{'):
+                # By default all JSON dictinaries will be converted into n0dict
+                _incoming = json.loads(_incoming, object_pairs_hook = _force_dict)
+            else:
+                raise TypeError(f"Expected XML or JSON as text argument for n0dict.__init__({args})")
+        if isinstance(_incoming, (dict, zip)):
+            super(n0dict, self).__init__(_incoming, **kw)
+        elif isinstance(_incoming, (list, tuple)):
+            # [(key1, value1), (key2, value2), ..., (keyN, valueN)]
+            if all(isinstance(itm, (tuple, list)) and len(itm) == 2 for itm in _incoming):
+                super(n0dict, self).__init__(_incoming)
+            # [key1, value1, key2, value2, ..., keyN, valueN]
+            elif (len(_incoming) % 2) == 0:
+                super(n0dict, self).__init__(zip(_incoming[0::2], _incoming[1::2]))
+            else:
+                raise TypeError(f"Expected even strings in the list [k1, v1, k2, v2] or list of pairs [[k1, v1],[k2, v2]] as argument for n0dict.__init__({args})")
+        else:
+            raise TypeError(f"Expected str (JSON/XML)/dict/list/tuple/zip, but received {type(_incoming)} in n0dict.__init__({args})")
+
+        if _recursively:
+            for key in self.keys():
+                n0dict.convert_recursively(self, key, f"//{key}", 1)
+
     # **************************************************************************
     # * n0dict. compare(..)
     # **************************************************************************
