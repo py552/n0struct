@@ -3,7 +3,8 @@ import datetime
 # ******************************************************************************
 pyformat_YYYYMMDD   = "%Y-%m-%d"    # 2020-07-16
 pyformat_DDMMYYYY   = "%d-%m-%Y"    # 16-07-2020
-pyformat_DDMMMYYYY  = "%d-%b-%y"    # 16-JUL-20
+pyformat_DDMMMYY    = "%d-%b-%y"    # 16-JUL-20
+pyformat_DDMMMYYYY  = "%d-%b-%Y"    # 16-JUL-2020
 pyformat_YYMM       = "%y%m"        # 2007
 pyformat_MMYY       = "%m%y"        # 0720
 # ******************************************************************************
@@ -259,5 +260,42 @@ def last_day_of_yymm(input_date_str: str) -> typing.Union[None, datetime.datetim
     if not date_datetime:
         return date_datetime
     return date_delta(date_datetime, month_delta=1) - datetime.timedelta(microseconds=1)
-# ******************************************************************************
-# ******************************************************************************
+
+
+################################################################################
+__all__ = (
+    'date_today',
+    'date_only',
+    'date_delta',
+    'date_to_format',
+    'date_format',
+    'date_timestamp_full',
+    'date_timestamp',
+    'date_iso',
+    'date_yymmdd',
+    'date_dash_yyyymmdd',
+    'date_slash_ddmmyyyy',
+    'date_dash_ddmmyyyy',
+    'date_yymm',
+    'date_mmyy',
+    'date_julian',
+    'time_hhmmss',
+    'time_colon_hhmmss',
+    'to_date',
+    'from_date',
+    'from_ddmmmyy',
+    'from_yyyymmdd',
+    'from_ddmmyyyy',
+    'is_date_format',
+    'is_date_yymm',
+    'is_date_mmyy',
+    'first_day_of_yymm',
+    'last_day_of_yymm',
+    'pyformat_YYYYMMDD',
+    'pyformat_DDMMYYYY',
+    'pyformat_DDMMMYY',
+    'pyformat_DDMMMYYYY',
+    'pyformat_YYMM',
+    'pyformat_MMYY',
+)
+################################################################################

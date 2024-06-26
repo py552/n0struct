@@ -179,3 +179,21 @@ def generate_composite_keys(
     return composite_keys_for_all_lines
 # ******************************************************************************
 # ******************************************************************************
+################################################################################
+__all__ = (
+    'set__flag_compare_check_different_types',
+    'get__flag_compare_check_different_types',
+    'set__flag_compare_return_difference_of_values',
+    'get__flag_compare_return_difference_of_values',
+    'set__flag_compare_return_equal',
+    'get__flag_compare_return_equal',
+    'set__flag_compare_return_equal_records',
+    'get__flag_compare_return_equal_records',
+    'set__flag_compare_return_equal_elements',
+    'get__flag_compare_return_equal_elements',
+    'set__flag_compare_return_place',
+    'get__flag_compare_return_place',
+    'xpath_match',
+    'generate_composite_keys',
+)
+################################################################################

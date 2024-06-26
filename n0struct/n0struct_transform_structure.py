@@ -4,13 +4,13 @@ from .n0struct_utils import isnumber
 strip_ns = lambda key: key.split(':', 1)[1] if ':' in key else key
 # ******************************************************************************
 '''
-# Sample
-currency_converter = {"682": "SAR"}
-keys_for_currency_convertion = {
-    "currency":         lambda value: currency_converter[value] if value in currency_converter else value,
-    "source_currency":  lambda value: currency_converter[value] if value in currency_converter else value,
-}
-sample: def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
+sample:
+    currency_converter = {"682": "SAR"}
+    keys_for_currency_convertion = {
+        "currency":         lambda value: currency_converter[value] if value in currency_converter else value,
+        "source_currency":  lambda value: currency_converter[value] if value in currency_converter else value,
+    }
+    def convert_to_native_format(value, key = None, exception = None, transform_depends_of_key = keys_for_currency_convertion):
 '''
 # ******************************************************************************
 def convert_to_native_format(value, key = None, exception: set = None, transform_depends_of_key: dict = None):
@@ -54,5 +54,10 @@ def transform_structure(in_structure, transform_key = strip_ns, transform_value 
         return out_list[0]
     else:
         return out_list
-# ******************************************************************************
-# ******************************************************************************
+################################################################################
+__all__ = (
+    'convert_to_native_format',
+    'transform_structure',
+    'strip_ns',
+)
+################################################################################

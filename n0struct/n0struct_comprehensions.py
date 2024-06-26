@@ -46,9 +46,8 @@ def load_ini(
     """
     result_dict = {}
     for line in load_lines(file_path):
-        if (stripped_line:=line.strip()) \
-        and not any(stripped_line.startswith(comment_tag) for comment_tag in iterable(comment_tags)):
-            # n0debug("default_value")
+        stripped_line = line.lstrip()
+        if stripped_line and not any(stripped_line.startswith(comment_tag) for comment_tag in iterable(comment_tags)):
             key, value = split_pair(
                 stripped_line,
                 delimiter = equal_tag,
@@ -63,5 +62,11 @@ def load_ini(
                     value = result_dict[key] + value
             result_dict[key] = value
     return result_dict
-# ******************************************************************************
-# ******************************************************************************
+
+
+################################################################################
+__all__ = (
+    'default_parse_value',
+    'load_ini',
+)
+################################################################################

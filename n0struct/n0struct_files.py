@@ -128,7 +128,13 @@ def unique_file_path(file_path: str, purpose: str = "") -> Path:
             return unique_file_path
     else:
         raise FileExistsError("Impossible to find unique name for {purpose}'{file_path}'")
-# ******************************************************************************
-# ******************************************************************************
 
 
+################################################################################
+__all__ = (
+    'load_file',
+    'load_lines',
+    'save_file',
+    'unique_file_path',
+)
+################################################################################

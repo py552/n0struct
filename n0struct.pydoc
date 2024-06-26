@@ -4,9 +4,13 @@ NAME
     n0struct
 
 DESCRIPTION
-    # -*- coding: utf-8 -*-
-    # ******************************************************************************
-    # ******************************************************************************
+    list/dict extensions allow to
+    * work (find/get/set/update) with tree-like structures, generated for example by json.loads(..), using xpath approach
+    * direct/wise compare lists/dictionaries/tree-like structures + exclude sub-nodes from comparison
+    * transform on the fly values in attributes during comparing
+    * .to_json(): convert tree-like structures into string buffer for saving into JSON file
+    * .to_xml(): convert tree-like structures into string buffer for saving into XML file
+    * .to_xpath: convert tree-like structures into string buffer for saving into XPATH file
 
 PACKAGE CONTENTS
     n0struct_arrays
@@ -31,21 +35,1443 @@ PACKAGE CONTENTS
     n0struct_utils_find
     test (package)
 
+CLASSES
+    builtins.object
+        n0struct.n0struct_git.Git
+    collections.abc.MutableSet(collections.abc.Set)
+        n0struct.n0struct_references.OrderedSet
+    n0struct.n0struct_n0dict_.n0dict_(n0struct.n0struct_n0dict__.n0dict__)
+        n0struct.n0struct_n0list_n0dict.n0dict
+    n0struct.n0struct_n0list_.n0list_(builtins.list)
+        n0struct.n0struct_n0list_n0dict.n0list
+    
+    class Git(builtins.object)
+     |  Git(repo_root_dir: str, repository_url: str, rsa_key_path: str = '', show_result=False)
+     |  
+     |  # ******************************************************************************
+     |  # ******************************************************************************
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, repo_root_dir: str, repository_url: str, rsa_key_path: str = '', show_result=False)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  checkout(self, branch_name: str, show_result=None)
+     |      # ##############################################################################################
+     |  
+     |  log(self, git_arguments: Union[str, list])
+     |      # ##############################################################################################
+     |  
+     |  run(self, git_arguments: Union[str, list], show_result=None) -> tuple
+     |      # ##############################################################################################
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class OrderedSet(collections.abc.MutableSet)
+     |  OrderedSet(iterable=None)
+     |  
+     |  # ******************************************************************************
+     |  # ******************************************************************************
+     |  # https://stackoverflow.com/questions/1653970/does-python-have-an-ordered-set
+     |  # https://code.activestate.com/recipes/576694/
+     |  
+     |  Method resolution order:
+     |      OrderedSet
+     |      collections.abc.MutableSet
+     |      collections.abc.Set
+     |      collections.abc.Collection
+     |      collections.abc.Sized
+     |      collections.abc.Iterable
+     |      collections.abc.Container
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __contains__(self, key) -> bool
+     |  
+     |  __eq__(self, other) -> bool
+     |      Return self==value.
+     |  
+     |  __init__(self, iterable=None)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __iter__(self) -> Generator
+     |  
+     |  __len__(self) -> int
+     |  
+     |  __repr__(self) -> str
+     |      Return repr(self).
+     |  
+     |  __reversed__(self) -> Generator
+     |  
+     |  add(self, key)
+     |      Add an element.
+     |  
+     |  discard(self, key)
+     |      Remove an element.  Do not raise an exception if absent.
+     |  
+     |  pop(self, last=True) -> Any
+     |      Return the popped value.  Raise KeyError if empty.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  __abstractmethods__ = frozenset()
+     |  
+     |  __hash__ = None
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from collections.abc.MutableSet:
+     |  
+     |  __iand__(self, it)
+     |  
+     |  __ior__(self, it)
+     |  
+     |  __isub__(self, it)
+     |  
+     |  __ixor__(self, it)
+     |  
+     |  clear(self)
+     |      This is slow (creates N new iterators!) but effective.
+     |  
+     |  remove(self, value)
+     |      Remove an element. If not a member, raise a KeyError.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from collections.abc.Set:
+     |  
+     |  __and__(self, other)
+     |  
+     |  __ge__(self, other)
+     |      Return self>=value.
+     |  
+     |  __gt__(self, other)
+     |      Return self>value.
+     |  
+     |  __le__(self, other)
+     |      Return self<=value.
+     |  
+     |  __lt__(self, other)
+     |      Return self<value.
+     |  
+     |  __or__(self, other)
+     |      Return self|value.
+     |  
+     |  __rand__ = __and__(self, other)
+     |  
+     |  __ror__ = __or__(self, other)
+     |  
+     |  __rsub__(self, other)
+     |  
+     |  __rxor__ = __xor__(self, other)
+     |  
+     |  __sub__(self, other)
+     |  
+     |  __xor__(self, other)
+     |  
+     |  isdisjoint(self, other)
+     |      Return True if two sets have a null intersection.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from collections.abc.Collection:
+     |  
+     |  __subclasshook__(C) from abc.ABCMeta
+     |      Abstract classes can override this to customize issubclass().
+     |      
+     |      This is invoked early on by abc.ABCMeta.__subclasscheck__().
+     |      It should return True, False or NotImplemented.  If it returns
+     |      NotImplemented, the normal algorithm is used.  Otherwise, it
+     |      overrides the normal algorithm (and the outcome is cached).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from collections.abc.Iterable:
+     |  
+     |  __class_getitem__ = GenericAlias(...) from abc.ABCMeta
+     |      Represent a PEP 585 generic type
+     |      
+     |      E.g. for t = list[int], t.__origin__ is list and t.__args__ is (int,).
+    
+    class n0dict(n0struct.n0struct_n0dict_.n0dict_)
+     |  n0dict(*args, **kw)
+     |  
+     |  https://github.com/martinblech/xmltodict/issues/252
+     |  For Python >= 3.6, dictionary are Sorted by insertion order, so avoid the use of OrderedDict for those python versions.
+     |  
+     |  Method resolution order:
+     |      n0dict
+     |      n0struct.n0struct_n0dict_.n0dict_
+     |      n0struct.n0struct_n0dict__.n0dict__
+     |      builtins.dict
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, *args, **kw)
+     |      args == tuple, kw == mapping(dictionary)
+     |      
+     |      * == convert from tuple into list of arguments
+     |      ** == convert from mapping into list of named arguments
+     |      
+     |      :param args:
+     |      :param kw:
+     |          force_dict=True     =>  leave JSON subnodes as dict.
+     |                                  by default all dictionaries will be converted into n0dict,
+     |                                             but all lists will stay lists. lists could be
+     |                                             converted into n0list only with recursively=True.
+     |          force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
+     |      
+     |          recursively=True    =>  convert all dict/XML-text/JSON-text subnodes into n0dict/n0list.
+     |                                  in case of incoming dict by default all subnodes are dict/list, only the root node is n0dict.
+     |                                  in case of incoming XML-text/JSON-text by default all subnodes are n0dict/list.
+     |          recursively=True is required to have ability to apply n0dict/n0list specific methods to all subnodes,
+     |          not only to the root node. This option will impact to performance and memory consumation.
+     |      
+     |          file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
+     |  
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x000001735A597BA0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
+     |      # **************************************************************************
+     |      # * n0dict. compare(..)
+     |      # **************************************************************************
+     |  
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x000001735A597B00>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |      # **************************************************************************
+     |      # * n0dict. direct_compare(..)
+     |      # **************************************************************************
+     |  
+     |  update(self, xpath: 'typing.Union[dict, str]', new_value: 'str' = None) -> 'n0dict__'
+     |      D.update([E, ]**F) -> None.  Update D from dict/iterable E and F.
+     |      If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
+     |      If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
+     |      In either case, this is followed by: for k in F:  D[k] = F[k]
+     |  
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |  
+     |  convert_recursively(node: 'Union[dict, list, tuple]', key_index: 'Any', xpath: 'str', level: 'int')
+     |      # **************************************************************************
+     |      # **************************************************************************
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from n0struct.n0struct_n0dict_.n0dict_:
+     |  
+     |  to_json(self, indent: int = 4, pairs_in_one_line=True, json_convention: bool = True, skip_empty_arrays: bool = False, compress: bool = False) -> str
+     |      Public function: export self into json result string
+     |  
+     |  to_xml(self, indent: int = 4, encoding: str = 'utf-8', quote: str = '"') -> str
+     |      Public function: export self into xml result string
+     |  
+     |  to_xpath(self, mode: int = None) -> str
+     |      Public function: collect elements xpath starts from root and print with indents
+     |  
+     |  xpath(self, mode: int = None) -> list
+     |      Public function: collect elements xpath starts from root
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from n0struct.n0struct_n0dict__.n0dict__:
+     |  
+     |  __getitem__(self, xpath)
+     |      Public function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
+     |  
+     |  __setitem__(self, xpath: 'typing.Union[str, int]', new_value)
+     |      Public function:
+     |      self[where1/where2/.../whereN] = value
+     |          AKA
+     |      self[where1][where2]...[whereN] = value
+     |      
+     |      if xpath will be started with ?, the nothing will be done if new_value is None or empty
+     |      if xpath is exist, then the value will be overwritten
+     |      if not exist, then the node will be created
+     |      
+     |      could be used predicates:
+     |          [<item>=<value>]
+     |          [<item>='<value>']
+     |      or indexes
+     |          [0]
+     |          [1]
+     |          [2]
+     |          [-1]
+     |          [-2]
+     |          [-3]
+     |      or functions
+     |          [last()]
+     |          [last()-1]
+     |          [last()-2]
+     |      or commands for creating (convertion into list) new node
+     |          [new()]
+     |  
+     |  all_not_valid(self, validate)
+     |      # **************************************************************************
+     |  
+     |  all_valid(self, validate)
+     |      # **************************************************************************
+     |  
+     |  any_not_valid(self, validate)
+     |      # **************************************************************************
+     |  
+     |  any_valid(self, validate)
+     |      # **************************************************************************
+     |  
+     |  delete(self, xpath: 'str', recursively: 'bool' = False) -> 'n0dict__'
+     |      # **************************************************************************
+     |  
+     |  findall(self, xpath: 'str', raise_exception: 'bool' = True)
+     |  
+     |  findfirst(self, xpath: 'str', raise_exception: 'bool' = True)
+     |  
+     |  first(self, xpath: 'str', if_not_found=None)
+     |      Public function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+     |      If self[where1/where2/.../whereN] is list, thet the first element will be returned
+     |  
+     |  get(self, xpath: 'str', if_not_found=None)
+     |      Public function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+     |  
+     |  has_all(self, tupple_of_keys: 'typing.Union[tuple, list]') -> 'bool'
+     |      # **************************************************************************
+     |      # **************************************************************************
+     |  
+     |  has_any_of(self, tupple_of_keys: 'typing.Union[tuple, list]') -> 'bool'
+     |      # **************************************************************************
+     |      # **************************************************************************
+     |  
+     |  isEqual(self, xpath, value)
+     |      Public function: return empty lists in dict, if self[xpath] == value
+     |  
+     |  isExist(self, xpath) -> 'dict'
+     |      Public function: return empty lists in dict, if self[xpath] exists
+     |  
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict__.<lambda> at 0x000001735A5976A0>)
+     |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
+     |  
+     |  is_exist(self, xpath: 'str') -> 'bool'
+     |      Public function: return True, if self[xpath] exists
+     |  
+     |  pop(self, xpath: 'str', if_not_found=None, recursively: 'bool' = False) -> 'typing.Any'
+     |      D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
+     |      
+     |      If the key is not found, return the default if given; otherwise,
+     |      raise a KeyError.
+     |  
+     |  update_extend(self, other)
+     |      # **************************************************************************
+     |      # **************************************************************************
+     |  
+     |  valid(self, node_xpath: 'str', validate, expected_result_for_error: 'bool' = False, msg: 'str' = None)
+     |      :param node_xpath:
+     |          xpath to the node inside self
+     |      :param validate:
+     |          list/scalar/function = validation
+     |      :param expected_result_for_error:
+     |          By default expected that if result of validation is True, then self[node_xpath] is not valid (return False)
+     |      :param msg:
+     |          if None => return result as bool True(validation)/False
+     |      :return:
+     |      
+     |      Examples:
+     |          xml.valid('node/subnode', ["", None], True, "ERROR")
+     |              If xml['node/subnode'] is equal "" or None (result of comparising is True), then return ERROR, else ""
+     |          xml.valid('node/subnode', ["", None], True)
+     |              If xml['node/subnode'] is equal "" or None (result of comparising is True), then return False (not valid), else True
+     |          xml.valid('node/subnode', "", True)
+     |              If xml['node/subnode'] is equal "" (result of comparising is True), then return False (not valid), else True
+     |          xml.valid('node/subnode', [1, 2], False, "ERROR")
+     |              If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return ERROR, else ""
+     |          xml.valid('node/subnode', [1, 2], False)
+     |              If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
+     |          xml.valid('node/subnode', [1, 2])
+     |              If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from n0struct.n0struct_n0dict__.n0dict__:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.dict:
+     |  
+     |  __contains__(self, key, /)
+     |      True if the dictionary has the specified key, else False.
+     |  
+     |  __delitem__(self, key, /)
+     |      Delete self[key].
+     |  
+     |  __eq__(self, value, /)
+     |      Return self==value.
+     |  
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |  
+     |  __ior__(self, value, /)
+     |      Return self|=value.
+     |  
+     |  __iter__(self, /)
+     |      Implement iter(self).
+     |  
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |  
+     |  __len__(self, /)
+     |      Return len(self).
+     |  
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |  
+     |  __ne__(self, value, /)
+     |      Return self!=value.
+     |  
+     |  __or__(self, value, /)
+     |      Return self|value.
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __reversed__(self, /)
+     |      Return a reverse iterator over the dict keys.
+     |  
+     |  __ror__(self, value, /)
+     |      Return value|self.
+     |  
+     |  __sizeof__(...)
+     |      D.__sizeof__() -> size of D in memory, in bytes
+     |  
+     |  clear(...)
+     |      D.clear() -> None.  Remove all items from D.
+     |  
+     |  copy(...)
+     |      D.copy() -> a shallow copy of D
+     |  
+     |  items(...)
+     |      D.items() -> a set-like object providing a view on D's items
+     |  
+     |  keys(...)
+     |      D.keys() -> a set-like object providing a view on D's keys
+     |  
+     |  popitem(self, /)
+     |      Remove and return a (key, value) pair as a 2-tuple.
+     |      
+     |      Pairs are returned in LIFO (last-in, first-out) order.
+     |      Raises KeyError if the dict is empty.
+     |  
+     |  setdefault(self, key, default=None, /)
+     |      Insert key with a value of default if key is not in the dictionary.
+     |      
+     |      Return the value for key if key is in the dictionary, else default.
+     |  
+     |  values(...)
+     |      D.values() -> an object providing a view on D's values
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from builtins.dict:
+     |  
+     |  __class_getitem__(...) from builtins.type
+     |      See PEP 585
+     |  
+     |  fromkeys(iterable, value=None, /) from builtins.type
+     |      Create a new dictionary with keys from iterable and values set to value.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Static methods inherited from builtins.dict:
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from builtins.dict:
+     |  
+     |  __hash__ = None
+    
+    class n0list(n0struct.n0struct_n0list_.n0list_)
+     |  n0list(*args, **kw)
+     |  
+     |  Class extended builtins.list(builtins.object) with additional methods:
+     |  . direct_compare()  = compare element self[i] with other[i] with the same indexes
+     |  . compare()         = compare element self[i] with any other[?] WITHOUT using sorting
+     |  
+     |  Method resolution order:
+     |      n0list
+     |      n0struct.n0struct_n0list_.n0list_
+     |      builtins.list
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, *args, **kw)
+     |      args == tuple, kw == mapping(dictionary)
+     |      
+     |      * == convert from tuple into list of arguments
+     |      ** == convert from mapping into list of named arguments
+     |      
+     |      :param args:
+     |      :param kw:
+     |          force_dict=True     =>  leave JSON subnodes as dict.
+     |                                  by default all dictionaries will be converted into n0dict,
+     |                                             but all lists will stay lists. lists could be
+     |                                             converted into n0list only with recursively=True.
+     |          force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
+     |      
+     |          recursively=True    =>  convert all list/JSON-text subnodes into n0dict/n0list.
+     |                                  in case of incoming dict by default all subnodes are dict/list, only the root node is n0dict.
+     |                                  in case of incoming JSON-text by default all subnodes are n0dict/list.
+     |          recursively=True is required to have ability to apply n0dict/n0list specific methods to all subnodes,
+     |          not only to the root node. This option will impact to performance and memory consumation.
+     |      
+     |          file=f"{file_path}" =>  load JSON-text from {file_path}
+     |  
+     |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |      Recursively compare self[i] with other[?] WITHOUT using order of elements.
+     |      If self[i] is n0list/n0dict (and if other[?] is found with the same type),
+     |      then goes deeper with n0list. compare(..)/n0dict.direct_compare(..)
+     |      
+     |      :param other:
+     |      :param self_name:
+     |      :param other_name:
+     |      :param prefix:
+     |      :param continuity_check:
+     |      :param composite_key:
+     |      :param compare_only:
+     |      :param exclude_xpaths:
+     |      :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
+     |      :return:
+     |              n0dict({
+     |                  "differences":  [], # generated for each case of not equality
+     |                  "not_equal":    [], # generated if elements with the same xpath and type are not equal
+     |                  "self_unique":  [], # generated if elements from self list don't exist in other list
+     |                  "other_unique": [], # generated if elements from other list don't exist in self list
+     |                  "difftypes":    [], # generated if elements with the same xpath have different types
+     |              })
+     |              if not returned["differences"]: self and other are equal with conditions:
+     |                  except exclude_xpaths;
+     |                  compare_only
+     |                  transform
+     |  
+     |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |      Recursively compare self[i] with other[i]
+     |      strictly according to the order of elements.
+     |      If self[i] (other[i] must be the same) is n0list/n0dict, then goes deeper
+     |      with n0list.direct_compare/n0dict.direct_compare(..)
+     |      
+     |      :param self: etalon list for compare.
+     |      :param other: list to compare with etalon
+     |      :param self_name: <default = "self"> dict/list name, used in result["differences"]
+     |      :param other_name: <default = "other"> dict/list name, used in result["differences"]
+     |      :param prefix: <default = ""> xpath prefix, used for full xpath generation
+     |      :param continuity_check: used for checking that below arguments are defined only with names
+     |      :param composite_key:  For compatibility with compare(..)
+     |      :param compare_only: For compatibility with compare(..)
+     |      :param exclude_xpaths: ()|None|empty mean nothing to exclude
+     |      :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
+     |      :return:
+     |              n0dict({
+     |                  "differences":  [], # generated for each case of not equality
+     |                  "not_equal":    [], # generated if elements with the same xpath and type are not equal
+     |                  "self_unique":  [], # generated if elements from self list don't exist in other list
+     |                  "other_unique": [], # generated if elements from other list don't exist in self list
+     |                  "difftypes":    [], # generated if elements with the same xpath have different types
+     |              })
+     |              if not returned["differences"]: self and other are equal with conditions:
+     |                  except exclude_xpaths;
+     |                  compare_only
+     |                  transform
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from n0struct.n0struct_n0list_.n0list_:
+     |  
+     |  __contains__(self, other_list)
+     |      Return key in self.
+     |  
+     |  __getitem__(self, xpath)
+     |      Public function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
+     |  
+     |  all_in(self, other_list)
+     |      # **************************************************************************
+     |  
+     |  all_not_in(self, other_list)
+     |      # **************************************************************************
+     |  
+     |  any_in(self, other_list)
+     |      # **************************************************************************
+     |  
+     |  any_not_in(self, other_list)
+     |      # **************************************************************************
+     |  
+     |  consists_of_all(self, other_list)
+     |      # **************************************************************************
+     |  
+     |  consists_of_any(self, other_list)
+     |      # **************************************************************************
+     |  
+     |  findall(self, xpath: str, raise_exception: bool = True)
+     |  
+     |  findfirst(self, xpath: str, raise_exception: bool = True)
+     |  
+     |  first(self, xpath: str, if_not_found=None)
+     |      Public function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+     |      If self[where1/where2/.../whereN] is list, thet the first element will be returned
+     |  
+     |  get(self, xpath: Union[str, int], if_not_found=None)
+     |      Public function:
+     |      return self[where1/where2/.../whereN]
+     |          AKA
+     |      return self[where1][where2]...[whereN]
+     |      
+     |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
+     |  
+     |  not_consists_of_any(self, other_list)
+     |      # **************************************************************************
+     |  
+     |  to_json(self, indent: int = 4, pairs_in_one_line=True, json_convention: bool = True, skip_empty_arrays: bool = False, compress: bool = False) -> str
+     |      Public function: export self into json result string
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from n0struct.n0struct_n0list_.n0list_:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.list:
+     |  
+     |  __add__(self, value, /)
+     |      Return self+value.
+     |  
+     |  __delitem__(self, key, /)
+     |      Delete self[key].
+     |  
+     |  __eq__(self, value, /)
+     |      Return self==value.
+     |  
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |  
+     |  __iadd__(self, value, /)
+     |      Implement self+=value.
+     |  
+     |  __imul__(self, value, /)
+     |      Implement self*=value.
+     |  
+     |  __iter__(self, /)
+     |      Implement iter(self).
+     |  
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |  
+     |  __len__(self, /)
+     |      Return len(self).
+     |  
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |  
+     |  __mul__(self, value, /)
+     |      Return self*value.
+     |  
+     |  __ne__(self, value, /)
+     |      Return self!=value.
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __reversed__(self, /)
+     |      Return a reverse iterator over the list.
+     |  
+     |  __rmul__(self, value, /)
+     |      Return value*self.
+     |  
+     |  __setitem__(self, key, value, /)
+     |      Set self[key] to value.
+     |  
+     |  __sizeof__(self, /)
+     |      Return the size of the list in memory, in bytes.
+     |  
+     |  append(self, object, /)
+     |      Append object to the end of the list.
+     |  
+     |  clear(self, /)
+     |      Remove all items from list.
+     |  
+     |  copy(self, /)
+     |      Return a shallow copy of the list.
+     |  
+     |  count(self, value, /)
+     |      Return number of occurrences of value.
+     |  
+     |  extend(self, iterable, /)
+     |      Extend list by appending elements from the iterable.
+     |  
+     |  index(self, value, start=0, stop=9223372036854775807, /)
+     |      Return first index of value.
+     |      
+     |      Raises ValueError if the value is not present.
+     |  
+     |  insert(self, index, object, /)
+     |      Insert object before index.
+     |  
+     |  pop(self, index=-1, /)
+     |      Remove and return item at index (default last).
+     |      
+     |      Raises IndexError if list is empty or index is out of range.
+     |  
+     |  remove(self, value, /)
+     |      Remove first occurrence of value.
+     |      
+     |      Raises ValueError if the value is not present.
+     |  
+     |  reverse(self, /)
+     |      Reverse *IN PLACE*.
+     |  
+     |  sort(self, /, *, key=None, reverse=False)
+     |      Sort the list in ascending order and return None.
+     |      
+     |      The sort is in-place (i.e. the list itself is modified) and stable (i.e. the
+     |      order of two equal elements is maintained).
+     |      
+     |      If a key function is given, apply it once to each list item and sort them,
+     |      ascending or descending, according to their function values.
+     |      
+     |      The reverse flag can be set to sort in descending order.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from builtins.list:
+     |  
+     |  __class_getitem__(...) from builtins.type
+     |      See PEP 585
+     |  
+     |  ----------------------------------------------------------------------
+     |  Static methods inherited from builtins.list:
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from builtins.list:
+     |  
+     |  __hash__ = None
+
 FUNCTIONS
-    getsizeof(...)
-        getsizeof(object [, default]) -> int
+    _findall(parent_node: Union[dict, list], seeked_xpath_list: list, found_xpath_list: list = [], parent_nodes_stack: dict = {}, raise_exception=True, level=0) -> Optional[dict]
+        returns:
+            {
+                seeked_xpath_str: node_ptr # if node_ptr is dict/list it's real node, else the final element
+            }
+    
+    add_colums_into_csv(additional_columns: list, csv_rows: list = None, csv_schema: dict = None, are_required: bool = False)
+        # ******************************************************************************
+    
+    catch_exception(func: <built-in function callable>, result_in_case_of_exception: Any = None, **kw)
+        args == tuple, kw == mapping(dictionary)
         
-        Return the size of object in bytes.
+        * == convert from tuple into list of arguments
+        ** == convert from mapping into list of named arguments
+        
+        :param args:
+        :param kw:
+            result:typing.Any => if defined, return {result} in case of no exception
+    
+    convert_to_native_format(value, key=None, exception: set = None, transform_depends_of_key: dict = None)
+        # ******************************************************************************
+    
+    date_dash_ddmmyyyy(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> str DD-MM-YYYY
+    
+    date_dash_yyyymmdd(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> str YYYY-MM-DD
+    
+    date_delta(input_date: Union[NoneType, datetime.datetime, datetime.date] = None, day_delta: int = 0, month_delta: int = 0) -> datetime.datetime
+        :param day_delta:
+        :param month_delta:
+        :return: today + day_delta + month_delta -> date
+    
+    date_format(date_format: str, input_date: Optional[datetime.datetime] = None, day_delta: int = 0, month_delta: int = 0) -> str
+        LEGACY
+    
+    date_iso(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> str ISO date format
+    
+    date_julian(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> str JULIAN
+    
+    date_mmyy(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> str MMYY
+    
+    date_only(input_date: datetime.datetime) -> datetime.date
+        # ******************************************************************************
+    
+    date_slash_ddmmyyyy(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> str DD/MM/YYYY
+    
+    date_timestamp(input_date: Optional[datetime.datetime] = None) -> str
+        :return: input_date -> str 13 characters YYMMDD_HHMMSS
+    
+    date_timestamp_full(input_date: Optional[datetime.datetime] = None, day_delta: int = 0, month_delta: int = 0) -> str
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> str 20 characters YYYYMMDDHHMMSSFFFFFF
+    
+    date_to_format(input_date: Optional[datetime.datetime], date_format: str, day_delta: int = 0, month_delta: int = 0) -> str
+        :param date_format:
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> date_format
+    
+    date_today() -> datetime.datetime
+        :return: today -> date
+        
+        https://stackoverflow.com/questions/32517248/what-is-the-difference-between-python-functions-datetime-now-and-datetime-t
+            datetime.datetime.now() takes tzinfo as keyword argument but datetime.today() does not take any keyword arguments.
+            By default, now() executes with datetime.datetime.now(tz=None)
+    
+    date_yymm(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> str YYMM
+    
+    date_yymmdd(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
+        :param input_date:
+        :param day_delta:
+        :param month_delta:
+        :return: (input_date or today) + day_delta + month_delta -> str YYMMDD
+    
+    default_parse_value(key_value, default_value)
+        ## from .n0struct_logging import n0debug, n0debug_calc
+        # ******************************************************************************
+    
+    deserialize_dict(buffer_str: str, delimiter: str = ';', parse_item: Optional[Callable] = None, parse_empty=False, equal_tag: str = '=', parse_key: Callable = <function <lambda> at 0x0000017358421D00>, default_key: Any = None, parse_value: Callable = <function <lambda> at 0x0000017358421DA0>, default_value: Any = None, default_dict_result=None, default_list_result=None, default_tuple_result=None) -> dict
+        buffer_str = "TAG1=VALUE1;TAG2=VALUE2"
+        deserialize_dict(buffer_str) == {"TAG1": "VALUE1", "TAG2": "VALUE2"}
+    
+    deserialize_fixed_list(buffer_str: str, fixed_list_len: int, delimiter: str = ';', default_item: Any = None, parse_item=<function <lambda> at 0x0000017358422200>, parse_empty=False, default_list_result=None) -> list
+        generate list [value1, value2, ... value[fixed_list_len]] with size of fixed_list_len from deserialized buffer_str
+        in case of values are not enough to fill fixed_list_len list, then [value1, default_item, ... default_item]
+            buffer_str = "TAG1;TAG2"
+            deserialize_fixed_list(buffer_str, 2) == ("TAG1", "TAG2")
+            deserialize_fixed_list(buffer_str, 4) == ("TAG1", "TAG2", None, None)
+            deserialize_fixed_list(buffer_str, 4, default_item = "DEFAULT_TAG") == ("TAG1", "TAG2", "DEFAULT_TAG", "DEFAULT_TAG")
+    
+    deserialize_key_value(buffer_str: str, equal_tag: str = '=', parse_key: Callable = <function <lambda> at 0x0000017358421A80>, default_key: Union[Callable, Any, NoneType] = None, parse_value: Callable = <function <lambda> at 0x0000017358421B20>, default_value: Union[Callable, Any, NoneType] = None, default_tuple_result=None) -> tuple
+        buffer_str = "TAG1=VALUE1"
+        deserialize_key_value(buffer_str) == ("TAG1", "VALUE1")
+        buffer_str = "TAG1"
+        deserialize_key_value(buffer_str) == ("TAG1", None)
+        buffer_str = "VALUE1"
+        deserialize_key_value(buffer_str, default_key = "TAG1") == ("TAG1", "VALUE1")
+    
+    deserialize_list(buffer_str: str, delimiter: str = ';', parse_item=<function <lambda> at 0x0000017358421940>, parse_empty=False, default_list_result=None, escape_character=None) -> list
+        buffer_str = "ITEM1;ITEM2;ITEM3"
+        deserialize_list_of_lists(buffer_str) == ["ITEM1", "ITEM2", "ITEM3"]
+    
+    deserialize_list_of_lists(buffer_str: str, delimiter: str = ';', parse_item=<function <lambda> at 0x00000173584220C0>, delimiter_for_sublists: str = ',', parse_sublist=None, parse_empty=False, default_list_result=None) -> list
+        buffer_str = "list1item1,list1item2;list2item1,list2item2;list3item1,list3item2"
+        deserialize_list_of_lists(buffer_str) == [
+                                                    ["list1item1", "list1item2"],
+                                                    ["list2item1", "list2item2"],
+                                                    ["list3item1", "list3item2"]
+                                                 ]
+    
+    findall(current_node: Union[dict, list], seeked_xpath_str: str, raise_exception=True) -> Optional[dict]
+        # ******************************************************************************
+        # ******************************************************************************
+    
+    findfirst(current_node: Union[dict, list], seeked_xpath_str: str, raise_exception=True) -> tuple
+        # ******************************************************************************
+    
+    first_day_of_yymm(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
+        # ******************************************************************************
+    
+    from_date(input_date_str: str, date_format: str) -> Union[NoneType, datetime.datetime, str]
+        LEGACY
+    
+    from_ddmmmyy(input_date_str: str) -> Union[NoneType, datetime.datetime, str]
+        :param input_date_str: DD-MMM-YY # 16-JUL-20
+        :return: str -> date
+    
+    from_ddmmyyyy(input_date_str: str) -> Union[NoneType, datetime.datetime, str]
+        :param input_date_str: DD-MM-YYYY # 16-07-2020
+        :return: str -> date
+    
+    from_yyyymmdd(input_date_str: str) -> Union[NoneType, datetime.datetime, str]
+        :param input_date_str: YYYY-MM-DD # 2020-07-16
+        :return: str -> date
+    
+    generate_complex_csv_row(row: list, delimiter: str = ',', EOL: str = '\n') -> str
+        # ******************************************************************************
+    
+    generate_composite_keys(input_list: list, elements_for_composite_key: tuple, prefix: str = None, transform: List[Tuple[str, Callable[[str], str]]] = []) -> list
+        serialization all or {elements_for_composite_key} elements of {input_list[]}
+        :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
+        :return:
+            [[<composite_key>,[<index of entry>],...}
+    
+    generate_csv(root_node: dict, list_xpath: str, mapping_dict: dict = None, save_to: str = None, delimiter: str = ',', show_header: bool = True, EOL: str = '\n') -> list
+        Samples:
+            response_json = n0dict({
+                "records" : [
+                    {
+                        "node" : {
+                            "field1": "row1_value1",
+                            "subnode1": {
+                                "field2": "row1_value2",
+                            },
+                            "subnode2": {
+                                "field3": "row1_value3",
+                            },
+                        }
+                    },
+                    {
+                        "node" : {
+                            "field1": "row2_value1",
+                            "subnode1": {
+                                "field2": "row2_value2",
+                            },
+                            "subnode2": {
+                                "field3": "row2_value3",
+                            },
+                        }
+                    },
+                ]
+            })
+            generated_csv = generate_csv(
+                                            response_json,
+                                            "//records[*]",
+                                            {
+                                                "Name of field #1": "node/field1",
+                                                "Name of field #2": "node/subnode1/field2",
+                                                "Name of field #3": ("node/subnode1/field3", "node/subnode2/field3"),
+                                            }
+            ) == [
+                ["row1_value1", "row1_value2", "row1_value3"],
+                ["row2_value1", "row2_value2", "row2_value3"],
+            ]
+            generate_csv(
+                                            response_json,
+                                            "//records[*]",
+                                            {
+                                                "Name of field #1": "node/field1",
+                                                "Name of field #2": "node/subnode1/field2",
+                                                "Name of field #3": "node/subnode2/field3",
+                                            },
+                                            "sample.csv"
+            )
+    
+    generate_fwf(root_node: dict, list_xpath: str, mapping_dict: dict, fwf_format: dict, save_to: str = None, filler: str = ' ') -> list
+        # ******************************************************************************
+    
+    generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler: str = ' ')
+        # ******************************************************************************
+    
+    get__flag_compare_check_different_types() -> bool
+    
+    get__flag_compare_return_difference_of_values() -> bool
+    
+    get__flag_compare_return_equal() -> bool
+    
+    get__flag_compare_return_equal_elements() -> bool
+    
+    get__flag_compare_return_equal_records() -> bool
+    
+    get__flag_compare_return_place() -> bool
+    
+    get_key_by_value(dict_: dict, value_: Any)
+        :param dict_:
+        :param value_:
+        :return: last key which is associated with value_ in dict_
+    
+    get_value_by_tag(tag_name: str, buffer_str: str, delimiter: str = ';', equal_tag: str = '=', parse_key: Callable = <function <lambda> at 0x0000017358421EE0>, default_key: Any = None, parse_value: Callable = <function <lambda> at 0x0000017358421F80>, default_value: Any = None) -> str
+        buffer_str = "TAG1=VALUE1;TAG2=VALUE2"
+        get_value_by_tag("TAG1", buffer_str) == "VALUE1"
+        get_value_by_tag("TAG2", buffer_str) == "VALUE2"
+        get_value_by_tag("TAG3", buffer_str) == None
+        get_value_by_tag("TAG3", buffer_str, default_value = "VALUE3") == "VALUE3"
+    
+    init_logger(debug_level: str = 'TRACE', debug_output=<_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>, debug_timeformat: str = 'YYYY-MM-DD HH:mm:ss.SSS', debug_show_object_type=False, debug_show_object_id=False, debug_show_item_count=True, debug_logtofile=False, log_file_name: str = None)
+    
+    is_date_format(input_date_str: str, date_format: str) -> Union[NoneType, datetime.datetime, bool]
+        # ******************************************************************************
+    
+    is_date_mmyy(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
+        # ******************************************************************************
+    
+    is_date_yymm(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
+        # ******************************************************************************
+    
+    isiterable(obj, item_type=<class 'str'>)
+    
+    isnumber(value: str, max_len: Optional[int] = None) -> bool
+    
+    iterable(obj)
+        "abc"   -> ["abc"]
+        ["abc"] -> ["abc"]
+    
+    join_triplets(in_list: Union[NoneType, str, tuple, list], level: int = 0) -> str
+        join_triplets(in_list: typing.Union[None, str, tuple, list], level = 0) -> str:
+        
+        join elements with middle sepataror:
+            [elem1, delimiter, elem2]   => elem1, delimiter, elem2
+            [elem1, delimiter, None]    => elem1
+            [None, delimiter, elem2]    => elem2
+    
+    key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@DataElement', value_tag: str = '@Value') -> dict
+        input_dict = {
+            xpath: [
+                {"@DataElement": key1, "@Value": value1},
+                {"@DataElement": key2, "@Value": value2},
+            ]
+        }
+        ->
+        output_dict = {
+            key1: value1,
+            key2: value2,
+        }
+    
+    last_day_of_yymm(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
+        # ******************************************************************************
+    
+    load_complex_csv = load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line at 0x000001735A40E160>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
+        # ******************************************************************************
+    
+    load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line at 0x000001735A40E160>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
+        # ******************************************************************************
+    
+    load_file(file_path: str, read_mode: str = 't', encoding: Optional[str] = 'utf-8-sig', EOL: str = '\r\n') -> str
+        # ******************************************************************************
+        # ******************************************************************************
+    
+    load_fwf(file_path: str, header_format: dict, body_format: dict = None, footer_format: dict = None, validate: bool = True, EOL: str = '\r\n', return_original_row=None, read_mode='t', encoding: Optional[str] = 'utf-8-sig')
+        # ******************************************************************************
+    
+    load_fwf_format(file_path: str) -> dict
+        # ******************************************************************************
+        # ******************************************************************************
+    
+    load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda> at 0x000001735A5ADEE0>, parse_value: Callable = <function default_parse_value at 0x000001735A5ADC60>) -> dict
+        load ini file as:
+            // Ini file
+            KEY1 =VALUE1
+            # KEY2=VALUE2
+            KEY3= VALUE3
+        to dict:
+            {
+                'KEY1': "VALUE1",
+                'KEY2': "VALUE2",
+            }
+    
+    load_lines(file_path: str, read_mode: str = 't', encoding: str = 'utf-8-sig', EOL: str = '\r\n') -> Generator
+        # ******************************************************************************
+    
+    load_native_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', EOL: str = '\n', contains_header: Union[list, tuple, NoneType] = None, encoding: Optional[str] = 'utf-8-sig') -> Generator
+        # ******************************************************************************
+    
+    load_simple_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: str = '\n', contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function <lambda> at 0x000001735A5AC2C0>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None) -> Generator
+        # ******************************************************************************
+    
+    mask_number(not_masked_number: str)
+        Public function: convert numbers into similar looks letters
+    
+    mask_pan(buffer_str: str)
+        Public function: mask PANs in buffer_str
+    
+    merge_dict(dict1: dict, dict2: dict) -> dict
+        # ******************************************************************************
+    
+    n0debug(var_name: str, level: str = 'DEBUG', show_type: bool = None, pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
+        Print value of the variable with name {var_name},
+        depends of value in global variable {__debug_level}.
+        
+        :param var_name:
+        :param level:
+        :return:
+    
+    n0debug_calc(var_object, var_name: str = '', level: str = 'DEBUG', internal_call: int = 0, show_type: bool = None, pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
+        Print  calculated value (for example returned by function),
+        depends of value in global variable __debug_level.
+        
+        :param var_object:
+        :param var_name:
+        :param level:
+        :return:
+    
+    n0debug_object(object_name: str, level: str = 'DEBUG')
+        # ******************************************************************************
+    
+    n0error(text: str, internal_call: int = 0)
+        # ******************************************************************************
+    
+    n0eval(_str: str) -> Union[int, float, Any]
+        # ******************************************************************************
+    
+    n0info(text: str, internal_call: int = 0)
+        # ******************************************************************************
+    
+    n0isnumeric(value: str) -> bool
+    
+    n0pretty(item: Any, indent_: int = 0, show_type: bool = None, __indent_size: int = 4, __quotes: str = '"', pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
+        :param item:
+        :param indent_:
+        :return:
+    
+    n0print(text: str, level: str = 'INFO', internal_call: int = 0)
+        if {level} <= {__debug_level} then print {text}{end}
+        
+        :param text:
+        :param level:
+        :param end:
+        :param internal_call:
+        :return: None
+    
+    notemptyitems(item)
+        # ******************************************************************************
+        # notemptyitems(item):
+        #   Check item or recursively subitems of item.
+        #   Return count of notempty item/subitems.
+        # ******************************************************************************
+    
+    parse_complex_csv_line(line: Union[str, bytes], delimiter: Union[str, bytes] = ',', process_field: <built-in function callable> = <function <lambda> at 0x000001735A40DE40>, EOL: Any = None) -> list
+        # ******************************************************************************
+        # ******************************************************************************
+    
+    parse_fwf_row(incoming_row: str, fwf_format: dict, validate: bool = True) -> Union[dict, tuple]
+        # ******************************************************************************
+    
+    raise_exception(ex: Exception)
+        # ******************************************************************************
+    
+    raise_in_lambda(ex)
+        # ******************************************************************************
+    
+    random_from(from_list: list) -> Any
+        :param from_list:
+        :return: from_list[rnd]
+    
+    remove_colums_in_csv(columns_to_remove: list, csv_rows: list = None, csv_schema: dict = None, are_required: bool = False)
+        # ******************************************************************************
+    
+    remove_void_elements(structure: Union[list, dict], remove_empty_arrays: bool = False, remove_empty_strings: bool = False, xpath: str = '/', level: int = 0, remove_empty_elements: set = {}) -> Union[list, dict]
+        # ******************************************************************************
+    
+    rnd(till_not_included: int) -> int
+        :param till_not_included:
+        :return: int [0..till_not_included)
+    
+    save_csv(file_path: str, rows: Union[list, tuple, NoneType], header: Union[list, tuple, NoneType] = None, encoding: str = 'utf-8', EOL: str = '\n', delimiter: str = ',')
+        # ******************************************************************************
+    
+    save_file(file_path: str, output_buffer: Union[str, bytes, bytearray, dict, list, tuple, Generator, set, frozenset], mode: str = 'wt', encoding: str = 'utf-8', EOL: str = '\r\n', equal_tag: str = '=', convert_EOL: bool = True)
+        # ******************************************************************************
+    
+    set__flag_compare_check_different_types(value: bool)
+        if __flag_compare_check_different_types == True, then
+        validate type of attributes in .compare()/.direct_compare()
+        and return result["difftypes"]
+    
+    set__flag_compare_return_difference_of_values(value: bool)
+        if __flag_compare_return_difference_of_values == True, then
+        if values of attributes are different and are int, float,
+        return additional element in result["not_equal"] with difference
+    
+    set__flag_compare_return_equal(value: bool)
+        if __flag_compare_return_equal == True, then
+        if records are the same,
+        then return additional element in result["equal"] with equal sub nodes
+    
+    set__flag_compare_return_equal_elements(value: bool)
+        if __flag_compare_return_equal_elements == True, then
+        if records are the same,
+        then return additional element in result["equal"] with equal elements
+    
+    set__flag_compare_return_equal_records(value: bool)
+        if __flag_compare_return_equal_records == True, then
+        if records are the same,
+        then return additional element in result["equal"] with equal records
+    
+    set__flag_compare_return_place(value: bool)
+        if __flag_compare_return_place == True, then
+            if record is the different, then return tupple of index and record in result["self_unique"]/result["other_unique"]
+        else
+            return only the record in result["self_unique"]/result["other_unique"]
+    
+    set_debug_show_item_count(debug_show_item_count: bool)
+    
+    set_debug_show_object_id(debug_show_object_id: bool)
+    
+    set_debug_show_object_type(debug_show_object_type: bool)
+    
+    split_name_index(node_name: str) -> Tuple[str, Union[str, Tuple[str, str, Union[str, bool]]]]
+        # ******************************************************************************
+        # ******************************************************************************
+    
+    split_pair(in_str: str, delimiter: Union[str, Iterable], transform_left: <built-in function callable> = <function <lambda> at 0x00000173584211C0>, transform_right: <built-in function callable> = <function <lambda> at 0x0000017358421440>, default_element: int = 1, default_left: Any = '', default_right: Any = '') -> tuple
+        split_pair(in_str: str, delimiter: str, transform_left: callable = lambda x: x, transform_right: callable = lambda x: x, default_element: int = 1) -> tuple:
+        
+        split string into 2 sub strings in any cases:
+            '' by '://'                                     => (default_left, default_right)
+            'www.aaa.com' by '://'                          => (default_left, 'www.aaa.com')
+            'https://www.aaa.com' by '://'                  => ('http', 'www.aaa.com')
+            'www.aaa.com',default_element = 0 by '/'        => ('www.aaa.com')
+            'www.aaa.com/path',default_element = 0 by '/'   => ('www.aaa.com', 'path')
+    
+    split_with_escape(buffer_str: str, delimiter: str, maxsplit: Optional[int] = None, escape_character: str = '\\', trim_trailing_double_escape_characters: bool = True)
+            buffer_str = "AAAA1;BBBB2;CCCC3;DDDD4"
+            split_with_escape(buffer_str) == ["ITEM1", "ITEM2", "ITEM3", "ITEM4"]
+        
+        Pay attention: '\' is '' in samples, because of r".." is not used:
+        
+            trim_trailing_double_escape_characters = True
+            buffer_str = "\\IT\EM1\;\\IT\EM2;\ITE\\M3\\;ITE\M4\\"
+            split_with_escape(buffer_str) ==
+                ["\\IT\EM1;\\ITE\M2", "\ITE\\M3\", "ITE\M4\"]
+        
+            trim_trailing_double_escape_characters = False
+            buffer_str = "\\IT\EM1\;\\IT\EM2;\ITE\\M3\\;ITE\M4\\"
+            split_with_escape(buffer_str) ==
+                ["\\IT\EM1;\\ITE\M2", "\ITE\\M3\\", "ITE\M4\\"]
+        
+            The reason of ONLY trailing escape characters: because of inside splitted parts could be subparts with termination of own unknown delimiters.
+    
+    strip_ns lambda key
+        # ******************************************************************************
+        # ******************************************************************************
+    
+    time_colon_hhmmss(input_date: Optional[datetime.datetime]) -> str
+        :param input_date:
+        :return: (input_date or today) -> str HHMMSS
+    
+    time_hhmmss(input_date: Optional[datetime.datetime]) -> str
+        :param input_date:
+        :return: (input_date or today) -> str HHMMSS
+    
+    to_date(input_date_str: str, date_format: str = None, raise_exception: bool = False) -> Union[NoneType, datetime.datetime, str]
+        :param input_date_str:
+        :param date_format:
+        :return: input_date_str converted into date_time as date_format
+        :return: str -> date
+    
+    to_int(value: str, max_len: Optional[int] = None, default_value: Any = None) -> Any
+        ## from .n0struct_logging import n0debug, n0debug_calc
+        # ******************************************************************************
+        # ******************************************************************************
+    
+    total_size(o, handlers={}, verbose=False)
+        Returns the approximate memory footprint an object and all of its contents.
+        
+        Automatically finds the contents of the following builtin containers and
+        their subclasses:  tuple, list, deque, dict, set and frozenset.
+        To search other containers, add handlers to iterate over their contents:
+        
+            handlers = {SomeContainerClass: iter,
+                        OtherContainerClass: OtherContainerClass.get_elements}
+        
+        ##### Example call #####
+            d = dict(a=1, b=2, c=3, d=[4,5,6,7], e='a string of chars')
+            print(total_size(d, verbose=True))
+    
+    transform_structure(in_structure, transform_key=<function <lambda> at 0x000001735A5ADD00>, transform_value=<function convert_to_native_format at 0x000001735A5ADDA0>)
+        # ******************************************************************************
+    
+    unescape(in_elem: Union[str, list, dict, Any]) -> Union[str, list, dict, Any]
+        # ******************************************************************************
+    
+    unique_file_path(file_path: str, purpose: str = '') -> pathlib.Path
+    
+    unmask_number(masked_number: str)
+        Public function: convert letters into similar looks numbers
+    
+    unpack_references(initial_dict: dict, initial_key: str, recursive: bool = True) -> n0struct.n0struct_references.OrderedSet
+        # ******************************************************************************
+        # 2 levels dict:
+        # initial_dict:
+        #   key1:
+        #       - item1
+        #       - item2
+        #   key2:
+        #       - key1
+        #       - item3
+        #       - item4
+        # Unpack references recursive: bool = True
+        # unpacked_dict = {key : list(unpack_references(initial_dict, key)) for key in initial_dict}
+        # unpacked_dict:
+        #   key1:
+        #       - item1
+        #       - item2
+        #   key2:
+        #       - item1
+        #       - item2
+        #       - item3
+        #       - item4
+        # Remove references recursive: bool = False
+        # unpacked_dict = {key : list(unpack_references(initial_dict, key), False) for key in initial_dict}
+        # unpacked_dict:
+        #   key1:
+        #       - item1
+        #       - item2
+        #   key2:
+        #       - item3
+        #       - item4
+        # ******************************************************************************
+    
+    validate_bool(value, unknown_value_is: bool = False)
+        value = "TRUE"
+        validate_bool(value) == True
+        value = "YES"
+        validate_bool(value) == True
+        value = "FALSE"
+        validate_bool(value) == False
+        value = "NO"
+        validate_bool(value) == False
+        value = "UNKNOWN"
+        validate_bool(value) == False
+    
+    validate_csv_row(row: Union[list, dict], csv_schema: dict, external_variables={}, interrupt_after_first_fail: bool = False, row_i: int = None, rows_count: int = 0) -> tuple
+        row:
+            list: [field_value[0], field_value[1], ... field_value[i]]
+            dict: {column_name[0]: field_value[0], column_name[1]: field_value[1], ... column_name[i]: field_value[i]}
+        csv_schema: dict
+            //items[0..i]/id                     = column_name[i]
+            //items[0..i]/mandatory              = true|false
+            //items[0..i]/validations[0..j@i][0] = mandatory str, which could be processed with eval("lambda field_value, row:" + validations[0..j@i][0]),
+                                                   for example: "field_value == {ORG}"
+                                                   in the lambda function body could be used variables:
+                                                        field_value
+                                                        row[column_name[0..i]]
+                                                        external_variables
+            //items[0..i]/validations[0..j@i][1] = optional f-str, message in case of validations[0..j@i][0] returned False,
+                                                   for example: "expected '{ORG}', but got '{value_ORG}'"
+                                                   in the failed message body could be used variables:
+                                                        external_variables.keys()
+                                                        value_{column_name[0..i]}
+            //minItems                           = optional int, min of columns
+            //maxItems                           = optional int, max of columns
+            //required[0..k]                     = optional str, mandatory column_name[k]
+        external_variables: dict
+            List of variables with names external_variables.keys() used in failed validation messages (f-str)
+            For example __params__ as {
+                'ORG': "123",
+                'BIN': "456789"
+            } could be used to exchange f-str placeholders {ORG} and {BIN}
+    
+    validate_path(value, default_value: str = '', parse_str=<function <lambda> at 0x0000017358422480>) -> str
+        value = ""
+        validate_path(value) == ""
+        value = "C:\TMP"
+        validate_path(value) == "C:\TMP"
+        value = ""
+        validate_path(value, default_value = "C:\ETC") == "C:\ETC"
+        value = "."
+        validate_path(value, default_value = "C:\ETC") == ""
+    
+    validate_str(value, default_value: str = '', parse_str=<function <lambda> at 0x0000017358422340>) -> str
+        value = ""
+        validate_str(value) == ""
+        value = "C:\TMP"
+        validate_path(value) == "C:\TMP"
+        value = ""
+        validate_path(value, default_value = "C:\ETC") == "C:\ETC"
+        value = "."
+        validate_path(value, default_value = "C:\ETC") == ""
+    
+    validate_values(value: str, possible_values_the_last_is_default: Union[list, tuple], return_if_wrong_input: Any = '', raise_if_not_found: Optional[Exception] = None)
+        value = "A"
+        validate_values(value.upper(), ("A", "B", "C")) == "A"
+        value = "c"
+        validate_values(value.upper(), ("A", "B", "C")) == "C"
+        value = "D"
+        validate_values(value.upper(), ("A", "B", "C")) == "C"
+    
+    xpath_match(xpath: str, xpath_list: Union[str, list, tuple]) -> int
+        :param xpath:
+            xpath: str
+        :param xpath_list:
+            xpath_list: str or list|tuple
+        :return:
+             0 not matched any of xpath_list
+            >0 matched
 
 DATA
+    __all__ = ['date_today', 'date_only', 'date_delta', 'date_to_format', ...
     compiled_regexp_mask_pan = re.compile('(0{3}|)(([456]([0-9]{7}|[0-9]{5...
-    logger = <loguru.logger handlers=[(id=0, level=10, sink=<stderr>)]>
-    pyformat_DDMMMYYYY = '%d-%b-%y'
+    pyformat_DDMMMYY = '%d-%b-%y'
+    pyformat_DDMMMYYYY = '%d-%b-%Y'
     pyformat_DDMMYYYY = '%d-%m-%Y'
     pyformat_MMYY = '%m%y'
     pyformat_YYMM = '%y%m'
     pyformat_YYYYMMDD = '%Y-%m-%d'
-    stderr = <_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>
 
 FILE
     c:\repo\n0struct\n0struct\__init__.py
