@@ -244,12 +244,12 @@ CLASSES
      |      
      |          file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x000001735A597BA0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x0000019DFFAE80E0>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. compare(..)
      |      # **************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x000001735A597B00>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x0000019DFFAE8040>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # **************************************************************************
@@ -370,7 +370,7 @@ CLASSES
      |  isExist(self, xpath) -> 'dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
      |  
-     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict__.<lambda> at 0x000001735A5976A0>)
+     |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict__.<lambda>>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
      |  
      |  is_exist(self, xpath: 'str') -> 'bool'
@@ -914,11 +914,11 @@ FUNCTIONS
         ## from .n0struct_logging import n0debug, n0debug_calc
         # ******************************************************************************
     
-    deserialize_dict(buffer_str: str, delimiter: str = ';', parse_item: Optional[Callable] = None, parse_empty=False, equal_tag: str = '=', parse_key: Callable = <function <lambda> at 0x0000017358421D00>, default_key: Any = None, parse_value: Callable = <function <lambda> at 0x0000017358421DA0>, default_value: Any = None, default_dict_result=None, default_list_result=None, default_tuple_result=None) -> dict
+    deserialize_dict(buffer_str: str, delimiter: str = ';', parse_item: Optional[Callable] = None, parse_empty=False, equal_tag: str = '=', parse_key: Callable = <function <lambda>>, default_key: Any = None, parse_value: Callable = <function <lambda>>, default_value: Any = None, default_dict_result=None, default_list_result=None, default_tuple_result=None) -> dict
         buffer_str = "TAG1=VALUE1;TAG2=VALUE2"
         deserialize_dict(buffer_str) == {"TAG1": "VALUE1", "TAG2": "VALUE2"}
     
-    deserialize_fixed_list(buffer_str: str, fixed_list_len: int, delimiter: str = ';', default_item: Any = None, parse_item=<function <lambda> at 0x0000017358422200>, parse_empty=False, default_list_result=None) -> list
+    deserialize_fixed_list(buffer_str: str, fixed_list_len: int, delimiter: str = ';', default_item: Any = None, parse_item=<function <lambda>>, parse_empty=False, default_list_result=None) -> list
         generate list [value1, value2, ... value[fixed_list_len]] with size of fixed_list_len from deserialized buffer_str
         in case of values are not enough to fill fixed_list_len list, then [value1, default_item, ... default_item]
             buffer_str = "TAG1;TAG2"
@@ -926,7 +926,7 @@ FUNCTIONS
             deserialize_fixed_list(buffer_str, 4) == ("TAG1", "TAG2", None, None)
             deserialize_fixed_list(buffer_str, 4, default_item = "DEFAULT_TAG") == ("TAG1", "TAG2", "DEFAULT_TAG", "DEFAULT_TAG")
     
-    deserialize_key_value(buffer_str: str, equal_tag: str = '=', parse_key: Callable = <function <lambda> at 0x0000017358421A80>, default_key: Union[Callable, Any, NoneType] = None, parse_value: Callable = <function <lambda> at 0x0000017358421B20>, default_value: Union[Callable, Any, NoneType] = None, default_tuple_result=None) -> tuple
+    deserialize_key_value(buffer_str: str, equal_tag: str = '=', parse_key: Callable = <function <lambda>>, default_key: Union[Callable, Any, NoneType] = None, parse_value: Callable = <function <lambda>>, default_value: Union[Callable, Any, NoneType] = None, default_tuple_result=None) -> tuple
         buffer_str = "TAG1=VALUE1"
         deserialize_key_value(buffer_str) == ("TAG1", "VALUE1")
         buffer_str = "TAG1"
@@ -934,11 +934,11 @@ FUNCTIONS
         buffer_str = "VALUE1"
         deserialize_key_value(buffer_str, default_key = "TAG1") == ("TAG1", "VALUE1")
     
-    deserialize_list(buffer_str: str, delimiter: str = ';', parse_item=<function <lambda> at 0x0000017358421940>, parse_empty=False, default_list_result=None, escape_character=None) -> list
+    deserialize_list(buffer_str: str, delimiter: str = ';', parse_item=<function <lambda>>, parse_empty=False, default_list_result=None, escape_character=None) -> list
         buffer_str = "ITEM1;ITEM2;ITEM3"
         deserialize_list_of_lists(buffer_str) == ["ITEM1", "ITEM2", "ITEM3"]
     
-    deserialize_list_of_lists(buffer_str: str, delimiter: str = ';', parse_item=<function <lambda> at 0x00000173584220C0>, delimiter_for_sublists: str = ',', parse_sublist=None, parse_empty=False, default_list_result=None) -> list
+    deserialize_list_of_lists(buffer_str: str, delimiter: str = ';', parse_item=<function <lambda>>, delimiter_for_sublists: str = ',', parse_sublist=None, parse_empty=False, default_list_result=None) -> list
         buffer_str = "list1item1,list1item2;list2item1,list2item2;list3item1,list3item2"
         deserialize_list_of_lists(buffer_str) == [
                                                     ["list1item1", "list1item2"],
@@ -1054,7 +1054,7 @@ FUNCTIONS
         :param value_:
         :return: last key which is associated with value_ in dict_
     
-    get_value_by_tag(tag_name: str, buffer_str: str, delimiter: str = ';', equal_tag: str = '=', parse_key: Callable = <function <lambda> at 0x0000017358421EE0>, default_key: Any = None, parse_value: Callable = <function <lambda> at 0x0000017358421F80>, default_value: Any = None) -> str
+    get_value_by_tag(tag_name: str, buffer_str: str, delimiter: str = ';', equal_tag: str = '=', parse_key: Callable = <function <lambda>>, default_key: Any = None, parse_value: Callable = <function <lambda>>, default_value: Any = None) -> str
         buffer_str = "TAG1=VALUE1;TAG2=VALUE2"
         get_value_by_tag("TAG1", buffer_str) == "VALUE1"
         get_value_by_tag("TAG2", buffer_str) == "VALUE2"
@@ -1104,10 +1104,10 @@ FUNCTIONS
     last_day_of_yymm(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
         # ******************************************************************************
     
-    load_complex_csv = load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line at 0x000001735A40E160>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
+    load_complex_csv = load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line at 0x0000019DFF94E0C0>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
         # ******************************************************************************
     
-    load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line at 0x000001735A40E160>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
+    load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line at 0x0000019DFF94E0C0>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
         # ******************************************************************************
     
     load_file(file_path: str, read_mode: str = 't', encoding: Optional[str] = 'utf-8-sig', EOL: str = '\r\n') -> str
@@ -1121,7 +1121,7 @@ FUNCTIONS
         # ******************************************************************************
         # ******************************************************************************
     
-    load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda> at 0x000001735A5ADEE0>, parse_value: Callable = <function default_parse_value at 0x000001735A5ADC60>) -> dict
+    load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value at 0x0000019DFFAEA340>) -> dict
         load ini file as:
             // Ini file
             KEY1 =VALUE1
@@ -1139,7 +1139,7 @@ FUNCTIONS
     load_native_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', EOL: str = '\n', contains_header: Union[list, tuple, NoneType] = None, encoding: Optional[str] = 'utf-8-sig') -> Generator
         # ******************************************************************************
     
-    load_simple_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: str = '\n', contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function <lambda> at 0x000001735A5AC2C0>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None) -> Generator
+    load_simple_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: str = '\n', contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function <lambda>>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None) -> Generator
         # ******************************************************************************
     
     mask_number(not_masked_number: str)
@@ -1203,7 +1203,7 @@ FUNCTIONS
         #   Return count of notempty item/subitems.
         # ******************************************************************************
     
-    parse_complex_csv_line(line: Union[str, bytes], delimiter: Union[str, bytes] = ',', process_field: <built-in function callable> = <function <lambda> at 0x000001735A40DE40>, EOL: Any = None) -> list
+    parse_complex_csv_line(line: Union[str, bytes], delimiter: Union[str, bytes] = ',', process_field: <built-in function callable> = <function <lambda>>, EOL: Any = None) -> list
         # ******************************************************************************
         # ******************************************************************************
     
@@ -1277,7 +1277,7 @@ FUNCTIONS
         # ******************************************************************************
         # ******************************************************************************
     
-    split_pair(in_str: str, delimiter: Union[str, Iterable], transform_left: <built-in function callable> = <function <lambda> at 0x00000173584211C0>, transform_right: <built-in function callable> = <function <lambda> at 0x0000017358421440>, default_element: int = 1, default_left: Any = '', default_right: Any = '') -> tuple
+    split_pair(in_str: str, delimiter: Union[str, Iterable], transform_left: <built-in function callable> = <function <lambda>>, transform_right: <built-in function callable> = <function <lambda>>, default_element: int = 1, default_left: Any = '', default_right: Any = '') -> tuple
         split_pair(in_str: str, delimiter: str, transform_left: callable = lambda x: x, transform_right: callable = lambda x: x, default_element: int = 1) -> tuple:
         
         split string into 2 sub strings in any cases:
@@ -1342,7 +1342,7 @@ FUNCTIONS
             d = dict(a=1, b=2, c=3, d=[4,5,6,7], e='a string of chars')
             print(total_size(d, verbose=True))
     
-    transform_structure(in_structure, transform_key=<function <lambda> at 0x000001735A5ADD00>, transform_value=<function convert_to_native_format at 0x000001735A5ADDA0>)
+    transform_structure(in_structure, transform_key=<function <lambda>>, transform_value=<function convert_to_native_format at 0x0000019DFFAEA2A0>)
         # ******************************************************************************
     
     unescape(in_elem: Union[str, list, dict, Any]) -> Union[str, list, dict, Any]
@@ -1426,7 +1426,7 @@ FUNCTIONS
                 'BIN': "456789"
             } could be used to exchange f-str placeholders {ORG} and {BIN}
     
-    validate_path(value, default_value: str = '', parse_str=<function <lambda> at 0x0000017358422480>) -> str
+    validate_path(value, default_value: str = '', parse_str=<function <lambda>>) -> str
         value = ""
         validate_path(value) == ""
         value = "C:\TMP"
@@ -1436,7 +1436,7 @@ FUNCTIONS
         value = "."
         validate_path(value, default_value = "C:\ETC") == ""
     
-    validate_str(value, default_value: str = '', parse_str=<function <lambda> at 0x0000017358422340>) -> str
+    validate_str(value, default_value: str = '', parse_str=<function <lambda>>) -> str
         value = ""
         validate_str(value) == ""
         value = "C:\TMP"
@@ -1464,7 +1464,7 @@ FUNCTIONS
             >0 matched
 
 DATA
-    __all__ = ['date_today', 'date_only', 'date_delta', 'date_to_format', ...
+    __all__ = ['typing', 'date_today', 'date_only', 'date_delta', 'date_to...
     compiled_regexp_mask_pan = re.compile('(0{3}|)(([456]([0-9]{7}|[0-9]{5...
     pyformat_DDMMMYY = '%d-%b-%y'
     pyformat_DDMMMYYYY = '%d-%b-%Y'

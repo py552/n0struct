@@ -70,17 +70,18 @@ class n0list(n0list_):
         _recursively = kw.pop("recursively", False)
         _args_len = len(args)
         _file = kw.pop("file", None)
-        if not _args_len and _file:
+        if _args_len == 0 and _file:
             _incoming = load_file(_file, encoding=kw.pop("encoding", "utf-8-sig")) # with possible UTF-8 BOM (Byte Order Mark)
             if not _incoming:
                 raise TypeError(f"'{_file}' must be XML or JSON structure, but it is empty")
         elif _args_len == 1:
             _incoming = args[0]
-        else:
+        elif _args_len > 1:
             raise TypeError("n0list.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/zip or list of paired tuples)")
 
         if not _incoming:
             super(n0list, self).__init__(*args, **kw)
+            return
 
         if isinstance(_incoming, str):
             _incoming = _incoming.strip()
@@ -699,17 +700,18 @@ class n0dict(n0dict_):
         _recursively = kw.pop("recursively", False)
         _args_len = len(args)
         _file = kw.pop("file", None)
-        if not _args_len and _file:
+        if _args_len == 0 and _file:
             _incoming = load_file(_file, encoding=kw.pop("encoding", "utf-8-sig")) # with possible UTF-8 BOM (Byte Order Mark)
             if not _incoming:
                 raise TypeError(f"'{_file}' must be XML or JSON structure, but it is empty")
         elif _args_len == 1:
             _incoming = args[0]
-        else:
+        elif _args_len > 1:
             raise TypeError("n0dict.__init__(..) takes exactly one notnamed argument (string (XML or JSON) or dict/zip or list of paired tuples)")
 
         if not _incoming:
             super(n0dict, self).__init__(*args, **kw)
+            return
 
         if isinstance(_incoming, str):
             _incoming = _incoming.strip()
