@@ -8,6 +8,7 @@ list/dict extensions allow to
 * .to_xpath: convert tree-like structures into string buffer for saving into XPATH file
 '''
 import typing
+from pathlib import Path
 
 from .n0struct_arrays import *
 from .n0struct_date import *
@@ -32,7 +33,7 @@ from .n0struct_utils_find import *
 
 ################################################################################
 __all__ = list(
-    ('typing', )
+    ('typing', 'Path')
     + n0struct_date.__all__
     + n0struct_random.__all__
     + n0struct_references.__all__

@@ -123,7 +123,9 @@ def save_file(
 
 def unique_file_path(file_path: str, purpose: str = "") -> Path:
     for i in range(1000):
-        unique_file_path = Path(str(file_path) + (f".{i:03}" if i else ""))
+        unique_file_path = Path(file_path)
+        unique_file_ext = unique_file_path.suffix
+        unique_file_path = unique_file_path.with_suffix(f".{i:03}{unique_file_ext}" if i else unique_file_ext)
         if not unique_file_path.exists():
             return unique_file_path
     else:
