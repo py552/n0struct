@@ -560,12 +560,12 @@ CLASSES
      |      
      |          file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
      |  
-     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare at 0x00000157B9D73B00>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
+     |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. compare(..)
      |      # **************************************************************************
      |  
-     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare at 0x00000157B9D73A60>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
+     |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # **************************************************************************
@@ -1420,10 +1420,10 @@ FUNCTIONS
     last_day_of_yymm(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
         # ******************************************************************************
     
-    load_complex_csv = load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line at 0x00000157B9BE20C0>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
+    load_complex_csv = load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
         # ******************************************************************************
     
-    load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line at 0x00000157B9BE20C0>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
+    load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False) -> Generator
         # ******************************************************************************
     
     load_file(file_path: str, read_mode: str = 't', encoding: Optional[str] = 'utf-8-sig', EOL: str = '\r\n') -> str
@@ -1437,7 +1437,7 @@ FUNCTIONS
         # ******************************************************************************
         # ******************************************************************************
     
-    load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value at 0x00000157B9D8DBC0>) -> dict
+    load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value>) -> dict
         load ini file as:
             // Ini file
             KEY1 =VALUE1
@@ -1658,7 +1658,7 @@ FUNCTIONS
             d = dict(a=1, b=2, c=3, d=[4,5,6,7], e='a string of chars')
             print(total_size(d, verbose=True))
     
-    transform_structure(in_structure, transform_key=<function <lambda>>, transform_value=<function convert_to_native_format at 0x00000157B9D8DD00>)
+    transform_structure(in_structure, transform_key=<function <lambda>>, transform_value=<function convert_to_native_format>)
         # ******************************************************************************
     
     unescape(in_elem: Union[str, list, dict, Any]) -> Union[str, list, dict, Any]
@@ -1780,7 +1780,7 @@ FUNCTIONS
             >0 matched
 
 DATA
-    __all__ = ['typing', 'Path', 'date_today', 'date_only', 'date_delta', ...
+    __all__ = ['typing', 'Path', 'sys', 'os', 'date_today', 'date_only', '...
     compiled_regexp_mask_pan = re.compile('(0{3}|)(([456]([0-9]{7}|[0-9]{5...
     pyformat_DDMMMYY = '%d-%b-%y'
     pyformat_DDMMMYYYY = '%d-%b-%Y'

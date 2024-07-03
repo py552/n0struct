@@ -87,7 +87,10 @@ class n0list(n0list_):
             _incoming = _incoming.strip()
             if _incoming.startswith('['):
                 # By default all JSON dictinaries will be converted into n0dict
-                _incoming = json.loads(_incoming, object_pairs_hook = _force_dict)
+                if _force_dict:
+                    _incoming = json.loads(_incoming, object_pairs_hook = _force_dict)
+                else:
+                    _incoming = json.loads(_incoming)
             else:
                 raise TypeError(f"Expected JSON as text argument for n0list.__init__({args})")
         super(n0list, self).__init__(_incoming, **kw)
@@ -718,10 +721,16 @@ class n0dict(n0dict_):
             if _incoming.startswith('<'):
                 # https://github.com/martinblech/xmltodict/issues/252
                 # The main function parse has a force_n0dict keyword argument useful for this purpose.
-                _incoming = xmltodict.parse(_incoming, dict_constructor = _force_dict)
+                if _force_dict:
+                    _incoming = xmltodict.parse(_incoming, dict_constructor = _force_dict)
+                else:
+                    _incoming = xmltodict.parse(_incoming)
             elif _incoming.startswith('{'):
                 # By default all JSON dictinaries will be converted into n0dict
-                _incoming = json.loads(_incoming, object_pairs_hook = _force_dict)
+                if _force_dict:
+                    _incoming = json.loads(_incoming, object_pairs_hook = _force_dict)
+                else:
+                    _incoming = json.loads(_incoming)
             else:
                 raise TypeError(f"Expected XML or JSON as text argument for n0dict.__init__({args})")
         if isinstance(_incoming, (dict, zip)):
