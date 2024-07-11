@@ -11,6 +11,7 @@ import typing
 from pathlib import Path
 import sys
 import os
+import re
 
 from .n0struct_arrays import *
 from .n0struct_date import *
@@ -35,7 +36,7 @@ from .n0struct_utils_find import *
 
 ################################################################################
 __all__ = list(
-    ('typing', 'Path', 'sys', 'os')
+    ('typing', 'Path', 'sys', 'os', 're')
     + n0struct_date.__all__
     + n0struct_random.__all__
     + n0struct_references.__all__
