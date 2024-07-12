@@ -670,10 +670,12 @@ def validate_csv_row(
         if column_name != 'common_validations':
             if field_value == "$N0t_F0uNd$":
                 if column_schema.get('mandatory'):
+                    validation_result = "REJECT"
                     failed_validations.update({column_name: f"mandatory field '{column_name}' doesn't exist"})
                 continue # ALL validations will be skipped without error message mandatory==False and field doesn't exist
             elif not field_value:
                 if column_schema.get('mandatory'):
+                    validation_result = "REJECT"
                     failed_validations.update({column_name: f"mandatory field '{column_name}' is empty"})
                 continue # ALL validations will be skipped without error message mandatory==False and field is empty/None
 
