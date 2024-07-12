@@ -22,8 +22,8 @@ class n0dict__(dict):
 
         If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
         """
-        if xpath is None or xpath == '':
-            raise IndexError(f"xpath '{xpath}' is not valid")
+        ### if xpath is None or xpath == '':
+        ###    raise IndexError(f"xpath '{xpath}' is not valid")
 
         if isinstance(xpath, str) and xpath.startswith('?'):
             xpath = xpath[1:]
