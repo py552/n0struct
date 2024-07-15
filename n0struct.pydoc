@@ -570,11 +570,8 @@ CLASSES
      |      # * n0dict. direct_compare(..)
      |      # **************************************************************************
      |  
-     |  update(self, xpath: 'typing.Union[dict, str]', new_value: 'str' = None) -> 'n0dict__'
-     |      D.update([E, ]**F) -> None.  Update D from dict/iterable E and F.
-     |      If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
-     |      If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
-     |      In either case, this is followed by: for k in F:  D[k] = F[k]
+     |  update_multi(self, xpath: 'typing.Union[dict, str]', new_value: 'str' = None) -> 'n0dict__'
+     |      # **************************************************************************
      |  
      |  ----------------------------------------------------------------------
      |  Static methods defined here:
@@ -812,6 +809,12 @@ CLASSES
      |      Insert key with a value of default if key is not in the dictionary.
      |      
      |      Return the value for key if key is in the dictionary, else default.
+     |  
+     |  update(...)
+     |      D.update([E, ]**F) -> None.  Update D from dict/iterable E and F.
+     |      If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
+     |      If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
+     |      In either case, this is followed by: for k in F:  D[k] = F[k]
      |  
      |  values(...)
      |      D.values() -> an object providing a view on D's values
