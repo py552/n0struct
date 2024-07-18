@@ -17,7 +17,7 @@ from n0struct import (
 )
 set__flag_compare_check_different_types(True)
 set__flag_compare_return_difference_of_values(True)
-init_logger(debug_timeformat = None, debug_show_object_id = False, debug_logtofile = False)
+init_logger(debug_timeformat = None, debug_show_object_id = False, debug_logtofile = False, debug_show_object_type = True)
 
 # ******************************************************************************
 # Etalon list in dictionary
@@ -425,7 +425,7 @@ def main():
     assert (dict_from_xml_empty["root"] is None) == True
     dict_from_xml_empty.to_json(); dict_from_xml_empty.to_xml(); dict_from_xml_empty.to_xpath()
 
-    dict4 = n0dict().update(
+    dict4 = n0dict(
         {
             "a": 1,
             "b": {
@@ -435,7 +435,7 @@ def main():
                 }
             }
         }
-    )
+    , recursively=True)
     n0debug("dict4")
     assert isinstance(dict4, n0dict)                                                    == True
     assert dict4["a"]                                                                   == 1
@@ -450,7 +450,7 @@ def main():
     assert dict4.get("b", "ALREADY_DELETED")                                            == "ALREADY_DELETED"
     n0debug("dict4")
 
-    dict5 = n0dict().update(
+    dict5 = n0dict(
         {
             "a": {
                 "b": {
