@@ -66,7 +66,7 @@ class n0list(n0list_):
             file=f"{file_path}" =>  load JSON-text from {file_path}
         """
         _incoming = None
-        _force_dict =  None if not kw.pop("force_dict", None) else n0dict
+        _force_dict =  None if kw.pop("force_dict", None) else n0dict
         _recursively = kw.pop("recursively", False)
         _args_len = len(args)
         _file = kw.pop("file", None)
@@ -699,7 +699,7 @@ class n0dict(n0dict_):
             file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
         """
         _incoming = None
-        _force_dict =  None if not kw.pop("force_dict", None) else n0dict
+        _force_dict =  None if kw.pop("force_dict", None) else n0dict
         _recursively = kw.pop("recursively", False)
         _args_len = len(args)
         _file = kw.pop("file", None)
