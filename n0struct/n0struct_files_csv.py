@@ -717,9 +717,9 @@ def validate_csv_row(
                     validation_next = validation[3].upper()  # BREAK/CONTINUE (default)
                     validation_next = validate_values(
                         validation_next,
-                        ("BREAK", "CONTINUE"),
+                        ("EXIT", "BREAK", "CONTINUE"),
                         raise_if_not_found = Exception(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
-                                                       " Action is expected as BREAK or CONTINUE"
+                                                       " Action is expected as EXIT, BREAK or CONTINUE"
                                                        f", but received '{validation_next}'"
                                              )
                     )
@@ -753,19 +753,22 @@ def validate_csv_row(
                 else:
                     validation_result = validation_action
 
-                if column_name not in failed_validations:
-                    failed_validations.update({column_name: []})
-
                 try:
                     failed_validation_message = validation_msg.format(**mapped_values)
                 except Exception as ex3:
                     failed_validation_message = f"Incorrect validation message #{validation_i} for '{column_name}': " + str(ex3)
 
-                failed_validations[column_name].append(failed_validation_message)
-                if interrupt_after_first_fail:
+                if failed_validation_message:
+                    if column_name not in failed_validations:
+                        failed_validations.update({column_name: []})
+                    failed_validations[column_name].append(failed_validation_message)
+
+            if validation_result != "VALID":
+                if validation_next in ("BREAK", "EXIT") or (validation_result == "REJECT" and interrupt_after_first_fail):
                     break
 
-            if validation_next == "BREAK":
+        if validation_result != "VALID":
+            if validation_next == "EXIT" or (validation_result == "REJECT" and interrupt_after_first_fail):
                 break
 
     return validation_result, failed_validations
