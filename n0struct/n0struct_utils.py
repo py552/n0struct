@@ -478,7 +478,14 @@ def catch_exception(func: callable, result_in_case_of_exception: typing.Any = No
         return result_in_case_of_exception
 
 # ******************************************************************************
-def key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@DataElement', value_tag: str = '@Value') -> dict:
+def key_value_list_into_dict(
+    input_dict: dict,
+    xpath: str,
+    key_tag: str = '@DataElement',
+    value_tag: str = '@Value',
+    capitalize_key: int = 0,  # 0 == leave as is, -1 == lower case, 1 = upper case
+    capitalize_value: int = 0,  # 0 == leave as is, -1 == lower case, 1 = upper case
+) -> dict:
     '''
         input_dict = {
             xpath: [
@@ -492,6 +499,22 @@ def key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@Data
             key2: value2,
         }
     '''
+    if not (capitalize_key:=int(capitalize_key)):
+        capitalize_key = lambda s: s
+    elif capitalize_key > 0:
+        capitalize_key = lambda s: s.upper() if isinstance(s, str) else s
+    else:
+        capitalize_key = lambda s: s.lower() if isinstance(s, str) else s
+
+    if not (capitalize_value:=int(capitalize_value)):
+        capitalize_value = lambda s: s
+    elif capitalize_value > 0:
+        capitalize_value = lambda s: s.upper() if isinstance(s, str) else s
+    else:
+        capitalize_value = lambda s: s.lower() if isinstance(s, str) else s
+
+
+
     output_dict = {}
     for input_list in (input_dict.get(xpath) or tuple()):
         ## n0debug("input_list")
@@ -502,16 +525,16 @@ def key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@Data
                     for key_value_subdict in key_value_dict:
                         ## n0debug("key_value_subdict")
                         if isinstance(key_value_subdict, dict):
-                            output_dict.update({key_value_subdict[key_tag]: key_value_subdict[value_tag]})
+                            output_dict.update({capitalize_key(key_value_subdict[key_tag]): capitalize_value(key_value_subdict[value_tag])})
                         else:
                             raise TypeError(f"Expected {key_value_subdict=} as dict, but got {type(key_value_subdict)}")
                 elif isinstance(key_value_dict, dict):
-                    output_dict.update({key_value_dict[key_tag]: key_value_dict[value_tag]})
+                    output_dict.update({capitalize_key(key_value_dict[key_tag]): capitalize_value(key_value_dict[value_tag])})
                 else:
                     raise TypeError(f"Expected {key_value_dict=} as list/dict, but got {type(key_value_dict)}")
         elif isinstance(input_list, dict):
             ## n0debug("input_list")
-            output_dict.update({input_list[key_tag]: input_list[value_tag]})
+            output_dict.update({capitalize_key(input_list[key_tag]): capitalize_value(input_list[value_tag])})
         else:
             raise TypeError(f"Expected {input_list=} as list/dict, but got {type(input_list)}")
     return output_dict
@@ -643,6 +666,81 @@ def total_size(o, handlers={}, verbose=False):
 
 
 # ******************************************************************************
+def serialize_dict(
+    input_dict: str,
+    delimiter: str = ";",
+    equal_tag: str = "=",
+    generate_empty = True,
+    generate_none = True,
+    capitalize_key: int = 0,  # 0 == leave as is, -1 == lower case, 1 = upper case
+    capitalize_value: int = 0,  # 0 == leave as is, -1 == lower case, 1 = upper case
+    level: int = 0,
+) -> str:
+    '''
+        serialize_dict({"TAG1": "VALUE1", "TAG2": "VALUE2"}) == "TAG1=VALUE1;TAG2=VALUE2"
+    '''
+    if input_dict is None:
+        return None
+
+    buffer_str = ""
+
+    if not isinstance(input_dict, (dict, list, tuple, set, frozenset)):
+        in_buffer_str = str(input_dict)
+        if (capitalize_value:=int(capitalize_value)) > 0:
+            in_buffer_str = in_buffer_str.upper()
+        elif capitalize_value < 0:
+            in_buffer_str = in_buffer_str.lower()
+
+        dangerous_characters = "{}[]\"\\" + delimiter + equal_tag
+        for ch in in_buffer_str:
+            if ch in dangerous_characters:
+                buffer_str += f"\\x{ord(ch):x}"
+            else:
+                buffer_str += ch
+
+        ## n0debug("buffer_str")
+        return buffer_str
+
+
+    if not (capitalize_key:=int(capitalize_key)):
+        capitalize_key = lambda s: s
+    elif capitalize_key > 0:
+        capitalize_key = lambda s: s.upper() if isinstance(s, str) else s
+    else:
+        capitalize_key = lambda s: s.lower() if isinstance(s, str) else s
+
+    if isinstance(input_dict, dict):
+        for key,value in input_dict.items():
+            if buffer_str:
+                buffer_str += delimiter
+            elif level:
+                buffer_str += "{"
+
+            serialized_value = serialize_dict(value, delimiter, equal_tag, generate_empty, generate_none, capitalize_key, capitalize_value, level+1)
+
+            buffer_str += capitalize_key(key)
+            if not serialized_value:
+                if serialized_value is None and generate_none:
+                    buffer_str += equal_tag
+                elif generate_empty:
+                    buffer_str += equal_tag
+            else:
+                buffer_str += equal_tag + serialized_value
+
+        if buffer_str and level:
+            buffer_str += "}"
+    else:
+        for value in input_dict:
+            if buffer_str:
+                buffer_str += delimiter
+            elif level:
+                buffer_str += "["
+            buffer_str += serialize_dict(value, delimiter, equal_tag, generate_empty, generate_none, capitalize_key, capitalize_value, level+1)
+        if buffer_str and level:
+            buffer_str += "]"
+
+    return buffer_str
+# ******************************************************************************
 # ******************************************************************************
 ################################################################################
 __all__ = (
@@ -672,5 +770,6 @@ __all__ = (
     'iterable',
     'isiterable',
     'total_size',
+    'serialize_dict',
 )
 ################################################################################

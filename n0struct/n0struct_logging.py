@@ -152,7 +152,6 @@ def n0pretty(
         pairs_in_one_line = False
     if auto_quotes:
         __quotes = '"'
-
     result_type = ""
 
     if isinstance(item, (list, tuple, dict, set, frozenset)):
@@ -219,6 +218,8 @@ def n0pretty(
                 result += sub_result + " }"
         else:
             # dict, set, frozenset or list/tuple with complex or not paired structure
+            condense_dict_pairs = isinstance(item, dict) and len(item.keys()) <= 2 and all(isinstance(sub_item, str) for sub_item in item.values())
+            
             for i_sub_item, sub_item in enumerate(item):
                 if isinstance(item, dict):
                     key = sub_item
@@ -285,7 +286,11 @@ def n0pretty(
 
                 if sub_item_value is not None:
                     if result:
-                        result += "," + indent()
+                        result += ","
+                        if not condense_dict_pairs:
+                            result += indent()
+                        else:
+                            result += " "
                     result += sub_item_value
 
         if (show_type or (show_type is None and __debug_show_object_type)) \
@@ -306,7 +311,7 @@ def n0pretty(
             if "\n" in result:
                 result = result_type + brackets[0] + indent() + result + indent(indent_ - 1) + brackets[1]
             else:
-                result = result_type + brackets[0] + result + brackets[1]
+                result = result_type + brackets[0] + " " + result + " " + brackets[1]
 
         if result is None:
             if json_convention:

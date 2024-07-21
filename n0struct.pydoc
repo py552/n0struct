@@ -1407,7 +1407,7 @@ FUNCTIONS
             [elem1, delimiter, None]    => elem1
             [None, delimiter, elem2]    => elem2
     
-    key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@DataElement', value_tag: str = '@Value') -> dict
+    key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@DataElement', value_tag: str = '@Value', capitalize_key: int = 0, capitalize_value: int = 0) -> dict
         input_dict = {
             xpath: [
                 {"@DataElement": key1, "@Value": value1},
@@ -1554,6 +1554,9 @@ FUNCTIONS
     
     save_file(file_path: str, output_buffer: Union[str, bytes, bytearray, dict, list, tuple, Generator, set, frozenset], mode: str = 'wt', encoding: str = 'utf-8', EOL: str = '\r\n', equal_tag: str = '=', convert_EOL: bool = True)
         # ******************************************************************************
+    
+    serialize_dict(input_dict: str, delimiter: str = ';', equal_tag: str = '=', generate_empty=True, generate_none=True, capitalize_key: int = 0, capitalize_value: int = 0, level: int = 0) -> str
+        serialize_dict({"TAG1": "VALUE1", "TAG2": "VALUE2"}) == "TAG1=VALUE1;TAG2=VALUE2"
     
     set__flag_compare_check_different_types(value: bool)
         if __flag_compare_check_different_types == True, then

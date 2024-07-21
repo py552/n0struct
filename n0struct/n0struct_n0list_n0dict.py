@@ -66,8 +66,8 @@ class n0list(n0list_):
             file=f"{file_path}" =>  load JSON-text from {file_path}
         """
         _incoming = None
-        _force_dict =  None if kw.pop("force_dict", None) else n0dict
-        _recursively = kw.pop("recursively", False)
+        _force_dict =  bool(kw.pop("force_dict", False))
+        _recursively = bool(kw.pop("recursively", False))
         _args_len = len(args)
         _file = kw.pop("file", None)
         if _args_len == 0 and _file:
@@ -88,9 +88,9 @@ class n0list(n0list_):
             if _incoming.startswith('['):
                 # By default all JSON dictinaries will be converted into n0dict
                 if _force_dict:
-                    _incoming = json.loads(_incoming, object_pairs_hook = _force_dict)
-                else:
                     _incoming = json.loads(_incoming)
+                else:
+                    _incoming = json.loads(_incoming, object_pairs_hook=n0dict)
             else:
                 raise TypeError(f"Expected JSON as text argument for n0list.__init__({args})")
         super(n0list, self).__init__(_incoming, **kw)
@@ -699,8 +699,9 @@ class n0dict(n0dict_):
             file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
         """
         _incoming = None
-        _force_dict =  None if kw.pop("force_dict", None) else n0dict
-        _recursively = kw.pop("recursively", False)
+        _force_dict =  bool(kw.pop("force_dict", False))
+        _recursively = bool(kw.pop("recursively", False))
+        _force_separate_dict = kw.pop("force_separate_dict", None) # xmltodict by gosplit+py552
         _args_len = len(args)
         _file = kw.pop("file", None)
         if _args_len == 0 and _file:
@@ -722,15 +723,15 @@ class n0dict(n0dict_):
                 # https://github.com/martinblech/xmltodict/issues/252
                 # The main function parse has a force_n0dict keyword argument useful for this purpose.
                 if _force_dict:
-                    _incoming = xmltodict.parse(_incoming, dict_constructor = _force_dict)
+                    _incoming = xmltodict.parse(_incoming, force_separate_dict=_force_separate_dict)
                 else:
-                    _incoming = xmltodict.parse(_incoming)
+                    _incoming = xmltodict.parse(_incoming, force_separate_dict=_force_separate_dict, dict_constructor=n0dict)
             elif _incoming.startswith('{'):
                 # By default all JSON dictinaries will be converted into n0dict
                 if _force_dict:
-                    _incoming = json.loads(_incoming, object_pairs_hook = _force_dict)
-                else:
                     _incoming = json.loads(_incoming)
+                else:
+                    _incoming = json.loads(_incoming, object_pairs_hook=n0dict)
             else:
                 raise TypeError(f"Expected XML or JSON as text argument for n0dict.__init__({args})")
         if isinstance(_incoming, (dict, zip)):
