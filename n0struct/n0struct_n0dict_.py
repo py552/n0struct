@@ -1,6 +1,7 @@
 import typing
 from .n0struct_n0dict__ import n0dict__
 from .n0struct_logging import n0pretty
+from .n0struct_logging import n0debug
 
 # **********************************************************************************************************************
 # *****************************************************************************
@@ -101,27 +102,30 @@ class n0dict_(n0dict__):
                 if not len(parent.items()):
                     return ""
                 for key, value in parent.items():
-                    if result:
-                        result += "\n"
-                        
+                    # if result and (len(parent) > 2 or key not in ("Parm",)):
+                    if key not in ("Parm","ParmCode","Value"):
+                        if result:
+                            result += "\n"
+                        result += f"{' '*indent}"
+
                     if isinstance(value, (list, tuple)):
                         if not value:
-                            result += " "*indent + f"<{key}/>"
+                            result += f"<{key}/>"
                         else:
-                            result += " "*indent + f"<{key}>"
+                            result += f"<{key}>"
                             for i, subitm in enumerate(value):
                                 result += "\n" + self.__xml(subitm, indent+inc_indent, inc_indent)
-                            result += "\n" +" "*indent + f"</{key}>"
+                            result += f"\n{' '*indent}</{key}>"
                     elif isinstance(value, (int, float)):
                         if not key.startswith("@"):
-                            result += " "*indent + f"<{key}>{value}</{key}>"
+                            result += f"<{key}>{value}</{key}>"
                         else:
                             raise NotImplementedError(f"Export of attibtures ({key}) is not supported yet")
                     elif isinstance(value, str):
                         if not key.startswith("@"):
-                            result += " "*indent + f"<{key}>"
+                            result += f"<{key}>"
                             if value.lstrip().upper().startswith("<![CDATA[") and value.rstrip().endswith("]]>"):
-                                result += "\n" + " "*(indent+inc_indent) + value + "\n" + " "*indent
+                                result += f"\n{' '*(indent+inc_indent)}{value}\n{' '*indent}"
                             else:
                                 result += value.translate(html_entities)
                             result += f"</{key}>"
@@ -136,11 +140,16 @@ class n0dict_(n0dict__):
                             for __key, __value in attribs_of_current_key:
                                 attribs += f' {__key}="{__value}"'
                         if sub_result:
-                            result += " "*indent + f"<{key}{attribs}>\n{sub_result}\n" + " "*indent + f"</{key}>"
+                            if '\n' in sub_result:
+                                result += f"<{key}{attribs}>\n{sub_result}\n{' '*indent}</{key}>"
+                            else:
+                                if key in ("Parm",):
+                                    result += f"{' '*indent}"
+                                result += f"<{key}{attribs}>{sub_result.lstrip()}</{key}>"
                         else:
-                            result += " "*indent + f"<{key}{attribs}/>"
+                            result += f"<{key}{attribs}/>"
                     elif value is None:
-                        result += " "*indent + f"<{key}/>"
+                        result += f"<{key}/>"
                     else:
                         raise TypeError(f"__xml(..): Unknown type ({type(value)}) {key} == {value}")
             elif isinstance(parent, (list, tuple)):
