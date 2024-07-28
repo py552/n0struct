@@ -1299,7 +1299,7 @@ FUNCTIONS
         :return:
             [[<composite_key>,[<index of entry>],...}
     
-    generate_csv(root_node: dict, list_xpath: str, mapping_dict: dict = None, save_to: str = None, delimiter: str = ',', show_header: bool = True, EOL: str = '\n') -> list
+    generate_csv(root_node: dict, list_xpath: str, mapping_dict: dict = None, save_to: str = None, delimiter: str = ',', show_header: bool = True, EOL: str = '\n', encoding: str = 'utf-8') -> list
         Samples:
             response_json = n0dict({
                 "records" : [
@@ -1440,7 +1440,7 @@ FUNCTIONS
         # ******************************************************************************
         # ******************************************************************************
     
-    load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value>) -> dict
+    load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value>, encoding: Optional[str] = 'utf-8-sig') -> dict
         load ini file as:
             // Ini file
             KEY1 =VALUE1
@@ -1639,7 +1639,7 @@ FUNCTIONS
         :param input_date:
         :return: (input_date or today) -> str HHMMSS
     
-    to_date(input_date_str: str, date_format: str = None, raise_exception: bool = False) -> Union[NoneType, datetime.datetime, str]
+    to_date(input_date_str: Optional[datetime.datetime], date_format: Union[NoneType, str, list, tuple] = None, raise_exception: bool = False, return_if_wrong_input: Any = None) -> Union[NoneType, datetime.datetime, str]
         :param input_date_str:
         :param date_format:
         :return: input_date_str converted into date_time as date_format
@@ -1788,12 +1788,6 @@ FUNCTIONS
 DATA
     __all__ = ['typing', 'Path', 'sys', 'os', 're', 'date_today', 'date_on...
     compiled_regexp_mask_pan = re.compile('(0{3}|)(([456]([0-9]{7}|[0-9]{5...
-    pyformat_DDMMMYY = '%d-%b-%y'
-    pyformat_DDMMMYYYY = '%d-%b-%Y'
-    pyformat_DDMMYYYY = '%d-%m-%Y'
-    pyformat_MMYY = '%m%y'
-    pyformat_YYMM = '%y%m'
-    pyformat_YYYYMMDD = '%Y-%m-%d'
 
 FILE
     c:\repo\n0struct\n0struct\__init__.py

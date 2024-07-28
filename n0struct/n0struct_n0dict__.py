@@ -31,14 +31,17 @@ class n0dict__(dict):
             if_not_found = ''
 
         if isinstance(xpath, str) and any(char in xpath for char in "/["):
-            _parent_node, _node_name_index, cur_value, xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists)
-            if not not_found_xpath_list:
-                return cur_value
-            else:
+            try:
+                _parent_node, _node_name_index, cur_value, xpath_found_str, not_found_xpath_list = self._find(xpath, self, return_lists)
+            except (ValueError, IndexError, TypeError, SyntaxError) as caught_ex:
                 if raise_exception:
+                    raise caught_ex
+            else:
+                if not not_found_xpath_list:
+                    return cur_value
+                elif raise_exception:
                     raise IndexError(f"not found '{'/'.join(not_found_xpath_list)}' in '{xpath_found_str}'")
-                else:
-                    return if_not_found
+            return if_not_found
         else:
             try:
                 return super(n0dict__, self).__getitem__(xpath)

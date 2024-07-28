@@ -1,13 +1,6 @@
 import typing
 import datetime
 # ******************************************************************************
-pyformat_YYYYMMDD   = "%Y-%m-%d"    # 2020-07-16
-pyformat_DDMMYYYY   = "%d-%m-%Y"    # 16-07-2020
-pyformat_DDMMMYY    = "%d-%b-%y"    # 16-JUL-20
-pyformat_DDMMMYYYY  = "%d-%b-%Y"    # 16-JUL-2020
-pyformat_YYMM       = "%y%m"        # 2007
-pyformat_MMYY       = "%m%y"        # 0720
-# ******************************************************************************
 # ******************************************************************************
 def date_today() -> datetime.datetime:
     """
@@ -36,7 +29,7 @@ def date_delta(input_date: typing.Union[None, datetime.datetime, datetime.date] 
 
     date_delta_ = input_date + datetime.timedelta(days=day_delta)
     month_quotient, month_remainder = divmod(date_delta_.month + month_delta - 1, 12)
-    
+
     result = datetime.datetime(
                             date_delta_.year + month_quotient, month_remainder + 1, date_delta_.day,
                             date_delta_.hour, date_delta_.minute,  date_delta_.second,  date_delta_.microsecond
@@ -108,7 +101,7 @@ def date_dash_yyyymmdd(input_date: typing.Union[None, datetime.datetime], day_de
     :param month_delta:
     :return: (input_date or today) + day_delta + month_delta -> str YYYY-MM-DD
     """
-    return date_to_format(input_date, pyformat_YYYYMMDD, day_delta, month_delta)
+    return date_to_format(input_date, "%Y-%m-%d", day_delta, month_delta)
 # ******************************************************************************
 def date_slash_ddmmyyyy(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -126,7 +119,7 @@ def date_dash_ddmmyyyy(input_date: typing.Union[None, datetime.datetime], day_de
     :param month_delta:
     :return: (input_date or today) + day_delta + month_delta -> str DD-MM-YYYY
     """
-    return date_to_format(input_date, pyformat_DDMMYYYY, day_delta, month_delta)
+    return date_to_format(input_date, "%d-%m-%Y" , day_delta, month_delta)
 # ******************************************************************************
 def date_yymm(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -135,7 +128,7 @@ def date_yymm(input_date: typing.Union[None, datetime.datetime], day_delta: int 
     :param month_delta:
     :return: (input_date or today) + day_delta + month_delta -> str YYMM
     """
-    return date_to_format(input_date, pyformat_YYMM, day_delta, month_delta)
+    return date_to_format(input_date, "%y%m", day_delta, month_delta)
 # ******************************************************************************
 def date_mmyy(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -144,7 +137,7 @@ def date_mmyy(input_date: typing.Union[None, datetime.datetime], day_delta: int 
     :param month_delta:
     :return: (input_date or today) + day_delta + month_delta -> str MMYY
     """
-    return date_to_format(input_date, pyformat_MMYY, day_delta, month_delta)
+    return date_to_format(input_date, "%m%y", day_delta, month_delta)
 # ******************************************************************************
 def date_julian(input_date: typing.Union[None, datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str:
     """
@@ -169,46 +162,66 @@ def time_colon_hhmmss(input_date: typing.Union[None, datetime.datetime]) -> str:
     """
     return date_to_format(input_date, "%H:%M:%S")
 # ******************************************************************************
-def to_date(input_date_str: str, date_format: str = None, raise_exception: bool = False) -> typing.Union[None, datetime.datetime, str]:
+def to_date(input_date_str: typing.Union[None, datetime.datetime], date_format: typing.Union[None, str, list, tuple] = None, raise_exception: bool = False, return_if_wrong_input: typing.Any = None) -> typing.Union[None, datetime.datetime, str]:
     """
     :param input_date_str:
     :param date_format:
     :return: input_date_str converted into date_time as date_format
     :return: str -> date
     """
-    if not input_date_str:
+    if not input_date_str or isinstance(input_date_str, datetime.datetime):
         return input_date_str
     elif not isinstance(input_date_str, str):
-        raise TypeError(f"{input_date_str=} must be str")
+        raise TypeError(f"{input_date_str=} must be str or datetime")
 
-    if date_format:
+    if not date_format:
+        date_format = (
+            "%Y-%m-%d",             # 2020-07-16
+            "%d-%m-%Y",             # 16-07-2020
+            "%d-%b-%y",             # 16-JUL-20
+            "%d-%b-%Y",             # 16-JUL-2020
+            "%d.%m.%Y",             # 16.07.2020
+            "%m/%d/%Y",             # 07/16/2020
+
+            "%Y-%m-%d %H:%M:%S",    # 2020-07-16 01:23:45
+            "%d-%m-%Y %H:%M:%S",    # 16-07-2020 01:23:45
+            "%d-%b-%y %H:%M:%S",    # 16-JUL-20 01:23:45
+            "%d-%b-%Y %H:%M:%S",    # 16-JUL-2020 01:23:45
+            "%d.%m.%Y %H:%M:%S",    # 16.07.2020 01:23:45
+            "%m/%d/%Y %I:%M:%S %p", # 07/16/2020 1:23:45 am
+        )
+    elif isinstance(date_format, str):
+        date_format = (date_format,)
+
+    if not isinstance(date_format, (list, tuple)):
+        raise TypeError(f"{date_format=} must be str or list/tuple of str")
+
+    # print(f"{input_date_str=}")
+    # print(f"{date_format=}")
+
+    for current_date_format in date_format:
         try:
-            return datetime.datetime.strptime(input_date_str, date_format)
+            return_datetime = datetime.datetime.strptime(input_date_str, current_date_format)
+            # print(f"{return_datetime=}")
+            if "%M" not in current_date_format:
+                return_datetime = return_datetime.date()
+                # print(f"{return_datetime=}")
+            return return_datetime
         except (ValueError, TypeError) as ex:
-            if raise_exception:
-                raise ex
-            else:
-                return input_date_str
+            # print(f"Exception: {input_date_str=} {current_date_format=}")
+            caught_ex = ex
+            continue
+
+    # print(f"{raise_exception=}")
+    if raise_exception:
+        raise caught_ex
     else:
-        try:
-            return datetime.datetime.strptime(input_date_str, pyformat_YYYYMMDD).date()             # 2020-07-16
-        except (ValueError, TypeError):
-            try:
-                return datetime.datetime.strptime(input_date_str, pyformat_DDMMMYYYY).date()        # 16-JUL-20
-            except (ValueError, TypeError):
-                try:
-                    return datetime.datetime.strptime(input_date_str, pyformat_DDMMYYYY).date()     # 16-07-2020
-                except (ValueError, TypeError):
-                    try:
-                        return datetime.datetime.strptime(input_date_str, "%d.%m.%Y").date()        # 16.07.2020
-                    except (ValueError, TypeError):
-                        try:
-                            return datetime.datetime.strptime(input_date_str, "%m/%d/%Y").date()    # 07/16/2020
-                        except (ValueError, TypeError) as ex:
-                            if raise_exception:
-                                raise ex
-                            else:
-                                return input_date_str
+        # print(f"{return_if_wrong_input=}")
+        if return_if_wrong_input is None:
+            return input_date_str
+        else:
+            return return_if_wrong_input
+
 # ******************************************************************************
 # LEGACY
 # ******************************************************************************
@@ -223,21 +236,21 @@ def from_ddmmmyy(input_date_str: str) -> typing.Union[None, datetime.datetime, s
     :param input_date_str: DD-MMM-YY # 16-JUL-20
     :return: str -> date
     """
-    return to_date(input_date_str, pyformat_DDMMMYYYY)  # 16-JUL-20
+    return to_date(input_date_str, "%d-%b-%y")  # 16-JUL-20
 # ******************************************************************************
 def from_yyyymmdd(input_date_str: str) -> typing.Union[None, datetime.datetime, str]:
     """
     :param input_date_str: YYYY-MM-DD # 2020-07-16
     :return: str -> date
     """
-    return to_date(input_date_str, pyformat_YYYYMMDD)  # 2020-07-16
+    return to_date(input_date_str, "%Y-%m-%d")  # 2020-07-16
 # ******************************************************************************
 def from_ddmmyyyy(input_date_str: str) -> typing.Union[None, datetime.datetime, str]:
     """
     :param input_date_str: DD-MM-YYYY # 16-07-2020
     :return: str -> date
     """
-    return to_date(input_date_str, pyformat_DDMMYYYY)  # 16-07-2020
+    return to_date(input_date_str, "%d-%m-%Y" )  # 16-07-2020
 # ******************************************************************************
 def is_date_format(input_date_str: str, date_format: str) -> typing.Union[None, datetime.datetime, bool]:
     result = to_date(input_date_str, date_format)
@@ -247,10 +260,10 @@ def is_date_format(input_date_str: str, date_format: str) -> typing.Union[None, 
         return False
 # ******************************************************************************
 def is_date_yymm(input_date_str: str) -> typing.Union[None, datetime.datetime, bool]:
-    return is_date_to_format(input_date_str, pyformat_YYMM)
+    return is_date_to_format(input_date_str, "%y%m")
 # ******************************************************************************
 def is_date_mmyy(input_date_str: str) -> typing.Union[None, datetime.datetime, bool]:
-    return is_date_to_format(input_date_str, pyformat_MMYY)
+    return is_date_to_format(input_date_str, "%m%y")
 # ******************************************************************************
 def first_day_of_yymm(input_date_str: str) -> typing.Union[None, datetime.datetime, bool]:
     return is_date_yymm(input_date_str)
@@ -291,11 +304,6 @@ __all__ = (
     'is_date_mmyy',
     'first_day_of_yymm',
     'last_day_of_yymm',
-    'pyformat_YYYYMMDD',
-    'pyformat_DDMMYYYY',
-    'pyformat_DDMMMYY',
-    'pyformat_DDMMMYYYY',
-    'pyformat_YYMM',
-    'pyformat_MMYY',
+    'datetime',
 )
 ################################################################################

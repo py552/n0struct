@@ -30,6 +30,7 @@ def load_ini(
                 comment_tags: typing.Union[str, typing.Iterable] = ("#", "//"),
                 parse_key: typing.Callable = lambda key_value, default_key: key_value[0].strip().upper(),
                 parse_value: typing.Callable = default_parse_value,
+                encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
 ) -> dict:
     """
         load ini file as:
@@ -45,7 +46,7 @@ def load_ini(
 
     """
     result_dict = {}
-    for line in load_lines(file_path):
+    for line in load_lines(file_path, encoding=encoding):
         stripped_line = line.lstrip()
         if stripped_line and not any(stripped_line.startswith(comment_tag) for comment_tag in iterable(comment_tags)):
             key, value = split_pair(

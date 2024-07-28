@@ -429,6 +429,7 @@ def generate_csv(
     delimiter: str = ',',
     show_header: bool = True,
     EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'wt' mode
+    encoding: str = "utf-8",  # without UTF-8 BOM (Byte Order Mark)
 ) -> list:
     '''
     Samples:
@@ -526,7 +527,7 @@ def generate_csv(
             ##     out_filehandler.write(generate_complex_csv_row(csv_row, delimiter))
 
     if save_to:
-        save_csv(save_to, csv_table, header if show_header else None, delimiter=delimiter, EOL=EOL)
+        save_csv(save_to, csv_table, header if show_header else None, delimiter=delimiter, EOL=EOL, encoding=encoding)
     ##    out_filehandler.close
 
     return csv_table

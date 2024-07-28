@@ -213,8 +213,8 @@ def n0pretty(
                         sub_result += f" {key_type}{key}: {sub_item_result}"
                     else:
                         if sub_result:
-                            sub_result += " "
-                        sub_result += " "*(1+len(__quotes)+len(key)+len(__quotes)+len(": ")+keys_and_max_len_of_value[key])
+                            sub_result += (" " if __indent_size else "")
+                        sub_result += (" " if __indent_size else "")*(1+len(__quotes)+len(key)+len(__quotes)+len(": " if __indent_size else ":")+keys_and_max_len_of_value[key])
                 result += sub_result + " }"
         else:
             # dict, set, frozenset or list/tuple with complex or not paired structure
@@ -290,7 +290,7 @@ def n0pretty(
                         if not condense_dict_pairs:
                             result += indent()
                         else:
-                            result += " "
+                            result += (" " if __indent_size else "")
                     result += sub_item_value
 
         if (show_type or (show_type is None and __debug_show_object_type)) \
@@ -311,7 +311,7 @@ def n0pretty(
             if "\n" in result:
                 result = result_type + brackets[0] + indent() + result + indent(indent_ - 1) + brackets[1]
             else:
-                result = result_type + brackets[0] + " " + result + " " + brackets[1]
+                result = result_type + brackets[0] + (" " if __indent_size else "") + result + (" " if __indent_size else "") + brackets[1]
 
         if result is None:
             if json_convention:

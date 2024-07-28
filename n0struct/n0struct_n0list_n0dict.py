@@ -721,11 +721,18 @@ class n0dict(n0dict_):
             _incoming = _incoming.strip()
             if _incoming.startswith('<'):
                 # https://github.com/martinblech/xmltodict/issues/252
-                # The main function parse has a force_n0dict keyword argument useful for this purpose.
                 if _force_dict:
-                    _incoming = xmltodict.parse(_incoming, force_separate_dict=_force_separate_dict)
+                    try:
+                        _incoming = xmltodict.parse(_incoming, force_separate_dict=_force_separate_dict)
+                    except TypeError:
+                        # xmltodict < 0.13.701 => force_separate_dict is not supported
+                        _incoming = xmltodict.parse(_incoming)
                 else:
-                    _incoming = xmltodict.parse(_incoming, force_separate_dict=_force_separate_dict, dict_constructor=n0dict)
+                    try:
+                        _incoming = xmltodict.parse(_incoming, dict_constructor=n0dict, force_separate_dict=_force_separate_dict)
+                    except TypeError:
+                        # xmltodict < 0.13.701 => force_separate_dict is not supported
+                        _incoming = xmltodict.parse(_incoming, dict_constructor=n0dict)
             elif _incoming.startswith('{'):
                 # By default all JSON dictinaries will be converted into n0dict
                 if _force_dict:
