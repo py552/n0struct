@@ -541,11 +541,9 @@ def key_value_list_into_dict(
 
 
 # ******************************************************************************
-def merge_dict(dict1: dict, dict2: dict) -> dict:
-    output_dict = dict(**dict1)
-    output_dict.update(dict2)
+def merge_dict(*kw) -> dict:
+    output_dict = {k: v for d in kw if isinstance(d, dict) for k, v in d.items()}
     return output_dict
-
 
 # ******************************************************************************
 def remove_void_elements(

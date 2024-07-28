@@ -1467,7 +1467,7 @@ FUNCTIONS
     mask_pan(buffer_str: str)
         Public function: mask PANs in buffer_str
     
-    merge_dict(dict1: dict, dict2: dict) -> dict
+    merge_dict(*kw) -> dict
         # ******************************************************************************
     
     n0debug(var_name: str, level: str = 'DEBUG', show_type: bool = None, pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
@@ -1720,14 +1720,14 @@ FUNCTIONS
         value = "UNKNOWN"
         validate_bool(value) == False
     
-    validate_csv_row(row: Union[list, dict], csv_schema: dict, external_variables={}, interrupt_after_first_fail: bool = False, row_i: int = None, rows_count: int = 0) -> tuple
+    validate_csv_row(row: Union[list, dict], csv_schema: dict, external_variables={}, interrupt_after_first_fail: bool = False, row_i: int = None, rows_count: int = 0, precompile: bool = False) -> tuple
         row:
             list: [field_value[0], field_value[1], ... field_value[i]]
             dict: {column_name[0]: field_value[0], column_name[1]: field_value[1], ... column_name[i]: field_value[i]}
         csv_schema: dict
             //items[0..i]/id                     = column_name[i]
             //items[0..i]/mandatory              = true|false
-            //items[0..i]/validations[0..j@i][0] = mandatory str, which could be processed with eval("lambda field_value, row:" + validations[0..j@i][0]),
+            //items[0..i]/validations[0..j@i][0] = mandatory str, which could be processed with eval("lambda field_value, row, row_i, row_last:" + validations[0..j@i][0]),
                                                    for example: "field_value == {ORG}"
                                                    in the lambda function body could be used variables:
                                                         field_value
@@ -1738,6 +1738,16 @@ FUNCTIONS
                                                    in the failed message body could be used variables:
                                                         external_variables.keys()
                                                         value_{column_name[0..i]}
+            //items[0..i]/validations[0..j@i][2] = action: "SKIP", "NOWAIT", "VALID", "REJECT" (default None == "REJECT")
+                                                   if result of validations[0..j@i][0] == False, and  validations[0..j@i][1] == "SKIP", "NOWAIT", "REJECT",
+                                                   then return back validations[0..j@i][1] ("SKIP", "NOWAIT", "REJECT")
+                                                   if result of validations[0..j@i][0] == True, and  validations[0..j@i][1] == "VALID"
+                                                   then return back "REJECT"
+            //items[0..i]/validations[0..j@i][3] = next: "EXIT", "BREAK", "CONTINUE" (default None == "CONTINUE")
+                                                   if result of validations[0..j@i][0] != "VALID"
+                                                   CONTINUE: go to the next validation rule for current column or next columns
+                                                   BREAK:    skip next validation rules for the current column, go to validation rules of the next columns
+                                                   EXIT:     skip validation rules for current and next columns
             //minItems                           = optional int, min of columns
             //maxItems                           = optional int, max of columns
             //required[0..k]                     = optional str, mandatory column_name[k]

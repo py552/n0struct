@@ -1,3 +1,4 @@
+import types
 import os
 import typing
 from pathlib import Path
@@ -394,15 +395,20 @@ def save_csv(
 ):
     if rows is None:
         return
-    if not isinstance(rows, (list, tuple)):
-        raise TypeError(f"Expected rows as list or tuple, but got ({typing(rows)}) {rows}")
-    if not isinstance(rows[0], (list, tuple)):
-        raise TypeError(f"Expected rows as list/tuples of lists/tuples, but got ({typing(rows[0])}) {rows[0]}")
+    if not isinstance(rows, (list, tuple, types.GeneratorType)):
+        raise TypeError(f"Expected rows as list or tuple or generator, but got ({type(rows)}) {rows}")
+    if isinstance(rows, (list, tuple)) \
+    and not isinstance(rows[0], (list, tuple)) and type(rows[0]) is not {}.values().__class__:
+        raise TypeError(f"Expected rows as list/tuples of lists/tuples, but got ({type(rows[0])}) {rows[0]}")
+    if header \
+    and not isinstance(header, (list, tuple, types.GeneratorType)) \
+    and type(header) is not {}.keys().__class__: \
+        raise TypeError(f"Expected header as list or tuple, but got ({type(rows)}) {rows}")
 
     '''
     if header:
         if not isinstance(header, (list, tuple)):
-            raise TypeError(f"Expected header as list or tuple, but got ({typing(rows)}) {rows}")
+            raise TypeError(f"Expected header as list or tuple, but got ({type(rows)}) {rows}")
         rows = [header] + rows
     # n0debug("rows")
     save_file(file_path, [generate_complex_csv_row(row, delimiter, EOL='') for row in rows], mode=mode, encoding=encoding, EOL=EOL)
@@ -415,8 +421,6 @@ def save_csv(
             lineterminator=EOL,
         )
         if header:
-            if not isinstance(header, (list, tuple)):
-                raise TypeError(f"Expected header as list or tuple, but got ({typing(rows)}) {rows}")
             csv_writer.writerow(header)
         csv_writer.writerows(rows)
 
@@ -604,6 +608,7 @@ def validate_csv_row(
     interrupt_after_first_fail: bool = False,
     row_i: int = None,
     rows_count: int = 0,
+    precompile: bool = False,
 ) -> tuple:  # ( validation_result: str = SKIP|NOWAIT|VALID|REJECT, failed_validations: dict = {column_name: [error message#n,...])
     '''
     row:
@@ -612,7 +617,7 @@ def validate_csv_row(
     csv_schema: dict
         //items[0..i]/id                     = column_name[i]
         //items[0..i]/mandatory              = true|false
-        //items[0..i]/validations[0..j@i][0] = mandatory str, which could be processed with eval("lambda field_value, row:" + validations[0..j@i][0]),
+        //items[0..i]/validations[0..j@i][0] = mandatory str, which could be processed with eval("lambda field_value, row, row_i, row_last:" + validations[0..j@i][0]),
                                                for example: "field_value == {ORG}"
                                                in the lambda function body could be used variables:
                                                     field_value
@@ -623,6 +628,16 @@ def validate_csv_row(
                                                in the failed message body could be used variables:
                                                     external_variables.keys()
                                                     value_{column_name[0..i]}
+        //items[0..i]/validations[0..j@i][2] = action: "SKIP", "NOWAIT", "VALID", "REJECT" (default None == "REJECT")
+                                               if result of validations[0..j@i][0] == False, and  validations[0..j@i][1] == "SKIP", "NOWAIT", "REJECT",
+                                               then return back validations[0..j@i][1] ("SKIP", "NOWAIT", "REJECT")
+                                               if result of validations[0..j@i][0] == True, and  validations[0..j@i][1] == "VALID"
+                                               then return back "REJECT"
+        //items[0..i]/validations[0..j@i][3] = next: "EXIT", "BREAK", "CONTINUE" (default None == "CONTINUE")
+                                               if result of validations[0..j@i][0] != "VALID"
+                                               CONTINUE: go to the next validation rule for current column or next columns
+                                               BREAK:    skip next validation rules for the current column, go to validation rules of the next columns
+                                               EXIT:     skip validation rules for current and next columns
         //minItems                           = optional int, min of columns
         //maxItems                           = optional int, max of columns
         //required[0..k]                     = optional str, mandatory column_name[k]
@@ -692,59 +707,78 @@ def validate_csv_row(
         })
 
         for validation_i,validation in enumerate(column_schema.get('validations', ())):
-            validation_msg = None
-            validation_action = "REJECT"
-            validation_next = "CONTINUE"
-            if isinstance(validation, (list, tuple)):
-                validation_lambda_txt = validation[0]
-                if len(validation) >= 2:
-                    validation_msg = validation[1]
-                if len(validation) >= 3:
-                    validation_action = validation[2].upper()  # SKIP/NOWAIT/VALID/REJECT (default)
-                    ## if validation_action not in {"SKIP", "NOWAIT", "VALID", "REJECT"}:
-                    ##     raise Exception(f"Validation rule #{validation_i} is incorrect."
-                    ##                     " Action is expected as SKIP or NOWAIT or VALID or REJECT"
-                    ##                     f", but received '{validation_action}'"
-                    ##     )
-                    validation_action = validate_values(
-                        validation_action,
-                        ("SKIP", "NOWAIT", "VALID", "REJECT"),
-                        raise_if_not_found = Exception(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
-                                                       " Action is expected as SKIP or NOWAIT or VALID or REJECT"
-                                                       f", but received '{validation_action}'"
-                                             )
-                    )
-                if len(validation) >= 4:
-                    validation_next = validation[3].upper()  # BREAK/CONTINUE (default)
-                    validation_next = validate_values(
-                        validation_next,
-                        ("EXIT", "BREAK", "CONTINUE"),
-                        raise_if_not_found = Exception(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
-                                                       " Action is expected as EXIT, BREAK or CONTINUE"
-                                                       f", but received '{validation_next}'"
-                                             )
-                    )
-            elif isinstance(validation, str):
-                validation_lambda_txt = validation
-            else:
+            # n0debug("validation")
+            
+            if not isinstance(validation, (list, tuple)) or len(validation) < 2:
                 raise TypeError(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
                                 " validation is expected as list/tuple/str"
                                 f", but received ({type(validation)}) '{validation}'"
                 )
+            if len(validation) > 2:
+                validation_action = validation[2].upper()  # SKIP/NOWAIT/VALID/REJECT (default)
+                ## if validation_action not in {"SKIP", "NOWAIT", "VALID", "REJECT"}:
+                ##     raise Exception(f"Validation rule #{validation_i} is incorrect."
+                ##                     " Action is expected as SKIP or NOWAIT or VALID or REJECT"
+                ##                     f", but received '{validation_action}'"
+                ##     )
+                validation_action = validate_values(
+                    validation_action,
+                    ("SKIP", "NOWAIT", "VALID", "REJECT"),
+                    raise_if_not_found = Exception(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
+                                                   " Action is expected as SKIP or NOWAIT or VALID or REJECT"
+                                                   f", but received '{validation_action}'"
+                                         )
+                )
+            else:
+                validation_action = "REJECT"
+                column_schema['validations'][validation_i].append(validation_action)
+                
+            # n0debug("validation_action")
+
+            if len(validation) > 3:
+                validation_next = validation[3].upper()  # EXIT/BREAK/CONTINUE (default)
+                validation_next = validate_values(
+                    validation_next,
+                    ("EXIT", "BREAK", "CONTINUE"),
+                    raise_if_not_found = Exception(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
+                                                   " Action is expected as EXIT, BREAK or CONTINUE"
+                                                   f", but received '{validation_next}'"
+                                         )
+                )
+            else:
+                validation_next = "CONTINUE"
+                column_schema['validations'][validation_i].append(validation_next)
+            # n0debug("validation_next")
+
+            validation_msg = None
+            if not precompile or len(validation) <= 4 or not callable(validation[4]):
+                try:
+                    validation_lambda = eval(
+                        lambda_txt:=(
+                            "lambda column_name, field_value, row, row_i, row_last: "
+                            + validation[0].format(**mapped_values)
+                        )
+                    )
+                    # n0debug("lambda_txt")
+                    if len(validation) <= 4:
+                        column_schema['validations'][validation_i].append(validation_lambda)
+                except Exception as ex1:
+                    validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex1)
+                    
+            # n0debug_calc(column_schema['validations'][validation_i], f"column_schema['validations'][{validation_i}]")
+            # n0debug("validation")
+            # n0debug("validation_msg")
 
             is_valid = False
-            try:
-                lambda_function_for_validation = eval(
-                    "lambda column_name, field_value, row, row_i, row_last: "
-                    + validation_lambda_txt.format(**mapped_values)
-                )
-            except Exception as ex1:
-                validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex1)
-            else:
+            _result = None
+            if not validation_msg:
                 try:
-                    is_valid = lambda_function_for_validation(column_name, field_value, row, row_i, row_last)
+                    _result = is_valid = validation_lambda(column_name, field_value, row, row_i, row_last)
+                    # n0debug("_result")
+                    # n0debug("validation_action")
                     if validation_action == "VALID":
                         is_valid = not is_valid
+                    # n0debug("is_valid")
                 except Exception as ex2:
                     validation_msg = f"Failed validation rule #{validation_i} for '{column_name}': " + str(ex2)
 
@@ -755,9 +789,10 @@ def validate_csv_row(
                     validation_result = validation_action
 
                 try:
-                    failed_validation_message = validation_msg.format(**mapped_values)
+                    failed_validation_message = validation[1].format(**mapped_values, result=_result)
                 except Exception as ex3:
                     failed_validation_message = f"Incorrect validation message #{validation_i} for '{column_name}': " + str(ex3)
+                # n0debug("failed_validation_message")
 
                 if failed_validation_message:
                     if column_name not in failed_validations:
