@@ -789,7 +789,7 @@ def validate_csv_row(
                     validation_result = validation_action
 
                 try:
-                    failed_validation_message = validation[1].format(**mapped_values, result=_result)
+                    failed_validation_message = validation[1].format(**mapped_values, validation_result=_result)
                 except Exception as ex3:
                     failed_validation_message = f"Incorrect validation message #{validation_i} for '{column_name}': " + str(ex3)
                 # n0debug("failed_validation_message")
