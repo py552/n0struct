@@ -17,13 +17,13 @@ from .n0struct_utils import *
 from .n0struct_files import (
     save_file,
 )
+'''
 from .n0struct_logging import (
     n0print,
     n0debug,
     n0debug_calc,
     n0error,
 )
-'''
 
 # ******************************************************************************
 # ******************************************************************************
@@ -139,6 +139,7 @@ def load_csv(
     #       column_names == None            The first row is header, column_names = first row
     #       column_names == []              The first row is header
     return_unknown_fields: bool = False,
+    raise_exception: bool = True,
 ) -> typing.Generator:
     # dict                                  dict of fields got from current read line
     # typing.Tuple[dict, str]               dict of fields got from current read line, current read line
@@ -237,13 +238,20 @@ def load_csv(
             if isinstance(contains_header, str):
                 if first_line_column_names[0] != contains_header:
                     if header_is_mandatory:
-                        raise ReferenceError(f"First line is not header {first_line_column_names}. Expected first column '{contains_header}'")
+                        if raise_exception:
+                            raise ReferenceError(f"First line is not the header: expected column names {tuple(contains_header)}, received {tuple(first_line_column_names)}. First column name '{first_line_column_names[0]}' is not equal to expected '{contains_header}'")
+                        else:
+                            return tuple()
                 else:
                     first_line_is_header = True
             elif isinstance(contains_header, (list, tuple)):
-                if any(mandatory_column_name not in first_line_column_names for mandatory_column_name in contains_header):
+                mandatory_column_name_does_not_exist = next((mandatory_column_name for mandatory_column_name in contains_header if mandatory_column_name not in first_line_column_names), None)
+                if mandatory_column_name_does_not_exist:
                     if header_is_mandatory:
-                        raise ReferenceError(f"First line is not header {first_line_column_names}. Expected {contains_header}")
+                        if raise_exception:
+                            raise ReferenceError(f"First line is not the header: expected column names {tuple(contains_header)}, received {tuple(first_line_column_names)}. '{mandatory_column_name_does_not_exist}' doesn't exist.")
+                        else:
+                            return tuple()
                 else:
                     first_line_is_header = True
         else:
@@ -296,8 +304,9 @@ def load_native_csv(
     column_names: typing.Union[list, tuple, None] = None,
     delimiter: str = ',',
     EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'rt' mode
-    contains_header: typing.Union[list, tuple, None] = None,
+    contains_header: typing.Union[bool, None] = True,
     encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
+    raise_exception: bool = True,
 ) -> typing.Generator:
     if column_names is not None:
         if not isinstance(column_names, (list, tuple)):
@@ -313,7 +322,15 @@ def load_native_csv(
             lineterminator=EOL,
             strict=True
         )
-        for row in csv_reader:
+        for i, row in enumerate(csv_reader):
+            if i == 0 and contains_header:
+                not_equal_column_name = next((f"name '{value}' of column #{j} is not equal to expected '{key}'" for j,(key,value) in enumerate(row.items()) if key != value), None)
+                if not_equal_column_name:
+                    if raise_exception:
+                        raise ReferenceError(f"First line is not the header: expected column names {tuple(column_names)}, received {tuple(row.keys())}. For example: {not_equal_column_name}")
+                    else:
+                        return tuple()
+                continue
             yield row
 # ******************************************************************************
 load_complex_csv = load_csv # Synonym
@@ -345,6 +362,7 @@ def load_simple_csv(
     encoding: typing.Union[str, None] = "utf-8-sig",  # with possible UTF-8 BOM (Byte Order Mark)
     read_mode: str = 't',
     header_is_mandatory: typing.Union[bool, None] = None,
+    raise_exception: bool = True,
 ) -> typing.Generator:
     # dict                                  dict of fields got from current read line
     # typing.Tuple[dict, str]               dict of fields got from current read line, current read line
@@ -364,6 +382,7 @@ def load_simple_csv(
         encoding             = encoding,
         read_mode            = read_mode,
         header_is_mandatory  = header_is_mandatory,
+        raise_exception      = raise_exception,
     )
 # ******************************************************************************
 def generate_complex_csv_row(
@@ -638,6 +657,7 @@ def validate_csv_row(
                                                CONTINUE: go to the next validation rule for current column or next columns
                                                BREAK:    skip next validation rules for the current column, go to validation rules of the next columns
                                                EXIT:     skip validation rules for current and next columns
+        //items[0..i]/validations[0..j@i][4] = precompiled validations[0..j@i][0]
         //minItems                           = optional int, min of columns
         //maxItems                           = optional int, max of columns
         //required[0..k]                     = optional str, mandatory column_name[k]
@@ -764,6 +784,8 @@ def validate_csv_row(
                         column_schema['validations'][validation_i].append(validation_lambda)
                 except Exception as ex1:
                     validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex1)
+            else:
+                validation_lambda = column_schema['validations'][validation_i][4]
                     
             # n0debug_calc(column_schema['validations'][validation_i], f"column_schema['validations'][{validation_i}]")
             # n0debug("validation")
