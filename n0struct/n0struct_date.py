@@ -254,7 +254,7 @@ def from_ddmmyyyy(input_date_str: str) -> typing.Union[None, datetime.datetime, 
 # ******************************************************************************
 def is_date_format(input_date_str: str, date_format: str) -> typing.Union[None, datetime.datetime, bool]:
     result = to_date(input_date_str, date_format)
-    if isinstance(result, datetime.datetime):
+    if isinstance(result, (datetime.date, datetime.datetime)):
         return result
     else:
         return False
