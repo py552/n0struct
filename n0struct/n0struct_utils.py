@@ -542,8 +542,58 @@ def key_value_list_into_dict(
 
 # ******************************************************************************
 def merge_dict(*kw) -> dict:
-    output_dict = {k: v for d in kw if isinstance(d, dict) for k, v in d.items()}
-    return output_dict
+    return {
+        k: v
+        for d in kw
+            if isinstance(d, dict)
+                for k, v in d.items()
+    }
+
+
+# ******************************************************************************
+def merge_dict_first(*kw) -> dict:
+    result_dict = {}
+    for d in kw:
+        if isinstance(d, dict):
+            result_dict.update({k: v  for k, v in d.items() if k not in result_dict})
+    return result_dict
+
+
+# ******************************************************************************
+def merge_dict_concatenate(
+    *kw,
+    # /,
+    concatenate_sign: typing.Union[str, None] = '\x16',
+    finalize_dict_concatenate: bool = False,
+) -> dict:
+    ## n0debug("concatenate_sign")
+    ## n0debug("finalize_dict_concatenate")
+    result_dict = {}
+    for d in kw:
+        ## n0debug("d")
+        if isinstance(d, dict):
+            result_dict.update(
+                {
+                    k:
+                        f"{old_v}{v[1:]}"
+                        if v.startswith(concatenate_sign) and ((old_v:=result_dict.get(k) or '') or finalize_dict_concatenate)
+                        else v
+                    for k, v in d.items()
+                }
+            )
+    return result_dict
+
+
+# ******************************************************************************
+def finalize_dict_concatenate(
+    input_dict: dict,
+    concatenate_sign: typing.Union[str, None] = '\x16',
+) -> dict:
+    for k, v in d.items():
+        if v.startswith(concatenate_sign):
+            input_dict[k] = v[1:]
+    return input_dict
+
 
 # ******************************************************************************
 def remove_void_elements(
@@ -764,6 +814,8 @@ __all__ = (
     'catch_exception',
     'key_value_list_into_dict',
     'merge_dict',
+    'merge_dict_first',
+    'merge_dict_concatenate',
     'remove_void_elements',
     'iterable',
     'isiterable',

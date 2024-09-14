@@ -92,6 +92,9 @@ def n0info(text: str, internal_call: int = 0):
 def n0error(text: str, internal_call: int = 0):
     n0print(text, level = "ERROR", internal_call = internal_call + 1)
 # ******************************************************************************
+def n0warning(text: str, internal_call: int = 0):
+    n0print(text, level = "WARNING", internal_call = internal_call + 1)
+# ******************************************************************************
 def n0pretty(
             item: typing.Any,
             indent_: int = 0,
@@ -219,7 +222,7 @@ def n0pretty(
         else:
             # dict, set, frozenset or list/tuple with complex or not paired structure
             condense_dict_pairs = isinstance(item, dict) and len(item.keys()) <= 2 and all(isinstance(sub_item, str) for sub_item in item.values())
-            
+
             for i_sub_item, sub_item in enumerate(item):
                 if isinstance(item, dict):
                     key = sub_item
@@ -472,6 +475,7 @@ __all__ = (
     'n0print',
     'n0info',
     'n0error',
+    'n0warning',
     'n0pretty',
     'n0debug_calc',
     'n0debug',

@@ -8,7 +8,11 @@ sys.path.insert(0, mydir+"/../../")
 from n0struct import *
 
 def test_use_external_libraries():
+    n0print(Path(__file__))
     n0debug_calc(Path(__file__))
+    n0error(Path(__file__))
+    n0warning(Path(__file__))
+    n0info(Path(__file__))
 
 # ******************************************************************************
 def main():

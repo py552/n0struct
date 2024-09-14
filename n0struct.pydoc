@@ -1440,7 +1440,7 @@ FUNCTIONS
         # ******************************************************************************
         # ******************************************************************************
     
-    load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value>, encoding: Optional[str] = 'utf-8-sig') -> dict
+    load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value>, encoding: Optional[str] = 'utf-8-sig', concatenate_sign: Optional[str] = '\x16') -> dict
         load ini file as:
             // Ini file
             KEY1 =VALUE1
@@ -1468,6 +1468,12 @@ FUNCTIONS
         Public function: mask PANs in buffer_str
     
     merge_dict(*kw) -> dict
+        # ******************************************************************************
+    
+    merge_dict_concatenate(*kw, concatenate_sign: Optional[str] = '\x16', finalize_dict_concatenate: bool = False) -> dict
+        # ******************************************************************************
+    
+    merge_dict_first(*kw) -> dict
         # ******************************************************************************
     
     n0debug(var_name: str, level: str = 'DEBUG', show_type: bool = None, pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
@@ -1515,6 +1521,9 @@ FUNCTIONS
         :param internal_call:
         :return: None
     
+    n0warning(text: str, internal_call: int = 0)
+        # ******************************************************************************
+    
     notemptyitems(item)
         # ******************************************************************************
         # notemptyitems(item):
@@ -1528,6 +1537,20 @@ FUNCTIONS
     
     parse_fwf_row(incoming_row: str, fwf_format: dict, validate: bool = True) -> Union[dict, tuple]
         # ******************************************************************************
+    
+    parse_ini(lines: Iterable, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value>, encoding: Optional[str] = 'utf-8-sig', concatenate_sign: Optional[str] = '\x16') -> dict
+        from lines:
+            [
+                "// Ini file",
+                "KEY1 =VALUE1",
+                "# KEY2=VALUE2",
+                "KEY3= VALUE3",
+            ]
+        to dict:
+            {
+                'KEY1': "VALUE1",
+                'KEY2': "VALUE2",
+            }
     
     raise_exception(ex: Exception)
         # ******************************************************************************
