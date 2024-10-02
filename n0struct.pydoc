@@ -552,11 +552,7 @@ CLASSES
      |                                             converted into n0list only with recursively=True.
      |          force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
      |      
-     |          recursively=True    =>  convert all dict/XML-text/JSON-text subnodes into n0dict/n0list.
-     |                                  in case of incoming dict by default all subnodes are dict/list, only the root node is n0dict.
-     |                                  in case of incoming XML-text/JSON-text by default all subnodes are n0dict/list.
-     |          recursively=True is required to have ability to apply n0dict/n0list specific methods to all subnodes,
-     |          not only to the root node. This option will impact to performance and memory consumation.
+     |          recursively=???     =>  removed. required to use n0dict.convert_recursively(dict/n0dict)
      |      
      |          file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
      |  
@@ -570,13 +566,10 @@ CLASSES
      |      # * n0dict. direct_compare(..)
      |      # **************************************************************************
      |  
-     |  update_multi(self, xpath: 'typing.Union[dict, str]', new_value: 'str' = None) -> 'n0dict__'
-     |      # **************************************************************************
-     |  
      |  ----------------------------------------------------------------------
      |  Static methods defined here:
      |  
-     |  convert_recursively(node: 'Union[dict, list, tuple]', key_index: 'Any', xpath: 'str', level: 'int')
+     |  convert_recursively(node: 'typing.Any', xpath: 'str' = '/', level: 'int' = 0) -> 'typing.Any'
      |      # **************************************************************************
      |      # **************************************************************************
      |  
@@ -864,15 +857,11 @@ CLASSES
      |      :param kw:
      |          force_dict=True     =>  leave JSON subnodes as dict.
      |                                  by default all dictionaries will be converted into n0dict,
-     |                                             but all lists will stay lists. lists could be
-     |                                             converted into n0list only with recursively=True.
+     |                                  but all lists will stay lists. lists could be converted into n0list only
+     |                                  with n0dict.convert_recursively(dict/n0dict).
      |          force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
      |      
-     |          recursively=True    =>  convert all list/JSON-text subnodes into n0dict/n0list.
-     |                                  in case of incoming dict by default all subnodes are dict/list, only the root node is n0dict.
-     |                                  in case of incoming JSON-text by default all subnodes are n0dict/list.
-     |          recursively=True is required to have ability to apply n0dict/n0list specific methods to all subnodes,
-     |          not only to the root node. This option will impact to performance and memory consumation.
+     |          recursively=???     =>  removed. required to use n0dict.convert_recursively(dict/n0dict)
      |      
      |          file=f"{file_path}" =>  load JSON-text from {file_path}
      |  
@@ -1550,6 +1539,36 @@ FUNCTIONS
             {
                 'KEY1': "VALUE1",
                 'KEY2': "VALUE2",
+            }
+    
+    parse_tlv(input_buffer: str, tag_name_fieldlen: int = 2, tag_value_len_fieldlen: int = 3) -> tuple
+        Parse string contains concatenated triplets <TAG_NAME><TAG_VALUE_LEN><TAG_VALUE>
+        
+        "01002P2020020103005100000900201220021023007DEFAULT"
+         ^^ == tag_name (tag_name_fieldlen == 2) == '01'
+           ^^^ == tag_value_len (tag_value_len_fieldlen == 3) == '002'
+              ^^ == tag_value (tag_value_len == 2) == 'P2'
+        
+        { tag_name: tag_value for tag_name, tag_value_len, tag_value in parse_triplet(input_buffer) } ==
+            {
+                "01": "P2",
+                "02": "01",
+                "03": "10000",
+                "09": "01",
+                "22": "10",
+                "23": "DEFAULT"
+            }
+        
+        "002P200201005100000020100210007DEFAULT"
+         tag_name (tag_name_fieldlen == 0) == ''
+         ^^^ == tag_value_len (tag_value_len_fieldlen == 3) == '002'
+            ^^ == tag_value (tag_value_len == 2) == 'P2'
+        
+        { a[2]: b[2] for a,b in zip(*[iter(parse_triplet(input_buffer, 0))]*2) } ==
+            {
+                "P2": "01",
+                "10000": "01",
+                "10": "DEFAULT"
             }
     
     raise_exception(ex: Exception)

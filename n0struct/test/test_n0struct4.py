@@ -13,13 +13,13 @@ from n0struct import (
 init_logger(debug_timeformat = None, debug_show_object_id = False, debug_logtofile = False)
 
 # ******************************************************************************
-dict1 = n0dict({
+dict1 = n0dict.convert_recursively({
     "C": [
         {"a": 1, "b": 2, "c": 3, "value1": 1, "value2": 4},
         {"a": 4, "b": 5, "c": 6, "value1": 2, "value2": 5},
         {"a": 7, "b": 8, "c": 9, "value1": 3, "value2": 6},
     ],
-}, recursively=True)
+})
 
 
 def test_n0dict():

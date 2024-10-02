@@ -789,6 +789,47 @@ def serialize_dict(
 
     return buffer_str
 # ******************************************************************************
+def parse_tlv(input_buffer: str, tag_name_fieldlen: int = 2, tag_value_len_fieldlen: int = 3) -> tuple:
+    '''
+    Parse string contains concatenated triplets <TAG_NAME><TAG_VALUE_LEN><TAG_VALUE>
+
+    "01002P2020020103005100000900201220021023007DEFAULT"
+     ^^ == tag_name (tag_name_fieldlen == 2) == '01'
+       ^^^ == tag_value_len (tag_value_len_fieldlen == 3) == '002'
+          ^^ == tag_value (tag_value_len == 2) == 'P2'
+
+    { tag_name: tag_value for tag_name, tag_value_len, tag_value in parse_triplet(input_buffer) } ==
+        {
+            "01": "P2",
+            "02": "01",
+            "03": "10000",
+            "09": "01",
+            "22": "10",
+            "23": "DEFAULT"
+        }
+
+    "002P200201005100000020100210007DEFAULT"
+     tag_name (tag_name_fieldlen == 0) == ''
+     ^^^ == tag_value_len (tag_value_len_fieldlen == 3) == '002'
+        ^^ == tag_value (tag_value_len == 2) == 'P2'
+
+    { a[2]: b[2] for a,b in zip(*[iter(parse_triplet(input_buffer, 0))]*2) } ==
+        {
+            "P2": "01",
+            "10000": "01",
+            "10": "DEFAULT"
+        }
+    '''
+    if not input_buffer or not isinstance(input_buffer, str):
+        return tuple()
+    
+    offset = 0
+    while offset < len(input_buffer):
+        tag_name = input_buffer[offset:(offset:=offset+tag_name_fieldlen)]
+        tag_value_len = int(input_buffer[offset:(offset:=offset+tag_value_len_fieldlen)])
+        tag_value = input_buffer[offset:(offset:=offset+tag_value_len)]
+        yield tag_name, tag_value_len, tag_value
+# ******************************************************************************
 # ******************************************************************************
 ################################################################################
 __all__ = (
@@ -821,5 +862,6 @@ __all__ = (
     'isiterable',
     'total_size',
     'serialize_dict',
+    'parse_tlv',
 )
 ################################################################################
