@@ -1345,6 +1345,9 @@ FUNCTIONS
     generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler: str = ' ')
         # ******************************************************************************
     
+    generate_tlv(input_dict: dict, tag_fieldlen: int = 2, len_fieldlen: int = 3, tag_padding: str = ' ', len_padding: str = '0') -> str
+        # ******************************************************************************
+    
     get__flag_compare_check_different_types() -> bool
     
     get__flag_compare_return_difference_of_values() -> bool
@@ -1541,15 +1544,15 @@ FUNCTIONS
                 'KEY2': "VALUE2",
             }
     
-    parse_tlv(input_buffer: str, tag_name_fieldlen: int = 2, tag_value_len_fieldlen: int = 3) -> tuple
-        Parse string contains concatenated triplets <TAG_NAME><TAG_VALUE_LEN><TAG_VALUE>
+    parse_tlv(input_buffer: str, tag_fieldlen: int = 2, len_fieldlen: int = 3) -> tuple
+        Parse string contains concatenated triplets <TAG><LEN><VALUE>
         
         "01002P2020020103005100000900201220021023007DEFAULT"
-         ^^ == tag_name (tag_name_fieldlen == 2) == '01'
-           ^^^ == tag_value_len (tag_value_len_fieldlen == 3) == '002'
-              ^^ == tag_value (tag_value_len == 2) == 'P2'
+         ^^ == _tag (tag_fieldlen == 2) == '01'
+           ^^^ == _len (len_fieldlen == 3) == '002'
+              ^^ == _value (_len == 2) == 'P2'
         
-        { tag_name: tag_value for tag_name, tag_value_len, tag_value in parse_triplet(input_buffer) } ==
+        { _tag: _value for _tag, _len, _value in parse_triplet(input_buffer) } ==
             {
                 "01": "P2",
                 "02": "01",
@@ -1560,9 +1563,9 @@ FUNCTIONS
             }
         
         "002P200201005100000020100210007DEFAULT"
-         tag_name (tag_name_fieldlen == 0) == ''
-         ^^^ == tag_value_len (tag_value_len_fieldlen == 3) == '002'
-            ^^ == tag_value (tag_value_len == 2) == 'P2'
+         _tag (tag_fieldlen == 0) == ''
+         ^^^ == _len (len_fieldlen == 3) == '002'
+            ^^ == _value (_len == 2) == 'P2'
         
         { a[2]: b[2] for a,b in zip(*[iter(parse_triplet(input_buffer, 0))]*2) } ==
             {
