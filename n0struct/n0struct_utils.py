@@ -71,7 +71,7 @@ def n0eval(_str: str) -> typing.Union[int, float, typing.Any]:
 
     return result
 # ******************************************************************************
-def raise_in_lambda(ex): raise ex
+def raise_in_lambda(ex): raise_exception(ex)
 # ******************************************************************************
 def split_with_escape(
     buffer_str: str,
@@ -455,7 +455,9 @@ def validate_values(value: str,
 
     return possible_values_the_last_is_default[-1]
 # ******************************************************************************
-def raise_exception(ex: Exception):
+def raise_exception(ex: BaseException):
+    if isinstance(ex, str):
+        ex = AssertionError(ex)
     raise ex
 # ******************************************************************************
 def catch_exception(func: callable, result_in_case_of_exception: typing.Any = None, **kw):
@@ -837,11 +839,11 @@ def generate_tlv(
     len_padding: str = '0',
 ) -> str:
     return ''.join(
-        ''.join(
+        ''.join((
             _tag.ljust(tag_fieldlen, tag_padding) if len(_tag:=str(__tag)) <= tag_fieldlen else raise_exception(f"Tag name '{_tag}' is longer than {tag_fieldlen} characters"),
             _len.rjust(len_fieldlen, len_padding) if len(_len:=str(len(_value:=str(__value)))) <= len_fieldlen else raise_exception(f"Value '{_value}' of tag '{_tag}' is longer than {len_fieldlen} characters"),
             _value
-        )
+        ))
         for __tag,__value in input_dict.items()
     )
 # ******************************************************************************

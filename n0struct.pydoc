@@ -1574,7 +1574,7 @@ FUNCTIONS
                 "10": "DEFAULT"
             }
     
-    raise_exception(ex: Exception)
+    raise_exception(ex: BaseException)
         # ******************************************************************************
     
     raise_in_lambda(ex)

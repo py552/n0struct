@@ -159,10 +159,13 @@ def n0pretty(
 
     if isinstance(item, (list, tuple, dict, set, frozenset)):
         brackets = "[]"
-        if isinstance(item, (set, frozenset, dict)):
+        if isinstance(item, dict):
             brackets = "{}"
-        elif isinstance(item, tuple):
-            brackets = "()"
+        if not json_convention:
+            if isinstance(item, (set, frozenset)):
+                brackets = "{}"
+            elif isinstance(item, tuple):
+                brackets = "()"
         result = ""
 
         keys_and_max_len_of_value = is_list_with_pairs(item)  # removed walrus operator for compatibility with 3.7

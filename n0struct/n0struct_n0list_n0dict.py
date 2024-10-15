@@ -663,7 +663,7 @@ class n0dict(n0dict_):
                 output_dict[key] = n0dict.convert_recursively(value, f"{xpath}/{key}", level+1)
             return output_dict
         # elif isinstance(node, (list, tuple, set, frozenset)):
-        elif isinstance(node, Iterable):
+        elif isinstance(node, Iterable) and not isinstance(node, (str, bytes, bytearray)):
             return n0list(n0dict.convert_recursively(value, f"{xpath}[{index}]", level+1) for index,value in enumerate(node))
         else:
             return node
