@@ -727,8 +727,6 @@ def validate_csv_row(
         })
 
         for validation_i,validation in enumerate(column_schema.get('validations', ())):
-            # n0debug("validation")
-            
             if not isinstance(validation, (list, tuple)) or len(validation) < 2:
                 raise TypeError(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
                                 " validation is expected as list/tuple/str"
@@ -752,7 +750,7 @@ def validate_csv_row(
             else:
                 validation_action = "REJECT"
                 column_schema['validations'][validation_i].append(validation_action)
-                
+
             # n0debug("validation_action")
 
             if len(validation) > 3:
@@ -786,23 +784,18 @@ def validate_csv_row(
                     validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex1)
             else:
                 validation_lambda = column_schema['validations'][validation_i][4]
-                    
-            # n0debug_calc(column_schema['validations'][validation_i], f"column_schema['validations'][{validation_i}]")
-            # n0debug("validation")
-            # n0debug("validation_msg")
+
+
 
             is_valid = False
             _result = None
             if not validation_msg:
                 try:
                     _result = is_valid = validation_lambda(column_name, field_value, row, row_i, row_last)
-                    # n0debug("_result")
-                    # n0debug("validation_action")
                     if validation_action == "VALID":
                         is_valid = not is_valid
-                    # n0debug("is_valid")
                 except Exception as ex2:
-                    validation_msg = f"Failed validation rule #{validation_i} for '{column_name}': " + str(ex2)
+                    validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex2)
 
             if not is_valid:
                 if validation_action == "VALID":
@@ -810,16 +803,16 @@ def validate_csv_row(
                 else:
                     validation_result = validation_action
 
-                try:
-                    failed_validation_message = validation[1].format(**mapped_values, validation_result=_result)
-                except Exception as ex3:
-                    failed_validation_message = f"Incorrect validation message #{validation_i} for '{column_name}': " + str(ex3)
-                # n0debug("failed_validation_message")
+                if not validation_msg:
+                    try:
+                        validation_msg = validation[1].format(**mapped_values, validation_result=_result)
+                    except Exception as ex3:
+                        validation_msg = f"Incorrect validation message #{validation_i} for '{column_name}': " + str(ex3)
 
-                if failed_validation_message:
+                if validation_msg:
                     if column_name not in failed_validations:
                         failed_validations.update({column_name: []})
-                    failed_validations[column_name].append(failed_validation_message)
+                    failed_validations[column_name].append(validation_msg)
 
             if validation_result != "VALID":
                 if validation_next in ("BREAK", "EXIT") or (validation_result == "REJECT" and interrupt_after_first_fail):
