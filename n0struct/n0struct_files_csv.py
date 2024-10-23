@@ -18,6 +18,7 @@ from .n0struct_files import (
     save_file,
 )
 '''
+
 from .n0struct_logging import (
     n0print,
     n0debug,
@@ -727,6 +728,8 @@ def validate_csv_row(
         })
 
         for validation_i,validation in enumerate(column_schema.get('validations', ())):
+            # n0debug("validation")
+
             if not isinstance(validation, (list, tuple)) or len(validation) < 2:
                 raise TypeError(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
                                 " validation is expected as list/tuple/str"
@@ -771,6 +774,9 @@ def validate_csv_row(
             validation_msg = None
             if not precompile or len(validation) <= 4 or not callable(validation[4]):
                 try:
+                    if isinstance(validation[0], (list,tuple)):
+                        validation[0] = ' '.join(validation[0])
+
                     validation_lambda = eval(
                         lambda_txt:=(
                             "lambda column_name, field_value, row, row_i, row_last: "
@@ -781,39 +787,56 @@ def validate_csv_row(
                     if len(validation) <= 4:
                         column_schema['validations'][validation_i].append(validation_lambda)
                 except Exception as ex1:
+                    validation_result = "REJECT"
                     validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex1)
             else:
                 validation_lambda = column_schema['validations'][validation_i][4]
 
-
+            # n0debug_calc(column_schema['validations'][validation_i], f"column_schema['validations'][{validation_i}]")
+            # n0debug("validation")
+            # n0debug("validation_msg")
 
             is_valid = False
             _result = None
             if not validation_msg:
                 try:
+                    # n0debug("lambda_txt")
+                    # n0debug("column_name")
+                    # n0debug("field_value")
+                    # n0debug("row")
+                    # n0debug("row_i")
+                    # n0debug("row_last")
                     _result = is_valid = validation_lambda(column_name, field_value, row, row_i, row_last)
+                    # n0debug("_result")
+                    # n0debug("validation_action")
                     if validation_action == "VALID":
                         is_valid = not is_valid
+                    # n0debug("is_valid")
                 except Exception as ex2:
-                    validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex2)
-
-            if not is_valid:
-                if validation_action == "VALID":
                     validation_result = "REJECT"
-                else:
-                    validation_result = validation_action
+                    validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex2)
+                    # n0debug("validation_msg")
 
-                if not validation_msg:
+                if not validation_msg and not is_valid:
+                    if validation_action == "VALID":
+                        validation_result = "REJECT"
+                    else:
+                        validation_result = validation_action
+
                     try:
                         validation_msg = validation[1].format(**mapped_values, validation_result=_result)
+                        # n0debug("validation_msg")
                     except Exception as ex3:
+                        validation_result = "REJECT"
                         validation_msg = f"Incorrect validation message #{validation_i} for '{column_name}': " + str(ex3)
+                        # n0debug("validation_msg")
 
-                if validation_msg:
-                    if column_name not in failed_validations:
-                        failed_validations.update({column_name: []})
-                    failed_validations[column_name].append(validation_msg)
+            if validation_msg:
+                if column_name not in failed_validations:
+                    failed_validations.update({column_name: []})
+                failed_validations[column_name].append(validation_msg)
 
+            # n0debug("validation_result")
             if validation_result != "VALID":
                 if validation_next in ("BREAK", "EXIT") or (validation_result == "REJECT" and interrupt_after_first_fail):
                     break
