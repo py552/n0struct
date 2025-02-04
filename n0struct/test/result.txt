@@ -1294,6 +1294,51 @@
 ['//C[2]/value2'] = \"6\"
 "
  INFO     | __main__:<module>:56 | Mission acomplished
+ DEBUG    | __main__:test_n0struct_arrays:34 | result == (
+    #0   "",
+    #1   ""
+)
+ DEBUG    | __main__:test_n0struct_arrays:38 | result == (
+    #0   "default_left",
+    #1   "default_right"
+)
+ DEBUG    | __main__:test_n0struct_arrays:42 | result == (
+    #0   "",
+    #1   ""
+)
+ DEBUG    | __main__:test_n0struct_arrays:46 | result == (
+    #0   "tag",
+    #1   "value"
+)
+ DEBUG    | __main__:test_n0struct_arrays:50 | result == (
+    #0   "",
+    #1   "www.aaa.com"
+)
+ DEBUG    | __main__:test_n0struct_arrays:54 | result == (
+    #0   "https",
+    #1   "www.aaa.com"
+)
+ DEBUG    | __main__:test_n0struct_arrays:58 | result == (
+    #0   "",
+    #1   "www.aaa.com"
+)
+ DEBUG    | __main__:test_n0struct_arrays:62 | result == (
+    #0   "www.aaa.com",
+    #1   ""
+)
+ DEBUG    | __main__:test_n0struct_arrays:66 | result == (
+    #0   "www.aaa.com",
+    #1   "path/"
+)
+ DEBUG    | __main__:test_n0struct_arrays:81 | result == (
+    #0   "",
+    #1   "tag=value"
+)
+ DEBUG    | __main__:test_n0struct_arrays:85 | result == (
+    #0   "tag=value",
+    #1   ""
+)
+ INFO     | __main__:<module>:95 | Mission acomplished
  DEBUG    | __main__:test_split_with_escape:18 | buffer_str == "AAAA1;BBBB2;CCCC3;DDDD4"
  DEBUG    | __main__:test_split_with_escape:19 | result == [
     #0   "AAAA1",
