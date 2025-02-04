@@ -2,8 +2,12 @@ import typing
 from .n0struct_utils import n0eval
 from .n0struct_findall import findall as n0struct_findall__findall
 from .n0struct_findall import findfirst as n0struct_findall__findfirst
-from .n0struct_logging import n0pretty
-from .n0struct_logging import n0debug, n0debug_calc, n0print, n0error
+from .n0struct_logging import (
+    n0debug,
+    n0debug_calc,
+    n0error,
+    n0pretty,
+)
 # ******************************************************************************
 # ******************************************************************************
 class n0list_(list):

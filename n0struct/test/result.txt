@@ -615,7 +615,7 @@
         ]
     }
 }
- DEBUG    | __main__:main:297 | dict_from_json_recursevely_force_n0dict == <n0struct.n0dict  2> {
+ DEBUG    | __main__:main:297 | dict_from_json_recursevely_force_n0dict == <n0struct.n0dict  1> {
     "root": <n0struct.n0dict  3> {
         "a": 1.0,
         "b": <n0struct.n0dict  2> {
@@ -633,8 +633,7 @@
             #0   7,
             #1   8
         ]
-    },
-    "force_n0dict": True
+    }
 }
  DEBUG    | __main__:main:341 | dict_from_xml_default == <n0struct.n0dict  1> {
     "root": <n0struct.n0dict  3> {
@@ -644,9 +643,7 @@
             "d": <n0struct.n0dict  3> {
                 "e": <n0struct.n0dict  1> { "f": "3" },
                 "g": <list  2> [
-                    #0   "
-                    4
-                ",
+                    #0   "4",
                     #1   <n0struct.n0dict  1> { "h": "5" }
                 ],
                 "i": <n0struct.n0dict  1> { "j": "6" }
@@ -666,9 +663,7 @@
             "d": <n0struct.n0dict  3> {
                 "e": <n0struct.n0dict  1> { "f": "3" },
                 "g": <list  2> [
-                    #0   "
-                    4
-                ",
+                    #0   "4",
                     #1   <n0struct.n0dict  1> { "h": "5" }
                 ],
                 "i": <n0struct.n0dict  1> { "j": "6" }
@@ -689,9 +684,7 @@
             "d": <n0struct.n0dict  3> {
                 "e": <n0struct.n0dict  1> { "f": "3" },
                 "g": <n0struct.n0list  2> [
-                    #0   "
-                    4
-                ",
+                    #0   "4",
                     #1   <n0struct.n0dict  1> { "h": "5" }
                 ],
                 "i": <n0struct.n0dict  1> { "j": "6" }
@@ -703,7 +696,7 @@
         ]
     }
 }
- DEBUG    | __main__:main:402 | dict_from_xml_recursevely_force_n0dict == <n0struct.n0dict  2> {
+ DEBUG    | __main__:main:402 | dict_from_xml_recursevely_force_n0dict == <n0struct.n0dict  1> {
     "root": <n0struct.n0dict  3> {
         "a": "1",
         "b": <n0struct.n0dict  2> {
@@ -711,9 +704,7 @@
             "d": <n0struct.n0dict  3> {
                 "e": <n0struct.n0dict  1> { "f": "3" },
                 "g": <n0struct.n0list  2> [
-                    #0   "
-                    4
-                ",
+                    #0   "4",
                     #1   <n0struct.n0dict  1> { "h": "5" }
                 ],
                 "i": <n0struct.n0dict  1> { "j": "6" }
@@ -723,8 +714,7 @@
             #0   "7",
             #1   "8"
         ]
-    },
-    "force_n0dict": True
+    }
 }
  DEBUG    | __main__:main:423 | dict_from_xml_empty == <n0struct.n0dict  1> { "root": None }
  DEBUG    | __main__:main:439 | dict4 == <n0struct.n0dict  2> {
@@ -846,21 +836,21 @@
 ]
  INFO     | __main__:<module>:72 | Mission acomplished
  DEBUG    | __main__:test_files_processing:23 | test_ini_path == "C:\REPO\n0struct\n0struct\test\test.ini"
- DEBUG    | __main__:test_files_processing:25 | test_ini == { "KEY1": "VALUE1", "KEY3": "VALUE3" }
- DEBUG    | __main__:test_files_processing:29 | test_ini(after save) == { "KEY1": "VALUE1", "KEY3": "VALUE3" }
- DEBUG    | __main__:test_files_processing:57 | CRLF                    read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
- DEBUG    | __main__:test_files_processing:58 | CRLF                    read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6\r\n'
- DEBUG    | __main__:test_files_processing:59 | CRLFlines               read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:26 | test_ini == { "KEY1": "VALUE1", "KEY3": "VALUE3" }
+ DEBUG    | __main__:test_files_processing:33 | test_ini(after save) == { "KEY1": "VALUE1", "KEY3": "VALUE3" }
+ DEBUG    | __main__:test_files_processing:86 | CRLF                    read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
+ DEBUG    | __main__:test_files_processing:87 | CRLF                    read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6\r\n'
+ DEBUG    | __main__:test_files_processing:88 | CRLFlines               read_mode='t' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:60 | CRLFlines               read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:89 | CRLFlines               read_mode='b' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:61 | CRLFcsv                 read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:90 | CRLFcsv                 read_mode='t' == [
     #0   {
         0: "A",
         1: "B",
@@ -877,7 +867,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:62 | CRLFcsv                 read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:91 | CRLFcsv                 read_mode='b' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -894,19 +884,19 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:64 | CRLF(wo last CRLF)      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
- DEBUG    | __main__:test_files_processing:65 | CRLF(wo last CRLF)      read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6'
- DEBUG    | __main__:test_files_processing:66 | CRLF(wo last CRLF)lines read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:93 | CRLF(wo last CRLF)      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
+ DEBUG    | __main__:test_files_processing:94 | CRLF(wo last CRLF)      read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6'
+ DEBUG    | __main__:test_files_processing:95 | CRLF(wo last CRLF)lines read_mode='t' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:67 | CRLF(wo last CRLF)lines read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:96 | CRLF(wo last CRLF)lines read_mode='b' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:68 | CRLF(wo last CRLF)csv   read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:97 | CRLF(wo last CRLF)csv   read_mode='t' == [
     #0   {
         0: "A",
         1: "B",
@@ -923,7 +913,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:69 | CRLF(wo last CRLF)csv   read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:98 | CRLF(wo last CRLF)csv   read_mode='b' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -940,19 +930,19 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:71 | LF                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
- DEBUG    | __main__:test_files_processing:72 | LF                      read_mode='b' == b'A,B,C\n1,2,3\n4,5,6\n'
- DEBUG    | __main__:test_files_processing:73 | LFlines                 read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:100 | LF                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
+ DEBUG    | __main__:test_files_processing:101 | LF                      read_mode='b' == b'A,B,C\n1,2,3\n4,5,6\n'
+ DEBUG    | __main__:test_files_processing:102 | LFlines                 read_mode='t' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:74 | LFlines                 read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:103 | LFlines                 read_mode='b' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:75 | LFcsv                   read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:104 | LFcsv                   read_mode='t' == [
     #0   {
         0: "A",
         1: "B",
@@ -969,7 +959,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:76 | LFcsv                   read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:105 | LFcsv                   read_mode='b' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -986,19 +976,19 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:78 | LF(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
- DEBUG    | __main__:test_files_processing:79 | LF(wo last CRLF)        read_mode='b' == b'A,B,C\n1,2,3\n4,5,6'
- DEBUG    | __main__:test_files_processing:80 | LF(wo last CRLF)lines   read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:107 | LF(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
+ DEBUG    | __main__:test_files_processing:108 | LF(wo last CRLF)        read_mode='b' == b'A,B,C\n1,2,3\n4,5,6'
+ DEBUG    | __main__:test_files_processing:109 | LF(wo last CRLF)lines   read_mode='t' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:81 | LF(wo last CRLF)lines   read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:110 | LF(wo last CRLF)lines   read_mode='b' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:82 | LF(wo last CRLF)csv     read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:111 | LF(wo last CRLF)csv     read_mode='t' == [
     #0   {
         0: "A",
         1: "B",
@@ -1015,7 +1005,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:83 | LF(wo last CRLF)csv     read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:112 | LF(wo last CRLF)csv     read_mode='b' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -1032,19 +1022,19 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:85 | CR                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
- DEBUG    | __main__:test_files_processing:86 | CR                      read_mode='b' == b'A,B,C\r1,2,3\r4,5,6\r'
- DEBUG    | __main__:test_files_processing:87 | CRlines                 read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:114 | CR                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
+ DEBUG    | __main__:test_files_processing:115 | CR                      read_mode='b' == b'A,B,C\r1,2,3\r4,5,6\r'
+ DEBUG    | __main__:test_files_processing:116 | CRlines                 read_mode='t' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:88 | CRlines                 read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:117 | CRlines                 read_mode='b' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:89 | CRcsv                   read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:118 | CRcsv                   read_mode='t' == [
     #0   {
         0: "A",
         1: "B",
@@ -1061,7 +1051,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:90 | CRcsv                   read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:119 | CRcsv                   read_mode='b' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -1072,7 +1062,7 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:91 | CRcsv                   read_mode='b' EOL='\r' == [
+ DEBUG    | __main__:test_files_processing:120 | CRcsv                   read_mode='b' EOL='\r' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -1083,19 +1073,19 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:93 | CR(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
- DEBUG    | __main__:test_files_processing:94 | CR(wo last CRLF)        read_mode='b' == b'A,B,C\r1,2,3\r4,5,6'
- DEBUG    | __main__:test_files_processing:95 | CR(wo last CRLF)lines   read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:122 | CR(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
+ DEBUG    | __main__:test_files_processing:123 | CR(wo last CRLF)        read_mode='b' == b'A,B,C\r1,2,3\r4,5,6'
+ DEBUG    | __main__:test_files_processing:124 | CR(wo last CRLF)lines   read_mode='t' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:96 | CR(wo last CRLF)lines   read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:125 | CR(wo last CRLF)lines   read_mode='b' == [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:97 | CR(wo last CRLF)csv     read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:126 | CR(wo last CRLF)csv     read_mode='t' == [
     #0   {
         0: "A",
         1: "B",
@@ -1112,7 +1102,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:98 | CR(wo last CRLF)csv     read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:127 | CR(wo last CRLF)csv     read_mode='b' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -1123,7 +1113,7 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:99 | CR(wo last CRLF)csv     read_mode='b' EOL='\r' == [
+ DEBUG    | __main__:test_files_processing:128 | CR(wo last CRLF)csv     read_mode='b' EOL='\r' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -1134,9 +1124,9 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:101 | LFCR                    read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6\n\n'
- DEBUG    | __main__:test_files_processing:102 | LFCR                    read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6\n\r'
- DEBUG    | __main__:test_files_processing:103 | LFCRlines               read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:130 | LFCR                    read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6\n\n'
+ DEBUG    | __main__:test_files_processing:131 | LFCR                    read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6\n\r'
+ DEBUG    | __main__:test_files_processing:132 | LFCRlines               read_mode='t' == [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
@@ -1144,7 +1134,7 @@
     #4   "4,5,6",
     #5   ""
 ]
- DEBUG    | __main__:test_files_processing:104 | LFCRlines               read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:133 | LFCRlines               read_mode='b' == [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
@@ -1152,7 +1142,7 @@
     #4   "4,5,6",
     #5   ""
 ]
- DEBUG    | __main__:test_files_processing:105 | LFCRcsv                 read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:134 | LFCRcsv                 read_mode='t' == [
     #0   {
         0: "A",
         1: "B",
@@ -1169,7 +1159,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:106 | LFCRcsv                 read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:135 | LFCRcsv                 read_mode='b' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -1186,7 +1176,7 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:107 | LFCRcsv                 read_mode='b' EOL='\n\r' == [
+ DEBUG    | __main__:test_files_processing:136 | LFCRcsv                 read_mode='b' EOL='\n\r' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -1203,23 +1193,23 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:109 | LFCR(wo last CRLF)      read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6'
- DEBUG    | __main__:test_files_processing:110 | LFCR(wo last CRLF)      read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6'
- DEBUG    | __main__:test_files_processing:111 | LFCR(wo last CRLF)lines read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:138 | LFCR(wo last CRLF)      read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6'
+ DEBUG    | __main__:test_files_processing:139 | LFCR(wo last CRLF)      read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6'
+ DEBUG    | __main__:test_files_processing:140 | LFCR(wo last CRLF)lines read_mode='t' == [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
     #3   "",
     #4   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:112 | LFCR(wo last CRLF)lines read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:141 | LFCR(wo last CRLF)lines read_mode='b' == [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
     #3   "",
     #4   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:113 | LFCR(wo last CRLF)csv   read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:142 | LFCR(wo last CRLF)csv   read_mode='t' == [
     #0   {
         0: "A",
         1: "B",
@@ -1236,7 +1226,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:114 | LFCR(wo last CRLF)csv   read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:143 | LFCR(wo last CRLF)csv   read_mode='b' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -1253,7 +1243,7 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:115 | LFCR(wo last CRLF)csv   read_mode='b' EOL='\n\r' == [
+ DEBUG    | __main__:test_files_processing:144 | LFCR(wo last CRLF)csv   read_mode='b' EOL='\n\r' == [
     #0   {
         0: b'A',
         1: b'B',
@@ -1270,7 +1260,7 @@
         2: b'6'
     }
 ]
- INFO     | __main__:<module>:133 | Mission acomplished
+ INFO     | __main__:<module>:162 | Mission acomplished
  DEBUG    | __main__:test_n0dict:27 | to_xpath_result == "['//C[0]/a']      = \"1\"
 ['//C[0]/b']      = \"2\"
 ['//C[0]/c']      = \"3\"
@@ -1341,315 +1331,315 @@
 ]
  INFO     | __main__:<module>:41 | Mission acomplished
  INFO     | __main__:test_save_load_file:38 | ******* t OS_DEFAULT
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dictOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_listOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_listOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_strOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_binOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* t -r-n
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
  DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* t -n
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-n.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
  DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-n.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-n.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-n.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-n.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* t -r
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-r.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\rB=2\rC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\rB=2\rC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
  DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-r.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-r.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-r.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-r.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* t -r-n
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
  DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* t -n-r
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
- INFO     | __main__:test_save_load_file:63 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
- INFO     | __main__:test_save_load_file:94 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
+ INFO     | __main__:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'\n\r'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
+ INFO     | __main__:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'\n\r'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* t $-n^
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
- INFO     | __main__:test_save_load_file:63 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- INFO     | __main__:test_save_load_file:94 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
+ INFO     | __main__:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'$\n^'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ INFO     | __main__:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'$\n^'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* b OS_DEFAULT
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dictOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_listOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_listOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_strOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_binOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* b -r-n
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
  DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* b -n
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-n.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
  DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-n.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-n.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-n.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-n.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* b -r
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-r.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\rB=2\rC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\rB=2\rC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
  DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-r.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-r.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-r.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-r.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* b -r-n
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
  DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* b -n-r
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
- INFO     | __main__:test_save_load_file:63 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
- INFO     | __main__:test_save_load_file:94 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
+ INFO     | __main__:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'\n\r'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
+ INFO     | __main__:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'\n\r'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:test_save_load_file:38 | ******* b $-n^
- INFO     | __main__:test_save_load_file:41 | * tmp_file='test_dict$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:49 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | __main__:test_save_load_file:51 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | __main__:test_save_load_file:55 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
- INFO     | __main__:test_save_load_file:63 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | __main__:test_save_load_file:72 | * tmp_file='test_str_list$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:80 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | __main__:test_save_load_file:82 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | __main__:test_save_load_file:86 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:89 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:92 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- INFO     | __main__:test_save_load_file:94 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | __main__:test_save_load_file:103 | * tmp_file='test_bin_list$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:111 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- DEBUG    | __main__:test_save_load_file:113 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- INFO     | __main__:test_save_load_file:120 | * tmp_file='test_str$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:128 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
- DEBUG    | __main__:test_save_load_file:130 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
- INFO     | __main__:test_save_load_file:137 | * tmp_file='test_bin$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:145 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:147 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:<module>:161 | Mission acomplished
+ INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
+ INFO     | __main__:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'$\n^'
+ INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ INFO     | __main__:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'$\n^'
+ INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
+ DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | __main__:<module>:178 | Mission acomplished

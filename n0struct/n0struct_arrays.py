@@ -12,20 +12,19 @@ def split_pair(
                 default_right: typing.Any = '',
 ) -> tuple:
     """
-    split_pair(in_str: str, delimiter: str, transform_left: callable = lambda x: x, transform_right: callable = lambda x: x, default_element: int = 1) -> tuple:
-
     split string into 2 sub strings in any cases:
         '' by '://'                                     => (default_left, default_right)
         'www.aaa.com' by '://'                          => (default_left, 'www.aaa.com')
-        'https://www.aaa.com' by '://'                  => ('http', 'www.aaa.com')
-        'www.aaa.com',default_element = 0 by '/'        => ('www.aaa.com')
+        'https://www.aaa.com' by '://'                  => ('https', 'www.aaa.com')
+        'www.aaa.com' by '/'                            => (default_left, 'www.aaa.com')
+        'www.aaa.com',default_element = 0 by '/'        => ('www.aaa.com', default_right)
         'www.aaa.com/path',default_element = 0 by '/'   => ('www.aaa.com', 'path')
     """
     if not in_str:
         return transform_left(default_left), transform_right(default_right)
-        
+
     for _delimiter in iterable(delimiter):
-        if _delimiter in in_str:
+        if _delimiter and _delimiter in in_str:
             str_parts = in_str.split(_delimiter, 1)
             return transform_left(str_parts[0]), transform_right(str_parts[1])
     if default_element:
@@ -40,12 +39,10 @@ def join_triplets(
                     level: int = 0
 ) -> str:
     """
-    join_triplets(in_list: typing.Union[None, str, tuple, list], level = 0) -> str:
-
     join elements with middle sepataror:
-        [elem1, delimiter, elem2]   => elem1, delimiter, elem2
-        [elem1, delimiter, None]    => elem1
-        [None, delimiter, elem2]    => elem2
+        [elem1, delimiter, elem2]   => f'{elem1}{delimiter}{elem2}'
+        [elem1, delimiter, None]    => f'{elem1}'
+        [None, delimiter, elem2]    => f'{elem2}'
     """
     if isinstance(in_list, str) or in_list is None:
         return in_list or ""

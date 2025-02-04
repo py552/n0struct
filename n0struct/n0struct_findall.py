@@ -4,7 +4,6 @@ from .n0struct_logging import (
     n0print,
     n0debug,
     n0debug_calc,
-    n0error,
 )
 # ******************************************************************************
 # ******************************************************************************
@@ -36,7 +35,7 @@ def findfirst(current_node: typing.Union[dict, list], seeked_xpath_str: str, rai
             return None, None
     elif len(found) > 1 and raise_exception:
         raise IndexError(f"Found more that single item {seeked_xpath_str}")  # In case of more than 1 found
-            
+
     found_key = list(found.keys())[0]  # Return first pair in any cases: key, value
     return found_key, found[found_key]
 # ******************************************************************************
@@ -104,7 +103,6 @@ def _findall(
         else:
             # Conditions
             lower_child_index = child_index.lower().replace(' ','')
-            # # n0debug("lower_child_index")
             if lower_child_index == '*':
                 pass  # will be processed lately
             elif lower_child_index.startswith("last()"):

@@ -273,7 +273,7 @@ def main():
     assert isinstance(dict_from_json_force_n0dict["root/k[1]"], int)                    == True # XML supports only str, for JSON int
     dict_from_json_force_n0dict.to_json(); dict_from_json_force_n0dict.to_xml(); dict_from_json_force_n0dict.to_xpath()
 
-    dict_from_json_recursevely = n0dict(str_json, recursively=True)
+    dict_from_json_recursevely = n0dict.convert_recursively(n0dict(str_json))
     n0debug("dict_from_json_recursevely")
     assert isinstance(dict_from_json_recursevely, n0dict)                               == True
     assert isinstance(dict_from_json_recursevely["root"], n0dict)                       == True
@@ -293,7 +293,7 @@ def main():
     assert isinstance(dict_from_json_recursevely["root/k[1]"], int)                     == True # XML supports only str, for JSON int
     dict_from_json_recursevely.to_json(); dict_from_json_recursevely.to_xml(); dict_from_json_recursevely.to_xpath()
 
-    dict_from_json_recursevely_force_n0dict = n0dict(str_json, recursively=True, force_n0dict = True)
+    dict_from_json_recursevely_force_n0dict = n0dict.convert_recursively(n0dict(str_json))
     n0debug("dict_from_json_recursevely_force_n0dict")
     assert isinstance(dict_from_json_recursevely_force_n0dict, n0dict)                  == True
     assert isinstance(dict_from_json_recursevely_force_n0dict["root"], n0dict)          == True
@@ -378,7 +378,7 @@ def main():
     assert isinstance(dict_from_xml_force_n0dict["root/k[1]"], str)                     == True # XML supports only str, for JSON int
     dict_from_xml_force_n0dict.to_json(); dict_from_xml_force_n0dict.to_xml(); dict_from_xml_force_n0dict.to_xpath()
 
-    dict_from_xml_recursevely = n0dict(str_xml, recursively=True)
+    dict_from_xml_recursevely = n0dict.convert_recursively(n0dict(str_xml))
     n0debug("dict_from_xml_recursevely")
     assert isinstance(dict_from_xml_recursevely, n0dict)                                == True
     assert isinstance(dict_from_xml_recursevely["root"], n0dict)                        == True
@@ -398,7 +398,7 @@ def main():
     assert isinstance(dict_from_xml_recursevely["root/k[1]"], str)                      == True # XML supports only str, for JSON int
     dict_from_xml_recursevely.to_json(); dict_from_xml_recursevely.to_xml(); dict_from_xml_recursevely.to_xpath()
 
-    dict_from_xml_recursevely_force_n0dict = n0dict(str_xml, recursively=True, force_n0dict = True)
+    dict_from_xml_recursevely_force_n0dict = n0dict.convert_recursively(n0dict(str_xml))
     n0debug("dict_from_xml_recursevely_force_n0dict")
     assert isinstance(dict_from_xml_recursevely_force_n0dict, n0dict)                   == True
     assert isinstance(dict_from_xml_recursevely_force_n0dict["root"], n0dict)           == True
@@ -425,7 +425,7 @@ def main():
     assert (dict_from_xml_empty["root"] is None) == True
     dict_from_xml_empty.to_json(); dict_from_xml_empty.to_xml(); dict_from_xml_empty.to_xpath()
 
-    dict4 = n0dict(
+    dict4 = n0dict.convert_recursively(
         {
             "a": 1,
             "b": {
@@ -435,7 +435,7 @@ def main():
                 }
             }
         }
-    , recursively=True)
+    )
     n0debug("dict4")
     assert isinstance(dict4, n0dict)                                                    == True
     assert dict4["a"]                                                                   == 1
@@ -536,9 +536,5 @@ __all__ = (
     'test_sorted_lists',
     'test_unsorted_lists',
     'main',
-    'mydir',
-    'dict1',
-    'dict2',
-    'dict3',
 )
 ################################################################################

@@ -1,13 +1,10 @@
-# Python 3.8+ is required. := (walrus operator) is used in comprehension inside load_ini(...)
 import typing
 from .n0struct_utils import isnumber
 from .n0struct_utils import iterable
 from .n0struct_files import load_lines
 from .n0struct_arrays import split_pair
-## from .n0struct_logging import n0debug, n0debug_calc
 # ******************************************************************************
 def default_parse_value(key_value, default_value):
-    # n0debug("key_value")
     stripped_value = key_value[1].strip()
     if isnumber(stripped_value):
         if '.' in stripped_value:

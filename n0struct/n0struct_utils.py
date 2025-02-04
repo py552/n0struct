@@ -1,6 +1,5 @@
 import typing
 import itertools
-## from .n0struct_logging import n0debug, n0debug_calc
 # ******************************************************************************
 # ******************************************************************************
 def to_int(value: str, max_len: typing.Union[int, None] = None, default_value: typing.Any = None) -> typing.Any:
@@ -107,9 +106,11 @@ def split_with_escape(
             for i,item in enumerate(separated_items[start_from_item:-1]):
                 if item.endswith(escape_character):
                     count_of_trailing_escape_characters = sum( 1 for _ in itertools.takewhile(lambda ch: ch == escape_character, reversed(item)) )
-                    if trim_trailing_double_escape_characters and (count_of_double_escape_characters:=count_of_trailing_escape_characters // 2):
-                        # Trim double escape charaters before delimiter
-                        separated_items[start_from_item+i] = item[:-count_of_double_escape_characters*2] + '\\'*count_of_double_escape_characters
+                    if trim_trailing_double_escape_characters:
+                        count_of_double_escape_characters = count_of_trailing_escape_characters // 2  # for compatibility with python 3.7
+                        if count_of_double_escape_characters:
+                            # Trim double escape charaters before delimiter
+                            separated_items[start_from_item+i] = item[:-count_of_double_escape_characters*2] + '\\'*count_of_double_escape_characters
                     if count_of_trailing_escape_characters % 2:
                         # Odd count_of_trailing_escape_characters, so last escape charater terminates delimiter
                         separated_items[start_from_item+i] = item[:-1] + delimiter + separated_items.pop(start_from_item+i+1)
@@ -120,7 +121,8 @@ def split_with_escape(
             else:
                 if trim_trailing_double_escape_characters and separated_items[-1].endswith(escape_character):
                     count_of_trailing_escape_characters = sum( 1 for _ in itertools.takewhile(lambda ch: ch == escape_character, reversed(item)) )
-                    if  (count_of_double_escape_characters:=count_of_trailing_escape_characters // 2):
+                    count_of_double_escape_characters = count_of_trailing_escape_characters // 2
+                    if count_of_double_escape_characters:
                         # Trim double escape charaters of the last element, like it was done for previous elements
                         separated_items[-1] = separated_items[-1][:-count_of_double_escape_characters*2] + '\\'*count_of_double_escape_characters
                 break # no more/no one trailing escape charaters found
@@ -445,7 +447,7 @@ def validate_values(value: str,
     if not possible_values_the_last_is_default or not isinstance(possible_values_the_last_is_default, (list, tuple)):
         if return_if_wrong_input:
             return return_if_wrong_input
-        raise ValueError(f"{possible_values_the_last_is_default=} must be not empty list/tuple")
+        raise ValueError(f"possible_values_the_last_is_default='{possible_values_the_last_is_default}' must be not empty list/tuple")
 
     if value in possible_values_the_last_is_default:
         return value
@@ -501,44 +503,44 @@ def key_value_list_into_dict(
             key2: value2,
         }
     '''
-    if not (capitalize_key:=int(capitalize_key)):
+    if not capitalize_key:
         capitalize_key = lambda s: s
-    elif capitalize_key > 0:
-        capitalize_key = lambda s: s.upper() if isinstance(s, str) else s
     else:
-        capitalize_key = lambda s: s.lower() if isinstance(s, str) else s
+        capitalize_key = int(capitalize_key) # for compatibility with python 3.7
+        if capitalize_key > 0:
+            capitalize_key = lambda s: s.upper() if isinstance(s, str) else s
+        else:
+            capitalize_key = lambda s: s.lower() if isinstance(s, str) else s
 
-    if not (capitalize_value:=int(capitalize_value)):
+    if not ():
         capitalize_value = lambda s: s
-    elif capitalize_value > 0:
-        capitalize_value = lambda s: s.upper() if isinstance(s, str) else s
     else:
-        capitalize_value = lambda s: s.lower() if isinstance(s, str) else s
+        capitalize_value = int(capitalize_value) # for compatibility with python 3.7
+        if capitalize_value > 0:
+            capitalize_value = lambda s: s.upper() if isinstance(s, str) else s
+        else:
+            capitalize_value = lambda s: s.lower() if isinstance(s, str) else s
 
 
 
     output_dict = {}
     for input_list in (input_dict.get(xpath) or tuple()):
-        ## n0debug("input_list")
         if isinstance(input_list, (list, tuple)):
             for key_value_dict in input_list:
-                ## n0debug("key_value_dict")
                 if isinstance(key_value_dict, (list, tuple)):
                     for key_value_subdict in key_value_dict:
-                        ## n0debug("key_value_subdict")
                         if isinstance(key_value_subdict, dict):
                             output_dict.update({capitalize_key(key_value_subdict[key_tag]): capitalize_value(key_value_subdict[value_tag])})
                         else:
-                            raise TypeError(f"Expected {key_value_subdict=} as dict, but got {type(key_value_subdict)}")
+                            raise TypeError(f"Expected key_value_subdict='{key_value_subdict}' as dict, but got {type(key_value_subdict)}")
                 elif isinstance(key_value_dict, dict):
                     output_dict.update({capitalize_key(key_value_dict[key_tag]): capitalize_value(key_value_dict[value_tag])})
                 else:
-                    raise TypeError(f"Expected {key_value_dict=} as list/dict, but got {type(key_value_dict)}")
+                    raise TypeError(f"Expected key_value_dict='{key_value_dict}' as list/dict, but got {type(key_value_dict)}")
         elif isinstance(input_list, dict):
-            ## n0debug("input_list")
             output_dict.update({capitalize_key(input_list[key_tag]): capitalize_value(input_list[value_tag])})
         else:
-            raise TypeError(f"Expected {input_list=} as list/dict, but got {type(input_list)}")
+            raise TypeError(f"Expected input_list='{input_list}' as list/dict, but got {type(input_list)}")
     return output_dict
 
 
@@ -568,17 +570,17 @@ def merge_dict_concatenate(
     concatenate_sign: typing.Union[str, None] = '\x16',
     finalize_dict_concatenate: bool = False,
 ) -> dict:
-    ## n0debug("concatenate_sign")
-    ## n0debug("finalize_dict_concatenate")
     result_dict = {}
     for d in kw:
-        ## n0debug("d")
         if isinstance(d, dict):
             result_dict.update(
                 {
                     k:
-                        f"{old_v}{v[1:]}"
-                        if v.startswith(concatenate_sign) and ((old_v:=result_dict.get(k) or '') or finalize_dict_concatenate)
+                        # for compatibility with python 3.7
+                        # f"{old_v}{v[1:]}"
+                        # if v.startswith(concatenate_sign) and ((old_v:=result_dict.get(k) or '') or finalize_dict_concatenate)
+                        f"{result_dict.get(k) or ''}{v[1:]}"
+                        if v.startswith(concatenate_sign) and (result_dict.get(k) or finalize_dict_concatenate)
                         else v
                     for k, v in d.items()
                 }
@@ -736,7 +738,8 @@ def serialize_dict(
 
     if not isinstance(input_dict, (dict, list, tuple, set, frozenset)):
         in_buffer_str = str(input_dict)
-        if (capitalize_value:=int(capitalize_value)) > 0:
+        capitalize_value = int(capitalize_value)
+        if capitalize_value > 0:
             in_buffer_str = in_buffer_str.upper()
         elif capitalize_value < 0:
             in_buffer_str = in_buffer_str.lower()
@@ -748,11 +751,11 @@ def serialize_dict(
             else:
                 buffer_str += ch
 
-        ## n0debug("buffer_str")
         return buffer_str
 
 
-    if not (capitalize_key:=int(capitalize_key)):
+    capitalize_key = int(capitalize_key)
+    if not capitalize_key:
         capitalize_key = lambda s: s
     elif capitalize_key > 0:
         capitalize_key = lambda s: s.upper() if isinstance(s, str) else s
@@ -826,9 +829,20 @@ def parse_tlv(input_buffer: str, tag_fieldlen: int = 2, len_fieldlen: int = 3) -
         return tuple()
     offset = 0
     while offset < len(input_buffer):
-        _tag = input_buffer[offset:(offset:=offset+tag_fieldlen)]
-        _len = int(input_buffer[offset:(offset:=offset+len_fieldlen)])
-        _value = input_buffer[offset:(offset:=offset+_len)]
+        # for compatibility with python 3.7
+
+        # _tag = input_buffer[offset:(offset:=offset+tag_fieldlen)]
+        new_offset = offset+tag_fieldlen
+        _tag, offset = input_buffer[offset:new_offset], new_offset
+
+        # _len = int(input_buffer[offset:(offset:=offset+len_fieldlen)])
+        new_offset = offset+len_fieldlen
+        _len, offset  = int(input_buffer[offset:new_offset]), new_offset
+
+        # _value = input_buffer[offset:(offset:=offset+_len)]
+        new_offset = offset+_len
+        _value, offset = input_buffer[offset:new_offset], new_offset
+
         yield _tag, _len, _value
 # ******************************************************************************
 def generate_tlv(
@@ -838,14 +852,23 @@ def generate_tlv(
     tag_padding: str = ' ',
     len_padding: str = '0',
 ) -> str:
+    # for compatibility with python 3.7
     return ''.join(
         ''.join((
-            _tag.ljust(tag_fieldlen, tag_padding) if len(_tag:=str(__tag)) <= tag_fieldlen else raise_exception(f"Tag name '{_tag}' is longer than {tag_fieldlen} characters"),
-            _len.rjust(len_fieldlen, len_padding) if len(_len:=str(len(_value:=str(__value)))) <= len_fieldlen else raise_exception(f"Value '{_value}' of tag '{_tag}' is longer than {len_fieldlen} characters"),
+            _tag.ljust(tag_fieldlen, tag_padding)             if len(_tag) <= tag_fieldlen              else raise_exception(f"Tag name '{_tag}' is longer than {tag_fieldlen} characters"),
+            str(len(_value)).rjust(len_fieldlen, len_padding) if len(str(len(_value))) <= len_fieldlen  else raise_exception(f"Value '{_value}' of tag '{_tag}' is longer than {len_fieldlen} characters"),
             _value
         ))
-        for __tag,__value in input_dict.items()
+        for _tag,_value in input_dict.items()
     )
+    # return ''.join(
+    #     ''.join((
+    #         _tag.ljust(tag_fieldlen, tag_padding) if len(_tag:=str(__tag)) <= tag_fieldlen else raise_exception(f"Tag name '{_tag}' is longer than {tag_fieldlen} characters"),
+    #         _len.rjust(len_fieldlen, len_padding) if len(_len:=str(len(_value:=str(__value)))) <= len_fieldlen else raise_exception(f"Value '{_value}' of tag '{_tag}' is longer than {len_fieldlen} characters"),
+    #         _value
+    #     ))
+    #     for __tag,__value in input_dict.items()
+    # )
 # ******************************************************************************
 # ******************************************************************************
 ################################################################################

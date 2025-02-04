@@ -1219,7 +1219,6 @@ FUNCTIONS
         :return: (input_date or today) + day_delta + month_delta -> str YYMMDD
     
     default_parse_value(key_value, default_value)
-        ## from .n0struct_logging import n0debug, n0debug_calc
         # ******************************************************************************
     
     deserialize_dict(buffer_str: str, delimiter: str = ';', parse_item: Optional[Callable] = None, parse_empty=False, equal_tag: str = '=', parse_key: Callable = <function <lambda>>, default_key: Any = None, parse_value: Callable = <function <lambda>>, default_value: Any = None, default_dict_result=None, default_list_result=None, default_tuple_result=None) -> dict
@@ -1392,12 +1391,10 @@ FUNCTIONS
         ["abc"] -> ["abc"]
     
     join_triplets(in_list: Union[NoneType, str, tuple, list], level: int = 0) -> str
-        join_triplets(in_list: typing.Union[None, str, tuple, list], level = 0) -> str:
-        
         join elements with middle sepataror:
-            [elem1, delimiter, elem2]   => elem1, delimiter, elem2
-            [elem1, delimiter, None]    => elem1
-            [None, delimiter, elem2]    => elem2
+            [elem1, delimiter, elem2]   => f'{elem1}{delimiter}{elem2}'
+            [elem1, delimiter, None]    => f'{elem1}'
+            [None, delimiter, elem2]    => f'{elem2}'
     
     key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@DataElement', value_tag: str = '@Value', capitalize_key: int = 0, capitalize_value: int = 0) -> dict
         input_dict = {
@@ -1468,7 +1465,7 @@ FUNCTIONS
     merge_dict_first(*kw) -> dict
         # ******************************************************************************
     
-    n0debug(var_name: str, level: str = 'DEBUG', show_type: bool = None, pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
+    n0debug(var_name: str, alias: str = None, level: str = 'DEBUG', show_type: bool = None, pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
         Print value of the variable with name {var_name},
         depends of value in global variable {__debug_level}.
         
@@ -1645,13 +1642,12 @@ FUNCTIONS
         # ******************************************************************************
     
     split_pair(in_str: str, delimiter: Union[str, Iterable], transform_left: <built-in function callable> = <function <lambda>>, transform_right: <built-in function callable> = <function <lambda>>, default_element: int = 1, default_left: Any = '', default_right: Any = '') -> tuple
-        split_pair(in_str: str, delimiter: str, transform_left: callable = lambda x: x, transform_right: callable = lambda x: x, default_element: int = 1) -> tuple:
-        
         split string into 2 sub strings in any cases:
             '' by '://'                                     => (default_left, default_right)
             'www.aaa.com' by '://'                          => (default_left, 'www.aaa.com')
-            'https://www.aaa.com' by '://'                  => ('http', 'www.aaa.com')
-            'www.aaa.com',default_element = 0 by '/'        => ('www.aaa.com')
+            'https://www.aaa.com' by '://'                  => ('https', 'www.aaa.com')
+            'www.aaa.com' by '/'                            => (default_left, 'www.aaa.com')
+            'www.aaa.com',default_element = 0 by '/'        => ('www.aaa.com', default_right)
             'www.aaa.com/path',default_element = 0 by '/'   => ('www.aaa.com', 'path')
     
     split_with_escape(buffer_str: str, delimiter: str, maxsplit: Optional[int] = None, escape_character: str = '\\', trim_trailing_double_escape_characters: bool = True)
@@ -1691,7 +1687,6 @@ FUNCTIONS
         :return: str -> date
     
     to_int(value: str, max_len: Optional[int] = None, default_value: Any = None) -> Any
-        ## from .n0struct_logging import n0debug, n0debug_calc
         # ******************************************************************************
         # ******************************************************************************
     

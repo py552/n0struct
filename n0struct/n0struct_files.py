@@ -5,12 +5,6 @@ import typing
 from pathlib import Path
 from .n0struct_utils import n0eval
 from .n0struct_utils import isnumber
-from .n0struct_logging import (
-    n0print,
-    n0debug,
-    n0debug_calc,
-    n0error,
-)
 # ******************************************************************************
 # ******************************************************************************
 def load_file(
@@ -20,22 +14,16 @@ def load_file(
         EOL: str = os.linesep,
 ) -> str:
     if 'b' in read_mode or EOL not in ('\r\n', '\n', '\r'):
-        # n0debug("read_mode")
         with open(file_path, f"rb{read_mode[1:]}") as in_filehandler:
             if 't' in read_mode:
                 if isinstance(EOL, str):
                     EOL = EOL.encode("utf-8")
                 elif not isinstance(EOL, bytes):
-                    raise TypeError(f"{EOL=} could be str or bytes for {read_mode=}")
+                    raise TypeError(f"EOL='{EOL}' could be str or bytes for read_mode='{read_mode}'")
                 return in_filehandler.read().replace(EOL, b'\n').decode(encoding)
             else:
                 return in_filehandler.read()
     else:
-        # n0debug("read_mode")
-        # n0debug("encoding")
-        # n0debug_calc(EOL.encode(), "EOL.encode()")
-
-        # with open(file_path, 'r'+read_mode, encoding=encoding, newline=EOL) as in_filehandler:
         # no newline parameter for auto decoding
         with open(file_path, f"rt{read_mode[1:]}", encoding=encoding) as in_filehandler:
             return in_filehandler.read()
@@ -50,7 +38,7 @@ def load_lines(
         if isinstance(EOL, str):
             EOL = EOL.encode("utf-8")
         elif not isinstance(EOL, bytes):
-            raise TypeError(f"{EOL=} could be str or bytes for {read_mode=}")
+            raise TypeError(f"EOL='{EOL}' could be str or bytes for read_mode='{read_mode}'")
         for line in load_file(file_path, read_mode='b').split(EOL):
             yield line
     else:
@@ -84,7 +72,6 @@ def save_file(
     if 'b' in mode or EOL not in ('\r\n', '\n', '\r'):
         mode = f"{mode[0]}b{mode[2:]}"
         if isinstance(output_buffer, str):
-            # n0debug_calc(EOL.encode(), "not standard EOL")
             output_buffer = output_buffer.replace('\n', EOL).encode(encoding)
         if isinstance(EOL, str):
             EOL = EOL.encode(encoding)
@@ -93,25 +80,16 @@ def save_file(
         out_filehandler = open(file_path, mode, encoding=encoding, newline=EOL)
         EOL = '\n'
 
-    # n0debug("file_path")
-    # n0debug("mode")
-    # n0debug("encoding")
-    # n0debug("output_buffer")
-
     if isinstance(output_buffer, (list, tuple, typing.Generator, set, frozenset)):
-        # n0debug("EOL")
         for line in output_buffer:
-            # n0debug("line")
             if 'b' in mode:
                 if not isinstance(line, (bytes, bytearray)):
                     line = str(line).encode(encoding)
-                    # n0debug("line")
             else:
                 if isinstance(line, (bytes, bytearray)):
                     line = line.decode(encoding)
                 elif not isinstance(line, str):
                     line = str(line)
-                # n0debug("line")
             out_filehandler.write(line)
             out_filehandler.write(EOL)
     else:

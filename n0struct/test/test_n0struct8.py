@@ -37,8 +37,11 @@ def test_save_load_file():
             linesep_ = linesep.encode('unicode_escape').decode().replace('\\','-')
             n0print(f"******* {mode} {linesep_}")
 
-            tmp_file = f"test_dict{linesep_}.tmp"
-            n0print(f"* {tmp_file=}")
+            tmp_file = os.path.join(
+                os.environ.get("TEMP", os.environ.get("TMP", "")),
+                f"test_dict{linesep_}.tmp"
+            )
+            n0print(f"* tmp_file='{tmp_file}'")
             if not optional_linesep:
                 linesep = os.linesep
                 save_file(tmp_file, test_dict, mode=mode)
@@ -69,7 +72,12 @@ def test_save_load_file():
             ########################################################################
 
             tmp_file = f"test_str_list{linesep_}.tmp"
-            n0print(f"* {tmp_file=}")
+            
+            tmp_file = os.path.join(
+                os.environ.get("TEMP", os.environ.get("TMP", "")),
+                f"test_str_list{linesep_}.tmp"
+            )
+            n0print(f"* tmp_file='{tmp_file}'")
             if not optional_linesep:
                 linesep = os.linesep
                 save_file(tmp_file, test_str_list, mode=mode)
@@ -99,8 +107,11 @@ def test_save_load_file():
 
             ########################################################################
 
-            tmp_file = f"test_bin_list{linesep_}.tmp"
-            n0print(f"* {tmp_file=}")
+            tmp_file = os.path.join(
+                os.environ.get("TEMP", os.environ.get("TMP", "")),
+                f"test_bin_list{linesep_}.tmp"
+            )
+            n0print(f"* tmp_file='{tmp_file}'")
             if not optional_linesep:
                 linesep = os.linesep
                 save_file(tmp_file, test_bin_list, mode=mode)
@@ -116,8 +127,11 @@ def test_save_load_file():
 
             ########################################################################
 
-            tmp_file = f"test_str{linesep_}.tmp"
-            n0print(f"* {tmp_file=}")
+            tmp_file = os.path.join(
+                os.environ.get("TEMP", os.environ.get("TMP", "")),
+                f"test_str{linesep_}.tmp"
+            )
+            n0print(f"* tmp_file='{tmp_file}'")
             if not optional_linesep:
                 linesep = os.linesep
                 save_file(tmp_file, test_str, mode=mode)
@@ -133,8 +147,11 @@ def test_save_load_file():
 
             ########################################################################
 
-            tmp_file = f"test_bin{linesep_}.tmp"
-            n0print(f"* {tmp_file=}")
+            tmp_file = os.path.join(
+                os.environ.get("TEMP", os.environ.get("TMP", "")),
+                f"test_bin{linesep_}.tmp"
+            )
+            n0print(f"* tmp_file='{tmp_file}'")
             if not optional_linesep:
                 linesep = os.linesep
                 save_file(tmp_file, test_bin, mode=mode)
@@ -165,6 +182,5 @@ if __name__ == '__main__':
 __all__ = (
     'test_save_load_file',
     'main',
-    'mydir',
 )
 ################################################################################

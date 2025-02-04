@@ -13,19 +13,6 @@ import re
 from .n0struct_date import *
 from .n0struct_utils import *
 
-'''
-from .n0struct_files import (
-    save_file,
-)
-'''
-
-from .n0struct_logging import (
-    n0print,
-    n0debug,
-    n0debug_calc,
-    n0error,
-)
-
 # ******************************************************************************
 # ******************************************************************************
 def parse_complex_csv_line(
@@ -51,7 +38,7 @@ def parse_complex_csv_line(
 
     for offset, ch in enumerate(line.rstrip(CRLF)):
         if isinstance(ch, int):  # if line is bytes, each fetched item will be int
-            ch = ch.to_bytes()
+            ch = ch.to_bytes(1, "big") # for compatibility with 3.7
         if ch == delimiter and (flag_quotes_in_the_begining == False or flag_expect_delimiter_or_quotes == True):
             # The next field is started
             fields_in_the_row.append(process_field(field_value))
@@ -149,7 +136,7 @@ def load_csv(
     if header_is_mandatory is None:
         header_is_mandatory = False
     elif not isinstance(header_is_mandatory, bool):
-        raise SyntaxError(f"Not expectable value in {header_is_mandatory=}. Should be bool or None")
+        raise SyntaxError(f"Not expectable value in header_is_mandatory='{header_is_mandatory}'. Should be bool or None")
 
     ## column_names
     if isinstance(column_names, (list, tuple)):
@@ -165,7 +152,7 @@ def load_csv(
                      and any(mandatory_column_name not in column_names for mandatory_column_name in contains_header):
                     raise SyntaxError(f"Mandatory column names {contains_header} are not in expected column names {column_names}")
     elif column_names is not None:
-        raise SyntaxError(f"Not expectable value in {column_names=}. Should be list/tuple/None")
+        raise SyntaxError(f"Not expectable value in column_names='{column_names}'. Should be list/tuple/None")
 
     ## contains_header
     if isinstance(contains_header, (str, list, tuple)) and not contains_header:
@@ -176,7 +163,7 @@ def load_csv(
             header_is_mandatory = contains_header
         elif isinstance(header_is_mandatory, bool):
             if header_is_mandatory != contains_header:
-                raise SyntaxError(f"{contains_header=} must be equal {header_is_mandatory=} if it's bool")
+                raise SyntaxError(f"contains_header='{contains_header}' must be equal header_is_mandatory='{header_is_mandatory}' if it's bool")
         contains_header = column_names
     elif isinstance(contains_header, (list, tuple)):
         if len(contains_header) != len(set(contains_header)):
@@ -184,7 +171,7 @@ def load_csv(
     elif contains_header is None:
         contains_header = column_names
     elif not isinstance(contains_header, str):
-        raise SyntaxError(f"Not expectable type of {type(contains_header)} {contains_header=}."
+        raise SyntaxError(f"Not expectable type of {type(contains_header)} contains_header='{contains_header}'."
                           " Should be str (first column name) or list/tuple (mandatory column names) or bool (LEGACY) or None"
         )
 
@@ -311,7 +298,7 @@ def load_native_csv(
 ) -> typing.Generator:
     if column_names is not None:
         if not isinstance(column_names, (list, tuple)):
-            raise SyntaxError(f"Not expectable value in {column_names=}. Should be list/tupleNone")
+            raise SyntaxError(f"Not expectable value in column_names='{column_names}'. Should be list/tupleNone")
         elif len(column_names) != len(set(column_names)):
             raise SyntaxError(f"Column names {column_names} contains not unique names of columns")
 
@@ -425,14 +412,6 @@ def save_csv(
     and type(header) is not {}.keys().__class__: \
         raise TypeError(f"Expected header as list or tuple, but got ({type(rows)}) {rows}")
 
-    '''
-    if header:
-        if not isinstance(header, (list, tuple)):
-            raise TypeError(f"Expected header as list or tuple, but got ({type(rows)}) {rows}")
-        rows = [header] + rows
-    # n0debug("rows")
-    save_file(file_path, [generate_complex_csv_row(row, delimiter, EOL='') for row in rows], mode=mode, encoding=encoding, EOL=EOL)
-    '''
     Path(file_path).parent.mkdir(parents=True, exist_ok=True)
     with open(file_path, 'wt', encoding=encoding, newline='') as out_filehandler:
         csv_writer = csv.writer(
@@ -728,7 +707,6 @@ def validate_csv_row(
         })
 
         for validation_i,validation in enumerate(column_schema.get('validations', ())):
-            # n0debug("validation")
 
             if not isinstance(validation, (list, tuple)) or len(validation) < 2:
                 raise TypeError(f"Validation rule #{validation_i} for '{column_name}' is incorrect."
@@ -737,11 +715,6 @@ def validate_csv_row(
                 )
             if len(validation) > 2:
                 validation_action = validation[2].upper()  # SKIP/NOWAIT/VALID/REJECT (default)
-                ## if validation_action not in {"SKIP", "NOWAIT", "VALID", "REJECT"}:
-                ##     raise Exception(f"Validation rule #{validation_i} is incorrect."
-                ##                     " Action is expected as SKIP or NOWAIT or VALID or REJECT"
-                ##                     f", but received '{validation_action}'"
-                ##     )
                 validation_action = validate_values(
                     validation_action,
                     ("SKIP", "NOWAIT", "VALID", "REJECT"),
@@ -753,8 +726,6 @@ def validate_csv_row(
             else:
                 validation_action = "REJECT"
                 column_schema['validations'][validation_i].append(validation_action)
-
-            # n0debug("validation_action")
 
             if len(validation) > 3:
                 validation_next = validation[3].upper()  # EXIT/BREAK/CONTINUE (default)
@@ -769,7 +740,6 @@ def validate_csv_row(
             else:
                 validation_next = "CONTINUE"
                 column_schema['validations'][validation_i].append(validation_next)
-            # n0debug("validation_next")
 
             validation_msg = None
             if not precompile or len(validation) <= 4 or not callable(validation[4]):
@@ -777,13 +747,9 @@ def validate_csv_row(
                     if isinstance(validation[0], (list,tuple)):
                         validation[0] = ' '.join(validation[0])
 
-                    validation_lambda = eval(
-                        lambda_txt:=(
-                            "lambda column_name, field_value, row, row_i, row_last: "
-                            + validation[0].format(**mapped_values)
-                        )
-                    )
-                    # n0debug("lambda_txt")
+                    # for compatibility with python 3.7
+                    lambda_txt = "lambda column_name, field_value, row, row_i, row_last: " + validation[0].format(**mapped_values)
+                    validation_lambda = eval(lambda_txt)
                     if len(validation) <= 4:
                         column_schema['validations'][validation_i].append(validation_lambda)
                 except Exception as ex1:
@@ -792,30 +758,16 @@ def validate_csv_row(
             else:
                 validation_lambda = column_schema['validations'][validation_i][4]
 
-            # n0debug_calc(column_schema['validations'][validation_i], f"column_schema['validations'][{validation_i}]")
-            # n0debug("validation")
-            # n0debug("validation_msg")
-
             is_valid = False
             _result = None
             if not validation_msg:
                 try:
-                    # n0debug("lambda_txt")
-                    # n0debug("column_name")
-                    # n0debug("field_value")
-                    # n0debug("row")
-                    # n0debug("row_i")
-                    # n0debug("row_last")
                     _result = is_valid = validation_lambda(column_name, field_value, row, row_i, row_last)
-                    # n0debug("_result")
-                    # n0debug("validation_action")
                     if validation_action == "VALID":
                         is_valid = not is_valid
-                    # n0debug("is_valid")
                 except Exception as ex2:
                     validation_result = "REJECT"
                     validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex2)
-                    # n0debug("validation_msg")
 
                 if not validation_msg and not is_valid:
                     if validation_action == "VALID":
@@ -825,18 +777,15 @@ def validate_csv_row(
 
                     try:
                         validation_msg = validation[1].format(**mapped_values, validation_result=_result)
-                        # n0debug("validation_msg")
                     except Exception as ex3:
                         validation_result = "REJECT"
                         validation_msg = f"Incorrect validation message #{validation_i} for '{column_name}': " + str(ex3)
-                        # n0debug("validation_msg")
 
             if validation_msg:
                 if column_name not in failed_validations:
                     failed_validations.update({column_name: []})
                 failed_validations[column_name].append(validation_msg)
 
-            # n0debug("validation_result")
             if validation_result != "VALID":
                 if validation_next in ("BREAK", "EXIT") or (validation_result == "REJECT" and interrupt_after_first_fail):
                     break

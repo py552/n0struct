@@ -172,7 +172,7 @@ def to_date(input_date_str: typing.Union[None, datetime.datetime], date_format: 
     if not input_date_str or isinstance(input_date_str, datetime.datetime):
         return input_date_str
     elif not isinstance(input_date_str, str):
-        raise TypeError(f"{input_date_str=} must be str or datetime")
+        raise TypeError(f"input_date_str='{input_date_str}' must be str or datetime")
 
     if not date_format:
         date_format = (
@@ -194,7 +194,7 @@ def to_date(input_date_str: typing.Union[None, datetime.datetime], date_format: 
         date_format = (date_format,)
 
     if not isinstance(date_format, (list, tuple)):
-        raise TypeError(f"{date_format=} must be str or list/tuple of str")
+        raise TypeError(f"date_format='{date_format}' must be str or list/tuple of str")
 
     # print(f"{input_date_str=}")
     # print(f"{date_format=}")

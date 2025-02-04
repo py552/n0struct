@@ -1,5 +1,6 @@
 import sys
 import os
+import re
 import inspect
 from loguru import logger
 from logging import StreamHandler
@@ -391,7 +392,8 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
         internal_call = internal_call + 1,
     )
 # ******************************************************************************
-def n0debug(var_name: str, level: str = "DEBUG",
+n0debug_regexp_pattern = re.compile(r'([\w\(\), ]+)|\[(\".*?\"|\d+|\'.*?\')\]')
+def n0debug(var_name: str, alias: str = None, level: str = "DEBUG",
 
             show_type: bool = None,
             pairs_in_one_line: bool = True,
@@ -412,12 +414,57 @@ def n0debug(var_name: str, level: str = "DEBUG",
     if not isinstance(var_name, str):
         raise TypeError("incorrect call of n0debug(..): argument MUST BE string")
 
-    __f_locals = inspect.currentframe().f_back.f_locals
-    if var_name not in __f_locals:
+    var_names = []
+    for match in n0debug_regexp_pattern.finditer(var_name):
+        if match.group(1):
+            var_names.append((match.group(1),))         # tuple  => var_names[0] is var name else class child
+        elif match.group(2):
+            # element in square brackets
+            value = match.group(2)
+            if value.isdigit():
+                var_names.append(int(value))            # int   => list index
+            else:
+                var_names.append((value.strip('"\''),)) # str   => dict key
+
+    def find_var(where, var_names):
+        if not var_names:
+            return where
+        var_name = var_names[0]
+        try:
+            if isinstance(var_name, tuple):
+                __method_arguments = None
+                var_name = var_name[0]
+                if '(' in var_name:
+                    var_name, __method_arguments = var_name.strip().rstrip(')').split('(')
+                    if not __method_arguments:
+                        __method_arguments = []
+                    else:
+                        __method_arguments = __method_arguments.strip().split(',')
+                        __method_arguments = [
+                            eval(__method_argument.strip())
+                            for __method_argument in __method_arguments
+                        ]
+                try:
+                    if isinstance(__method_arguments, list):
+                        return find_var(getattr(where, var_name)(*__method_arguments), var_names[1:])
+                    else:
+                        return find_var(getattr(where, var_name), var_names[1:])
+                except AttributeError as ex:
+                    pass
+            return find_var(where[var_name], var_names[1:])
+        except:
+            raise TypeError()
+
+    try:
+        try:
+            var_object = find_var(inspect.currentframe().f_back.f_locals, var_names)
+        except TypeError as ex:
+            var_object = find_var(inspect.currentframe().f_back.f_globals, var_names)
+    except TypeError as ex:
         raise NameError(f"impossible to find object '{var_name}'")
-    var_object = __f_locals.get(var_name)
+
     n0debug_calc(
-        var_object, var_name,
+        var_object, alias or var_name,
         level = level, internal_call = 1,
 
         show_type = show_type,
