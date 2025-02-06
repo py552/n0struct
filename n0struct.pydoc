@@ -33,11 +33,13 @@ PACKAGE CONTENTS
     n0struct_utils
     n0struct_utils_compare
     n0struct_utils_find
+    n0struct_xml
     test (package)
 
 CLASSES
     builtins.object
         n0struct.n0struct_git.Git
+        n0struct.n0struct_xml.n0xml
     collections.abc.MutableSet(collections.abc.Set)
         n0struct.n0struct_references.OrderedSet
     n0struct.n0struct_n0dict_.n0dict_(n0struct.n0struct_n0dict__.n0dict__)
@@ -1112,6 +1114,71 @@ CLASSES
      |  Data and other attributes inherited from builtins.list:
      |  
      |  __hash__ = None
+    
+    class n0xml(builtins.object)
+     |  n0xml(xml_text: str)
+     |  
+     |  A parser to process XML into an ordered list of tuples,
+     |  search elements by custom XPath-like expressions, and handle multi-level wildcards.
+     |  
+     |  Methods defined here:
+     |  
+     |  __contains__(self, xpath: Union[str, list]) -> Optional[str]
+     |  
+     |  __getitem__(self, index: Union[int, str]) -> Any
+     |  
+     |  __init__(self, xml_text: str)
+     |      Parse an XML string into an ordered list of tuples.
+     |      
+     |      :param xml_text: The XML string to parse.
+     |  
+     |  __len__(self) -> int
+     |  
+     |  __repr__(self) -> list
+     |      Return repr(self).
+     |  
+     |  __str__(self) -> str
+     |      Return str(self).
+     |  
+     |  findall(self, xpath: Union[str, list], root_xpath: Union[str, list] = [], find_first: bool = False) -> list
+     |      Find elements based on an XPath-like expression, supporting multi-level wildcards.
+     |      
+     |      :param xpath: The XPath-like string or list specifying the search path.
+     |      :param root_xpath: The root path for the search.
+     |      :param find_first: Whether to stop at the first match.
+     |      :return: A list of found elements or the first match if find_first is True.
+     |  
+     |  findfirst(self, xpath: Union[str, list], root_xpath: Union[str, list] = []) -> tuple
+     |  
+     |  get(self, xpath: Union[str, list], default=None) -> Union[list, Any]
+     |      Find an element's value/subnodes in the ordered list based on an XPath-like expression.
+     |      
+     |      :param xpath: The XPath-like string or list specifying the search path.
+     |      :param default: Value to return if the element is not found.
+     |      :return: The found element or the default value if not found.
+     |  
+     |  get_attrib(self, xpath: Union[str, list], default=None) -> Union[list, Any]
+     |      Find an element's attributes in the ordered list based on an XPath-like expression.
+     |      
+     |      :param xpath: The XPath-like string or list specifying the search path.
+     |      :param default: Value to return if the element is not found.
+     |      :return: The found element attributes or the default value if not found.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |  
+     |  to_dict(from_list_of_tuples: list)
+     |  
+     |  to_tuple(from_list_of_tuples: list)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
 
 FUNCTIONS
     _findall(parent_node: Union[dict, list], seeked_xpath_list: list, found_xpath_list: list = [], parent_nodes_stack: dict = {}, raise_exception=True, level=0) -> Optional[dict]
@@ -1837,7 +1904,7 @@ FUNCTIONS
             >0 matched
 
 DATA
-    __all__ = ['typing', 'Path', 'sys', 'os', 're', 'date_today', 'date_on...
+    __all__ = ['typing', 'Path', 'sys', 'os', 're', 'split_pair', 'join_tr...
     compiled_regexp_mask_pan = re.compile('(0{3}|)(([456]([0-9]{7}|[0-9]{5...
 
 FILE

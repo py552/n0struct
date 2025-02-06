@@ -14,6 +14,7 @@ import os
 import re
 
 from .n0struct_arrays import *
+from .n0struct_comprehensions import *
 from .n0struct_date import *
 from .n0struct_files import *
 from .n0struct_files_csv import *
@@ -32,31 +33,32 @@ from .n0struct_transform_structure import *
 from .n0struct_utils import *
 from .n0struct_utils_compare import *
 from .n0struct_utils_find import *
+from .n0struct_xml import *
 
 
 ################################################################################
 __all__ = list(
     ('typing', 'Path', 'sys', 'os', 're')
-    + n0struct_date.__all__
-    + n0struct_random.__all__
-    + n0struct_references.__all__
-    + n0struct_git.__all__
     + n0struct_arrays.__all__
-    + n0struct_mask.__all__
-    + n0struct_utils.__all__
-    + n0struct_transform_structure.__all__
-    + n0struct_logging.__all__
+    + n0struct_comprehensions.__all__
+    + n0struct_date.__all__
     + n0struct_files.__all__
     + n0struct_files_csv.__all__
     + n0struct_files_fwf.__all__
-    + n0struct_utils_find.__all__
-    + n0struct_utils_compare.__all__
     + n0struct_findall.__all__
+    + n0struct_git.__all__
+    + n0struct_logging.__all__
+    + n0struct_mask.__all__
+    # + n0struct_n0dict_.__all__
+    # + n0struct_n0dict__.__all__
+    # + n0struct_n0list_.__all__
     + n0struct_n0list_n0dict.__all__
+    + n0struct_random.__all__
+    + n0struct_references.__all__
+    + n0struct_transform_structure.__all__
+    + n0struct_utils.__all__
+    + n0struct_utils_compare.__all__
+    + n0struct_utils_find.__all__
+    + n0struct_xml.__all__
+    
 )
-################################################################################
-import sys
-if sys.version_info > (3, 7):
-    from .n0struct_comprehensions import *
-    __all__.extend(n0struct_comprehensions.__all__)
-################################################################################

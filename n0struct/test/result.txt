@@ -1688,3 +1688,324 @@
  DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
  DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:<module>:178 | Mission acomplished
+ INFO     | __main__:test_use_external_libraries:11 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ DEBUG    | __main__:test_use_external_libraries:12 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ ERROR    | __main__:test_use_external_libraries:13 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ WARNING  | __main__:test_use_external_libraries:14 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ INFO     | __main__:test_use_external_libraries:15 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ INFO     | __main__:<module>:25 | Mission acomplished
+ DEBUG    | __main__:test_18_find_return_all_items:174 | item[*]/name[text()="Item 2"] == [
+    #0   (
+        #0   [
+            #0   "item[1]",
+            #1   "name"
+        ],
+        #1   "Item 2"
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:178 | item[*]/name[text()="Item 2"][0] == "Item 2"
+ DEBUG    | __main__:test_18_find_return_all_items:183 | item[*]/name[text()="Item 2"]/.. == [
+    #0   (
+        #0   [ #0   "item[1]" ],
+        #1   [
+            #0   (
+                #0   "name",
+                #1   {
+                    "value": "Item 2",
+                    "attrib": {  }
+                }
+            )
+        ]
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:187 | item[*]/name[text()="Item 2"]/..[0] == [
+    #0   (
+        #0   "name",
+        #1   {
+            "value": "Item 2",
+            "attrib": {  }
+        }
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:192 | find_first=item[*] == [
+    #0   (
+        #0   [ #0   "item[0]" ],
+        #1   [
+            #0   (
+                #0   "name",
+                #1   {
+                    "value": "Item 1",
+                    "attrib": {  }
+                }
+            )
+        ]
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:195 | item[*][0] == "Item 1"
+ DEBUG    | __main__:test_18_find_return_all_items:200 | item[*] == [
+    #0   (
+        #0   [ #0   "item[0]" ],
+        #1   [
+            #0   (
+                #0   "name",
+                #1   {
+                    "value": "Item 1",
+                    "attrib": {  }
+                }
+            )
+        ]
+    ),
+    #1   (
+        #0   [ #0   "item[1]" ],
+        #1   [
+            #0   (
+                #0   "name",
+                #1   {
+                    "value": "Item 2",
+                    "attrib": {  }
+                }
+            )
+        ]
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:203 | item[*][0] == "Item 1"
+ DEBUG    | __main__:test_18_find_return_all_items:206 | item[*][1] == "Item 2"
+ DEBUG    | __main__:test_18_find_return_all_items:211 | item == [
+    #0   (
+        #0   [ #0   "item" ],
+        #1   [
+            #0   (
+                #0   "name",
+                #1   {
+                    "value": "Item 1",
+                    "attrib": {  }
+                }
+            )
+        ]
+    ),
+    #1   (
+        #0   [ #0   "item[1]" ],
+        #1   [
+            #0   (
+                #0   "name",
+                #1   {
+                    "value": "Item 2",
+                    "attrib": {  }
+                }
+            )
+        ]
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:215 | item/name[0] == "Item 1"
+ DEBUG    | __main__:test_18_find_return_all_items:219 | item[1]/name[1] == "Item 2"
+ DEBUG    | __main__:test_18_find_return_all_items:224 | item[0] == [
+    #0   (
+        #0   [ #0   "item" ],
+        #1   [
+            #0   (
+                #0   "name",
+                #1   {
+                    "value": "Item 1",
+                    "attrib": {  }
+                }
+            )
+        ]
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:227 | item[0] == [
+    #0   (
+        #0   "name",
+        #1   {
+            "value": "Item 1",
+            "attrib": {  }
+        }
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:232 | item[1] == [
+    #0   (
+        #0   [ #0   "item[1]" ],
+        #1   [
+            #0   (
+                #0   "name",
+                #1   {
+                    "value": "Item 2",
+                    "attrib": {  }
+                }
+            )
+        ]
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:235 | item[1] == [
+    #0   (
+        #0   "name",
+        #1   {
+            "value": "Item 2",
+            "attrib": {  }
+        }
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:240 | item[2] == [  ]
+ DEBUG    | __main__:test_18_find_return_all_items:245 | ** == [
+    #0   (
+        #0   [
+            #0   "item",
+            #1   "name"
+        ],
+        #1   "Item 1"
+    ),
+    #1   (
+        #0   [
+            #0   "item[1]",
+            #1   "name"
+        ],
+        #1   "Item 2"
+    ),
+    #2   (
+        #0   [
+            #0   "group",
+            #1   "item",
+            #2   "name"
+        ],
+        #1   "Item 3"
+    )
+]
+ DEBUG    | __main__:test_18_find_return_all_items:247 | item/name[0] == "Item 1"
+ DEBUG    | __main__:test_18_find_return_all_items:249 | item[1]/name[1] == "Item 2"
+ DEBUG    | __main__:test_18_find_return_all_items:251 | group/item/name[2] == "Item 3"
+ DEBUG    | __main__:test_18_find_return_all_items:255 | item/name == "Item 1"
+ DEBUG    | __main__:test_18_find_return_all_items:256 | results[0][1] == "Item 1"
+ DEBUG    | __main__:test_18_find_return_all_items:260 | item[1]/name == "Item 2"
+ DEBUG    | __main__:test_18_find_return_all_items:261 | results[1][1] == "Item 2"
+ DEBUG    | __main__:test_18_find_return_all_items:265 | group/item/name == "Item 3"
+ DEBUG    | __main__:test_18_find_return_all_items:266 | results[2][1] == "Item 3"
+ DEBUG    | __main__:test_21_findall:310 | item[0]/name == "Item 1"
+ DEBUG    | __main__:test_21_findall:315 | group/item[0]/name == "Item 3"
+ DEBUG    | __main__:test_21_findall:320 | nonexistent == "Not Found"
+ DEBUG    | __main__:test_21_findall:324 | nonexistent == None
+ DEBUG    | __main__:test_21_findall:360 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == [
+    #0   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[0]",
+            #2   "VALUE"
+        ],
+        #1   "1"
+    ),
+    #1   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[2]",
+            #2   "VALUE"
+        ],
+        #1   "3"
+    )
+]
+ DEBUG    | __main__:test_21_findall:365 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == [
+    #0   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[0]",
+            #2   "VALUE"
+        ],
+        #1   "1"
+    )
+]
+ DEBUG    | __main__:test_21_findall:370 | ARRAY/ELEM[1]/KEY[text()=MYNODE]/../VALUE == [  ]
+ DEBUG    | __main__:test_21_findall:375 | */ELEM[*]/KEY[text()=MYNODE]/../VALUE == [
+    #0   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[0]",
+            #2   "VALUE"
+        ],
+        #1   "1"
+    ),
+    #1   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[2]",
+            #2   "VALUE"
+        ],
+        #1   "3"
+    )
+]
+ DEBUG    | __main__:test_21_findall:381 | **/KEY[text()=MYNODE]/../VALUE == [
+    #0   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM",
+            #2   "VALUE"
+        ],
+        #1   "1"
+    ),
+    #1   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[2]",
+            #2   "VALUE"
+        ],
+        #1   "3"
+    )
+]
+ DEBUG    | __main__:test_21_findall:382 | to_dict:**/KEY[text()=MYNODE]/../VALUE == { "ARRAY/ELEM/VALUE": "1", "ARRAY/ELEM[2]/VALUE": "3" }
+ DEBUG    | __main__:test_21_findall:383 | to_list_of_dict:**/KEY[text()=MYNODE]/../VALUE == [
+    #0   (
+        #0   "ARRAY/ELEM/VALUE",
+        #1   "1"
+    ),
+    #1   (
+        #0   "ARRAY/ELEM[2]/VALUE",
+        #1   "3"
+    )
+]
+ DEBUG    | __main__:test_21_findall:389 | ** == [
+    #0   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM",
+            #2   "KEY"
+        ],
+        #1   "MYNODE"
+    ),
+    #1   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM",
+            #2   "VALUE"
+        ],
+        #1   "1"
+    ),
+    #2   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[1]",
+            #2   "KEY"
+        ],
+        #1   "OTHERNODE"
+    ),
+    #3   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[1]",
+            #2   "VALUE"
+        ],
+        #1   "2"
+    ),
+    #4   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[2]",
+            #2   "KEY"
+        ],
+        #1   "MYNODE"
+    ),
+    #5   (
+        #0   [
+            #0   "ARRAY",
+            #1   "ELEM[2]",
+            #2   "VALUE"
+        ],
+        #1   "3"
+    )
+]
+ INFO     | __main__:<module>:433 | Mission acomplished

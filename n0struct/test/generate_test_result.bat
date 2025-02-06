@@ -1,9 +1,11 @@
 copy nul result.txt
-python test_n0struct1.py >> result.txt 2>&1
-python test_n0struct2.py >> result.txt 2>&1
-python test_n0struct3.py >> result.txt 2>&1
-python test_n0struct4.py >> result.txt 2>&1
-python test_n0struct5.py >> result.txt 2>&1
-::python test_n0struct6.py >> result.txt 2>&1
-python test_n0struct7.py >> result.txt 2>&1
-python test_n0struct8.py >> result.txt 2>&1
+python test_n0struct01.py >> result.txt 2>&1
+python test_n0struct02.py >> result.txt 2>&1
+python test_n0struct03.py >> result.txt 2>&1
+python test_n0struct04.py >> result.txt 2>&1
+python test_n0struct05.py >> result.txt 2>&1
+::python test_n0struct06.py >> result.txt 2>&1
+python test_n0struct07.py >> result.txt 2>&1
+python test_n0struct08.py >> result.txt 2>&1
+python test_n0struct09.py >> result.txt 2>&1
+python test_n0struct10.py >> result.txt 2>&1
