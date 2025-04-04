@@ -8,41 +8,38 @@ import typing
 from .n0struct_date import date_timestamp
 # ******************************************************************************
 # ******************************************************************************
-# __prev_end = "\n"
 
-__debug_show_object_type = True
+_debug_show_object_type = True
 def set_debug_show_object_type(debug_show_object_type: bool):
-    global __debug_show_object_type
-    __debug_show_object_type = debug_show_object_type
+    global _debug_show_object_type
+    _debug_show_object_type = debug_show_object_type
 
-
-__debug_show_object_id = False
+_debug_show_object_id = False
 def set_debug_show_object_id(debug_show_object_id: bool):
-    global __debug_show_object_id
-    __debug_show_object_id = debug_show_object_id
+    global _debug_show_object_id
+    _debug_show_object_id = debug_show_object_id
 
-
-__debug_show_item_count = True
+_debug_show_item_count = True
 def set_debug_show_item_count(debug_show_item_count: bool):
-    global __debug_show_item_count
-    __debug_show_item_count = debug_show_item_count
+    global _debug_show_item_count
+    _debug_show_item_count = debug_show_item_count
 
 
 __main_log_filename = None
 def init_logger(
-        debug_level: str = "TRACE",
-        debug_output = sys.stderr,
-        debug_timeformat: str = "YYYY-MM-DD HH:mm:ss.SSS",
-        debug_show_object_type = False,
-        debug_show_object_id = False,
-        debug_show_item_count = True,
-        debug_logtofile = False,
-        log_file_name: str = None,
-    ):
+    debug_level: str             = "TRACE",
+    debug_output                 = sys.stderr,
+    debug_timeformat: str        = "YYYY-MM-DD HH:mm:ss.SSS",
+    debug_show_object_type: bool = _debug_show_object_type,
+    debug_show_object_id: bool   = _debug_show_object_id,
+    debug_show_item_count: bool  = _debug_show_item_count,
+    debug_logtofile: bool        = False,
+    log_file_name: str           = None,
+):
     logger.level("DEBUG", color="<white>")  # Change default color of DEBUG messages from blue into light gray
 
     global __main_log_filename
-    if debug_logtofile:
+    if debug_logtofile or log_file_name:
         if log_file_name:
             __main_log_filename = log_file_name
         else:
@@ -71,10 +68,9 @@ def init_logger(
     logger.configure(handlers = handlers)
 # ******************************************************************************
 def n0print(
-        text: str,
-        level: str = "INFO",
-        internal_call: int = 0,
-        # end: str = "\n"
+    text: str,
+    level: str = "INFO",
+    internal_call: int = 0,
 ):
     """
     if {level} <= {__debug_level} then print {text}{end}
@@ -96,67 +92,113 @@ def n0error(text: str, internal_call: int = 0):
 def n0warning(text: str, internal_call: int = 0):
     n0print(text, level = "WARNING", internal_call = internal_call + 1)
 # ******************************************************************************
+json_control_characters = re.compile(r"[\x00-\x1F\"\\\x7F]")
+python_control_characters = re.compile(r"[\x00-\x09\x0B-\x1F\"\\\x7F]")
+not_ascii_characters = re.compile(r"[^\x00-\x7F]")
+escaped_control_characters = {
+    '\b':   '\\b',  # 0x08  Backspace
+    '\t':   '\\t',  # 0x09  Tab
+    '\n':   '\\n',  # 0x0A  New line
+    '\f':   '\\f',  # 0x0C  Form feed
+    '\r':   '\\r',  # 0x0D  Carriage return
+    '\"':   '\\"',  # 0x22  Double quote
+    '\\':   '\\\\', # 0x5C  Backslash
+}
+def replace_not_ascii_characters(match):
+    return f"\\u{ord(match.group(0)):04X}"
+def replace_control_characters(match):
+    char = match.group(0)
+    return escaped_control_characters.get(char, f"\\x{ord(char):02X}")
 def n0pretty(
-            item: typing.Any,
-            indent_: int = 0,
-            show_type: bool = None,
-            __indent_size: int = 4,
-            __quotes: str = '"',
-            pairs_in_one_line: bool = True,
-            json_convention: bool = False,
-            skip_empty_arrays: bool = False,
-            skip_simple_types: bool = True,
-            auto_quotes: bool = True,
-            show_item_count: bool = None,
+    item: typing.Any,
+    indent_level: int       = 0,
+    show_object_type: bool  = _debug_show_object_type,
+    indent_size: int        = 4,
+    quote: str              = '"',
+    pairs_in_one_line: bool = True,
+    json_convention: bool   = False,
+    skip_empty_arrays: bool = False,
+    skip_simple_types: bool = True,
+    show_item_count: bool   = _debug_show_item_count,
 ):
     """
     :param item:
-    :param indent_:
+    :param indent_level:
     :return:
     """
     # ######################################################################
-    def indent(indent__ = indent_):
-        return "\n" + (" " * (indent__ + 1) * __indent_size) if __indent_size else ""
-    # ######################################################################
-    def is_list_with_pairs(item: list) -> typing.Union[None, dict]:
-        element_names = {} # {keyname1: max_len_of_values1, keyname2: max_len_of_values2}
-        for sub_item in item:
-            if not isinstance(sub_item, dict) or len(sub_item) > 2:
-                return None # Sub element not dictionary with 2 or less elements
-            for key in sub_item:
-                if key not in element_names:
-                    element_names.update({key: 0})
-                if len(element_names) > 2:
-                    return None # Not more that 2 elems could be condensed into one line
-                sub_item_key_value = sub_item[key]
-                if not isinstance(sub_item_key_value, (str, int, float)):
-                    return None # Sub element has complex structure
+    def object_type(
+        _object: typing.Any,
+        _show_object_type: bool = show_object_type,
+        _skip_simple_types: bool = skip_simple_types,
+    ) -> str:
+        if not _show_object_type or (_skip_simple_types and isinstance(_object, (str, int, float, bool, type(None), bytes))):
+            return ''
+        # removed walrus operator for compatibility with 3.7
+        obj_type = str(type(_object)).replace("<class '", '').replace("'>", '')
+        class_type_parts = obj_type.split('.')
+        if len(class_type_parts) > 2:
+            # leave just only first and last class names
+            obj_type = '..'.join((class_type_parts[0], class_type_parts[-1]))
 
-                # construct presentation string
-                presentation_string = \
-                    (
-                        (str(type(sub_item_key_value)) or "") \
-                            .replace("<class '", "<") \
-                            .replace("'>", " ") \
-                        + str(len(sub_item_key_value)) \
-                        + "> "
-                        if (show_type or (show_type is None and __debug_show_object_type))
-                        and (not skip_simple_types or not isinstance(sub_item_key_value, (str, int, float)))
-                        else ""
-                    ) + \
-                    (
-                        f"{__quotes}{sub_item_key_value}{__quotes}"
-                        if isinstance(sub_item_key_value, str)
-                        else f"{str(sub_item_key_value)}"
-                    )
-                element_names.update({key: max(element_names[key], len(presentation_string))})
-        return element_names  # Returns dict {"name of key": max length of presented (+type+len and etc) value assosiated with key}
+        return f"<{obj_type}{' '+str(len(_object)) if isinstance(_object, (str, list, tuple, set, frozenset, dict, bytes, bytearray)) else ''}> "
     # ######################################################################
-    if not __indent_size:
+    def indent(_indent_level = indent_level) -> str:
+        return f"{(' ' * (_indent_level + 1) * indent_size) if indent_size else ''}"
+    # ######################################################################
+    def quote_value_if_str(value: typing.Any, _quote: str = quote, padding: typing.Union[str, int] = '') -> str:
+        if json_convention:
+            if isinstance(value, bool):
+                return "true" if value else "false"
+            if item is None:
+                return "null"  # json.decoder.JSONDecodeError: Expecting value
+        if isinstance(value, str):
+            if json_convention:
+                value = not_ascii_characters.sub(replace_not_ascii_characters, json_control_characters.sub(replace_control_characters, value))
+            else:
+                value = python_control_characters.sub(replace_control_characters, value)
+                if '\n' in value:
+                    _quote = _quote*3
+        else:
+            value = str(value)
+            _quote = ''
+
+        if padding:
+            padding = ' '*(padding-len(value))
+
+        return f"{_quote}{value}{_quote}{padding}"
+    # ######################################################################
+    def is_list_with_pairs(list_of_dicts: list) -> int:
+        """
+        Check if list contains dictionaries with pairs (2 keys in each dictionary)
+        and return max len of the values for further adjustment
+        """
+        if not list_of_dicts or not isinstance(list_of_dicts, (list, tuple)):
+            return None
+        adjust_values = {}
+        for item in list_of_dicts:
+            if not isinstance(item, dict) or len(item) != 2:
+                return None
+            for key, value in item.items():
+                adjust_values[key] = max(adjust_values.get(key, 0), len(str(value)))
+                if len(adjust_values) > 2:
+                    return None
+        if len(adjust_values) != 2:
+            return None
+        return adjust_values
+    # ######################################################################
+
+    space = ' '
+    newline = '\n' + indent()
+    newline_previndent = '\n' + indent(indent_level - 1)
+    if not indent_size:
         pairs_in_one_line = False
-    if auto_quotes:
-        __quotes = '"'
-    result_type = ""
+        space = ''
+        newline = ''
+        newline_previndent = ''
+    comma_space = f",{space}"
+    comma_newline = f",{newline}"
+    colon_space = f":{space}"
 
     if isinstance(item, (list, tuple, dict, set, frozenset)):
         brackets = "[]"
@@ -167,204 +209,85 @@ def n0pretty(
                 brackets = "{}"
             elif isinstance(item, tuple):
                 brackets = "()"
+
+
         result = ""
-
-        keys_and_max_len_of_value = is_list_with_pairs(item)  # removed walrus operator for compatibility with 3.7
-        if pairs_in_one_line and isinstance(item, (list, tuple)) and keys_and_max_len_of_value:
-            # Sturcture contains 2 items together
-            for sub_item in item:
-                if result:
-                    result += "," + indent()
-                result += "{"
-                sub_result = ""
-                for key in keys_and_max_len_of_value:
-                    if key in sub_item:
-                        sub_item_key_value = sub_item[key]
-
-                        key_type = ""
-                        value_type = ""
-                        if show_type or (show_type is None and __debug_show_object_type):
-                            if not skip_simple_types \
-                            or not isinstance(key, (str, int, float, complex, bool, list, tuple, set, frozenset, dict, type(None))):
-                                key_type = (str(type(key)) or "") \
-                                    .replace("<class '", "<") \
-                                    .replace("'>", "")
-                                if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
-                                    key_type += f" {len(key)}"
-                                key_type += "> "
-
-                            if not skip_simple_types \
-                            or not isinstance(sub_item_key_value, (str, int, float, complex, bool, list, tuple, set, frozenset, dict, type(None))):
-                                value_type = (str(type(sub_item_key_value)) or "").replace("<class '", "<").replace("'>", "")
-                                if isinstance(sub_item_key_value, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
-                                    value_type += f" {len(sub_item_key_value)}"
-                                value_type += "> "
-
-                        if isinstance(sub_item_key_value, str):
-                            sub_item_key_value = sub_item_key_value.replace('\"', '\\\"')  # SyntaxError: f-string expression part cannot include a backslash
-                            sub_item_result = f"{__quotes}{sub_item_key_value}{__quotes}"
-                        else:
-                            sub_item_result = str(sub_item_key_value)
-                            if isinstance(sub_item_key_value, bool) and json_convention:
-                                sub_item_result = sub_item_result.lower()
-                        sub_item_result = f"{value_type}{sub_item_result}".ljust(keys_and_max_len_of_value[key])
-
-                        if isinstance(key, str):
-                            key = key.replace('\"', '\\\"')  # SyntaxError: f-string expression part cannot include a backslash
-                            key = f"{__quotes}{key}{__quotes}"
-                        else:
-                            key = str(key)
-
-                        if sub_result:
-                            sub_result += ","
-                        sub_result += f" {key_type}{key}: {sub_item_result}"
-                    else:
-                        if sub_result:
-                            sub_result += (" " if __indent_size else "")
-                        sub_result += (" " if __indent_size else "")*(1+len(__quotes)+len(key)+len(__quotes)+len(": " if __indent_size else ":")+keys_and_max_len_of_value[key])
-                result += sub_result + " }"
+        # removed walrus operator for compatibility with 3.7
+        keys_and_max_len_of_value = is_list_with_pairs(item)
+        if pairs_in_one_line and keys_and_max_len_of_value:
+            result = comma_newline.join(
+                '{' + # 3.7 doesn't support {{
+                f"{comma_space.join(f'{quote_value_if_str(k)}{colon_space}{quote_value_if_str(v, padding = keys_and_max_len_of_value[k])}' for k, v in _dict.items())}" +
+                '}'   # 3.7 doesn't support }}
+                for _dict in item
+            )
         else:
             # dict, set, frozenset or list/tuple with complex or not paired structure
-            condense_dict_pairs = isinstance(item, dict) and len(item.keys()) <= 2 and all(isinstance(sub_item, str) for sub_item in item.values())
+            len_item = len(item)
+            possible_condense_dict_into_one_line = \
+                isinstance(item, dict) \
+                and len_item <= 2 \
+                and all(
+                    isinstance(sub_item, str)
+                    for sub_item in item.values()
+                )
 
             for i_sub_item, sub_item in enumerate(item):
                 if isinstance(item, dict):
                     key = sub_item
-
-                    if indent_ < 111:
-                        sub_item_value = n0pretty(
-                                                item[key],
-                                                indent_ + 1,
-                                                show_type,
-                                                __indent_size,
-                                                __quotes,
-                                                pairs_in_one_line,
-                                                json_convention,
-                                                skip_empty_arrays,
-                                                skip_simple_types,
-                                                auto_quotes,
-                                                show_item_count,
-                        )
-                    else:
-                        sub_item_value = "{.......}"
-
-                    key_type = ""
-                    if (show_type or (show_type is None and __debug_show_object_type)) \
-                    and (not skip_simple_types or not isinstance(key, (str, int, float, type(None)))):
-                        key_type = (str(type(key)) or "") \
-                            .replace("<class '", "<") \
-                            .replace("'>", "")
-                        if isinstance(key, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
-                            key_type += f" {len(key)}"
-                        key_type += "> "
-                    if isinstance(key, str):
-                        key = f"{__quotes}{key}{__quotes}"
-                    else:
-                        key = str(key)
-
-                    if not sub_item_value:
-                        sub_item_value = str(sub_item_value) # None
-
-                    sub_item_value = f"{key_type}{key}:" + (" " if __indent_size else "") + sub_item_value
-
+                    sub_item = item[key]
+                    sub_item_value = "{.......}"
                 else:
-                    # set, frozenset or list/tuple with complex or not paired structure
-                    if show_item_count or (show_item_count is None and __debug_show_item_count):
-                        sub_item_value = f"#{i_sub_item} ".ljust(5)
+                    sub_item_value = "[.......]"
+
+                if indent_level < 111:
+                    sub_item_value = n0pretty(
+                        sub_item,
+                        indent_level + 1,
+                        show_object_type  = show_object_type,
+                        indent_size       = indent_size,
+                        quote             = quote,
+                        pairs_in_one_line = pairs_in_one_line,
+                        json_convention   = json_convention,
+                        skip_empty_arrays = skip_empty_arrays,
+                        skip_simple_types = skip_simple_types,
+                        show_item_count   = show_item_count,
+                    )
+
+                    if isinstance(item, dict):
+                        sub_item_value = f"{quote_value_if_str(key)}{colon_space}{sub_item_value}"
                     else:
-                        sub_item_value = ""
+                        if show_item_count:
+                            sub_item_value = f"#{i_sub_item:<3} {sub_item_value}"
 
-                    if indent_ < 111:
-                        sub_item_value += str(n0pretty(
-                                                sub_item,
-                                                indent_ + 1,
-                                                show_type,
-                                                __indent_size,
-                                                __quotes,
-                                                pairs_in_one_line,
-                                                json_convention,
-                                                skip_empty_arrays,
-                                                skip_simple_types,
-                                                auto_quotes,
-                                                show_item_count,
-                        ))
-                    else:
-                        sub_item_value = "[.......]"
+                result = f"{result}{(comma_newline if not possible_condense_dict_into_one_line else comma_space) if result else ''}{sub_item_value}"
 
-                if sub_item_value is not None:
-                    if result:
-                        result += ","
-                        if not condense_dict_pairs:
-                            result += indent()
-                        else:
-                            result += (" " if __indent_size else "")
-                    result += sub_item_value
-
-        if (show_type or (show_type is None and __debug_show_object_type)) \
-        and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            # removed walrus operator for compatibility with 3.7
-            result_type = str(type(item)).replace("<class '", "<").replace("'>", " ")
-            if result_type:
-                class_type_parts = result_type.split('.')
-                if len(class_type_parts) > 2:
-                    # leave just only first and last class names
-                    result_type = ".".join((class_type_parts[0], class_type_parts[-1]))
-
-            if isinstance(item, (str, bytes, bytearray, list, tuple, set, frozenset, dict)):
-                result_type += f" {len(item)}"
-            result_type += "> "
-
+        result_type = object_type(item)
         if result or skip_empty_arrays == False:
-            if "\n" in result:
-                result = result_type + brackets[0] + indent() + result + indent(indent_ - 1) + brackets[1]
+            if '\n' in result:
+                result = f"{result_type}{brackets[0]}{newline}{result}{newline_previndent}{brackets[1]}"
             else:
-                result = result_type + brackets[0] + (" " if __indent_size else "") + result + (" " if __indent_size else "") + brackets[1]
+                result = f"{result_type}{brackets[0]}{space}{result}{space}{brackets[1]}"
 
-        if result is None:
-            if json_convention:
-                result = "null"  # json.decoder.JSONDecodeError: Expecting value
-            else:
-                result = "None"
-
-    elif isinstance(item, str):
-        if (show_type or (show_type is None and __debug_show_object_type)) \
-        and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            result_type = (str(type(item)) or "") \
-                            .replace("<class '", "<") \
-                            .replace("'>", " ") \
-                          + f"{len(item)}> "
-        if auto_quotes and '"' in item and "'" not in item:
-                result = result_type + f"'{item}'"
-        else:
-            result = result_type + __quotes + item.replace(__quotes, '\\"' if __quotes == '"' else "\\'") + __quotes
-    elif item is None:
-        if json_convention:
-            result = "null"  # json.decoder.JSONDecodeError: Expecting value
-        else:
-            result = "None"
     else:
-        result = str(item)
-        if (show_type or (show_type is None and __debug_show_object_type)) \
-        and (not skip_simple_types or not isinstance(item, (str, int, float))):
-            result_type = (str(type(item)) or "") \
-                            .replace("<class 'function'>", " ") \
-                            .replace("<class '", "<") \
-                            .replace("'>", "> ")
-            result = result_type + result
-
-        if isinstance(item, bool) and json_convention:
-            result = result.lower()
+        result = f"{object_type(item)}{quote_value_if_str(item)}"
 
     return result
 # ******************************************************************************
-def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_call: int = 0,
-            show_type: bool = None,
-            pairs_in_one_line: bool = True,
-            json_convention: bool = False,
-            skip_empty_arrays: bool = False,
-            skip_simple_types: bool = True,
-            auto_quotes: bool = True,
-            show_item_count: bool = None,
+def n0debug_calc(
+    var_object,
+    var_name: str           = "",
+    level: str              = "DEBUG",
+    internal_call: int      = 0,
+
+    show_object_type: bool  = _debug_show_object_type,
+    indent_size: int        = 4,
+    quote: str              = '"',
+    pairs_in_one_line: bool = True,
+    json_convention: bool   = False,
+    skip_empty_arrays: bool = False,
+    skip_simple_types: bool = True,
+    show_item_count: bool   = _debug_show_item_count,
 ):
     """
     Print  calculated value (for example returned by function),
@@ -376,32 +299,37 @@ def n0debug_calc(var_object, var_name: str = "", level: str = "DEBUG", internal_
     :return:
     """
     n0print(
-        (f"id={id(var_object)} " if __debug_show_object_id else "")
+        (f"id={id(var_object)} " if _debug_show_object_id else "")
       + (f"{var_name} == " if var_name else "")
       + n0pretty(
             var_object,
-            show_type = show_type,
+            show_object_type  = show_object_type,
+            indent_size       = indent_size,
+            quote             = quote,
             pairs_in_one_line = pairs_in_one_line,
-            json_convention = json_convention,
+            json_convention   = json_convention,
             skip_empty_arrays = skip_empty_arrays,
             skip_simple_types = skip_simple_types,
-            auto_quotes = auto_quotes,
-            show_item_count = show_item_count,
+            show_item_count   = show_item_count,
         ),
         level = level,
         internal_call = internal_call + 1,
     )
 # ******************************************************************************
 n0debug_regexp_pattern = re.compile(r'([\w\(\), ]+)|\[(\".*?\"|\d+|\'.*?\')\]')
-def n0debug(var_name: str, alias: str = None, level: str = "DEBUG",
+def n0debug(
+    var_name: str,
+    alias: str = None,
+    level: str = "DEBUG",
 
-            show_type: bool = None,
-            pairs_in_one_line: bool = True,
-            json_convention: bool = False,
-            skip_empty_arrays: bool = False,
-            skip_simple_types: bool = True,
-            auto_quotes: bool = True,
-            show_item_count: bool = None,
+    show_object_type: bool  = _debug_show_object_type,
+    indent_size: int        = 4,
+    quote: str              = '"',
+    pairs_in_one_line: bool = True,
+    json_convention: bool   = False,
+    skip_empty_arrays: bool = False,
+    skip_simple_types: bool = True,
+    show_item_count: bool   = _debug_show_item_count,
 ):
     """
     Print value of the variable with name {var_name},
@@ -464,16 +392,19 @@ def n0debug(var_name: str, alias: str = None, level: str = "DEBUG",
         raise NameError(f"impossible to find object '{var_name}'")
 
     n0debug_calc(
-        var_object, alias or var_name,
-        level = level, internal_call = 1,
+        var_object,
+        alias or var_name,
+        level = level,
+        internal_call = 1,
 
-        show_type = show_type,
+        show_object_type  = show_object_type,
+        indent_size       = indent_size,
+        quote             = quote,
         pairs_in_one_line = pairs_in_one_line,
-        json_convention = json_convention,
+        json_convention   = json_convention,
         skip_empty_arrays = skip_empty_arrays,
         skip_simple_types = skip_simple_types,
-        auto_quotes = auto_quotes,
-        show_item_count = show_item_count,
+        show_item_count   = show_item_count,
     )
 # ******************************************************************************
 def n0debug_object(object_name: str, level: str = "DEBUG"):
@@ -484,10 +415,10 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
 
     prefix = (
         str(type(class_object))
-        if __debug_show_object_type
+        if _debug_show_object_type
         else (
              f" id={id(class_object)}"
-             if __debug_show_object_id
+             if _debug_show_object_id
              else ""
         )
     )
@@ -507,8 +438,8 @@ def n0debug_object(object_name: str, level: str = "DEBUG"):
 
     for attrib_name in class_attribs:
         attrib = getattr(class_object, attrib_name)
-        prefix = str(type(attrib)) if __debug_show_object_type else "" + \
-                 f" id={id(attrib)}" if __debug_show_object_id else ""
+        prefix = str(type(attrib)) if _debug_show_object_type else "" + \
+                 f" id={id(attrib)}" if _debug_show_object_id else ""
         if prefix:
             prefix = "(" + prefix + ")"
         to_print += f"=== {prefix}{attrib_name} = {n0pretty(attrib)}\n"

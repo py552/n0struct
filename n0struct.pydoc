@@ -48,44 +48,44 @@ CLASSES
         n0struct.n0struct_n0list_n0dict.n0list
     pathlib.PurePath(builtins.object)
         pathlib.Path
-    
+
     class Git(builtins.object)
      |  Git(repo_root_dir: str, repository_url: str, rsa_key_path: str = '', show_result=False)
-     |  
+     |
      |  # ******************************************************************************
      |  # ******************************************************************************
-     |  
+     |
      |  Methods defined here:
-     |  
+     |
      |  __init__(self, repo_root_dir: str, repository_url: str, rsa_key_path: str = '', show_result=False)
      |      Initialize self.  See help(type(self)) for accurate signature.
-     |  
+     |
      |  checkout(self, branch_name: str, show_result=None)
      |      # ##############################################################################################
-     |  
+     |
      |  log(self, git_arguments: Union[str, list])
      |      # ##############################################################################################
-     |  
+     |
      |  run(self, git_arguments: Union[str, list], show_result=None) -> tuple
      |      # ##############################################################################################
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
-     |  
+     |
      |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
+     |      dictionary for instance variables
+     |
      |  __weakref__
-     |      list of weak references to the object (if defined)
-    
+     |      list of weak references to the object
+
     class OrderedSet(collections.abc.MutableSet)
      |  OrderedSet(iterable=None)
-     |  
+     |
      |  # ******************************************************************************
      |  # ******************************************************************************
      |  # https://stackoverflow.com/questions/1653970/does-python-have-an-ordered-set
      |  # https://code.activestate.com/recipes/576694/
-     |  
+     |
      |  Method resolution order:
      |      OrderedSet
      |      collections.abc.MutableSet
@@ -95,457 +95,467 @@ CLASSES
      |      collections.abc.Iterable
      |      collections.abc.Container
      |      builtins.object
-     |  
+     |
      |  Methods defined here:
-     |  
+     |
      |  __contains__(self, key) -> bool
-     |  
+     |
      |  __eq__(self, other) -> bool
      |      Return self==value.
-     |  
+     |
      |  __init__(self, iterable=None)
      |      Initialize self.  See help(type(self)) for accurate signature.
-     |  
+     |
      |  __iter__(self) -> Generator
-     |  
+     |
      |  __len__(self) -> int
-     |  
+     |
      |  __repr__(self) -> str
      |      Return repr(self).
-     |  
+     |
      |  __reversed__(self) -> Generator
-     |  
+     |
      |  add(self, key)
      |      Add an element.
-     |  
+     |
      |  discard(self, key)
      |      Remove an element.  Do not raise an exception if absent.
-     |  
+     |
      |  pop(self, last=True) -> Any
      |      Return the popped value.  Raise KeyError if empty.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
-     |  
+     |
      |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
+     |      dictionary for instance variables
+     |
      |  __weakref__
-     |      list of weak references to the object (if defined)
-     |  
+     |      list of weak references to the object
+     |
      |  ----------------------------------------------------------------------
      |  Data and other attributes defined here:
-     |  
+     |
      |  __abstractmethods__ = frozenset()
-     |  
+     |
      |  __hash__ = None
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Methods inherited from collections.abc.MutableSet:
-     |  
+     |
      |  __iand__(self, it)
-     |  
+     |
      |  __ior__(self, it)
-     |  
+     |
      |  __isub__(self, it)
-     |  
+     |
      |  __ixor__(self, it)
-     |  
+     |
      |  clear(self)
      |      This is slow (creates N new iterators!) but effective.
-     |  
+     |
      |  remove(self, value)
      |      Remove an element. If not a member, raise a KeyError.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Methods inherited from collections.abc.Set:
-     |  
+     |
      |  __and__(self, other)
-     |  
+     |
      |  __ge__(self, other)
      |      Return self>=value.
-     |  
+     |
      |  __gt__(self, other)
      |      Return self>value.
-     |  
+     |
      |  __le__(self, other)
      |      Return self<=value.
-     |  
+     |
      |  __lt__(self, other)
      |      Return self<value.
-     |  
+     |
      |  __or__(self, other)
      |      Return self|value.
-     |  
+     |
      |  __rand__ = __and__(self, other)
-     |  
+     |
      |  __ror__ = __or__(self, other)
-     |  
+     |
      |  __rsub__(self, other)
-     |  
+     |
      |  __rxor__ = __xor__(self, other)
-     |  
+     |
      |  __sub__(self, other)
-     |  
+     |
      |  __xor__(self, other)
-     |  
+     |
      |  isdisjoint(self, other)
      |      Return True if two sets have a null intersection.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Class methods inherited from collections.abc.Collection:
-     |  
-     |  __subclasshook__(C) from abc.ABCMeta
+     |
+     |  __subclasshook__(C)
      |      Abstract classes can override this to customize issubclass().
-     |      
+     |
      |      This is invoked early on by abc.ABCMeta.__subclasscheck__().
      |      It should return True, False or NotImplemented.  If it returns
      |      NotImplemented, the normal algorithm is used.  Otherwise, it
      |      overrides the normal algorithm (and the outcome is cached).
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Class methods inherited from collections.abc.Iterable:
-     |  
-     |  __class_getitem__ = GenericAlias(...) from abc.ABCMeta
+     |
+     |  __class_getitem__ = GenericAlias(...)
      |      Represent a PEP 585 generic type
-     |      
+     |
      |      E.g. for t = list[int], t.__origin__ is list and t.__args__ is (int,).
-    
+
     class Path(PurePath)
      |  Path(*args, **kwargs)
-     |  
+     |
      |  PurePath subclass that can make system calls.
-     |  
+     |
      |  Path represents a filesystem path but unlike PurePath, also offers
      |  methods to do system calls on path objects. Depending on your system,
      |  instantiating a Path will return either a PosixPath or a WindowsPath
      |  object. You can also instantiate a PosixPath or WindowsPath directly,
      |  but cannot instantiate a WindowsPath on a POSIX system or vice versa.
-     |  
+     |
      |  Method resolution order:
      |      Path
      |      PurePath
      |      builtins.object
-     |  
+     |
      |  Methods defined here:
-     |  
+     |
      |  __enter__(self)
-     |  
+     |
      |  __exit__(self, t, v, tb)
-     |  
+     |
+     |  __init__(self, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
      |  absolute(self)
      |      Return an absolute version of this path by prepending the current
      |      working directory. No normalization or symlink resolution is performed.
-     |      
+     |
      |      Use resolve() to get the canonical path to a file.
-     |  
+     |
      |  chmod(self, mode, *, follow_symlinks=True)
      |      Change the permissions of the path, like os.chmod().
-     |  
-     |  exists(self)
+     |
+     |  exists(self, *, follow_symlinks=True)
      |      Whether this path exists.
-     |  
+     |
+     |      This method normally follows symlinks; to check whether a symlink exists,
+     |      add the argument follow_symlinks=False.
+     |
      |  expanduser(self)
      |      Return a new path with expanded ~ and ~user constructs
      |      (as returned by os.path.expanduser)
-     |  
-     |  glob(self, pattern)
+     |
+     |  glob(self, pattern, *, case_sensitive=None)
      |      Iterate over this subtree and yield all existing files (of any
      |      kind, including directories) matching the given relative pattern.
-     |  
+     |
      |  group(self)
      |      Return the group name of the file gid.
-     |  
+     |
      |  hardlink_to(self, target)
      |      Make this path a hard link pointing to the same file as *target*.
-     |      
+     |
      |      Note the order of arguments (self, target) is the reverse of os.link's.
-     |  
+     |
      |  is_block_device(self)
      |      Whether this path is a block device.
-     |  
+     |
      |  is_char_device(self)
      |      Whether this path is a character device.
-     |  
+     |
      |  is_dir(self)
      |      Whether this path is a directory.
-     |  
+     |
      |  is_fifo(self)
      |      Whether this path is a FIFO.
-     |  
+     |
      |  is_file(self)
      |      Whether this path is a regular file (also True for symlinks pointing
      |      to regular files).
-     |  
+     |
+     |  is_junction(self)
+     |      Whether this path is a junction.
+     |
      |  is_mount(self)
-     |      Check if this path is a POSIX mount point
-     |  
+     |      Check if this path is a mount point
+     |
      |  is_socket(self)
      |      Whether this path is a socket.
-     |  
+     |
      |  is_symlink(self)
      |      Whether this path is a symbolic link.
-     |  
+     |
      |  iterdir(self)
-     |      Iterate over the files in this directory.  Does not yield any
-     |      result for the special paths '.' and '..'.
-     |  
+     |      Yield path objects of the directory contents.
+     |
+     |      The children are yielded in arbitrary order, and the
+     |      special entries '.' and '..' are not included.
+     |
      |  lchmod(self, mode)
      |      Like chmod(), except if the path points to a symlink, the symlink's
      |      permissions are changed, rather than its target's.
-     |  
-     |  link_to(self, target)
-     |      Make the target path a hard link pointing to this path.
-     |      
-     |      Note this function does not make this path a hard link to *target*,
-     |      despite the implication of the function and argument names. The order
-     |      of arguments (target, link) is the reverse of Path.symlink_to, but
-     |      matches that of os.link.
-     |      
-     |      Deprecated since Python 3.10 and scheduled for removal in Python 3.12.
-     |      Use `hardlink_to()` instead.
-     |  
+     |
      |  lstat(self)
      |      Like stat(), except if the path points to a symlink, the symlink's
      |      status information is returned, rather than its target's.
-     |  
+     |
      |  mkdir(self, mode=511, parents=False, exist_ok=False)
      |      Create a new directory at this given path.
-     |  
+     |
      |  open(self, mode='r', buffering=-1, encoding=None, errors=None, newline=None)
-     |      Open the file pointed by this path and return a file object, as
+     |      Open the file pointed to by this path and return a file object, as
      |      the built-in open() function does.
-     |  
+     |
      |  owner(self)
      |      Return the login name of the file owner.
-     |  
+     |
      |  read_bytes(self)
      |      Open the file in bytes mode, read it, and close the file.
-     |  
+     |
      |  read_text(self, encoding=None, errors=None)
      |      Open the file in text mode, read it, and close the file.
-     |  
+     |
      |  readlink(self)
      |      Return the path to which the symbolic link points.
-     |  
+     |
      |  rename(self, target)
      |      Rename this path to the target path.
-     |      
+     |
      |      The target path may be absolute or relative. Relative paths are
      |      interpreted relative to the current working directory, *not* the
      |      directory of the Path object.
-     |      
+     |
      |      Returns the new Path instance pointing to the target path.
-     |  
+     |
      |  replace(self, target)
      |      Rename this path to the target path, overwriting if that path exists.
-     |      
+     |
      |      The target path may be absolute or relative. Relative paths are
      |      interpreted relative to the current working directory, *not* the
      |      directory of the Path object.
-     |      
+     |
      |      Returns the new Path instance pointing to the target path.
-     |  
+     |
      |  resolve(self, strict=False)
      |      Make the path absolute, resolving all symlinks on the way and also
      |      normalizing it.
-     |  
-     |  rglob(self, pattern)
+     |
+     |  rglob(self, pattern, *, case_sensitive=None)
      |      Recursively yield all existing files (of any kind, including
      |      directories) matching the given relative pattern, anywhere in
      |      this subtree.
-     |  
+     |
      |  rmdir(self)
      |      Remove this directory.  The directory must be empty.
-     |  
+     |
      |  samefile(self, other_path)
      |      Return whether other_path is the same or not as this file
      |      (as returned by os.path.samefile()).
-     |  
+     |
      |  stat(self, *, follow_symlinks=True)
      |      Return the result of the stat() system call on this path, like
      |      os.stat() does.
-     |  
+     |
      |  symlink_to(self, target, target_is_directory=False)
      |      Make this path a symlink pointing to the target path.
      |      Note the order of arguments (link, target) is the reverse of os.symlink.
-     |  
+     |
      |  touch(self, mode=438, exist_ok=True)
      |      Create this file with the given access mode, if it doesn't exist.
-     |  
+     |
      |  unlink(self, missing_ok=False)
      |      Remove this file or link.
      |      If the path is a directory, use rmdir() instead.
-     |  
+     |
+     |  walk(self, top_down=True, on_error=None, follow_symlinks=False)
+     |      Walk the directory tree from this directory, similar to os.walk().
+     |
      |  write_bytes(self, data)
      |      Open the file in bytes mode, write to it, and close the file.
-     |  
+     |
      |  write_text(self, data, encoding=None, errors=None, newline=None)
      |      Open the file in text mode, write to it, and close the file.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Class methods defined here:
-     |  
-     |  cwd() from builtins.type
-     |      Return a new path pointing to the current working directory
-     |      (as returned by os.getcwd()).
-     |  
-     |  home() from builtins.type
+     |
+     |  cwd()
+     |      Return a new path pointing to the current working directory.
+     |
+     |  home()
      |      Return a new path pointing to the user's home directory (as
      |      returned by os.path.expanduser('~')).
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Static methods defined here:
-     |  
+     |
      |  __new__(cls, *args, **kwargs)
      |      Construct a PurePath from one or several strings and or existing
      |      PurePath objects.  The strings and path objects are combined so as
      |      to yield a canonicalized path, which is incorporated into the
      |      new PurePath object.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Methods inherited from PurePath:
-     |  
+     |
      |  __bytes__(self)
      |      Return the bytes representation of the path.  This is only
      |      recommended to use under Unix.
-     |  
+     |
      |  __eq__(self, other)
      |      Return self==value.
-     |  
+     |
      |  __fspath__(self)
-     |  
+     |
      |  __ge__(self, other)
      |      Return self>=value.
-     |  
+     |
      |  __gt__(self, other)
      |      Return self>value.
-     |  
+     |
      |  __hash__(self)
      |      Return hash(self).
-     |  
+     |
      |  __le__(self, other)
      |      Return self<=value.
-     |  
+     |
      |  __lt__(self, other)
      |      Return self<value.
-     |  
+     |
      |  __reduce__(self)
      |      Helper for pickle.
-     |  
+     |
      |  __repr__(self)
      |      Return repr(self).
-     |  
+     |
      |  __rtruediv__(self, key)
-     |  
+     |
      |  __str__(self)
      |      Return the string representation of the path, suitable for
      |      passing to system calls.
-     |  
+     |
      |  __truediv__(self, key)
-     |  
+     |
      |  as_posix(self)
      |      Return the string representation of the path with forward (/)
      |      slashes.
-     |  
+     |
      |  as_uri(self)
      |      Return the path as a 'file' URI.
-     |  
+     |
      |  is_absolute(self)
      |      True if the path is absolute (has both a root and, if applicable,
      |      a drive).
-     |  
-     |  is_relative_to(self, *other)
+     |
+     |  is_relative_to(self, other, /, *_deprecated)
      |      Return True if the path is relative to another path or False.
-     |  
+     |
      |  is_reserved(self)
      |      Return True if the path contains one of the special names reserved
      |      by the system, if any.
-     |  
-     |  joinpath(self, *args)
+     |
+     |  joinpath(self, *pathsegments)
      |      Combine this path with one or several arguments, and return a
      |      new path representing either a subpath (if all arguments are relative
      |      paths) or a totally different path (if one of the arguments is
      |      anchored).
-     |  
-     |  match(self, path_pattern)
+     |
+     |  match(self, path_pattern, *, case_sensitive=None)
      |      Return True if this path matches the given pattern.
-     |  
-     |  relative_to(self, *other)
+     |
+     |  relative_to(self, other, /, *_deprecated, walk_up=False)
      |      Return the relative path to another path identified by the passed
      |      arguments.  If the operation is not possible (because this is not
-     |      a subpath of the other path), raise ValueError.
-     |  
+     |      related to the other path), raise ValueError.
+     |
+     |      The *walk_up* parameter controls whether `..` may be used to resolve
+     |      the path.
+     |
      |  with_name(self, name)
      |      Return a new path with the file name changed.
-     |  
+     |
+     |  with_segments(self, *pathsegments)
+     |      Construct a new path object from any number of path-like objects.
+     |      Subclasses may override this method to customize how new path objects
+     |      are created from methods like `iterdir()`.
+     |
      |  with_stem(self, stem)
      |      Return a new path with the stem changed.
-     |  
+     |
      |  with_suffix(self, suffix)
      |      Return a new path with the file suffix changed.  If the path
      |      has no suffix, add given suffix.  If the given suffix is an empty
      |      string, remove the suffix from the path.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Readonly properties inherited from PurePath:
-     |  
+     |
      |  anchor
      |      The concatenation of the drive and root, or ''.
-     |  
+     |
      |  drive
      |      The drive prefix (letter or UNC path), if any.
-     |  
+     |
      |  name
      |      The final path component, if any.
-     |  
+     |
      |  parent
      |      The logical parent of the path.
-     |  
+     |
      |  parents
      |      A sequence of this path's logical parents.
-     |  
+     |
      |  parts
      |      An object providing sequence-like access to the
      |      components in the filesystem path.
-     |  
+     |
      |  root
      |      The root of the path, if any.
-     |  
+     |
      |  stem
      |      The final path component, minus its last suffix.
-     |  
+     |
      |  suffix
      |      The final component's last suffix, if any.
-     |      
+     |
      |      This includes the leading period. For example: '.txt'
-     |  
+     |
      |  suffixes
      |      A list of the final component's suffixes, if any.
-     |      
+     |
      |      These include the leading periods. For example: ['.tar', '.gz']
-    
+
     class n0dict(n0struct.n0struct_n0dict_.n0dict_)
      |  n0dict(*args, **kw)
-     |  
+     |
      |  https://github.com/martinblech/xmltodict/issues/252
      |  For Python >= 3.6, dictionary are Sorted by insertion order, so avoid the use of OrderedDict for those python versions.
-     |  
+     |
      |  Method resolution order:
      |      n0dict
      |      n0struct.n0struct_n0dict_.n0dict_
      |      n0struct.n0struct_n0dict__.n0dict__
      |      builtins.dict
      |      builtins.object
-     |  
+     |
      |  Methods defined here:
-     |  
+     |
      |  __init__(self, *args, **kw)
      |      args == tuple, kw == mapping(dictionary)
-     |      
+     |
      |      * == convert from tuple into list of arguments
      |      ** == convert from mapping into list of named arguments
-     |      
+     |
      |      :param args:
      |      :param kw:
      |          force_dict=True     =>  leave JSON subnodes as dict.
@@ -553,64 +563,64 @@ CLASSES
      |                                             but all lists will stay lists. lists could be
      |                                             converted into n0list only with recursively=True.
      |          force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
-     |      
+     |
      |          recursively=???     =>  removed. required to use n0dict.convert_recursively(dict/n0dict)
-     |      
+     |
      |          file=f"{file_path}" =>  load XML-text/JSON-text from {file_path}
-     |  
+     |
      |  compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.compare>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'typing.Tuple[typing.Tuple[str, typing.Callable, typing.Callable]]' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. compare(..)
      |      # **************************************************************************
-     |  
+     |
      |  direct_compare(self, other: 'n0dict', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check='continuity_check', one_of_list_compare=<function n0list.direct_compare>, composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      # **************************************************************************
      |      # * n0dict. direct_compare(..)
      |      # **************************************************************************
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Static methods defined here:
-     |  
+     |
      |  convert_recursively(node: 'typing.Any', xpath: 'str' = '/', level: 'int' = 0) -> 'typing.Any'
      |      # **************************************************************************
      |      # **************************************************************************
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Methods inherited from n0struct.n0struct_n0dict_.n0dict_:
-     |  
-     |  to_json(self, indent: int = 4, pairs_in_one_line=True, json_convention: bool = True, skip_empty_arrays: bool = False, compress: bool = False) -> str
+     |
+     |  to_json(self, indent_size: int = 4, pairs_in_one_line=True, skip_empty_arrays: bool = False, compress: bool = False) -> str
      |      Public function: export self into json result string
-     |  
+     |
      |  to_xml(self, indent: int = 4, encoding: str = 'utf-8', quote: str = '"') -> str
      |      Public function: export self into xml result string
-     |  
+     |
      |  to_xpath(self, mode: int = None) -> str
      |      Public function: collect elements xpath starts from root and print with indents
-     |  
+     |
      |  xpath(self, mode: int = None) -> list
      |      Public function: collect elements xpath starts from root
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Methods inherited from n0struct.n0struct_n0dict__.n0dict__:
-     |  
+     |
      |  __getitem__(self, xpath)
      |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
-     |      
+     |
      |      If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
-     |  
+     |
      |  __setitem__(self, xpath: 'typing.Union[str, int]', new_value)
      |      Public function:
      |      self[where1/where2/.../whereN] = value
      |          AKA
      |      self[where1][where2]...[whereN] = value
-     |      
+     |
      |      if xpath will be started with ?, the nothing will be done if new_value is None or empty
      |      if xpath is exist, then the value will be overwritten
      |      if not exist, then the node will be created
-     |      
+     |
      |      could be used predicates:
      |          [<item>=<value>]
      |          [<item>='<value>']
@@ -627,73 +637,73 @@ CLASSES
      |          [last()-2]
      |      or commands for creating (convertion into list) new node
      |          [new()]
-     |  
+     |
      |  all_not_valid(self, validate)
      |      # **************************************************************************
-     |  
+     |
      |  all_valid(self, validate)
      |      # **************************************************************************
-     |  
+     |
      |  any_not_valid(self, validate)
      |      # **************************************************************************
-     |  
+     |
      |  any_valid(self, validate)
      |      # **************************************************************************
-     |  
+     |
      |  delete(self, xpath: 'str', recursively: 'bool' = False) -> 'n0dict__'
      |      # **************************************************************************
-     |  
+     |
      |  findall(self, xpath: 'str', raise_exception: 'bool' = True)
-     |  
+     |
      |  findfirst(self, xpath: 'str', raise_exception: 'bool' = True)
-     |  
+     |
      |  first(self, xpath: 'str', if_not_found=None)
      |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
-     |      
+     |
      |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
      |      If self[where1/where2/.../whereN] is list, thet the first element will be returned
-     |  
+     |
      |  get(self, xpath: 'str', if_not_found=None)
      |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
-     |      
+     |
      |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
-     |  
+     |
      |  has_all(self, tupple_of_keys: 'typing.Union[tuple, list]') -> 'bool'
      |      # **************************************************************************
      |      # **************************************************************************
-     |  
+     |
      |  has_any_of(self, tupple_of_keys: 'typing.Union[tuple, list]') -> 'bool'
      |      # **************************************************************************
      |      # **************************************************************************
-     |  
+     |
      |  isEqual(self, xpath, value)
      |      Public function: return empty lists in dict, if self[xpath] == value
-     |  
+     |
      |  isExist(self, xpath) -> 'dict'
      |      Public function: return empty lists in dict, if self[xpath] exists
-     |  
+     |
      |  isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=<function n0dict__.<lambda>>)
      |      Public function: return empty lists in dict, if transformation(self[xpath]) == transformation(other_n0dict[other_xpath])
-     |  
+     |
      |  is_exist(self, xpath: 'str') -> 'bool'
      |      Public function: return True, if self[xpath] exists
-     |  
+     |
      |  pop(self, xpath: 'str', if_not_found=None, recursively: 'bool' = False) -> 'typing.Any'
      |      D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
-     |      
+     |
      |      If the key is not found, return the default if given; otherwise,
      |      raise a KeyError.
-     |  
+     |
      |  update_extend(self, other)
      |      # **************************************************************************
      |      # **************************************************************************
-     |  
+     |
      |  valid(self, node_xpath: 'str', validate, expected_result_for_error: 'bool' = False, msg: 'str' = None)
      |      :param node_xpath:
      |          xpath to the node inside self
@@ -704,7 +714,7 @@ CLASSES
      |      :param msg:
      |          if None => return result as bool True(validation)/False
      |      :return:
-     |      
+     |
      |      Examples:
      |          xml.valid('node/subnode', ["", None], True, "ERROR")
      |              If xml['node/subnode'] is equal "" or None (result of comparising is True), then return ERROR, else ""
@@ -718,143 +728,143 @@ CLASSES
      |              If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
      |          xml.valid('node/subnode', [1, 2])
      |              If xml['node/subnode'] is not equal 1 or 2 (result of comparising is False), then return False (not valid), else True
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data descriptors inherited from n0struct.n0struct_n0dict__.n0dict__:
-     |  
+     |
      |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
+     |      dictionary for instance variables
+     |
      |  __weakref__
-     |      list of weak references to the object (if defined)
-     |  
+     |      list of weak references to the object
+     |
      |  ----------------------------------------------------------------------
      |  Methods inherited from builtins.dict:
-     |  
+     |
      |  __contains__(self, key, /)
      |      True if the dictionary has the specified key, else False.
-     |  
+     |
      |  __delitem__(self, key, /)
      |      Delete self[key].
-     |  
+     |
      |  __eq__(self, value, /)
      |      Return self==value.
-     |  
+     |
      |  __ge__(self, value, /)
      |      Return self>=value.
-     |  
+     |
      |  __getattribute__(self, name, /)
      |      Return getattr(self, name).
-     |  
+     |
      |  __gt__(self, value, /)
      |      Return self>value.
-     |  
+     |
      |  __ior__(self, value, /)
      |      Return self|=value.
-     |  
+     |
      |  __iter__(self, /)
      |      Implement iter(self).
-     |  
+     |
      |  __le__(self, value, /)
      |      Return self<=value.
-     |  
+     |
      |  __len__(self, /)
      |      Return len(self).
-     |  
+     |
      |  __lt__(self, value, /)
      |      Return self<value.
-     |  
+     |
      |  __ne__(self, value, /)
      |      Return self!=value.
-     |  
+     |
      |  __or__(self, value, /)
      |      Return self|value.
-     |  
+     |
      |  __repr__(self, /)
      |      Return repr(self).
-     |  
+     |
      |  __reversed__(self, /)
      |      Return a reverse iterator over the dict keys.
-     |  
+     |
      |  __ror__(self, value, /)
      |      Return value|self.
-     |  
+     |
      |  __sizeof__(...)
      |      D.__sizeof__() -> size of D in memory, in bytes
-     |  
+     |
      |  clear(...)
      |      D.clear() -> None.  Remove all items from D.
-     |  
+     |
      |  copy(...)
      |      D.copy() -> a shallow copy of D
-     |  
+     |
      |  items(...)
      |      D.items() -> a set-like object providing a view on D's items
-     |  
+     |
      |  keys(...)
      |      D.keys() -> a set-like object providing a view on D's keys
-     |  
+     |
      |  popitem(self, /)
      |      Remove and return a (key, value) pair as a 2-tuple.
-     |      
+     |
      |      Pairs are returned in LIFO (last-in, first-out) order.
      |      Raises KeyError if the dict is empty.
-     |  
+     |
      |  setdefault(self, key, default=None, /)
      |      Insert key with a value of default if key is not in the dictionary.
-     |      
+     |
      |      Return the value for key if key is in the dictionary, else default.
-     |  
+     |
      |  update(...)
-     |      D.update([E, ]**F) -> None.  Update D from dict/iterable E and F.
-     |      If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
+     |      D.update([E, ]**F) -> None.  Update D from mapping/iterable E and F.
+     |      If E is present and has a .keys() method, then does:  for k in E.keys(): D[k] = E[k]
      |      If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
      |      In either case, this is followed by: for k in F:  D[k] = F[k]
-     |  
+     |
      |  values(...)
      |      D.values() -> an object providing a view on D's values
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Class methods inherited from builtins.dict:
-     |  
-     |  __class_getitem__(...) from builtins.type
+     |
+     |  __class_getitem__(...)
      |      See PEP 585
-     |  
-     |  fromkeys(iterable, value=None, /) from builtins.type
+     |
+     |  fromkeys(iterable, value=None, /)
      |      Create a new dictionary with keys from iterable and values set to value.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Static methods inherited from builtins.dict:
-     |  
-     |  __new__(*args, **kwargs) from builtins.type
+     |
+     |  __new__(*args, **kwargs) class method of builtins.dict
      |      Create and return a new object.  See help(type) for accurate signature.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data and other attributes inherited from builtins.dict:
-     |  
+     |
      |  __hash__ = None
-    
+
     class n0list(n0struct.n0struct_n0list_.n0list_)
      |  n0list(*args, **kw)
-     |  
+     |
      |  Class extended builtins.list(builtins.object) with additional methods:
      |  . direct_compare()  = compare element self[i] with other[i] with the same indexes
      |  . compare()         = compare element self[i] with any other[?] WITHOUT using sorting
-     |  
+     |
      |  Method resolution order:
      |      n0list
      |      n0struct.n0struct_n0list_.n0list_
      |      builtins.list
      |      builtins.object
-     |  
+     |
      |  Methods defined here:
-     |  
+     |
      |  __init__(self, *args, **kw)
      |      args == tuple, kw == mapping(dictionary)
-     |      
+     |
      |      * == convert from tuple into list of arguments
      |      ** == convert from mapping into list of named arguments
-     |      
+     |
      |      :param args:
      |      :param kw:
      |          force_dict=True     =>  leave JSON subnodes as dict.
@@ -862,16 +872,16 @@ CLASSES
      |                                  but all lists will stay lists. lists could be converted into n0list only
      |                                  with n0dict.convert_recursively(dict/n0dict).
      |          force_dict=True is required to slightly decrease time for convertion of JSON-text into structure.
-     |      
+     |
      |          recursively=???     =>  removed. required to use n0dict.convert_recursively(dict/n0dict)
-     |      
+     |
      |          file=f"{file_path}" =>  load JSON-text from {file_path}
-     |  
+     |
      |  compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[?] WITHOUT using order of elements.
      |      If self[i] is n0list/n0dict (and if other[?] is found with the same type),
      |      then goes deeper with n0list. compare(..)/n0dict.direct_compare(..)
-     |      
+     |
      |      :param other:
      |      :param self_name:
      |      :param other_name:
@@ -893,13 +903,13 @@ CLASSES
      |                  except exclude_xpaths;
      |                  compare_only
      |                  transform
-     |  
+     |
      |  direct_compare(self, other: 'n0list', self_name: 'str' = 'self', other_name: 'str' = 'other', prefix: 'str' = '', continuity_check: 'str' = 'continuity_check', composite_key: 'tuple' = (), compare_only: 'tuple' = (), exclude_xpaths: 'tuple' = (), transform: 'tuple' = ()) -> 'n0dict'
      |      Recursively compare self[i] with other[i]
      |      strictly according to the order of elements.
      |      If self[i] (other[i] must be the same) is n0list/n0dict, then goes deeper
      |      with n0list.direct_compare/n0dict.direct_compare(..)
-     |      
+     |
      |      :param self: etalon list for compare.
      |      :param other: list to compare with etalon
      |      :param self_name: <default = "self"> dict/list name, used in result["differences"]
@@ -922,263 +932,263 @@ CLASSES
      |                  except exclude_xpaths;
      |                  compare_only
      |                  transform
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Methods inherited from n0struct.n0struct_n0list_.n0list_:
-     |  
+     |
      |  __contains__(self, other_list)
-     |      Return key in self.
-     |  
+     |      Return bool(key in self).
+     |
      |  __getitem__(self, xpath)
      |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
-     |      
+     |
      |      If any of [where1][where2]...[whereN] are not found, exception IndexError will be raised
-     |  
+     |
      |  all_in(self, other_list)
      |      # **************************************************************************
-     |  
+     |
      |  all_not_in(self, other_list)
      |      # **************************************************************************
-     |  
+     |
      |  any_in(self, other_list)
      |      # **************************************************************************
-     |  
+     |
      |  any_not_in(self, other_list)
      |      # **************************************************************************
-     |  
+     |
      |  consists_of_all(self, other_list)
      |      # **************************************************************************
-     |  
+     |
      |  consists_of_any(self, other_list)
      |      # **************************************************************************
-     |  
+     |
      |  findall(self, xpath: str, raise_exception: bool = True)
-     |  
+     |
      |  findfirst(self, xpath: str, raise_exception: bool = True)
-     |  
+     |
      |  first(self, xpath: str, if_not_found=None)
      |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
-     |      
+     |
      |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
      |      If self[where1/where2/.../whereN] is list, thet the first element will be returned
-     |  
+     |
      |  get(self, xpath: Union[str, int], if_not_found=None)
      |      Public function:
      |      return self[where1/where2/.../whereN]
      |          AKA
      |      return self[where1][where2]...[whereN]
-     |      
+     |
      |      If any of [where1][where2]...[whereN] are not found, if_not_found will be returned
-     |  
+     |
      |  not_consists_of_any(self, other_list)
      |      # **************************************************************************
-     |  
+     |
      |  to_json(self, indent: int = 4, pairs_in_one_line=True, json_convention: bool = True, skip_empty_arrays: bool = False, compress: bool = False) -> str
      |      Public function: export self into json result string
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data descriptors inherited from n0struct.n0struct_n0list_.n0list_:
-     |  
+     |
      |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
+     |      dictionary for instance variables
+     |
      |  __weakref__
-     |      list of weak references to the object (if defined)
-     |  
+     |      list of weak references to the object
+     |
      |  ----------------------------------------------------------------------
      |  Methods inherited from builtins.list:
-     |  
+     |
      |  __add__(self, value, /)
      |      Return self+value.
-     |  
+     |
      |  __delitem__(self, key, /)
      |      Delete self[key].
-     |  
+     |
      |  __eq__(self, value, /)
      |      Return self==value.
-     |  
+     |
      |  __ge__(self, value, /)
      |      Return self>=value.
-     |  
+     |
      |  __getattribute__(self, name, /)
      |      Return getattr(self, name).
-     |  
+     |
      |  __gt__(self, value, /)
      |      Return self>value.
-     |  
+     |
      |  __iadd__(self, value, /)
      |      Implement self+=value.
-     |  
+     |
      |  __imul__(self, value, /)
      |      Implement self*=value.
-     |  
+     |
      |  __iter__(self, /)
      |      Implement iter(self).
-     |  
+     |
      |  __le__(self, value, /)
      |      Return self<=value.
-     |  
+     |
      |  __len__(self, /)
      |      Return len(self).
-     |  
+     |
      |  __lt__(self, value, /)
      |      Return self<value.
-     |  
+     |
      |  __mul__(self, value, /)
      |      Return self*value.
-     |  
+     |
      |  __ne__(self, value, /)
      |      Return self!=value.
-     |  
+     |
      |  __repr__(self, /)
      |      Return repr(self).
-     |  
+     |
      |  __reversed__(self, /)
      |      Return a reverse iterator over the list.
-     |  
+     |
      |  __rmul__(self, value, /)
      |      Return value*self.
-     |  
+     |
      |  __setitem__(self, key, value, /)
      |      Set self[key] to value.
-     |  
+     |
      |  __sizeof__(self, /)
      |      Return the size of the list in memory, in bytes.
-     |  
+     |
      |  append(self, object, /)
      |      Append object to the end of the list.
-     |  
+     |
      |  clear(self, /)
      |      Remove all items from list.
-     |  
+     |
      |  copy(self, /)
      |      Return a shallow copy of the list.
-     |  
+     |
      |  count(self, value, /)
      |      Return number of occurrences of value.
-     |  
+     |
      |  extend(self, iterable, /)
      |      Extend list by appending elements from the iterable.
-     |  
+     |
      |  index(self, value, start=0, stop=9223372036854775807, /)
      |      Return first index of value.
-     |      
+     |
      |      Raises ValueError if the value is not present.
-     |  
+     |
      |  insert(self, index, object, /)
      |      Insert object before index.
-     |  
+     |
      |  pop(self, index=-1, /)
      |      Remove and return item at index (default last).
-     |      
+     |
      |      Raises IndexError if list is empty or index is out of range.
-     |  
+     |
      |  remove(self, value, /)
      |      Remove first occurrence of value.
-     |      
+     |
      |      Raises ValueError if the value is not present.
-     |  
+     |
      |  reverse(self, /)
      |      Reverse *IN PLACE*.
-     |  
+     |
      |  sort(self, /, *, key=None, reverse=False)
      |      Sort the list in ascending order and return None.
-     |      
+     |
      |      The sort is in-place (i.e. the list itself is modified) and stable (i.e. the
      |      order of two equal elements is maintained).
-     |      
+     |
      |      If a key function is given, apply it once to each list item and sort them,
      |      ascending or descending, according to their function values.
-     |      
+     |
      |      The reverse flag can be set to sort in descending order.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Class methods inherited from builtins.list:
-     |  
-     |  __class_getitem__(...) from builtins.type
+     |
+     |  __class_getitem__(...)
      |      See PEP 585
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Static methods inherited from builtins.list:
-     |  
-     |  __new__(*args, **kwargs) from builtins.type
+     |
+     |  __new__(*args, **kwargs) class method of builtins.list
      |      Create and return a new object.  See help(type) for accurate signature.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data and other attributes inherited from builtins.list:
-     |  
+     |
      |  __hash__ = None
-    
+
     class n0xml(builtins.object)
      |  n0xml(xml_text: str)
-     |  
+     |
      |  A parser to process XML into an ordered list of tuples,
      |  search elements by custom XPath-like expressions, and handle multi-level wildcards.
-     |  
+     |
      |  Methods defined here:
-     |  
+     |
      |  __contains__(self, xpath: Union[str, list]) -> Optional[str]
-     |  
+     |
      |  __getitem__(self, index: Union[int, str]) -> Any
-     |  
+     |
      |  __init__(self, xml_text: str)
      |      Parse an XML string into an ordered list of tuples.
-     |      
+     |
      |      :param xml_text: The XML string to parse.
-     |  
+     |
      |  __len__(self) -> int
-     |  
+     |
      |  __repr__(self) -> list
      |      Return repr(self).
-     |  
+     |
      |  __str__(self) -> str
      |      Return str(self).
-     |  
+     |
      |  findall(self, xpath: Union[str, list], root_xpath: Union[str, list] = [], find_first: bool = False) -> list
      |      Find elements based on an XPath-like expression, supporting multi-level wildcards.
-     |      
+     |
      |      :param xpath: The XPath-like string or list specifying the search path.
      |      :param root_xpath: The root path for the search.
      |      :param find_first: Whether to stop at the first match.
      |      :return: A list of found elements or the first match if find_first is True.
-     |  
+     |
      |  findfirst(self, xpath: Union[str, list], root_xpath: Union[str, list] = []) -> tuple
-     |  
+     |
      |  get(self, xpath: Union[str, list], default=None) -> Union[list, Any]
      |      Find an element's value/subnodes in the ordered list based on an XPath-like expression.
-     |      
+     |
      |      :param xpath: The XPath-like string or list specifying the search path.
      |      :param default: Value to return if the element is not found.
      |      :return: The found element or the default value if not found.
-     |  
+     |
      |  get_attrib(self, xpath: Union[str, list], default=None) -> Union[list, Any]
      |      Find an element's attributes in the ordered list based on an XPath-like expression.
-     |      
+     |
      |      :param xpath: The XPath-like string or list specifying the search path.
      |      :param default: Value to return if the element is not found.
      |      :return: The found element attributes or the default value if not found.
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Static methods defined here:
-     |  
+     |
      |  to_dict(from_list_of_tuples: list)
-     |  
+     |
      |  to_tuple(from_list_of_tuples: list)
-     |  
+     |
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
-     |  
+     |
      |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
+     |      dictionary for instance variables
+     |
      |  __weakref__
-     |      list of weak references to the object (if defined)
+     |      list of weak references to the object
 
 FUNCTIONS
     _findall(parent_node: Union[dict, list], seeked_xpath_list: list, found_xpath_list: list = [], parent_nodes_stack: dict = {}, raise_exception=True, level=0) -> Optional[dict]
@@ -1186,112 +1196,112 @@ FUNCTIONS
             {
                 seeked_xpath_str: node_ptr # if node_ptr is dict/list it's real node, else the final element
             }
-    
+
     add_colums_into_csv(additional_columns: list, csv_rows: list = None, csv_schema: dict = None, are_required: bool = False)
         # ******************************************************************************
-    
+
     catch_exception(func: <built-in function callable>, result_in_case_of_exception: Any = None, **kw)
         args == tuple, kw == mapping(dictionary)
-        
+
         * == convert from tuple into list of arguments
         ** == convert from mapping into list of named arguments
-        
+
         :param args:
         :param kw:
             result:typing.Any => if defined, return {result} in case of no exception
-    
+
     convert_to_native_format(value, key=None, exception: set = None, transform_depends_of_key: dict = None)
         # ******************************************************************************
-    
+
     date_dash_ddmmyyyy(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> str DD-MM-YYYY
-    
+
     date_dash_yyyymmdd(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> str YYYY-MM-DD
-    
+
     date_delta(input_date: Union[NoneType, datetime.datetime, datetime.date] = None, day_delta: int = 0, month_delta: int = 0) -> datetime.datetime
         :param day_delta:
         :param month_delta:
         :return: today + day_delta + month_delta -> date
-    
+
     date_format(date_format: str, input_date: Optional[datetime.datetime] = None, day_delta: int = 0, month_delta: int = 0) -> str
         LEGACY
-    
+
     date_iso(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> str ISO date format
-    
+
     date_julian(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> str JULIAN
-    
+
     date_mmyy(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> str MMYY
-    
+
     date_only(input_date: datetime.datetime) -> datetime.date
         # ******************************************************************************
-    
+
     date_slash_ddmmyyyy(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> str DD/MM/YYYY
-    
+
     date_timestamp(input_date: Optional[datetime.datetime] = None) -> str
         :return: input_date -> str 13 characters YYMMDD_HHMMSS
-    
+
     date_timestamp_full(input_date: Optional[datetime.datetime] = None, day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> str 20 characters YYYYMMDDHHMMSSFFFFFF
-    
+
     date_to_format(input_date: Optional[datetime.datetime], date_format: str, day_delta: int = 0, month_delta: int = 0) -> str
         :param date_format:
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> date_format
-    
+
     date_today() -> datetime.datetime
         :return: today -> date
-        
+
         https://stackoverflow.com/questions/32517248/what-is-the-difference-between-python-functions-datetime-now-and-datetime-t
             datetime.datetime.now() takes tzinfo as keyword argument but datetime.today() does not take any keyword arguments.
             By default, now() executes with datetime.datetime.now(tz=None)
-    
+
     date_yymm(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> str YYMM
-    
+
     date_yymmdd(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:
         :param month_delta:
         :return: (input_date or today) + day_delta + month_delta -> str YYMMDD
-    
+
     default_parse_value(key_value, default_value)
         # ******************************************************************************
-    
+
     deserialize_dict(buffer_str: str, delimiter: str = ';', parse_item: Optional[Callable] = None, parse_empty=False, equal_tag: str = '=', parse_key: Callable = <function <lambda>>, default_key: Any = None, parse_value: Callable = <function <lambda>>, default_value: Any = None, default_dict_result=None, default_list_result=None, default_tuple_result=None) -> dict
         buffer_str = "TAG1=VALUE1;TAG2=VALUE2"
         deserialize_dict(buffer_str) == {"TAG1": "VALUE1", "TAG2": "VALUE2"}
-    
+
     deserialize_fixed_list(buffer_str: str, fixed_list_len: int, delimiter: str = ';', default_item: Any = None, parse_item=<function <lambda>>, parse_empty=False, default_list_result=None) -> list
         generate list [value1, value2, ... value[fixed_list_len]] with size of fixed_list_len from deserialized buffer_str
         in case of values are not enough to fill fixed_list_len list, then [value1, default_item, ... default_item]
@@ -1299,7 +1309,7 @@ FUNCTIONS
             deserialize_fixed_list(buffer_str, 2) == ("TAG1", "TAG2")
             deserialize_fixed_list(buffer_str, 4) == ("TAG1", "TAG2", None, None)
             deserialize_fixed_list(buffer_str, 4, default_item = "DEFAULT_TAG") == ("TAG1", "TAG2", "DEFAULT_TAG", "DEFAULT_TAG")
-    
+
     deserialize_key_value(buffer_str: str, equal_tag: str = '=', parse_key: Callable = <function <lambda>>, default_key: Union[Callable, Any, NoneType] = None, parse_value: Callable = <function <lambda>>, default_value: Union[Callable, Any, NoneType] = None, default_tuple_result=None) -> tuple
         buffer_str = "TAG1=VALUE1"
         deserialize_key_value(buffer_str) == ("TAG1", "VALUE1")
@@ -1307,11 +1317,11 @@ FUNCTIONS
         deserialize_key_value(buffer_str) == ("TAG1", None)
         buffer_str = "VALUE1"
         deserialize_key_value(buffer_str, default_key = "TAG1") == ("TAG1", "VALUE1")
-    
+
     deserialize_list(buffer_str: str, delimiter: str = ';', parse_item=<function <lambda>>, parse_empty=False, default_list_result=None, escape_character=None) -> list
         buffer_str = "ITEM1;ITEM2;ITEM3"
         deserialize_list_of_lists(buffer_str) == ["ITEM1", "ITEM2", "ITEM3"]
-    
+
     deserialize_list_of_lists(buffer_str: str, delimiter: str = ';', parse_item=<function <lambda>>, delimiter_for_sublists: str = ',', parse_sublist=None, parse_empty=False, default_list_result=None) -> list
         buffer_str = "list1item1,list1item2;list2item1,list2item2;list3item1,list3item2"
         deserialize_list_of_lists(buffer_str) == [
@@ -1319,41 +1329,41 @@ FUNCTIONS
                                                     ["list2item1", "list2item2"],
                                                     ["list3item1", "list3item2"]
                                                  ]
-    
+
     findall(current_node: Union[dict, list], seeked_xpath_str: str, raise_exception=True) -> Optional[dict]
         # ******************************************************************************
         # ******************************************************************************
-    
+
     findfirst(current_node: Union[dict, list], seeked_xpath_str: str, raise_exception=True) -> tuple
         # ******************************************************************************
-    
+
     first_day_of_yymm(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
         # ******************************************************************************
-    
+
     from_date(input_date_str: str, date_format: str) -> Union[NoneType, datetime.datetime, str]
         LEGACY
-    
+
     from_ddmmmyy(input_date_str: str) -> Union[NoneType, datetime.datetime, str]
         :param input_date_str: DD-MMM-YY # 16-JUL-20
         :return: str -> date
-    
+
     from_ddmmyyyy(input_date_str: str) -> Union[NoneType, datetime.datetime, str]
         :param input_date_str: DD-MM-YYYY # 16-07-2020
         :return: str -> date
-    
+
     from_yyyymmdd(input_date_str: str) -> Union[NoneType, datetime.datetime, str]
         :param input_date_str: YYYY-MM-DD # 2020-07-16
         :return: str -> date
-    
+
     generate_complex_csv_row(row: list, delimiter: str = ',', EOL: str = '\n') -> str
         # ******************************************************************************
-    
+
     generate_composite_keys(input_list: list, elements_for_composite_key: tuple, prefix: str = None, transform: List[Tuple[str, Callable[[str], str]]] = []) -> list
         serialization all or {elements_for_composite_key} elements of {input_list[]}
         :param transform: ()|None|empty mean nothing to transform, else [[<xpath to elem>,<lambda for transformatio>],..]
         :return:
             [[<composite_key>,[<index of entry>],...}
-    
+
     generate_csv(root_node: dict, list_xpath: str, mapping_dict: dict = None, save_to: str = None, delimiter: str = ',', show_header: bool = True, EOL: str = '\n', encoding: str = 'utf-8') -> list
         Samples:
             response_json = n0dict({
@@ -1404,65 +1414,65 @@ FUNCTIONS
                                             },
                                             "sample.csv"
             )
-    
+
     generate_fwf(root_node: dict, list_xpath: str, mapping_dict: dict, fwf_format: dict, save_to: str = None, filler: str = ' ') -> list
         # ******************************************************************************
-    
+
     generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler: str = ' ')
         # ******************************************************************************
-    
+
     generate_tlv(input_dict: dict, tag_fieldlen: int = 2, len_fieldlen: int = 3, tag_padding: str = ' ', len_padding: str = '0') -> str
         # ******************************************************************************
-    
+
     get__flag_compare_check_different_types() -> bool
-    
+
     get__flag_compare_return_difference_of_values() -> bool
-    
+
     get__flag_compare_return_equal() -> bool
-    
+
     get__flag_compare_return_equal_elements() -> bool
-    
+
     get__flag_compare_return_equal_records() -> bool
-    
+
     get__flag_compare_return_place() -> bool
-    
+
     get_key_by_value(dict_: dict, value_: Any)
         :param dict_:
         :param value_:
         :return: last key which is associated with value_ in dict_
-    
+
     get_value_by_tag(tag_name: str, buffer_str: str, delimiter: str = ';', equal_tag: str = '=', parse_key: Callable = <function <lambda>>, default_key: Any = None, parse_value: Callable = <function <lambda>>, default_value: Any = None) -> str
         buffer_str = "TAG1=VALUE1;TAG2=VALUE2"
         get_value_by_tag("TAG1", buffer_str) == "VALUE1"
         get_value_by_tag("TAG2", buffer_str) == "VALUE2"
         get_value_by_tag("TAG3", buffer_str) == None
         get_value_by_tag("TAG3", buffer_str, default_value = "VALUE3") == "VALUE3"
-    
-    init_logger(debug_level: str = 'TRACE', debug_output=<_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>, debug_timeformat: str = 'YYYY-MM-DD HH:mm:ss.SSS', debug_show_object_type=False, debug_show_object_id=False, debug_show_item_count=True, debug_logtofile=False, log_file_name: str = None)
-    
+
+    init_logger(debug_level: str = 'TRACE', debug_output=<_io.TextIOWrapper name='<stderr>' mode='w' encoding='utf-8'>, debug_timeformat: str = 'YYYY-MM-DD HH:mm:ss.SSS', debug_show_object_type: bool = True, debug_show_object_id: bool = False, debug_show_item_count: bool = True, debug_logtofile: bool = False, log_file_name: str = None)
+
     is_date_format(input_date_str: str, date_format: str) -> Union[NoneType, datetime.datetime, bool]
         # ******************************************************************************
-    
+
     is_date_mmyy(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
         # ******************************************************************************
-    
+
     is_date_yymm(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
         # ******************************************************************************
-    
+
     isiterable(obj, item_type=<class 'str'>)
-    
+
     isnumber(value: str, max_len: Optional[int] = None) -> bool
-    
+
     iterable(obj)
         "abc"   -> ["abc"]
         ["abc"] -> ["abc"]
-    
+
     join_triplets(in_list: Union[NoneType, str, tuple, list], level: int = 0) -> str
         join elements with middle sepataror:
             [elem1, delimiter, elem2]   => f'{elem1}{delimiter}{elem2}'
             [elem1, delimiter, None]    => f'{elem1}'
             [None, delimiter, elem2]    => f'{elem2}'
-    
+
     key_value_list_into_dict(input_dict: dict, xpath: str, key_tag: str = '@DataElement', value_tag: str = '@Value', capitalize_key: int = 0, capitalize_value: int = 0) -> dict
         input_dict = {
             xpath: [
@@ -1475,27 +1485,27 @@ FUNCTIONS
             key1: value1,
             key2: value2,
         }
-    
+
     last_day_of_yymm(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
         # ******************************************************************************
-    
+
     load_complex_csv = load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False, raise_exception: bool = True) -> Generator
         # ******************************************************************************
-    
+
     load_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: Any = None, contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function parse_complex_csv_line>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, return_unknown_fields: bool = False, raise_exception: bool = True) -> Generator
         # ******************************************************************************
-    
+
     load_file(file_path: str, read_mode: str = 't', encoding: Optional[str] = 'utf-8-sig', EOL: str = '\r\n') -> str
         # ******************************************************************************
         # ******************************************************************************
-    
+
     load_fwf(file_path: str, header_format: dict, body_format: dict = None, footer_format: dict = None, validate: bool = True, EOL: str = '\r\n', return_original_row=None, read_mode='t', encoding: Optional[str] = 'utf-8-sig')
         # ******************************************************************************
-    
+
     load_fwf_format(file_path: str) -> dict
         # ******************************************************************************
         # ******************************************************************************
-    
+
     load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value>, encoding: Optional[str] = 'utf-8-sig', concatenate_sign: Optional[str] = '\x16') -> dict
         load ini file as:
             // Ini file
@@ -1507,93 +1517,93 @@ FUNCTIONS
                 'KEY1': "VALUE1",
                 'KEY2': "VALUE2",
             }
-    
+
     load_lines(file_path: str, read_mode: str = 't', encoding: str = 'utf-8-sig', EOL: str = '\r\n') -> Generator
         # ******************************************************************************
-    
+
     load_native_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', EOL: str = '\n', contains_header: Optional[bool] = True, encoding: Optional[str] = 'utf-8-sig', raise_exception: bool = True) -> Generator
         # ******************************************************************************
-    
+
     load_simple_csv(file_path: str, column_names: Union[list, tuple, NoneType] = None, delimiter: str = ',', process_field: Optional[<built-in function callable>] = None, EOL: str = '\n', contains_header: Union[bool, str, list, tuple, NoneType] = None, process_line: Union[<built-in function callable>, bool, NoneType] = None, skip_empty_lines: bool = True, strip_line: Union[bool, <built-in function callable>] = False, strip_field: Union[bool, <built-in function callable>] = False, return_original_line: bool = False, parse_csv_line: <built-in function callable> = <function <lambda>>, encoding: Optional[str] = 'utf-8-sig', read_mode: str = 't', header_is_mandatory: Optional[bool] = None, raise_exception: bool = True) -> Generator
         # ******************************************************************************
-    
+
     mask_number(not_masked_number: str)
         Public function: convert numbers into similar looks letters
-    
+
     mask_pan(buffer_str: str)
         Public function: mask PANs in buffer_str
-    
+
     merge_dict(*kw) -> dict
         # ******************************************************************************
-    
+
     merge_dict_concatenate(*kw, concatenate_sign: Optional[str] = '\x16', finalize_dict_concatenate: bool = False) -> dict
         # ******************************************************************************
-    
+
     merge_dict_first(*kw) -> dict
         # ******************************************************************************
-    
-    n0debug(var_name: str, alias: str = None, level: str = 'DEBUG', show_type: bool = None, pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
+
+    n0debug(var_name: str, alias: str = None, level: str = 'DEBUG', show_object_type: bool = True, indent_size: int = 4, quote: str = '"', pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, show_item_count: bool = True)
         Print value of the variable with name {var_name},
         depends of value in global variable {__debug_level}.
-        
+
         :param var_name:
         :param level:
         :return:
-    
-    n0debug_calc(var_object, var_name: str = '', level: str = 'DEBUG', internal_call: int = 0, show_type: bool = None, pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
+
+    n0debug_calc(var_object, var_name: str = '', level: str = 'DEBUG', internal_call: int = 0, show_object_type: bool = True, indent_size: int = 4, quote: str = '"', pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, show_item_count: bool = True)
         Print  calculated value (for example returned by function),
         depends of value in global variable __debug_level.
-        
+
         :param var_object:
         :param var_name:
         :param level:
         :return:
-    
+
     n0debug_object(object_name: str, level: str = 'DEBUG')
         # ******************************************************************************
-    
+
     n0error(text: str, internal_call: int = 0)
         # ******************************************************************************
-    
+
     n0eval(_str: str) -> Union[int, float, Any]
         # ******************************************************************************
-    
+
     n0info(text: str, internal_call: int = 0)
         # ******************************************************************************
-    
+
     n0isnumeric(value: str) -> bool
-    
-    n0pretty(item: Any, indent_: int = 0, show_type: bool = None, __indent_size: int = 4, __quotes: str = '"', pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, auto_quotes: bool = True, show_item_count: bool = None)
+
+    n0pretty(item: Any, indent_level: int = 0, show_object_type: bool = True, indent_size: int = 4, quote: str = '"', pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, show_item_count: bool = True)
         :param item:
-        :param indent_:
+        :param indent_level:
         :return:
-    
+
     n0print(text: str, level: str = 'INFO', internal_call: int = 0)
         if {level} <= {__debug_level} then print {text}{end}
-        
+
         :param text:
         :param level:
         :param end:
         :param internal_call:
         :return: None
-    
+
     n0warning(text: str, internal_call: int = 0)
         # ******************************************************************************
-    
+
     notemptyitems(item)
         # ******************************************************************************
         # notemptyitems(item):
         #   Check item or recursively subitems of item.
         #   Return count of notempty item/subitems.
         # ******************************************************************************
-    
+
     parse_complex_csv_line(line: Union[str, bytes], delimiter: Union[str, bytes] = ',', process_field: <built-in function callable> = <function <lambda>>, EOL: Any = None) -> list
         # ******************************************************************************
         # ******************************************************************************
-    
+
     parse_fwf_row(incoming_row: str, fwf_format: dict, validate: bool = True) -> Union[dict, tuple]
         # ******************************************************************************
-    
+
     parse_ini(lines: Iterable, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value>, encoding: Optional[str] = 'utf-8-sig', concatenate_sign: Optional[str] = '\x16') -> dict
         from lines:
             [
@@ -1607,15 +1617,15 @@ FUNCTIONS
                 'KEY1': "VALUE1",
                 'KEY2': "VALUE2",
             }
-    
+
     parse_tlv(input_buffer: str, tag_fieldlen: int = 2, len_fieldlen: int = 3) -> tuple
         Parse string contains concatenated triplets <TAG><LEN><VALUE>
-        
+
         "01002P2020020103005100000900201220021023007DEFAULT"
          ^^ == _tag (tag_fieldlen == 2) == '01'
            ^^^ == _len (len_fieldlen == 3) == '002'
               ^^ == _value (_len == 2) == 'P2'
-        
+
         { _tag: _value for _tag, _len, _value in parse_triplet(input_buffer) } ==
             {
                 "01": "P2",
@@ -1625,89 +1635,89 @@ FUNCTIONS
                 "22": "10",
                 "23": "DEFAULT"
             }
-        
+
         "002P200201005100000020100210007DEFAULT"
          _tag (tag_fieldlen == 0) == ''
          ^^^ == _len (len_fieldlen == 3) == '002'
             ^^ == _value (_len == 2) == 'P2'
-        
+
         { a[2]: b[2] for a,b in zip(*[iter(parse_triplet(input_buffer, 0))]*2) } ==
             {
                 "P2": "01",
                 "10000": "01",
                 "10": "DEFAULT"
             }
-    
+
     raise_exception(ex: BaseException)
         # ******************************************************************************
-    
+
     raise_in_lambda(ex)
         # ******************************************************************************
-    
+
     random_from(from_list: list) -> Any
         :param from_list:
         :return: from_list[rnd]
-    
+
     remove_colums_in_csv(columns_to_remove: list, csv_rows: list = None, csv_schema: dict = None, are_required: bool = False)
         # ******************************************************************************
-    
+
     remove_void_elements(structure: Union[list, dict], remove_empty_arrays: bool = False, remove_empty_strings: bool = False, xpath: str = '/', level: int = 0, remove_empty_elements: set = {}) -> Union[list, dict]
         # ******************************************************************************
-    
+
     rnd(till_not_included: int) -> int
         :param till_not_included:
         :return: int [0..till_not_included)
-    
+
     save_csv(file_path: str, rows: Union[list, tuple, NoneType], header: Union[list, tuple, NoneType] = None, encoding: str = 'utf-8', EOL: str = '\n', delimiter: str = ',')
         # ******************************************************************************
-    
+
     save_file(file_path: str, output_buffer: Union[str, bytes, bytearray, dict, list, tuple, Generator, set, frozenset], mode: str = 'wt', encoding: str = 'utf-8', EOL: str = '\r\n', equal_tag: str = '=', convert_EOL: bool = True)
         # ******************************************************************************
-    
+
     serialize_dict(input_dict: str, delimiter: str = ';', equal_tag: str = '=', generate_empty=True, generate_none=True, capitalize_key: int = 0, capitalize_value: int = 0, level: int = 0) -> str
         serialize_dict({"TAG1": "VALUE1", "TAG2": "VALUE2"}) == "TAG1=VALUE1;TAG2=VALUE2"
-    
+
     set__flag_compare_check_different_types(value: bool)
         if __flag_compare_check_different_types == True, then
         validate type of attributes in .compare()/.direct_compare()
         and return result["difftypes"]
-    
+
     set__flag_compare_return_difference_of_values(value: bool)
         if __flag_compare_return_difference_of_values == True, then
         if values of attributes are different and are int, float,
         return additional element in result["not_equal"] with difference
-    
+
     set__flag_compare_return_equal(value: bool)
         if __flag_compare_return_equal == True, then
         if records are the same,
         then return additional element in result["equal"] with equal sub nodes
-    
+
     set__flag_compare_return_equal_elements(value: bool)
         if __flag_compare_return_equal_elements == True, then
         if records are the same,
         then return additional element in result["equal"] with equal elements
-    
+
     set__flag_compare_return_equal_records(value: bool)
         if __flag_compare_return_equal_records == True, then
         if records are the same,
         then return additional element in result["equal"] with equal records
-    
+
     set__flag_compare_return_place(value: bool)
         if __flag_compare_return_place == True, then
             if record is the different, then return tupple of index and record in result["self_unique"]/result["other_unique"]
         else
             return only the record in result["self_unique"]/result["other_unique"]
-    
+
     set_debug_show_item_count(debug_show_item_count: bool)
-    
+
     set_debug_show_object_id(debug_show_object_id: bool)
-    
+
     set_debug_show_object_type(debug_show_object_type: bool)
-    
+
     split_name_index(node_name: str) -> Tuple[str, Union[str, Tuple[str, str, Union[str, bool]]]]
         # ******************************************************************************
         # ******************************************************************************
-    
+
     split_pair(in_str: str, delimiter: Union[str, Iterable], transform_left: <built-in function callable> = <function <lambda>>, transform_right: <built-in function callable> = <function <lambda>>, default_element: int = 1, default_left: Any = '', default_right: Any = '') -> tuple
         split string into 2 sub strings in any cases:
             '' by '://'                                     => (default_left, default_right)
@@ -1716,72 +1726,72 @@ FUNCTIONS
             'www.aaa.com' by '/'                            => (default_left, 'www.aaa.com')
             'www.aaa.com',default_element = 0 by '/'        => ('www.aaa.com', default_right)
             'www.aaa.com/path',default_element = 0 by '/'   => ('www.aaa.com', 'path')
-    
+
     split_with_escape(buffer_str: str, delimiter: str, maxsplit: Optional[int] = None, escape_character: str = '\\', trim_trailing_double_escape_characters: bool = True)
             buffer_str = "AAAA1;BBBB2;CCCC3;DDDD4"
             split_with_escape(buffer_str) == ["ITEM1", "ITEM2", "ITEM3", "ITEM4"]
-        
+
         Pay attention: '\' is '' in samples, because of r".." is not used:
-        
+
             trim_trailing_double_escape_characters = True
             buffer_str = "\\IT\EM1\;\\IT\EM2;\ITE\\M3\\;ITE\M4\\"
             split_with_escape(buffer_str) ==
                 ["\\IT\EM1;\\ITE\M2", "\ITE\\M3\", "ITE\M4\"]
-        
+
             trim_trailing_double_escape_characters = False
             buffer_str = "\\IT\EM1\;\\IT\EM2;\ITE\\M3\\;ITE\M4\\"
             split_with_escape(buffer_str) ==
                 ["\\IT\EM1;\\ITE\M2", "\ITE\\M3\\", "ITE\M4\\"]
-        
+
             The reason of ONLY trailing escape characters: because of inside splitted parts could be subparts with termination of own unknown delimiters.
-    
+
     strip_ns lambda key
         # ******************************************************************************
         # ******************************************************************************
-    
+
     time_colon_hhmmss(input_date: Optional[datetime.datetime]) -> str
         :param input_date:
         :return: (input_date or today) -> str HHMMSS
-    
+
     time_hhmmss(input_date: Optional[datetime.datetime]) -> str
         :param input_date:
         :return: (input_date or today) -> str HHMMSS
-    
+
     to_date(input_date_str: Optional[datetime.datetime], date_format: Union[NoneType, str, list, tuple] = None, raise_exception: bool = False, return_if_wrong_input: Any = None) -> Union[NoneType, datetime.datetime, str]
         :param input_date_str:
         :param date_format:
         :return: input_date_str converted into date_time as date_format
         :return: str -> date
-    
+
     to_int(value: str, max_len: Optional[int] = None, default_value: Any = None) -> Any
         # ******************************************************************************
         # ******************************************************************************
-    
+
     total_size(o, handlers={}, verbose=False)
         Returns the approximate memory footprint an object and all of its contents.
-        
+
         Automatically finds the contents of the following builtin containers and
         their subclasses:  tuple, list, deque, dict, set and frozenset.
         To search other containers, add handlers to iterate over their contents:
-        
+
             handlers = {SomeContainerClass: iter,
                         OtherContainerClass: OtherContainerClass.get_elements}
-        
+
         ##### Example call #####
             d = dict(a=1, b=2, c=3, d=[4,5,6,7], e='a string of chars')
             print(total_size(d, verbose=True))
-    
+
     transform_structure(in_structure, transform_key=<function <lambda>>, transform_value=<function convert_to_native_format>)
         # ******************************************************************************
-    
+
     unescape(in_elem: Union[str, list, dict, Any]) -> Union[str, list, dict, Any]
         # ******************************************************************************
-    
+
     unique_file_path(file_path: str, purpose: str = '') -> pathlib.Path
-    
+
     unmask_number(masked_number: str)
         Public function: convert letters into similar looks numbers
-    
+
     unpack_references(initial_dict: dict, initial_key: str, recursive: bool = True) -> n0struct.n0struct_references.OrderedSet
         # ******************************************************************************
         # 2 levels dict:
@@ -1814,7 +1824,7 @@ FUNCTIONS
         #       - item3
         #       - item4
         # ******************************************************************************
-    
+
     validate_bool(value, unknown_value_is: bool = False)
         value = "TRUE"
         validate_bool(value) == True
@@ -1826,7 +1836,7 @@ FUNCTIONS
         validate_bool(value) == False
         value = "UNKNOWN"
         validate_bool(value) == False
-    
+
     validate_csv_row(row: Union[list, dict], csv_schema: dict, external_variables={}, interrupt_after_first_fail: bool = False, row_i: int = None, rows_count: int = 0, precompile: bool = False) -> tuple
         row:
             list: [field_value[0], field_value[1], ... field_value[i]]
@@ -1865,7 +1875,7 @@ FUNCTIONS
                 'ORG': "123",
                 'BIN': "456789"
             } could be used to exchange f-str placeholders {ORG} and {BIN}
-    
+
     validate_path(value, default_value: str = '', parse_str=<function <lambda>>) -> str
         value = ""
         validate_path(value) == ""
@@ -1875,7 +1885,7 @@ FUNCTIONS
         validate_path(value, default_value = "C:\ETC") == "C:\ETC"
         value = "."
         validate_path(value, default_value = "C:\ETC") == ""
-    
+
     validate_str(value, default_value: str = '', parse_str=<function <lambda>>) -> str
         value = ""
         validate_str(value) == ""
@@ -1885,7 +1895,7 @@ FUNCTIONS
         validate_path(value, default_value = "C:\ETC") == "C:\ETC"
         value = "."
         validate_path(value, default_value = "C:\ETC") == ""
-    
+
     validate_values(value: str, possible_values_the_last_is_default: Union[list, tuple], return_if_wrong_input: Any = '', raise_if_not_found: Optional[Exception] = None)
         value = "A"
         validate_values(value.upper(), ("A", "B", "C")) == "A"
@@ -1893,7 +1903,7 @@ FUNCTIONS
         validate_values(value.upper(), ("A", "B", "C")) == "C"
         value = "D"
         validate_values(value.upper(), ("A", "B", "C")) == "C"
-    
+
     xpath_match(xpath: str, xpath_list: Union[str, list, tuple]) -> int
         :param xpath:
             xpath: str

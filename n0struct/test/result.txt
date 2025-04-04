@@ -1,21 +1,21 @@
  INFO     | __main__:main:133 | ================================================================================
- DEBUG    | __main__:main:134 | dict1 == <n0struct.n0dict  1> {
-    "C": <n0struct.n0list  3> [
-        #0   <n0struct.n0dict  5> {
+ DEBUG    | __main__:main:134 | dict1 == <n0struct..n0dict 1> {
+    "C": <n0struct..n0list 3> [
+        #0   <n0struct..n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        #1   <n0struct.n0dict  5> {
+        #1   <n0struct..n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        #2   <n0struct.n0dict  5> {
+        #2   <n0struct..n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -25,23 +25,23 @@
     ]
 }
  INFO     | __main__:main:135 | ================================================================================
- DEBUG    | __main__:main:136 | dict2 == <n0struct.n0dict  1> {
-    "C": <n0struct.n0list  3> [
-        #0   <n0struct.n0dict  5> {
+ DEBUG    | __main__:main:136 | dict2 == <n0struct..n0dict 1> {
+    "C": <n0struct..n0list 3> [
+        #0   <n0struct..n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        #1   <n0struct.n0dict  5> {
+        #1   <n0struct..n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 99
         },
-        #2   <n0struct.n0dict  5> {
+        #2   <n0struct..n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -51,23 +51,23 @@
     ]
 }
  INFO     | __main__:main:137 | ================================================================================
- DEBUG    | __main__:main:138 | dict3 == <n0struct.n0dict  1> {
-    "C": <n0struct.n0list  3> [
-        #0   <n0struct.n0dict  5> {
+ DEBUG    | __main__:main:138 | dict3 == <n0struct..n0dict 1> {
+    "C": <n0struct..n0list 3> [
+        #0   <n0struct..n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        #1   <n0struct.n0dict  5> {
+        #1   <n0struct..n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 99
         },
-        #2   <n0struct.n0dict  5> {
+        #2   <n0struct..n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -93,40 +93,40 @@
  INFO     | __main__:test_sorted_lists:68 | *** other_unique
  INFO     | __main__:test_sorted_lists:68 | *** difftypes
  INFO     | __main__:test_sorted_lists:72 | ================================================================================
- DEBUG    | __main__:test_sorted_lists:73 | differences1_direct_compare == <n0struct.n0dict  5> {
-    "differences": <list  1> [ #0   "Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99" ],
-    "not_equal": <list  1> [
-        #0   <tuple  2> (
+ DEBUG    | __main__:test_sorted_lists:73 | differences1_direct_compare == <n0struct..n0dict 5> {
+    "differences": <list 1> [ #0   "Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99" ],
+    "not_equal": <list 1> [
+        #0   <tuple 2> (
             #0   "/C[1]/value2",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   5,
                 #1   99,
                 #2   94.0
             ]
         )
     ],
-    "self_unique": <list  0> [  ],
-    "other_unique": <list  0> [  ],
-    "difftypes": <list  0> [  ]
+    "self_unique": <list 0> [  ],
+    "other_unique": <list 0> [  ],
+    "difftypes": <list 0> [  ]
 }
  DEBUG    | __main__:test_sorted_lists:74 | notemptyitems(differences1_direct_compare["differences"]) == 1
  DEBUG    | __main__:test_sorted_lists:76 | notemptyitems(differences1_direct_compare["not_equal"]) == 4
  INFO     | __main__:test_sorted_lists:82 | ================================================================================
- DEBUG    | __main__:test_sorted_lists:83 | differences2_wise_compare == <n0struct.n0dict  5> {
-    "differences": <list  1> [ #0   "Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99" ],
-    "not_equal": <list  1> [
-        #0   <tuple  2> (
+ DEBUG    | __main__:test_sorted_lists:83 | differences2_wise_compare == <n0struct..n0dict 5> {
+    "differences": <list 1> [ #0   "Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99" ],
+    "not_equal": <list 1> [
+        #0   <tuple 2> (
             #0   "/C[1]/value2",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   5,
                 #1   99,
                 #2   94.0
             ]
         )
     ],
-    "self_unique": <list  0> [  ],
-    "other_unique": <list  0> [  ],
-    "difftypes": <list  0> [  ]
+    "self_unique": <list 0> [  ],
+    "other_unique": <list 0> [  ],
+    "difftypes": <list 0> [  ]
 }
  INFO     | __main__:test_unsorted_lists:91 | ******************************************************************************** 3 = Unsorted list in dictionary = direct_compare
  INFO     | __main__:test_unsorted_lists:94 | *** differences
@@ -169,8 +169,8 @@
  INFO     | __main__:test_unsorted_lists:106 | ('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
  INFO     | __main__:test_unsorted_lists:104 | *** difftypes
  INFO     | __main__:test_unsorted_lists:108 | ================================================================================
- DEBUG    | __main__:test_unsorted_lists:109 | differences1_direct_compare == <n0struct.n0dict  5> {
-    "differences": <list  12> [
+ DEBUG    | __main__:test_unsorted_lists:109 | differences1_direct_compare == <n0struct..n0dict 5> {
+    "differences": <list 12> [
         #0   "Values are different: dict1['C'][0]['a']=1 != dict3['C'][0]['a']=7",
         #1   "Values are different: dict1['C'][0]['b']=2 != dict3['C'][0]['b']=8",
         #2   "Values are different: dict1['C'][0]['c']=3 != dict3['C'][0]['c']=9",
@@ -184,101 +184,101 @@
         #10  "Values are different: dict1['C'][2]['value2']=6 != dict3['C'][2]['value2']=4",
         #11  "List dict3['C'] is longer dict1['C']: dict3['C'][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1['C']"
     ],
-    "not_equal": <list  11> [
-        #0   <tuple  2> (
+    "not_equal": <list 11> [
+        #0   <tuple 2> (
             #0   "/C[0]/a",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   1,
                 #1   7,
                 #2   6.0
             ]
         ),
-        #1   <tuple  2> (
+        #1   <tuple 2> (
             #0   "/C[0]/b",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   2,
                 #1   8,
                 #2   6.0
             ]
         ),
-        #2   <tuple  2> (
+        #2   <tuple 2> (
             #0   "/C[0]/c",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   3,
                 #1   9,
                 #2   6.0
             ]
         ),
-        #3   <tuple  2> (
+        #3   <tuple 2> (
             #0   "/C[0]/value1",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   1,
                 #1   3,
                 #2   2.0
             ]
         ),
-        #4   <tuple  2> (
+        #4   <tuple 2> (
             #0   "/C[0]/value2",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   4,
                 #1   6,
                 #2   2.0
             ]
         ),
-        #5   <tuple  2> (
+        #5   <tuple 2> (
             #0   "/C[1]/value2",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   5,
                 #1   99,
                 #2   94.0
             ]
         ),
-        #6   <tuple  2> (
+        #6   <tuple 2> (
             #0   "/C[2]/a",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   7,
                 #1   1,
                 #2   -6.0
             ]
         ),
-        #7   <tuple  2> (
+        #7   <tuple 2> (
             #0   "/C[2]/b",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   8,
                 #1   2,
                 #2   -6.0
             ]
         ),
-        #8   <tuple  2> (
+        #8   <tuple 2> (
             #0   "/C[2]/c",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   9,
                 #1   3,
                 #2   -6.0
             ]
         ),
-        #9   <tuple  2> (
+        #9   <tuple 2> (
             #0   "/C[2]/value1",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   3,
                 #1   1,
                 #2   -2.0
             ]
         ),
-        #10  <tuple  2> (
+        #10  <tuple 2> (
             #0   "/C[2]/value2",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   6,
                 #1   4,
                 #2   -2.0
             ]
         )
     ],
-    "self_unique": <list  0> [  ],
-    "other_unique": <list  1> [
-        #0   <tuple  2> (
+    "self_unique": <list 0> [  ],
+    "other_unique": <list 1> [
+        #0   <tuple 2> (
             #0   "/C[3]",
-            #1   <n0struct.n0dict  5> {
+            #1   <n0struct..n0dict 5> {
                 "a": 1,
                 "b": 2,
                 "c": 3,
@@ -287,33 +287,33 @@
             }
         )
     ],
-    "difftypes": <list  0> [  ]
+    "difftypes": <list 0> [  ]
 }
  DEBUG    | __main__:test_unsorted_lists:110 | notemptyitems(differences1_direct_compare["differences"] == 12
  DEBUG    | __main__:test_unsorted_lists:112 | differences1_direct_compare["not_equal"] == 44
  DEBUG    | __main__:test_unsorted_lists:115 | notemptyitems(differences1_direct_compare["other_unique"]) == 6
  DEBUG    | __main__:test_unsorted_lists:117 | notemptyitems(differences1_direct_compare["self_unique"]) == 0
  INFO     | __main__:test_unsorted_lists:120 | ================================================================================
- DEBUG    | __main__:test_unsorted_lists:121 | differences2_wise_compare == <n0struct.n0dict  5> {
-    "differences": <list  2> [
+ DEBUG    | __main__:test_unsorted_lists:121 | differences2_wise_compare == <n0struct..n0dict 5> {
+    "differences": <list 2> [
         #0   "Values are different: dict1['C'][1]['value2']=5 != dict3['C'][1]['value2']=99",
         #1   "Element dict3['C'][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1['C']"
     ],
-    "not_equal": <list  1> [
-        #0   <tuple  2> (
+    "not_equal": <list 1> [
+        #0   <tuple 2> (
             #0   "/C[1]/value2",
-            #1   <list  3> [
+            #1   <list 3> [
                 #0   5,
                 #1   99,
                 #2   94.0
             ]
         )
     ],
-    "self_unique": <list  0> [  ],
-    "other_unique": <list  1> [
-        #0   <tuple  2> (
+    "self_unique": <list 0> [  ],
+    "other_unique": <list 1> [
+        #0   <tuple 2> (
             #0   "/C[3]",
-            #1   <n0struct.n0dict  5> {
+            #1   <n0struct..n0dict 5> {
                 "a": 1,
                 "b": 2,
                 "c": 3,
@@ -322,29 +322,29 @@
             }
         )
     ],
-    "difftypes": <list  0> [  ]
+    "difftypes": <list 0> [  ]
 }
  DEBUG    | __main__:test_unsorted_lists:122 | notemptyitems(differences2_wise_compare["differences"] == 2
  DEBUG    | __main__:test_unsorted_lists:124 | differences2_wise_compare["not_equal"] == 4
  DEBUG    | __main__:test_unsorted_lists:127 | notemptyitems(differences2_wise_compare["other_unique"]) == 6
  DEBUG    | __main__:test_unsorted_lists:129 | notemptyitems(differences2_wise_compare["self_unique"]) == 0
- DEBUG    | __main__:main:143 | dict1 == <n0struct.n0dict  1> {
-    "C": <n0struct.n0list  3> [
-        #0   <n0struct.n0dict  5> {
+ DEBUG    | __main__:main:143 | dict1 == <n0struct..n0dict 1> {
+    "C": <n0struct..n0list 3> [
+        #0   <n0struct..n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        #1   <n0struct.n0dict  5> {
+        #1   <n0struct..n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        #2   <n0struct.n0dict  5> {
+        #2   <n0struct..n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -353,23 +353,23 @@
         }
     ]
 }
- DEBUG    | __main__:main:145 | dict1 == <n0struct.n0dict  2> {
-    "C": <n0struct.n0list  3> [
-        #0   <n0struct.n0dict  5> {
+ DEBUG    | __main__:main:145 | dict1 == <n0struct..n0dict 2> {
+    "C": <n0struct..n0list 3> [
+        #0   <n0struct..n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        #1   <n0struct.n0dict  5> {
+        #1   <n0struct..n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        #2   <n0struct.n0dict  5> {
+        #2   <n0struct..n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -377,25 +377,25 @@
             "value2": 6
         }
     ],
-    "moreone": <n0struct.n0dict  1> { "node": <n0struct.n0list  1> [ #0   <n0struct.n0dict  1> { "value": <n0struct.n0dict  0> {  } } ] }
+    "moreone": <n0struct..n0dict 1> { "node": <n0struct..n0list 1> [ #0   <n0struct..n0dict 1> { "value": <n0struct..n0dict 0> {  } } ] }
 }
- DEBUG    | __main__:main:147 | dict1 == <n0struct.n0dict  2> {
-    "C": <n0struct.n0list  3> [
-        #0   <n0struct.n0dict  5> {
+ DEBUG    | __main__:main:147 | dict1 == <n0struct..n0dict 2> {
+    "C": <n0struct..n0list 3> [
+        #0   <n0struct..n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        #1   <n0struct.n0dict  5> {
+        #1   <n0struct..n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        #2   <n0struct.n0dict  5> {
+        #2   <n0struct..n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -403,30 +403,30 @@
             "value2": 6
         }
     ],
-    "moreone": <n0struct.n0dict  1> {
-        "node": <n0struct.n0list  2> [
-            #0   <n0struct.n0dict  1> { "value": <n0struct.n0dict  0> {  } },
-            #1   <n0struct.n0dict  1> { "value": None }
+    "moreone": <n0struct..n0dict 1> {
+        "node": <n0struct..n0list 2> [
+            #0   <n0struct..n0dict 1> { "value": <n0struct..n0dict 0> {  } },
+            #1   <n0struct..n0dict 1> { "value": None }
         ]
     }
 }
- DEBUG    | __main__:main:150 | dict1 == <n0struct.n0dict  2> {
-    "C": <n0struct.n0list  3> [
-        #0   <n0struct.n0dict  5> {
+ DEBUG    | __main__:main:150 | dict1 == <n0struct..n0dict 2> {
+    "C": <n0struct..n0list 3> [
+        #0   <n0struct..n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        #1   <n0struct.n0dict  5> {
+        #1   <n0struct..n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        #2   <n0struct.n0dict  5> {
+        #2   <n0struct..n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -434,31 +434,31 @@
             "value2": 6
         }
     ],
-    "moreone": <n0struct.n0dict  1> {
-        "node": <n0struct.n0list  3> [
-            #0   <n0struct.n0dict  1> { "value": <n0struct.n0dict  0> {  } },
-            #1   <n0struct.n0dict  1> { "value": None },
-            #2   <n0struct.n0dict  1> { "value": "" }
+    "moreone": <n0struct..n0dict 1> {
+        "node": <n0struct..n0list 3> [
+            #0   <n0struct..n0dict 1> { "value": <n0struct..n0dict 0> {  } },
+            #1   <n0struct..n0dict 1> { "value": None },
+            #2   <n0struct..n0dict 1> { "value": "" }
         ]
     }
 }
- DEBUG    | __main__:main:152 | dict1 == <n0struct.n0dict  2> {
-    "C": <n0struct.n0list  3> [
-        #0   <n0struct.n0dict  5> {
+ DEBUG    | __main__:main:152 | dict1 == <n0struct..n0dict 2> {
+    "C": <n0struct..n0list 3> [
+        #0   <n0struct..n0dict 5> {
             "a": 1,
             "b": 2,
             "c": 3,
             "value1": 1,
             "value2": 4
         },
-        #1   <n0struct.n0dict  5> {
+        #1   <n0struct..n0dict 5> {
             "a": 4,
             "b": 5,
             "c": 6,
             "value1": 2,
             "value2": 5
         },
-        #2   <n0struct.n0dict  5> {
+        #2   <n0struct..n0dict 5> {
             "a": 7,
             "b": 8,
             "c": 9,
@@ -466,12 +466,12 @@
             "value2": 6
         }
     ],
-    "moreone": <n0struct.n0dict  1> {
-        "node": <n0struct.n0list  4> [
-            #0   <n0struct.n0dict  1> { "value": <n0struct.n0dict  0> {  } },
-            #1   <n0struct.n0dict  1> { "value": None },
-            #2   <n0struct.n0dict  1> { "value": "" },
-            #3   <n0struct.n0dict  1> { "value": 1 }
+    "moreone": <n0struct..n0dict 1> {
+        "node": <n0struct..n0list 4> [
+            #0   <n0struct..n0dict 1> { "value": <n0struct..n0dict 0> {  } },
+            #1   <n0struct..n0dict 1> { "value": None },
+            #2   <n0struct..n0dict 1> { "value": "" },
+            #3   <n0struct..n0dict 1> { "value": 1 }
         ]
     }
 }
@@ -554,216 +554,216 @@
  INFO     | __main__:main:199 | 7
  INFO     | __main__:main:202 | 
  INFO     | __main__:main:205 | 
- DEBUG    | __main__:main:237 | dict_from_json_default == <n0struct.n0dict  1> {
-    "root": <n0struct.n0dict  3> {
+ DEBUG    | __main__:main:237 | dict_from_json_default == <n0struct..n0dict 1> {
+    "root": <n0struct..n0dict 3> {
         "a": 1.0,
-        "b": <n0struct.n0dict  2> {
+        "b": <n0struct..n0dict 2> {
             "c": 2,
-            "d": <n0struct.n0dict  3> {
-                "e": <n0struct.n0dict  1> { "f": 3 },
-                "g": <list  2> [
+            "d": <n0struct..n0dict 3> {
+                "e": <n0struct..n0dict 1> { "f": 3 },
+                "g": <list 2> [
                     #0   "4",
-                    #1   <n0struct.n0dict  1> { "h": 5 }
+                    #1   <n0struct..n0dict 1> { "h": 5 }
                 ],
-                "i": <list  1> [ { "j": 6 } ]
+                "i": <list 1> [ #0   <n0struct..n0dict 1> { "j": 6 } ]
             }
         },
-        "k": <list  2> [
+        "k": <list 2> [
             #0   7,
             #1   8
         ]
     }
 }
- DEBUG    | __main__:main:257 | dict_from_json_force_n0dict == <n0struct.n0dict  2> {
-    "root": <n0struct.n0dict  3> {
+ DEBUG    | __main__:main:257 | dict_from_json_force_n0dict == <n0struct..n0dict 2> {
+    "root": <n0struct..n0dict 3> {
         "a": 1.0,
-        "b": <n0struct.n0dict  2> {
+        "b": <n0struct..n0dict 2> {
             "c": 2,
-            "d": <n0struct.n0dict  3> {
-                "e": <n0struct.n0dict  1> { "f": 3 },
-                "g": <list  2> [
+            "d": <n0struct..n0dict 3> {
+                "e": <n0struct..n0dict 1> { "f": 3 },
+                "g": <list 2> [
                     #0   "4",
-                    #1   <n0struct.n0dict  1> { "h": 5 }
+                    #1   <n0struct..n0dict 1> { "h": 5 }
                 ],
-                "i": <list  1> [ { "j": 6 } ]
+                "i": <list 1> [ #0   <n0struct..n0dict 1> { "j": 6 } ]
             }
         },
-        "k": <list  2> [
+        "k": <list 2> [
             #0   7,
             #1   8
         ]
     },
     "force_n0dict": True
 }
- DEBUG    | __main__:main:277 | dict_from_json_recursevely == <n0struct.n0dict  1> {
-    "root": <n0struct.n0dict  3> {
+ DEBUG    | __main__:main:277 | dict_from_json_recursevely == <n0struct..n0dict 1> {
+    "root": <n0struct..n0dict 3> {
         "a": 1.0,
-        "b": <n0struct.n0dict  2> {
+        "b": <n0struct..n0dict 2> {
             "c": 2,
-            "d": <n0struct.n0dict  3> {
-                "e": <n0struct.n0dict  1> { "f": 3 },
-                "g": <n0struct.n0list  2> [
+            "d": <n0struct..n0dict 3> {
+                "e": <n0struct..n0dict 1> { "f": 3 },
+                "g": <n0struct..n0list 2> [
                     #0   "4",
-                    #1   <n0struct.n0dict  1> { "h": 5 }
+                    #1   <n0struct..n0dict 1> { "h": 5 }
                 ],
-                "i": <n0struct.n0list  1> [ { "j": 6 } ]
+                "i": <n0struct..n0list 1> [ #0   <n0struct..n0dict 1> { "j": 6 } ]
             }
         },
-        "k": <n0struct.n0list  2> [
+        "k": <n0struct..n0list 2> [
             #0   7,
             #1   8
         ]
     }
 }
- DEBUG    | __main__:main:297 | dict_from_json_recursevely_force_n0dict == <n0struct.n0dict  1> {
-    "root": <n0struct.n0dict  3> {
+ DEBUG    | __main__:main:297 | dict_from_json_recursevely_force_n0dict == <n0struct..n0dict 1> {
+    "root": <n0struct..n0dict 3> {
         "a": 1.0,
-        "b": <n0struct.n0dict  2> {
+        "b": <n0struct..n0dict 2> {
             "c": 2,
-            "d": <n0struct.n0dict  3> {
-                "e": <n0struct.n0dict  1> { "f": 3 },
-                "g": <n0struct.n0list  2> [
+            "d": <n0struct..n0dict 3> {
+                "e": <n0struct..n0dict 1> { "f": 3 },
+                "g": <n0struct..n0list 2> [
                     #0   "4",
-                    #1   <n0struct.n0dict  1> { "h": 5 }
+                    #1   <n0struct..n0dict 1> { "h": 5 }
                 ],
-                "i": <n0struct.n0list  1> [ { "j": 6 } ]
+                "i": <n0struct..n0list 1> [ #0   <n0struct..n0dict 1> { "j": 6 } ]
             }
         },
-        "k": <n0struct.n0list  2> [
+        "k": <n0struct..n0list 2> [
             #0   7,
             #1   8
         ]
     }
 }
- DEBUG    | __main__:main:341 | dict_from_xml_default == <n0struct.n0dict  1> {
-    "root": <n0struct.n0dict  3> {
+ DEBUG    | __main__:main:341 | dict_from_xml_default == <n0struct..n0dict 1> {
+    "root": <n0struct..n0dict 3> {
         "a": "1",
-        "b": <n0struct.n0dict  2> {
+        "b": <n0struct..n0dict 2> {
             "c": "2",
-            "d": <n0struct.n0dict  3> {
-                "e": <n0struct.n0dict  1> { "f": "3" },
-                "g": <list  2> [
+            "d": <n0struct..n0dict 3> {
+                "e": <n0struct..n0dict 1> { "f": "3" },
+                "g": <list 2> [
                     #0   "4",
-                    #1   <n0struct.n0dict  1> { "h": "5" }
+                    #1   <n0struct..n0dict 1> { "h": "5" }
                 ],
-                "i": <n0struct.n0dict  1> { "j": "6" }
+                "i": <n0struct..n0dict 1> { "j": "6" }
             }
         },
-        "k": <list  2> [
+        "k": <list 2> [
             #0   "7",
             #1   "8"
         ]
     }
 }
- DEBUG    | __main__:main:362 | dict_from_xml_force_n0dict == <n0struct.n0dict  2> {
-    "root": <n0struct.n0dict  3> {
+ DEBUG    | __main__:main:362 | dict_from_xml_force_n0dict == <n0struct..n0dict 2> {
+    "root": <n0struct..n0dict 3> {
         "a": "1",
-        "b": <n0struct.n0dict  2> {
+        "b": <n0struct..n0dict 2> {
             "c": "2",
-            "d": <n0struct.n0dict  3> {
-                "e": <n0struct.n0dict  1> { "f": "3" },
-                "g": <list  2> [
+            "d": <n0struct..n0dict 3> {
+                "e": <n0struct..n0dict 1> { "f": "3" },
+                "g": <list 2> [
                     #0   "4",
-                    #1   <n0struct.n0dict  1> { "h": "5" }
+                    #1   <n0struct..n0dict 1> { "h": "5" }
                 ],
-                "i": <n0struct.n0dict  1> { "j": "6" }
+                "i": <n0struct..n0dict 1> { "j": "6" }
             }
         },
-        "k": <list  2> [
+        "k": <list 2> [
             #0   "7",
             #1   "8"
         ]
     },
     "force_n0dict": True
 }
- DEBUG    | __main__:main:382 | dict_from_xml_recursevely == <n0struct.n0dict  1> {
-    "root": <n0struct.n0dict  3> {
+ DEBUG    | __main__:main:382 | dict_from_xml_recursevely == <n0struct..n0dict 1> {
+    "root": <n0struct..n0dict 3> {
         "a": "1",
-        "b": <n0struct.n0dict  2> {
+        "b": <n0struct..n0dict 2> {
             "c": "2",
-            "d": <n0struct.n0dict  3> {
-                "e": <n0struct.n0dict  1> { "f": "3" },
-                "g": <n0struct.n0list  2> [
+            "d": <n0struct..n0dict 3> {
+                "e": <n0struct..n0dict 1> { "f": "3" },
+                "g": <n0struct..n0list 2> [
                     #0   "4",
-                    #1   <n0struct.n0dict  1> { "h": "5" }
+                    #1   <n0struct..n0dict 1> { "h": "5" }
                 ],
-                "i": <n0struct.n0dict  1> { "j": "6" }
+                "i": <n0struct..n0dict 1> { "j": "6" }
             }
         },
-        "k": <n0struct.n0list  2> [
+        "k": <n0struct..n0list 2> [
             #0   "7",
             #1   "8"
         ]
     }
 }
- DEBUG    | __main__:main:402 | dict_from_xml_recursevely_force_n0dict == <n0struct.n0dict  1> {
-    "root": <n0struct.n0dict  3> {
+ DEBUG    | __main__:main:402 | dict_from_xml_recursevely_force_n0dict == <n0struct..n0dict 1> {
+    "root": <n0struct..n0dict 3> {
         "a": "1",
-        "b": <n0struct.n0dict  2> {
+        "b": <n0struct..n0dict 2> {
             "c": "2",
-            "d": <n0struct.n0dict  3> {
-                "e": <n0struct.n0dict  1> { "f": "3" },
-                "g": <n0struct.n0list  2> [
+            "d": <n0struct..n0dict 3> {
+                "e": <n0struct..n0dict 1> { "f": "3" },
+                "g": <n0struct..n0list 2> [
                     #0   "4",
-                    #1   <n0struct.n0dict  1> { "h": "5" }
+                    #1   <n0struct..n0dict 1> { "h": "5" }
                 ],
-                "i": <n0struct.n0dict  1> { "j": "6" }
+                "i": <n0struct..n0dict 1> { "j": "6" }
             }
         },
-        "k": <n0struct.n0list  2> [
+        "k": <n0struct..n0list 2> [
             #0   "7",
             #1   "8"
         ]
     }
 }
- DEBUG    | __main__:main:423 | dict_from_xml_empty == <n0struct.n0dict  1> { "root": None }
- DEBUG    | __main__:main:439 | dict4 == <n0struct.n0dict  2> {
+ DEBUG    | __main__:main:423 | dict_from_xml_empty == <n0struct..n0dict 1> { "root": None }
+ DEBUG    | __main__:main:439 | dict4 == <n0struct..n0dict 2> {
     "a": 1,
-    "b": <n0struct.n0dict  2> {
+    "b": <n0struct..n0dict 2> {
         "c": 2,
-        "d": <n0struct.n0dict  1> { "e": 3 }
+        "d": <n0struct..n0dict 1> { "e": 3 }
     }
 }
- DEBUG    | __main__:main:451 | dict4 == <n0struct.n0dict  1> { "a": 1 }
- DEBUG    | __main__:main:464 | dict5 == <n0struct.n0dict  1> { "a": <dict  1> { "b": <dict  1> { "c": <dict  1> { "d": 4 } } } }
- DEBUG    | __main__:main:466 | dict5 == <n0struct.n0dict  1> { "a": <dict  1> { "b": <dict  1> { "c": <dict  0> {  } } } }
- DEBUG    | __main__:main:495 | dict6 == <n0struct.n0dict  1> {
-    "Root": <dict  2> {
-        "Node1": <dict  2> {
-            "Subnode1_1": <list  2> [
-                { "tag": "PARAM1", "value": "VALUE1 from subnode1_1" },
-                { "tag": "PARAM2", "value": "VALUE2 from subnode1_1" }
+ DEBUG    | __main__:main:451 | dict4 == <n0struct..n0dict 1> { "a": 1 }
+ DEBUG    | __main__:main:464 | dict5 == <n0struct..n0dict 1> { "a": <dict 1> { "b": <dict 1> { "c": <dict 1> { "d": 4 } } } }
+ DEBUG    | __main__:main:466 | dict5 == <n0struct..n0dict 1> { "a": <dict 1> { "b": <dict 1> { "c": <dict 0> {  } } } }
+ DEBUG    | __main__:main:495 | dict6 == <n0struct..n0dict 1> {
+    "Root": <dict 2> {
+        "Node1": <dict 2> {
+            "Subnode1_1": <list 2> [
+                {"tag": "PARAM1", "value": "VALUE1 from subn1_1"   },
+                {"tag": "PARM2" , "value": "VALUE2 from subnode1_1"}
             ],
-            "Subnode1_2": <list  2> [
-                { "tag": "PARAM1", "value": "VALUE1 from subnode1_2" },
-                { "tag": "PARAM2", "value": "VALUE2 from subnode1_2" }
+            "Subnode1_2": <list 2> [
+                {"tag": "PARAM1", "value": "VALUE1 from subnode1_2"},
+                {"tag": "PARAM2", "value": "VALUE2 from subnode1_2"}
             ]
         },
-        "Node2": <dict  2> {
-            "Subnode2_1": <list  2> [
-                { "tag": "PARAM1", "value": "VALUE1 from subnode2_1" },
-                { "tag": "PARAM2", "value": "VALUE2 from subnode2_1" }
+        "Node2": <dict 2> {
+            "Subnode2_1": <list 2> [
+                {"tag": "PARAM1", "value": "VALUE1 from subnode2_1"},
+                {"tag": "PARAM2", "value": "VALUE2 from subnode2_1"}
             ],
-            "Subnode2_2": <list  2> [
-                { "tag": "PARAM1", "value": "VALUE1 from subnode2_2" },
-                { "tag": "PARAM2", "value": "VALUE2 from subnode2_2" }
+            "Subnode2_2": <list 2> [
+                {"tag": "PARAM1", "value": "VALUE1 from subnode2_2"},
+                {"tag": "PARAM2", "value": "VALUE2 from subnode2_2"}
             ]
         }
     }
 }
- DEBUG    | __main__:main:496 | <dict  1> {
-    "//Root/Node1": <dict  2> {
-        "Subnode1_1": <list  2> [
-            { "tag": "PARAM1", "value": "VALUE1 from subnode1_1" },
-            { "tag": "PARAM2", "value": "VALUE2 from subnode1_1" }
+ DEBUG    | __main__:main:496 | <dict 1> {
+    "//Root/Node1": <dict 2> {
+        "Subnode1_1": <list 2> [
+            {"tag": "PARAM1", "value": "VALUE1 from subn1_1"   },
+            {"tag": "PARM2" , "value": "VALUE2 from subnode1_1"}
         ],
-        "Subnode1_2": <list  2> [
-            { "tag": "PARAM1", "value": "VALUE1 from subnode1_2" },
-            { "tag": "PARAM2", "value": "VALUE2 from subnode1_2" }
+        "Subnode1_2": <list 2> [
+            {"tag": "PARAM1", "value": "VALUE1 from subnode1_2"},
+            {"tag": "PARAM2", "value": "VALUE2 from subnode1_2"}
         ]
     }
 }
- DEBUG    | __main__:main:497 | <dict  1> { "//Root/Node2/Subnode2_1[0]/value": "VALUE1 from subnode2_1" }
+ DEBUG    | __main__:main:497 | <dict 1> { "//Root/Node2/Subnode2_1[0]/value": "VALUE1 from subnode2_1" }
  INFO     | __main__:main:523 | 
 ['//Root/Nodes[0][0]/tag']   = "PARAM1"
 ['//Root/Nodes[0][0]/value'] = "VALUE1 from subnode0_0"
@@ -782,7 +782,7 @@
 ['//Root/Nodes[3][1]/tag']   = "PARAM2"
 ['//Root/Nodes[3][1]/value'] = "VALUE2 from subnode3_1"
 
- DEBUG    | __main__:main:525 | "//Root/Nodes/tag[text()==PARAM1]/../value" == <dict  4> {
+ DEBUG    | __main__:main:525 | "//Root/Nodes/tag[text()==PARAM1]/../value" == <dict 4> {
     "//Root/Nodes[0][0]/value": "VALUE1 from subnode0_0",
     "//Root/Nodes[1][0]/value": "VALUE1 from subnode1_0",
     "//Root/Nodes[2][0]/value": "VALUE1 from subnode2_0",
@@ -790,26 +790,26 @@
 }
  INFO     | __main__:<module>:531 | Mission acomplished
  DEBUG    | __main__:test_deserialization:30 | serialized_list == "1;2;3"
- DEBUG    | __main__:test_deserialization:32 | deserialized_list == [
+ DEBUG    | __main__:test_deserialization:32 | deserialized_list == <list 3> [
     #0   "1",
     #1   "2",
     #2   "3"
 ]
  DEBUG    | __main__:test_deserialization:36 | serialized_list == "1,2,3"
- DEBUG    | __main__:test_deserialization:38 | deserialized_list == [
+ DEBUG    | __main__:test_deserialization:38 | deserialized_list == <list 3> [
     #0   "1",
     #1   "2",
     #2   "3"
 ]
  DEBUG    | __main__:test_deserialization:42 | serialized_list == "1;2;3"
- DEBUG    | __main__:test_deserialization:44 | deserialized_list == [
+ DEBUG    | __main__:test_deserialization:44 | deserialized_list == <list 4> [
     #0   "1",
     #1   "2",
     #2   "3",
     #3   "444"
 ]
  DEBUG    | __main__:test_deserialization:49 | serialized_dict == "a=1;b=2;c=3"
- DEBUG    | __main__:test_deserialization:51 | deserialized_dict == {
+ DEBUG    | __main__:test_deserialization:51 | deserialized_dict == <dict 3> {
     "a": "1",
     "b": "2",
     "c": "3"
@@ -817,68 +817,68 @@
  DEBUG    | __main__:test_deserialization:54 | serialized_dict == "a=1;b=2;c=3"
  DEBUG    | __main__:test_deserialization:55 | get_value_by_tag("b", serialized_dict) == "2"
  DEBUG    | __main__:test_deserialization:60 | serialized_list_of_lists == "a1,a2,a3;b1,b2,b3;c1,c2,c3"
- DEBUG    | __main__:test_deserialization:62 | deserialized_list_of_lists == [
-    #0   [
+ DEBUG    | __main__:test_deserialization:62 | deserialized_list_of_lists == <list 3> [
+    #0   <list 3> [
         #0   "a1",
         #1   "a2",
         #2   "a3"
     ],
-    #1   [
+    #1   <list 3> [
         #0   "b1",
         #1   "b2",
         #2   "b3"
     ],
-    #2   [
+    #2   <list 3> [
         #0   "c1",
         #1   "c2",
         #2   "c3"
     ]
 ]
  INFO     | __main__:<module>:72 | Mission acomplished
- DEBUG    | __main__:test_files_processing:23 | test_ini_path == "C:\REPO\n0struct\n0struct\test\test.ini"
- DEBUG    | __main__:test_files_processing:26 | test_ini == { "KEY1": "VALUE1", "KEY3": "VALUE3" }
- DEBUG    | __main__:test_files_processing:33 | test_ini(after save) == { "KEY1": "VALUE1", "KEY3": "VALUE3" }
+ DEBUG    | __main__:test_files_processing:23 | test_ini_path == "C:\\REPO\\n0struct\\n0struct\\test\\test.ini"
+ DEBUG    | __main__:test_files_processing:26 | test_ini == <dict 2> { "KEY1": "VALUE1", "KEY3": "VALUE3" }
+ DEBUG    | __main__:test_files_processing:33 | test_ini(after save) == <dict 2> { "KEY1": "VALUE1", "KEY3": "VALUE3" }
  DEBUG    | __main__:test_files_processing:86 | CRLF                    read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
  DEBUG    | __main__:test_files_processing:87 | CRLF                    read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6\r\n'
- DEBUG    | __main__:test_files_processing:88 | CRLFlines               read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:88 | CRLFlines               read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:89 | CRLFlines               read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:89 | CRLFlines               read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:90 | CRLFcsv                 read_mode='t' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:90 | CRLFcsv                 read_mode='t' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
         2: "C"
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: "1",
         1: "2",
         2: "3"
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: "4",
         1: "5",
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:91 | CRLFcsv                 read_mode='b' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:91 | CRLFcsv                 read_mode='b' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
         2: b'C'
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: b'1',
         1: b'2',
         2: b'3'
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: b'4',
         1: b'5',
         2: b'6'
@@ -886,45 +886,45 @@
 ]
  DEBUG    | __main__:test_files_processing:93 | CRLF(wo last CRLF)      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
  DEBUG    | __main__:test_files_processing:94 | CRLF(wo last CRLF)      read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6'
- DEBUG    | __main__:test_files_processing:95 | CRLF(wo last CRLF)lines read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:95 | CRLF(wo last CRLF)lines read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:96 | CRLF(wo last CRLF)lines read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:96 | CRLF(wo last CRLF)lines read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:97 | CRLF(wo last CRLF)csv   read_mode='t' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:97 | CRLF(wo last CRLF)csv   read_mode='t' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
         2: "C"
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: "1",
         1: "2",
         2: "3"
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: "4",
         1: "5",
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:98 | CRLF(wo last CRLF)csv   read_mode='b' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:98 | CRLF(wo last CRLF)csv   read_mode='b' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
         2: b'C'
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: b'1',
         1: b'2',
         2: b'3'
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: b'4',
         1: b'5',
         2: b'6'
@@ -932,45 +932,45 @@
 ]
  DEBUG    | __main__:test_files_processing:100 | LF                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
  DEBUG    | __main__:test_files_processing:101 | LF                      read_mode='b' == b'A,B,C\n1,2,3\n4,5,6\n'
- DEBUG    | __main__:test_files_processing:102 | LFlines                 read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:102 | LFlines                 read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:103 | LFlines                 read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:103 | LFlines                 read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:104 | LFcsv                   read_mode='t' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:104 | LFcsv                   read_mode='t' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
         2: "C"
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: "1",
         1: "2",
         2: "3"
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: "4",
         1: "5",
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:105 | LFcsv                   read_mode='b' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:105 | LFcsv                   read_mode='b' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
         2: b'C'
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: b'1',
         1: b'2',
         2: b'3'
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: b'4',
         1: b'5',
         2: b'6'
@@ -978,45 +978,45 @@
 ]
  DEBUG    | __main__:test_files_processing:107 | LF(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
  DEBUG    | __main__:test_files_processing:108 | LF(wo last CRLF)        read_mode='b' == b'A,B,C\n1,2,3\n4,5,6'
- DEBUG    | __main__:test_files_processing:109 | LF(wo last CRLF)lines   read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:109 | LF(wo last CRLF)lines   read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:110 | LF(wo last CRLF)lines   read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:110 | LF(wo last CRLF)lines   read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:111 | LF(wo last CRLF)csv     read_mode='t' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:111 | LF(wo last CRLF)csv     read_mode='t' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
         2: "C"
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: "1",
         1: "2",
         2: "3"
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: "4",
         1: "5",
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:112 | LF(wo last CRLF)csv     read_mode='b' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:112 | LF(wo last CRLF)csv     read_mode='b' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
         2: b'C'
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: b'1',
         1: b'2',
         2: b'3'
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: b'4',
         1: b'5',
         2: b'6'
@@ -1024,35 +1024,35 @@
 ]
  DEBUG    | __main__:test_files_processing:114 | CR                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
  DEBUG    | __main__:test_files_processing:115 | CR                      read_mode='b' == b'A,B,C\r1,2,3\r4,5,6\r'
- DEBUG    | __main__:test_files_processing:116 | CRlines                 read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:116 | CRlines                 read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:117 | CRlines                 read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:117 | CRlines                 read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:118 | CRcsv                   read_mode='t' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:118 | CRcsv                   read_mode='t' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
         2: "C"
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: "1",
         1: "2",
         2: "3"
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: "4",
         1: "5",
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:119 | CRcsv                   read_mode='b' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:119 | CRcsv                   read_mode='b' == <list 1> [
+    #0   <n0struct..n0dict 7> {
         0: b'A',
         1: b'B',
         2: b'C\r1',
@@ -1062,8 +1062,8 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:120 | CRcsv                   read_mode='b' EOL='\r' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:120 | CRcsv                   read_mode='b' EOL='\r' == <list 1> [
+    #0   <n0struct..n0dict 7> {
         0: b'A',
         1: b'B',
         2: b'C\r1',
@@ -1075,35 +1075,35 @@
 ]
  DEBUG    | __main__:test_files_processing:122 | CR(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
  DEBUG    | __main__:test_files_processing:123 | CR(wo last CRLF)        read_mode='b' == b'A,B,C\r1,2,3\r4,5,6'
- DEBUG    | __main__:test_files_processing:124 | CR(wo last CRLF)lines   read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:124 | CR(wo last CRLF)lines   read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:125 | CR(wo last CRLF)lines   read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:125 | CR(wo last CRLF)lines   read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:126 | CR(wo last CRLF)csv     read_mode='t' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:126 | CR(wo last CRLF)csv     read_mode='t' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
         2: "C"
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: "1",
         1: "2",
         2: "3"
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: "4",
         1: "5",
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:127 | CR(wo last CRLF)csv     read_mode='b' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:127 | CR(wo last CRLF)csv     read_mode='b' == <list 1> [
+    #0   <n0struct..n0dict 7> {
         0: b'A',
         1: b'B',
         2: b'C\r1',
@@ -1113,8 +1113,8 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:128 | CR(wo last CRLF)csv     read_mode='b' EOL='\r' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:128 | CR(wo last CRLF)csv     read_mode='b' EOL='\r' == <list 1> [
+    #0   <n0struct..n0dict 7> {
         0: b'A',
         1: b'B',
         2: b'C\r1',
@@ -1126,7 +1126,7 @@
 ]
  DEBUG    | __main__:test_files_processing:130 | LFCR                    read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6\n\n'
  DEBUG    | __main__:test_files_processing:131 | LFCR                    read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6\n\r'
- DEBUG    | __main__:test_files_processing:132 | LFCRlines               read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:132 | LFCRlines               read_mode='t' == <list 6> [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
@@ -1134,7 +1134,7 @@
     #4   "4,5,6",
     #5   ""
 ]
- DEBUG    | __main__:test_files_processing:133 | LFCRlines               read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:133 | LFCRlines               read_mode='b' == <list 6> [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
@@ -1142,52 +1142,52 @@
     #4   "4,5,6",
     #5   ""
 ]
- DEBUG    | __main__:test_files_processing:134 | LFCRcsv                 read_mode='t' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:134 | LFCRcsv                 read_mode='t' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
         2: "C"
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: "1",
         1: "2",
         2: "3"
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: "4",
         1: "5",
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:135 | LFCRcsv                 read_mode='b' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:135 | LFCRcsv                 read_mode='b' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
         2: b'C'
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: b'\r1',
         1: b'2',
         2: b'3'
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: b'\r4',
         1: b'5',
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:136 | LFCRcsv                 read_mode='b' EOL='\n\r' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:136 | LFCRcsv                 read_mode='b' EOL='\n\r' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
         2: b'C'
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: b'\r1',
         1: b'2',
         2: b'3'
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: b'\r4',
         1: b'5',
         2: b'6'
@@ -1195,73 +1195,73 @@
 ]
  DEBUG    | __main__:test_files_processing:138 | LFCR(wo last CRLF)      read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6'
  DEBUG    | __main__:test_files_processing:139 | LFCR(wo last CRLF)      read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6'
- DEBUG    | __main__:test_files_processing:140 | LFCR(wo last CRLF)lines read_mode='t' == [
+ DEBUG    | __main__:test_files_processing:140 | LFCR(wo last CRLF)lines read_mode='t' == <list 5> [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
     #3   "",
     #4   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:141 | LFCR(wo last CRLF)lines read_mode='b' == [
+ DEBUG    | __main__:test_files_processing:141 | LFCR(wo last CRLF)lines read_mode='b' == <list 5> [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
     #3   "",
     #4   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:142 | LFCR(wo last CRLF)csv   read_mode='t' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:142 | LFCR(wo last CRLF)csv   read_mode='t' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
         2: "C"
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: "1",
         1: "2",
         2: "3"
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: "4",
         1: "5",
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:143 | LFCR(wo last CRLF)csv   read_mode='b' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:143 | LFCR(wo last CRLF)csv   read_mode='b' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
         2: b'C'
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: b'\r1',
         1: b'2',
         2: b'3'
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: b'\r4',
         1: b'5',
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:144 | LFCR(wo last CRLF)csv   read_mode='b' EOL='\n\r' == [
-    #0   {
+ DEBUG    | __main__:test_files_processing:144 | LFCR(wo last CRLF)csv   read_mode='b' EOL='\n\r' == <list 3> [
+    #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
         2: b'C'
     },
-    #1   {
+    #1   <n0struct..n0dict 3> {
         0: b'\r1',
         1: b'2',
         2: b'3'
     },
-    #2   {
+    #2   <n0struct..n0dict 3> {
         0: b'\r4',
         1: b'5',
         2: b'6'
     }
 ]
  INFO     | __main__:<module>:162 | Mission acomplished
- DEBUG    | __main__:test_n0dict:27 | to_xpath_result == "['//C[0]/a']      = \"1\"
+ DEBUG    | __main__:test_n0dict:27 | to_xpath_result == """['//C[0]/a']      = \"1\"
 ['//C[0]/b']      = \"2\"
 ['//C[0]/c']      = \"3\"
 ['//C[0]/value1'] = \"1\"
@@ -1276,8 +1276,8 @@
 ['//C[2]/c']      = \"9\"
 ['//C[2]/value1'] = \"3\"
 ['//C[2]/value2'] = \"6\"
-"
- DEBUG    | __main__:test_n0dict:45 | to_xpath_expected_result == "['//C[0]/a']      = \"1\"
+"""
+ DEBUG    | __main__:test_n0dict:45 | to_xpath_expected_result == """['//C[0]/a']      = \"1\"
 ['//C[0]/b']      = \"2\"
 ['//C[0]/c']      = \"3\"
 ['//C[0]/value1'] = \"1\"
@@ -1292,87 +1292,87 @@
 ['//C[2]/c']      = \"9\"
 ['//C[2]/value1'] = \"3\"
 ['//C[2]/value2'] = \"6\"
-"
+"""
  INFO     | __main__:<module>:56 | Mission acomplished
- DEBUG    | __main__:test_n0struct_arrays:34 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:34 | result == <tuple 2> (
     #0   "",
     #1   ""
 )
- DEBUG    | __main__:test_n0struct_arrays:38 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:38 | result == <tuple 2> (
     #0   "default_left",
     #1   "default_right"
 )
- DEBUG    | __main__:test_n0struct_arrays:42 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:42 | result == <tuple 2> (
     #0   "",
     #1   ""
 )
- DEBUG    | __main__:test_n0struct_arrays:46 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:46 | result == <tuple 2> (
     #0   "tag",
     #1   "value"
 )
- DEBUG    | __main__:test_n0struct_arrays:50 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:50 | result == <tuple 2> (
     #0   "",
     #1   "www.aaa.com"
 )
- DEBUG    | __main__:test_n0struct_arrays:54 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:54 | result == <tuple 2> (
     #0   "https",
     #1   "www.aaa.com"
 )
- DEBUG    | __main__:test_n0struct_arrays:58 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:58 | result == <tuple 2> (
     #0   "",
     #1   "www.aaa.com"
 )
- DEBUG    | __main__:test_n0struct_arrays:62 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:62 | result == <tuple 2> (
     #0   "www.aaa.com",
     #1   ""
 )
- DEBUG    | __main__:test_n0struct_arrays:66 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:66 | result == <tuple 2> (
     #0   "www.aaa.com",
     #1   "path/"
 )
- DEBUG    | __main__:test_n0struct_arrays:81 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:81 | result == <tuple 2> (
     #0   "",
     #1   "tag=value"
 )
- DEBUG    | __main__:test_n0struct_arrays:85 | result == (
+ DEBUG    | __main__:test_n0struct_arrays:85 | result == <tuple 2> (
     #0   "tag=value",
     #1   ""
 )
  INFO     | __main__:<module>:95 | Mission acomplished
  DEBUG    | __main__:test_split_with_escape:18 | buffer_str == "AAAA1;BBBB2;CCCC3;DDDD4"
- DEBUG    | __main__:test_split_with_escape:19 | result == [
+ DEBUG    | __main__:test_split_with_escape:19 | result == <list 4> [
     #0   "AAAA1",
     #1   "BBBB2",
     #2   "CCCC3",
     #3   "DDDD4"
 ]
- DEBUG    | __main__:test_split_with_escape:20 | expected_result == [
+ DEBUG    | __main__:test_split_with_escape:20 | expected_result == <list 4> [
     #0   "AAAA1",
     #1   "BBBB2",
     #2   "CCCC3",
     #3   "DDDD4"
 ]
- DEBUG    | __main__:test_split_with_escape:23 | buffer_str == "\\AA\AA1\;\\BB\BB2;\CC\\CC3\\;DD\DD4\\"
- DEBUG    | __main__:test_split_with_escape:24 | result == [
-    #0   "\\AA\AA1;\\BB\BB2",
-    #1   "\CC\\CC3\",
-    #2   "DD\DD4\"
+ DEBUG    | __main__:test_split_with_escape:23 | buffer_str == "\\\\AA\\AA1\\;\\\\BB\\BB2;\\CC\\\\CC3\\\\;DD\\DD4\\\\"
+ DEBUG    | __main__:test_split_with_escape:24 | result == <list 3> [
+    #0   "\\\\AA\\AA1;\\\\BB\\BB2",
+    #1   "\\CC\\\\CC3\\",
+    #2   "DD\\DD4\\"
 ]
- DEBUG    | __main__:test_split_with_escape:25 | expected_result == [
-    #0   "\\AA\AA1;\\BB\BB2",
-    #1   "\CC\\CC3\",
-    #2   "DD\DD4\"
+ DEBUG    | __main__:test_split_with_escape:25 | expected_result == <list 3> [
+    #0   "\\\\AA\\AA1;\\\\BB\\BB2",
+    #1   "\\CC\\\\CC3\\",
+    #2   "DD\\DD4\\"
 ]
- DEBUG    | __main__:test_split_with_escape:28 | buffer_str == "\\AA\AA1\;\\BB\BB2;\CC\\CC3\\;DD\DD4\\"
- DEBUG    | __main__:test_split_with_escape:29 | result == [
-    #0   "\\AA\AA1;\\BB\BB2",
-    #1   "\CC\\CC3\\",
-    #2   "DD\DD4\\"
+ DEBUG    | __main__:test_split_with_escape:28 | buffer_str == "\\\\AA\\AA1\\;\\\\BB\\BB2;\\CC\\\\CC3\\\\;DD\\DD4\\\\"
+ DEBUG    | __main__:test_split_with_escape:29 | result == <list 3> [
+    #0   "\\\\AA\\AA1;\\\\BB\\BB2",
+    #1   "\\CC\\\\CC3\\\\",
+    #2   "DD\\DD4\\\\"
 ]
- DEBUG    | __main__:test_split_with_escape:30 | expected_result == [
-    #0   "\\AA\AA1;\\BB\BB2",
-    #1   "\CC\\CC3\\",
-    #2   "DD\DD4\\"
+ DEBUG    | __main__:test_split_with_escape:30 | expected_result == <list 3> [
+    #0   "\\\\AA\\AA1;\\\\BB\\BB2",
+    #1   "\\CC\\\\CC3\\\\",
+    #2   "DD\\DD4\\\\"
 ]
  INFO     | __main__:<module>:41 | Mission acomplished
  INFO     | __main__:test_save_load_file:38 | ******* t OS_DEFAULT
@@ -1688,15 +1688,15 @@
  DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
  DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
  INFO     | __main__:<module>:178 | Mission acomplished
- INFO     | __main__:test_use_external_libraries:11 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
- DEBUG    | __main__:test_use_external_libraries:12 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
- ERROR    | __main__:test_use_external_libraries:13 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
- WARNING  | __main__:test_use_external_libraries:14 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
- INFO     | __main__:test_use_external_libraries:15 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ INFO     | __main__:test_use_external_libraries:11 | test_n0struct09.py
+ DEBUG    | __main__:test_use_external_libraries:12 | <pathlib.WindowsPath> test_n0struct09.py
+ ERROR    | __main__:test_use_external_libraries:13 | test_n0struct09.py
+ WARNING  | __main__:test_use_external_libraries:14 | test_n0struct09.py
+ INFO     | __main__:test_use_external_libraries:15 | test_n0struct09.py
  INFO     | __main__:<module>:25 | Mission acomplished
- DEBUG    | __main__:test_18_find_return_all_items:174 | item[*]/name[text()="Item 2"] == [
-    #0   (
-        #0   [
+ DEBUG    | __main__:test_18_find_return_all_items:174 | item[*]/name[text()="Item 2"] == <list 1> [
+    #0   <tuple 2> (
+        #0   <list 2> [
             #0   "item[1]",
             #1   "name"
         ],
@@ -1704,65 +1704,65 @@
     )
 ]
  DEBUG    | __main__:test_18_find_return_all_items:178 | item[*]/name[text()="Item 2"][0] == "Item 2"
- DEBUG    | __main__:test_18_find_return_all_items:183 | item[*]/name[text()="Item 2"]/.. == [
-    #0   (
-        #0   [ #0   "item[1]" ],
-        #1   [
-            #0   (
+ DEBUG    | __main__:test_18_find_return_all_items:183 | item[*]/name[text()="Item 2"]/.. == <list 1> [
+    #0   <tuple 2> (
+        #0   <list 1> [ #0   "item[1]" ],
+        #1   <list 1> [
+            #0   <tuple 2> (
                 #0   "name",
-                #1   {
+                #1   <dict 2> {
                     "value": "Item 2",
-                    "attrib": {  }
+                    "attrib": <dict 0> {  }
                 }
             )
         ]
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:187 | item[*]/name[text()="Item 2"]/..[0] == [
-    #0   (
+ DEBUG    | __main__:test_18_find_return_all_items:187 | item[*]/name[text()="Item 2"]/..[0] == <list 1> [
+    #0   <tuple 2> (
         #0   "name",
-        #1   {
+        #1   <dict 2> {
             "value": "Item 2",
-            "attrib": {  }
+            "attrib": <dict 0> {  }
         }
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:192 | find_first=item[*] == [
-    #0   (
-        #0   [ #0   "item[0]" ],
-        #1   [
-            #0   (
+ DEBUG    | __main__:test_18_find_return_all_items:192 | find_first=item[*] == <list 1> [
+    #0   <tuple 2> (
+        #0   <list 1> [ #0   "item[0]" ],
+        #1   <list 1> [
+            #0   <tuple 2> (
                 #0   "name",
-                #1   {
+                #1   <dict 2> {
                     "value": "Item 1",
-                    "attrib": {  }
+                    "attrib": <dict 0> {  }
                 }
             )
         ]
     )
 ]
  DEBUG    | __main__:test_18_find_return_all_items:195 | item[*][0] == "Item 1"
- DEBUG    | __main__:test_18_find_return_all_items:200 | item[*] == [
-    #0   (
-        #0   [ #0   "item[0]" ],
-        #1   [
-            #0   (
+ DEBUG    | __main__:test_18_find_return_all_items:200 | item[*] == <list 2> [
+    #0   <tuple 2> (
+        #0   <list 1> [ #0   "item[0]" ],
+        #1   <list 1> [
+            #0   <tuple 2> (
                 #0   "name",
-                #1   {
+                #1   <dict 2> {
                     "value": "Item 1",
-                    "attrib": {  }
+                    "attrib": <dict 0> {  }
                 }
             )
         ]
     ),
-    #1   (
-        #0   [ #0   "item[1]" ],
-        #1   [
-            #0   (
+    #1   <tuple 2> (
+        #0   <list 1> [ #0   "item[1]" ],
+        #1   <list 1> [
+            #0   <tuple 2> (
                 #0   "name",
-                #1   {
+                #1   <dict 2> {
                     "value": "Item 2",
-                    "attrib": {  }
+                    "attrib": <dict 0> {  }
                 }
             )
         ]
@@ -1770,27 +1770,27 @@
 ]
  DEBUG    | __main__:test_18_find_return_all_items:203 | item[*][0] == "Item 1"
  DEBUG    | __main__:test_18_find_return_all_items:206 | item[*][1] == "Item 2"
- DEBUG    | __main__:test_18_find_return_all_items:211 | item == [
-    #0   (
-        #0   [ #0   "item" ],
-        #1   [
-            #0   (
+ DEBUG    | __main__:test_18_find_return_all_items:211 | item == <list 2> [
+    #0   <tuple 2> (
+        #0   <list 1> [ #0   "item" ],
+        #1   <list 1> [
+            #0   <tuple 2> (
                 #0   "name",
-                #1   {
+                #1   <dict 2> {
                     "value": "Item 1",
-                    "attrib": {  }
+                    "attrib": <dict 0> {  }
                 }
             )
         ]
     ),
-    #1   (
-        #0   [ #0   "item[1]" ],
-        #1   [
-            #0   (
+    #1   <tuple 2> (
+        #0   <list 1> [ #0   "item[1]" ],
+        #1   <list 1> [
+            #0   <tuple 2> (
                 #0   "name",
-                #1   {
+                #1   <dict 2> {
                     "value": "Item 2",
-                    "attrib": {  }
+                    "attrib": <dict 0> {  }
                 }
             )
         ]
@@ -1798,70 +1798,70 @@
 ]
  DEBUG    | __main__:test_18_find_return_all_items:215 | item/name[0] == "Item 1"
  DEBUG    | __main__:test_18_find_return_all_items:219 | item[1]/name[1] == "Item 2"
- DEBUG    | __main__:test_18_find_return_all_items:224 | item[0] == [
-    #0   (
-        #0   [ #0   "item" ],
-        #1   [
-            #0   (
+ DEBUG    | __main__:test_18_find_return_all_items:224 | item[0] == <list 1> [
+    #0   <tuple 2> (
+        #0   <list 1> [ #0   "item" ],
+        #1   <list 1> [
+            #0   <tuple 2> (
                 #0   "name",
-                #1   {
+                #1   <dict 2> {
                     "value": "Item 1",
-                    "attrib": {  }
+                    "attrib": <dict 0> {  }
                 }
             )
         ]
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:227 | item[0] == [
-    #0   (
+ DEBUG    | __main__:test_18_find_return_all_items:227 | item[0] == <list 1> [
+    #0   <tuple 2> (
         #0   "name",
-        #1   {
+        #1   <dict 2> {
             "value": "Item 1",
-            "attrib": {  }
+            "attrib": <dict 0> {  }
         }
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:232 | item[1] == [
-    #0   (
-        #0   [ #0   "item[1]" ],
-        #1   [
-            #0   (
+ DEBUG    | __main__:test_18_find_return_all_items:232 | item[1] == <list 1> [
+    #0   <tuple 2> (
+        #0   <list 1> [ #0   "item[1]" ],
+        #1   <list 1> [
+            #0   <tuple 2> (
                 #0   "name",
-                #1   {
+                #1   <dict 2> {
                     "value": "Item 2",
-                    "attrib": {  }
+                    "attrib": <dict 0> {  }
                 }
             )
         ]
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:235 | item[1] == [
-    #0   (
+ DEBUG    | __main__:test_18_find_return_all_items:235 | item[1] == <list 1> [
+    #0   <tuple 2> (
         #0   "name",
-        #1   {
+        #1   <dict 2> {
             "value": "Item 2",
-            "attrib": {  }
+            "attrib": <dict 0> {  }
         }
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:240 | item[2] == [  ]
- DEBUG    | __main__:test_18_find_return_all_items:245 | ** == [
-    #0   (
-        #0   [
+ DEBUG    | __main__:test_18_find_return_all_items:240 | item[2] == <list 0> [  ]
+ DEBUG    | __main__:test_18_find_return_all_items:245 | ** == <list 3> [
+    #0   <tuple 2> (
+        #0   <list 2> [
             #0   "item",
             #1   "name"
         ],
         #1   "Item 1"
     ),
-    #1   (
-        #0   [
+    #1   <tuple 2> (
+        #0   <list 2> [
             #0   "item[1]",
             #1   "name"
         ],
         #1   "Item 2"
     ),
-    #2   (
-        #0   [
+    #2   <tuple 2> (
+        #0   <list 3> [
             #0   "group",
             #1   "item",
             #2   "name"
@@ -1882,17 +1882,17 @@
  DEBUG    | __main__:test_21_findall:315 | group/item[0]/name == "Item 3"
  DEBUG    | __main__:test_21_findall:320 | nonexistent == "Not Found"
  DEBUG    | __main__:test_21_findall:324 | nonexistent == None
- DEBUG    | __main__:test_21_findall:360 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == [
-    #0   (
-        #0   [
+ DEBUG    | __main__:test_21_findall:360 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == <list 2> [
+    #0   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[0]",
             #2   "VALUE"
         ],
         #1   "1"
     ),
-    #1   (
-        #0   [
+    #1   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[2]",
             #2   "VALUE"
@@ -1900,9 +1900,9 @@
         #1   "3"
     )
 ]
- DEBUG    | __main__:test_21_findall:365 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == [
-    #0   (
-        #0   [
+ DEBUG    | __main__:test_21_findall:365 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == <list 1> [
+    #0   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[0]",
             #2   "VALUE"
@@ -1910,18 +1910,18 @@
         #1   "1"
     )
 ]
- DEBUG    | __main__:test_21_findall:370 | ARRAY/ELEM[1]/KEY[text()=MYNODE]/../VALUE == [  ]
- DEBUG    | __main__:test_21_findall:375 | */ELEM[*]/KEY[text()=MYNODE]/../VALUE == [
-    #0   (
-        #0   [
+ DEBUG    | __main__:test_21_findall:370 | ARRAY/ELEM[1]/KEY[text()=MYNODE]/../VALUE == <list 0> [  ]
+ DEBUG    | __main__:test_21_findall:375 | */ELEM[*]/KEY[text()=MYNODE]/../VALUE == <list 2> [
+    #0   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[0]",
             #2   "VALUE"
         ],
         #1   "1"
     ),
-    #1   (
-        #0   [
+    #1   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[2]",
             #2   "VALUE"
@@ -1929,17 +1929,17 @@
         #1   "3"
     )
 ]
- DEBUG    | __main__:test_21_findall:381 | **/KEY[text()=MYNODE]/../VALUE == [
-    #0   (
-        #0   [
+ DEBUG    | __main__:test_21_findall:381 | **/KEY[text()=MYNODE]/../VALUE == <list 2> [
+    #0   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM",
             #2   "VALUE"
         ],
         #1   "1"
     ),
-    #1   (
-        #0   [
+    #1   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[2]",
             #2   "VALUE"
@@ -1947,60 +1947,60 @@
         #1   "3"
     )
 ]
- DEBUG    | __main__:test_21_findall:382 | to_dict:**/KEY[text()=MYNODE]/../VALUE == { "ARRAY/ELEM/VALUE": "1", "ARRAY/ELEM[2]/VALUE": "3" }
- DEBUG    | __main__:test_21_findall:383 | to_list_of_dict:**/KEY[text()=MYNODE]/../VALUE == [
-    #0   (
+ DEBUG    | __main__:test_21_findall:382 | to_dict:**/KEY[text()=MYNODE]/../VALUE == <dict 2> { "ARRAY/ELEM/VALUE": "1", "ARRAY/ELEM[2]/VALUE": "3" }
+ DEBUG    | __main__:test_21_findall:383 | to_list_of_dict:**/KEY[text()=MYNODE]/../VALUE == <list 2> [
+    #0   <tuple 2> (
         #0   "ARRAY/ELEM/VALUE",
         #1   "1"
     ),
-    #1   (
+    #1   <tuple 2> (
         #0   "ARRAY/ELEM[2]/VALUE",
         #1   "3"
     )
 ]
- DEBUG    | __main__:test_21_findall:389 | ** == [
-    #0   (
-        #0   [
+ DEBUG    | __main__:test_21_findall:389 | ** == <list 6> [
+    #0   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM",
             #2   "KEY"
         ],
         #1   "MYNODE"
     ),
-    #1   (
-        #0   [
+    #1   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM",
             #2   "VALUE"
         ],
         #1   "1"
     ),
-    #2   (
-        #0   [
+    #2   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[1]",
             #2   "KEY"
         ],
         #1   "OTHERNODE"
     ),
-    #3   (
-        #0   [
+    #3   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[1]",
             #2   "VALUE"
         ],
         #1   "2"
     ),
-    #4   (
-        #0   [
+    #4   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[2]",
             #2   "KEY"
         ],
         #1   "MYNODE"
     ),
-    #5   (
-        #0   [
+    #5   <tuple 2> (
+        #0   <list 3> [
             #0   "ARRAY",
             #1   "ELEM[2]",
             #2   "VALUE"

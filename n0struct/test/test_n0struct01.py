@@ -472,8 +472,8 @@ def main():
         "Root": {
             "Node1": {
                 "Subnode1_1": [
-                    {"tag": "PARAM1", "value": "VALUE1 from subnode1_1"},
-                    {"tag": "PARAM2", "value": "VALUE2 from subnode1_1"},
+                    {"tag": "PARAM1", "value": "VALUE1 from subn1_1"},
+                    {"tag": "PARM2", "value": "VALUE2 from subnode1_1"},
                 ],
                 "Subnode1_2": [
                     {"tag": "PARAM1", "value": "VALUE1 from subnode1_2"},
