@@ -591,7 +591,7 @@ CLASSES
      |  to_json(self, indent_size: int = 4, pairs_in_one_line=True, skip_empty_arrays: bool = False, compress: bool = False) -> str
      |      Public function: export self into json result string
      |
-     |  to_xml(self, indent: int = 4, encoding: str = 'utf-8', quote: str = '"') -> str
+     |  to_xml(self, indent: int = 0, indent_size: int = 4, encoding: str = 'utf-8', quote: str = '"') -> str
      |      Public function: export self into xml result string
      |
      |  to_xpath(self, mode: int = None) -> str
@@ -1668,6 +1668,8 @@ FUNCTIONS
         :param till_not_included:
         :return: int [0..till_not_included)
 
+    safe_json(value)
+
     save_csv(file_path: str, rows: Union[list, tuple, NoneType], header: Union[list, tuple, NoneType] = None, encoding: str = 'utf-8', EOL: str = '\n', delimiter: str = ',')
         # ******************************************************************************
 
@@ -1713,6 +1715,9 @@ FUNCTIONS
     set_debug_show_object_id(debug_show_object_id: bool)
 
     set_debug_show_object_type(debug_show_object_type: bool)
+
+    split_dict_into_chunks(object_fields: dict, chunk_max_len: int = 3886, key_value_template: str = '{{"key":{key},"value":{value}}}', chunk_template: str = '<![CDATA[[{chunk}]]]>', delimiter: str = ',')
+        # ******************************************************************************
 
     split_name_index(node_name: str) -> Tuple[str, Union[str, Tuple[str, str, Union[str, bool]]]]
         # ******************************************************************************

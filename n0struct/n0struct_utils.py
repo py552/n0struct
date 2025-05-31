@@ -1,5 +1,6 @@
 import typing
 import itertools
+from n0struct.n0struct_logging import safe_json
 # ******************************************************************************
 # ******************************************************************************
 def to_int(value: str, max_len: typing.Union[int, None] = None, default_value: typing.Any = None) -> typing.Any:
@@ -870,6 +871,30 @@ def generate_tlv(
     #     for __tag,__value in input_dict.items()
     # )
 # ******************************************************************************
+def split_dict_into_chunks(
+    object_fields: dict,
+    chunk_max_len: int = 3900 - 14, # 3900 == max field size for SDM, 14 == len of <![CDATA[[]]]>
+    key_value_template: str = '{{"key":{key},"value":{value}}}',
+    chunk_template: str = '<![CDATA[[{chunk}]]]>',
+    delimiter: str = ',',
+):
+    chunks = []
+    chunk = ""
+    for key_value in (
+        key_value_template.format(key=safe_json(key), value=safe_json(value))
+        for key,value in object_fields.items()
+    ):
+        if len(chunk)+len(key_value) < chunk_max_len:
+            if chunk:
+                chunk += delimiter
+            chunk += key_value
+        else:
+            chunks.append(chunk_template.format(chunk=chunk))
+            chunk = key_value
+    if chunk:
+        chunks.append(chunk_template.format(chunk=chunk))
+    return chunks
+# ******************************************************************************
 # ******************************************************************************
 ################################################################################
 __all__ = (
@@ -904,5 +929,6 @@ __all__ = (
     'serialize_dict',
     'parse_tlv',
     'generate_tlv',
+    'split_dict_into_chunks',
 )
 ################################################################################

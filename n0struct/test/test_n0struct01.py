@@ -14,6 +14,7 @@ from n0struct import (
     set__flag_compare_return_difference_of_values,
     init_logger,
     notemptyitems,
+    split_dict_into_chunks,
 )
 set__flag_compare_check_different_types(True)
 set__flag_compare_return_difference_of_values(True)
@@ -165,6 +166,22 @@ def main():
 
     n0print(dict1.to_json())
     n0print(dict1.to_xml())
+    n0print(dict1._xml(dict1))
+
+    object_fields = {
+        "CN-BILLING_DAY": "27",
+        "CN-CARD_TARIFF": "PCT_001",
+        "CN-SALES_BRANCH": "Main Office",
+        "CN-SALES_CAMPAIGN": "New Year",
+        "CN-SALES_DET_1": "New Year Offer",
+        "CN-SALES_MG": "John Smith",
+    }
+    n0print(split_dict_into_chunks(object_fields, 100))
+    n0print(split_dict_into_chunks(object_fields, 100, '{key}:{value}'))
+    n0print(split_dict_into_chunks(object_fields, 100, '{key}:{value}', '{{{chunk}}}'))
+    assert len(split_dict_into_chunks(object_fields, 50))                   == 6
+    assert len(split_dict_into_chunks(object_fields, 100))                  == 3
+    assert len(split_dict_into_chunks(object_fields, 100, '{key}:{value}')) == 2
 
     n0print(dict1["moreone/node"])
 

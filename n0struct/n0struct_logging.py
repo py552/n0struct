@@ -109,6 +109,14 @@ def replace_not_ascii_characters(match):
 def replace_control_characters(match):
     char = match.group(0)
     return escaped_control_characters.get(char, f"\\x{ord(char):02X}")
+def safe_json(value):
+    if isinstance(value, str):
+        return f"\"{not_ascii_characters.sub(replace_not_ascii_characters, json_control_characters.sub(replace_control_characters, value))}\""
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    return value
 def n0pretty(
     item: typing.Any,
     indent_level: int       = 0,
@@ -461,5 +469,6 @@ __all__ = (
     'n0debug_calc',
     'n0debug',
     'n0debug_object',
+    'safe_json',
 )
 ################################################################################

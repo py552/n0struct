@@ -91,7 +91,7 @@ class n0dict_(n0dict__):
     # **************************************************************************
     # XML
     # **************************************************************************
-    def __xml(self, parent: dict, indent: int, inc_indent: int) -> typing.Union[str, None]:
+    def _xml(self, parent: dict, indent: int = 0, indent_size: int = 4) -> typing.Union[str, None]:
         """
         Private function: recursively export n0dict into xml result string
         """
@@ -113,7 +113,7 @@ class n0dict_(n0dict__):
                         else:
                             result += f"<{key}>"
                             for i, subitm in enumerate(value):
-                                result += "\n" + self.__xml(subitm, indent+inc_indent, inc_indent)
+                                result += "\n" + self._xml(subitm, indent+indent_size, indent_size)
                             result += f"\n{' '*indent}</{key}>"
                     elif isinstance(value, (int, float)):
                         if not key.startswith("@"):
@@ -124,14 +124,14 @@ class n0dict_(n0dict__):
                         if not key.startswith("@"):
                             result += f"<{key}>"
                             if value.lstrip().upper().startswith("<![CDATA[") and value.rstrip().endswith("]]>"):
-                                result += f"\n{' '*(indent+inc_indent)}{value}\n{' '*indent}"
+                                result += f"\n{' '*(indent+indent_size)}{value}\n{' '*indent}"
                             else:
                                 result += value.translate(html_entities)
                             result += f"</{key}>"
                         else:
                             raise NotImplementedError(f"Export of attibtures ({key}) is not supported yet")
                     elif isinstance(value, dict):
-                        sub_result = self.__xml(value, indent+inc_indent, inc_indent)
+                        sub_result = self._xml(value, indent+indent_size, indent_size)
 
                         attribs = ""
                         attribs_of_current_key = [(__key[1:], __value) for __key,__value in value.items() if __key.startswith("@")]
@@ -150,29 +150,29 @@ class n0dict_(n0dict__):
                     elif value is None:
                         result += f"<{key}/>"
                     else:
-                        raise TypeError(f"__xml(..): Unknown type ({type(value)}) {key} == {value}")
+                        raise TypeError(f"_xml(..): Unknown type ({type(value)}) {key} == {value}")
             elif isinstance(parent, (list, tuple)):
                 if not len(parent):
                     return None
                 for i, itm in enumerate(parent):
                     if i:
                         result += "\n"
-                    result += self.__xml(itm, indent+inc_indent, inc_indent)
+                    result += self._xml(itm, indent+indent_size, indent_size)
             elif isinstance(parent, (str, int, float)):
                 result += str(parent)
             else:
-                raise TypeError(f"__xml(..): Unknown type ({type(parent)}) == {parent}")
+                raise TypeError(f"_xml(..): Unknown type ({type(parent)}) == {parent}")
 
             return result
         else:
             return ""
     # **************************************************************************
-    def to_xml(self, indent: int = 4, encoding: str = "utf-8", quote: str = '"') -> str:
+    def to_xml(self, indent: int = 0, indent_size: int = 4, encoding: str = "utf-8", quote: str = '"') -> str:
         """
         Public function: export self into xml result string
         """
         return (f'<?xml version={quote}1.0{quote} encoding={quote}{encoding}{quote}?>\n' if encoding else '') + \
-            self.__xml(self, 0, indent)
+            self._xml(self, indent, indent_size)
     # **************************************************************************
     # JSON
     # **************************************************************************
