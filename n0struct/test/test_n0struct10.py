@@ -7,7 +7,7 @@ sys.path.insert(0, mydir+"/../../")
 
 import pytest
 from xml.etree.ElementTree import ParseError
-from n0struct_xml import n0xml
+from n0struct_n0xml import n0xml
 from n0struct import (
     n0print,
     n0debug,

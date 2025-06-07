@@ -6,8 +6,7 @@ NAME
 DESCRIPTION
     list/dict extensions allow to
     * work (find/get/set/update) with tree-like structures, generated for example by json.loads(..), using xpath approach
-    * direct/wise compare lists/dictionaries/tree-like structures + exclude sub-nodes from comparison
-    * transform on the fly values in attributes during comparing
+    * wise compare of lists/dictionaries/tree-like structures + unification/transform (exclude from comparison) sub-nodes/values
     * .to_json(): convert tree-like structures into string buffer for saving into JSON file
     * .to_xml(): convert tree-like structures into string buffer for saving into XML file
     * .to_xpath: convert tree-like structures into string buffer for saving into XPATH file
@@ -15,6 +14,9 @@ DESCRIPTION
 PACKAGE CONTENTS
     n0struct_arrays
     n0struct_comprehensions
+    n0struct_data_to_json
+    n0struct_data_to_xml
+    n0struct_data_to_xpath
     n0struct_date
     n0struct_files
     n0struct_files_csv
@@ -28,26 +30,34 @@ PACKAGE CONTENTS
     n0struct_n0dict__
     n0struct_n0list_
     n0struct_n0list_n0dict
+    n0struct_n0xml
+    n0struct_n1dict_n1list
     n0struct_random
     n0struct_references
     n0struct_transform_dicts
     n0struct_utils
     n0struct_utils_compare
     n0struct_utils_find
-    n0struct_xml
     test (package)
 
 CLASSES
+    builtins.dict(builtins.object)
+        n0struct.n0struct_n1dict_n1list.n1dict(n0struct.n0struct_n1dict_n1list.n0dict_n0list_mixin, builtins.dict)
+    builtins.list(builtins.object)
+        n0struct.n0struct_n1dict_n1list.n1list(n0struct.n0struct_n1dict_n1list.n0dict_n0list_mixin, builtins.list)
     builtins.object
         n0struct.n0struct_git.Git
         n0struct.n0struct_n0compare.n0compare
-        n0struct.n0struct_xml.n0xml
+        n0struct.n0struct_n0xml.n0xml
     collections.abc.MutableSet(collections.abc.Set)
         n0struct.n0struct_references.OrderedSet
     n0struct.n0struct_n0dict_.n0dict_(n0struct.n0struct_n0dict__.n0dict__)
         n0struct.n0struct_n0list_n0dict.n0dict
     n0struct.n0struct_n0list_.n0list_(builtins.list)
         n0struct.n0struct_n0list_n0dict.n0list
+    n0struct.n0struct_n1dict_n1list.n0dict_n0list_mixin(builtins.object)
+        n0struct.n0struct_n1dict_n1list.n1dict(n0struct.n0struct_n1dict_n1list.n0dict_n0list_mixin, builtins.dict)
+        n0struct.n0struct_n1dict_n1list.n1list(n0struct.n0struct_n1dict_n1list.n0dict_n0list_mixin, builtins.list)
     pathlib.PurePath(builtins.object)
         pathlib.Path
 
@@ -624,9 +634,6 @@ CLASSES
      |  to_xpath(self, mode: int = None) -> str
      |      Public function: collect elements xpath starts from root and print with indents
      |
-     |  xpath(self, mode: int = None) -> list
-     |      Public function: collect elements xpath starts from root
-     |
      |  ----------------------------------------------------------------------
      |  Methods inherited from n0struct.n0struct_n0dict__.n0dict__:
      |
@@ -1016,7 +1023,7 @@ CLASSES
      |  not_consists_of_any(self, other_list)
      |      # **************************************************************************
      |
-     |  to_json(self, indent: int = 4, pairs_in_one_line=True, json_convention: bool = True, skip_empty_arrays: bool = False, compress: bool = False) -> str
+     |  to_json(self, indent_size: int = 4, pairs_in_one_line=True, skip_empty_arrays: bool = False, compress: bool = False) -> str
      |      Public function: export self into json result string
      |
      |  ----------------------------------------------------------------------
@@ -1216,6 +1223,396 @@ CLASSES
      |
      |  __weakref__
      |      list of weak references to the object
+
+    class n1dict(n0dict_n0list_mixin, builtins.dict)
+     |  n1dict(*args, **kwargs)
+     |
+     |  Method resolution order:
+     |      n1dict
+     |      n0dict_n0list_mixin
+     |      builtins.dict
+     |      builtins.object
+     |
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from n0dict_n0list_mixin:
+     |
+     |  __getitem__(self, xpath: str) -> Any
+     |      Get value by XPath.
+     |
+     |  __init__(self, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  __setitem__(self, xpath: str, value: Any) -> None
+     |      Set value by XPath.
+     |
+     |  append_to_path(self, xpath: str, value: Any) -> 'n0dict_n0list_mixin'
+     |      Append value to path, converting scalar to list if needed.
+     |      Creates new list if path doesn't exist.
+     |
+     |      Usage: nav.append_to_path('/a/b', value)
+     |
+     |  chain(self)
+     |      Start a method chain.
+     |
+     |  extend_path(self, xpath: str, values: list) -> 'n0dict_n0list_mixin'
+     |      Extend path with multiple values.
+     |      Converts scalar to list if needed, creates new list if path doesn't exist.
+     |
+     |  find_all(self, xpath: str) -> List[Tuple[str, Any]]
+     |      Find all nodes by XPath.
+     |
+     |  get(self, xpath: str, default: Any = None) -> Any
+     |      Get value with default option.
+     |
+     |  listify(self, xpath: str) -> 'n0dict_n0list_mixin'
+     |      Alias for to_list for more familiar naming.
+     |
+     |  pop(self, xpath: str, default: Any = None) -> Any
+     |      Remove and return node value by XPath.
+     |
+     |  push(self, xpath: str, value: Any) -> 'n0dict_n0list_mixin'
+     |      Alias for append_to_path for more familiar naming.
+     |
+     |  remove(self, xpath: str) -> bool
+     |      Remove node by XPath. Returns True if removed, False if not found.
+     |
+     |  scalarify(self, xpath: str) -> 'n0dict_n0list_mixin'
+     |      Alias for to_scalar for more familiar naming.
+     |
+     |  to_json(self, indent: Optional[int] = None, indent_size: int = 4, pairs_in_one_line: bool = True, skip_empty_arrays: bool = False, compress: bool = False, sort_keys: bool = False, ensure_ascii: bool = False, allow_nan: bool = True, escape_special: bool = False, escape_unicode: bool = False) -> str
+     |
+     |  to_list(self, xpath: str) -> 'n0dict_n0list_mixin'
+     |      Convert path value to list format.
+     |
+     |      - If already list: leave as is
+     |      - If scalar/dict/other: wrap in list
+     |      - If doesn't exist: create empty list
+     |
+     |  to_scalar(self, xpath: str) -> 'n0dict_n0list_mixin'
+     |      Convert path value to scalar format.
+     |
+     |      - If single-element list: extract the element
+     |      - If empty list: convert to None
+     |      - If multi-element list: leave as is
+     |      - If doesn't exist: create None
+     |      - If already scalar: leave as is
+     |
+     |  to_xml(self, indent: Optional[int] = None, indent_size: int = 4, encoding: str = 'utf-8', quote: str = '"') -> str
+     |
+     |  to_xpath(self, indent: Optional[int] = None) -> str
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.dict:
+     |
+     |  __contains__(self, key, /)
+     |      True if the dictionary has the specified key, else False.
+     |
+     |  __delitem__(self, key, /)
+     |      Delete self[key].
+     |
+     |  __eq__(self, value, /)
+     |      Return self==value.
+     |
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |
+     |  __ior__(self, value, /)
+     |      Return self|=value.
+     |
+     |  __iter__(self, /)
+     |      Implement iter(self).
+     |
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |
+     |  __len__(self, /)
+     |      Return len(self).
+     |
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |
+     |  __ne__(self, value, /)
+     |      Return self!=value.
+     |
+     |  __or__(self, value, /)
+     |      Return self|value.
+     |
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |
+     |  __reversed__(self, /)
+     |      Return a reverse iterator over the dict keys.
+     |
+     |  __ror__(self, value, /)
+     |      Return value|self.
+     |
+     |  __sizeof__(...)
+     |      D.__sizeof__() -> size of D in memory, in bytes
+     |
+     |  clear(...)
+     |      D.clear() -> None.  Remove all items from D.
+     |
+     |  copy(...)
+     |      D.copy() -> a shallow copy of D
+     |
+     |  items(...)
+     |      D.items() -> a set-like object providing a view on D's items
+     |
+     |  keys(...)
+     |      D.keys() -> a set-like object providing a view on D's keys
+     |
+     |  popitem(self, /)
+     |      Remove and return a (key, value) pair as a 2-tuple.
+     |
+     |      Pairs are returned in LIFO (last-in, first-out) order.
+     |      Raises KeyError if the dict is empty.
+     |
+     |  setdefault(self, key, default=None, /)
+     |      Insert key with a value of default if key is not in the dictionary.
+     |
+     |      Return the value for key if key is in the dictionary, else default.
+     |
+     |  update(...)
+     |      D.update([E, ]**F) -> None.  Update D from mapping/iterable E and F.
+     |      If E is present and has a .keys() method, then does:  for k in E.keys(): D[k] = E[k]
+     |      If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
+     |      In either case, this is followed by: for k in F:  D[k] = F[k]
+     |
+     |  values(...)
+     |      D.values() -> an object providing a view on D's values
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from builtins.dict:
+     |
+     |  __class_getitem__(...)
+     |      See PEP 585
+     |
+     |  fromkeys(iterable, value=None, /)
+     |      Create a new dictionary with keys from iterable and values set to value.
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods inherited from builtins.dict:
+     |
+     |  __new__(*args, **kwargs) class method of builtins.dict
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from builtins.dict:
+     |
+     |  __hash__ = None
+
+    class n1list(n0dict_n0list_mixin, builtins.list)
+     |  n1list(*args, **kwargs)
+     |
+     |  Method resolution order:
+     |      n1list
+     |      n0dict_n0list_mixin
+     |      builtins.list
+     |      builtins.object
+     |
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from n0dict_n0list_mixin:
+     |
+     |  __getitem__(self, xpath: str) -> Any
+     |      Get value by XPath.
+     |
+     |  __init__(self, *args, **kwargs)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  __setitem__(self, xpath: str, value: Any) -> None
+     |      Set value by XPath.
+     |
+     |  append_to_path(self, xpath: str, value: Any) -> 'n0dict_n0list_mixin'
+     |      Append value to path, converting scalar to list if needed.
+     |      Creates new list if path doesn't exist.
+     |
+     |      Usage: nav.append_to_path('/a/b', value)
+     |
+     |  chain(self)
+     |      Start a method chain.
+     |
+     |  extend_path(self, xpath: str, values: list) -> 'n0dict_n0list_mixin'
+     |      Extend path with multiple values.
+     |      Converts scalar to list if needed, creates new list if path doesn't exist.
+     |
+     |  find_all(self, xpath: str) -> List[Tuple[str, Any]]
+     |      Find all nodes by XPath.
+     |
+     |  get(self, xpath: str, default: Any = None) -> Any
+     |      Get value with default option.
+     |
+     |  listify(self, xpath: str) -> 'n0dict_n0list_mixin'
+     |      Alias for to_list for more familiar naming.
+     |
+     |  pop(self, xpath: str, default: Any = None) -> Any
+     |      Remove and return node value by XPath.
+     |
+     |  push(self, xpath: str, value: Any) -> 'n0dict_n0list_mixin'
+     |      Alias for append_to_path for more familiar naming.
+     |
+     |  remove(self, xpath: str) -> bool
+     |      Remove node by XPath. Returns True if removed, False if not found.
+     |
+     |  scalarify(self, xpath: str) -> 'n0dict_n0list_mixin'
+     |      Alias for to_scalar for more familiar naming.
+     |
+     |  to_json(self, indent: Optional[int] = None, indent_size: int = 4, pairs_in_one_line: bool = True, skip_empty_arrays: bool = False, compress: bool = False, sort_keys: bool = False, ensure_ascii: bool = False, allow_nan: bool = True, escape_special: bool = False, escape_unicode: bool = False) -> str
+     |
+     |  to_list(self, xpath: str) -> 'n0dict_n0list_mixin'
+     |      Convert path value to list format.
+     |
+     |      - If already list: leave as is
+     |      - If scalar/dict/other: wrap in list
+     |      - If doesn't exist: create empty list
+     |
+     |  to_scalar(self, xpath: str) -> 'n0dict_n0list_mixin'
+     |      Convert path value to scalar format.
+     |
+     |      - If single-element list: extract the element
+     |      - If empty list: convert to None
+     |      - If multi-element list: leave as is
+     |      - If doesn't exist: create None
+     |      - If already scalar: leave as is
+     |
+     |  to_xml(self, indent: Optional[int] = None, indent_size: int = 4, encoding: str = 'utf-8', quote: str = '"') -> str
+     |
+     |  to_xpath(self, indent: Optional[int] = None) -> str
+     |
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.list:
+     |
+     |  __add__(self, value, /)
+     |      Return self+value.
+     |
+     |  __contains__(self, key, /)
+     |      Return bool(key in self).
+     |
+     |  __delitem__(self, key, /)
+     |      Delete self[key].
+     |
+     |  __eq__(self, value, /)
+     |      Return self==value.
+     |
+     |  __ge__(self, value, /)
+     |      Return self>=value.
+     |
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |
+     |  __gt__(self, value, /)
+     |      Return self>value.
+     |
+     |  __iadd__(self, value, /)
+     |      Implement self+=value.
+     |
+     |  __imul__(self, value, /)
+     |      Implement self*=value.
+     |
+     |  __iter__(self, /)
+     |      Implement iter(self).
+     |
+     |  __le__(self, value, /)
+     |      Return self<=value.
+     |
+     |  __len__(self, /)
+     |      Return len(self).
+     |
+     |  __lt__(self, value, /)
+     |      Return self<value.
+     |
+     |  __mul__(self, value, /)
+     |      Return self*value.
+     |
+     |  __ne__(self, value, /)
+     |      Return self!=value.
+     |
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |
+     |  __reversed__(self, /)
+     |      Return a reverse iterator over the list.
+     |
+     |  __rmul__(self, value, /)
+     |      Return value*self.
+     |
+     |  __sizeof__(self, /)
+     |      Return the size of the list in memory, in bytes.
+     |
+     |  append(self, object, /)
+     |      Append object to the end of the list.
+     |
+     |  clear(self, /)
+     |      Remove all items from list.
+     |
+     |  copy(self, /)
+     |      Return a shallow copy of the list.
+     |
+     |  count(self, value, /)
+     |      Return number of occurrences of value.
+     |
+     |  extend(self, iterable, /)
+     |      Extend list by appending elements from the iterable.
+     |
+     |  index(self, value, start=0, stop=9223372036854775807, /)
+     |      Return first index of value.
+     |
+     |      Raises ValueError if the value is not present.
+     |
+     |  insert(self, index, object, /)
+     |      Insert object before index.
+     |
+     |  reverse(self, /)
+     |      Reverse *IN PLACE*.
+     |
+     |  sort(self, /, *, key=None, reverse=False)
+     |      Sort the list in ascending order and return None.
+     |
+     |      The sort is in-place (i.e. the list itself is modified) and stable (i.e. the
+     |      order of two equal elements is maintained).
+     |
+     |      If a key function is given, apply it once to each list item and sort them,
+     |      ascending or descending, according to their function values.
+     |
+     |      The reverse flag can be set to sort in descending order.
+     |
+     |  ----------------------------------------------------------------------
+     |  Class methods inherited from builtins.list:
+     |
+     |  __class_getitem__(...)
+     |      See PEP 585
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods inherited from builtins.list:
+     |
+     |  __new__(*args, **kwargs) class method of builtins.list
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes inherited from builtins.list:
+     |
+     |  __hash__ = None
 
 FUNCTIONS
     _findall(parent_node: Union[dict, list], seeked_xpath_list: list, found_xpath_list: list = [], parent_nodes_stack: dict = {}, raise_exception=True, level=0) -> Optional[dict]
@@ -1956,6 +2353,9 @@ FUNCTIONS
         :return:
              0 not matched any of xpath_list
             >0 matched
+
+    xpath_search(data: Any, xpath: str, first_only: bool = False) -> Union[List[Tuple[str, Any]], Tuple[str, Any], NoneType]
+        Search nodes in complex data structure by XPath.
 
 DATA
     _EXCLUDE_NODE_MARKER = <object object>

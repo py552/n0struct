@@ -162,9 +162,8 @@ class n0list_(list):
     # JSON
     # **************************************************************************
     def to_json(self,
-                indent: int = 4,
+                indent_size: int = 4,
                 pairs_in_one_line = True,
-                json_convention: bool = True,
                 skip_empty_arrays: bool = False,
                 compress: bool = False,
     ) -> str:
@@ -174,15 +173,16 @@ class n0list_(list):
         if compress:
             indent = 0
 
-        return n0pretty(self,
-                        show_type=False,
-                        auto_quotes=False,
-                        __quotes='"',
-                        __indent_size=indent,
-                        pairs_in_one_line=pairs_in_one_line,
-                        json_convention=json_convention,
-                        skip_empty_arrays=skip_empty_arrays,
-                        show_item_count=False,
+        return n0pretty(
+            self,
+            show_object_type  = False,
+            indent_size       = indent_size,
+            quote             = '"',
+            pairs_in_one_line = pairs_in_one_line,
+            json_convention   = True,
+            skip_empty_arrays = skip_empty_arrays,
+            skip_simple_types = True,
+            show_item_count   = False,
         )
 
 

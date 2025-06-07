@@ -2136,11 +2136,11 @@
     "only_in_1": [  ],
     "only_in_2": [ "/tranzations[5]" ],
     "diffs": {
-        "/tranzations[1]/date": [
-            "12/01/2025",
+        "/tranzations[1]/currency": [
+            "EUR",
             [
-                "/tranzations[2]/date",
-                "13/01/2025"
+                "/tranzations[2]/currency",
+                "GBP"
             ]
         ],
         "/tranzations[1]/amount": [
@@ -2150,18 +2150,18 @@
                 12
             ]
         ],
+        "/tranzations[1]/date": [
+            "12/01/2025",
+            [
+                "/tranzations[2]/date",
+                "13/01/2025"
+            ]
+        ],
         "/tranzations[1]/authcode": [
             "00000002",
             [
                 "/tranzations[2]/authcode",
                 "00000003"
-            ]
-        ],
-        "/tranzations[1]/currency": [
-            "EUR",
-            [
-                "/tranzations[2]/currency",
-                "GBP"
             ]
         ],
         "/tranzations[4]/authcode": [
@@ -2190,3 +2190,194 @@
     }
 }
  INFO     | __main__:<module>:127 | Mission acomplished
+ INFO     | __main__:test_n1dict_n1list:27 | assert1 = [
+    {"name": "John", "tags": "admin"},
+        {
+        "name": "Jane",
+        "tags": ["user", "active"]
+    }
+]
+ INFO     | __main__:test_n1dict_n1list:30 | [
+    {"name": "John", "tags": "admin"},
+        {
+        "name": "Jane",
+        "tags": ["user", "active"]
+    }
+]
+ INFO     | __main__:test_n1dict_n1list:31 | <?xml version="1.0" encoding="utf-8"?>
+
+<item_0>
+    <name>John</name>
+    <tags>admin</tags>
+</item_0>
+
+<item_1>
+    <name>Jane</name>
+    <tags>user</tags>
+    <tags>active</tags>
+</item_1>
+ INFO     | __main__:test_n1dict_n1list:32 | ['[0]/name']    = "John"
+['[0]/tags']    = "admin"
+['[1]/name']    = "Jane"
+['[1]/tags[0]'] = "user"
+['[1]/tags[1]'] = "active"
+ INFO     | __main__:test_n1dict_n1list:35 | assert2 = {"name": "John", "tags": "admin"}
+ INFO     | __main__:test_n1dict_n1list:40 | assert3 = {"name": "John", "tags": "admin"}
+ INFO     | __main__:test_n1dict_n1list:44 | assert4 = "John"
+ INFO     | __main__:test_n1dict_n1list:49 | assert5 = "admin"
+ INFO     | __main__:test_n1dict_n1list:55 | assert6 = ['user', 'passive1']
+ INFO     | __main__:test_n1dict_n1list:61 | assert7 = ['user', 'passive2']
+ INFO     | __main__:test_n1dict_n1list:67 | assert8 = ['user', 'passive3']
+ DEBUG    | __main__:test_n1dict_n1list:88 | _dict == <n0struct..n1dict 2> {
+    "users": <list 2> [
+        {"name": "John", "tags": "admin"             },
+        {"name": "Jane", "tags": ['user', 'active']}
+    ],
+    "config": <dict 2> {
+        "theme": "dark",
+        "features": <dict 1> { "notifications": True }
+    }
+}
+ INFO     | __main__:test_n1dict_n1list:90 | {
+    "users":     [
+        {"name": "John", "tags": "admin"},
+                {
+            "name": "Jane",
+            "tags": ["user", "active"]
+        }
+    ],
+    "config":     {
+        "theme": "dark",
+        "features": {"notifications": true}
+    }
+}
+ INFO     | __main__:test_n1dict_n1list:91 | <?xml version="1.0" encoding="utf-8"?>
+
+<users>
+    <name>John</name>
+    <tags>admin</tags>
+</users>
+<users>
+    <name>Jane</name>
+    <tags>user</tags>
+    <tags>active</tags>
+</users>
+
+<config>
+    <theme>dark</theme>
+    <features>
+        <notifications>True</notifications>
+    </features>
+</config>
+ INFO     | __main__:test_n1dict_n1list:92 | ['//users[0]/name']                 = "John"
+['//users[0]/tags']                 = "admin"
+['//users[1]/name']                 = "Jane"
+['//users[1]/tags[0]']              = "user"
+['//users[1]/tags[1]']              = "active"
+['//config/theme']                  = "dark"
+['//config/features/notifications'] = "True"
+ DEBUG    | __main__:test_n1dict_n1list:95 | _dict['/missing_item'] == None
+ INFO     | __main__:test_n1dict_n1list:97 | 1. Testing append_to_path:
+ DEBUG    | __main__:test_n1dict_n1list:103 | _dict['users[0]/tags'] == <list 6> [
+    #0   "admin",
+    #1   "moderator0",
+    #2   "moderator1",
+    #3   "moderator1",
+    #4   "moderator2",
+    #5   "moderator3"
+]
+ DEBUG    | __main__:test_n1dict_n1list:104 | _dict['/users[0]/tags'] == <list 6> [
+    #0   "admin",
+    #1   "moderator0",
+    #2   "moderator1",
+    #3   "moderator1",
+    #4   "moderator2",
+    #5   "moderator3"
+]
+ DEBUG    | __main__:test_n1dict_n1list:105 | _dict['/users/[0]/tags'] == <list 6> [
+    #0   "admin",
+    #1   "moderator0",
+    #2   "moderator1",
+    #3   "moderator1",
+    #4   "moderator2",
+    #5   "moderator3"
+]
+ DEBUG    | __main__:test_n1dict_n1list:106 | _dict['/users/tags'] == <list 6> [
+    #0   "admin",
+    #1   "moderator0",
+    #2   "moderator1",
+    #3   "moderator1",
+    #4   "moderator2",
+    #5   "moderator3"
+]
+ INFO     | __main__:test_n1dict_n1list:108 | 2. Testing to_list:
+ DEBUG    | __main__:test_n1dict_n1list:109 | _dict['/config/theme'] == "dark"
+ DEBUG    | __main__:test_n1dict_n1list:111 | _dict['/config/theme'] == <list 1> [ #0   "dark" ]
+ DEBUG    | __main__:test_n1dict_n1list:113 | _dict['/nonexistent'] == <list 0> [  ]
+ INFO     | __main__:test_n1dict_n1list:115 | 3. Testing to_scalar:
+ DEBUG    | __main__:test_n1dict_n1list:116 | None
+ DEBUG    | __main__:test_n1dict_n1list:118 | _dict['/single_item'] == <list 1> [ #0   "only_one" ]
+ DEBUG    | __main__:test_n1dict_n1list:120 | _dict['/single_item'] == "only_one"
+ DEBUG    | __main__:test_n1dict_n1list:122 | _dict['/missing_item'] == None
+ INFO     | __main__:test_n1dict_n1list:124 | 4. Testing extend_path:
+ DEBUG    | __main__:test_n1dict_n1list:125 | _dict['/config/theme'] == <list 1> [ #0   "dark" ]
+ DEBUG    | __main__:test_n1dict_n1list:127 | _dict['/config/theme'] == <list 3> [
+    #0   "dark",
+    #1   "light",
+    #2   "auto"
+]
+ DEBUG    | __main__:test_n1dict_n1list:129 | _dict['/config/theme'] == <list 5> [
+    #0   "dark",
+    #1   "light",
+    #2   "auto",
+    #3   "light2",
+    #4   "auto2"
+]
+ INFO     | __main__:test_n1dict_n1list:131 | 5. Testing method chaining:
+ DEBUG    | __main__:test_n1dict_n1list:140 | result['/workflow/step1'] == <list 3> [
+    #0   "initial",
+    #1   "second",
+    #2   "third"
+]
+ INFO     | __main__:test_n1dict_n1list:142 | 6. Complex transformation workflow:
+ DEBUG    | __main__:test_n1dict_n1list:144 | workflow_structure['/data'] == "start"
+ DEBUG    | __main__:test_n1dict_n1list:146 | workflow_structure['/data'] == <list 2> [
+    #0   "start",
+    #1   "middle"
+]
+ DEBUG    | __main__:test_n1dict_n1list:148 | workflow_structure['/data'] == <list 4> [
+    #0   "start",
+    #1   "middle",
+    #2   "end1",
+    #3   "end2"
+]
+ DEBUG    | __main__:test_n1dict_n1list:152 | workflow_structure['/single'] == <list 1> [ #0   "lone_item" ]
+ DEBUG    | __main__:test_n1dict_n1list:154 | workflow_structure['/single'] == "lone_item"
+ INFO     | __main__:test_n1dict_n1list:156 | 7. Final state:
+ DEBUG    | __main__:test_n1dict_n1list:157 | _dict == <n0struct..n1dict 6> {
+    "users": <list 2> [
+        {"name": "John", "tags": ['admin', 'moderator0', 'moderator1', 'moderator1', 'moderator2', 'moderator3']},
+        {"name": "Jane", "tags": ['user', 'active']                                                             }
+    ],
+    "config": <dict 2> {
+        "theme": <list 5> [
+            #0   "dark",
+            #1   "light",
+            #2   "auto",
+            #3   "light2",
+            #4   "auto2"
+        ],
+        "features": <dict 1> { "notifications": True }
+    },
+    "missing_item": None,
+    "nonexistent": <list 0> [  ],
+    "single_item": "only_one",
+    "workflow": <dict 1> {
+        "step1": <list 3> [
+            #0   "initial",
+            #1   "second",
+            #2   "third"
+        ]
+    }
+}
+ INFO     | __main__:<module>:168 | Mission acomplished

@@ -67,7 +67,7 @@ class n0dict_(n0dict__):
             raise TypeError(f"Not expected type ({type(value)}) in {path} == {value}")
         return result
     # **************************************************************************
-    def xpath(self, mode: int = None) -> list:  # list[(xpath, value)]
+    def _xpath(self, mode: int = None) -> list:  # list[(xpath, value)]
         """
         Public function: collect elements xpath starts from root
         """
@@ -78,7 +78,7 @@ class n0dict_(n0dict__):
         Public function: collect elements xpath starts from root and print with indents
         """
         result = ""
-        xpath_list = self.xpath(mode)
+        xpath_list = self._xpath(mode)
         if xpath_list:
             xpath_maxlen = max(len(itm[0]) for itm in xpath_list) + 2  # plus 2 chars '"]'
             for itm in xpath_list:
