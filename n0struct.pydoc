@@ -23,13 +23,14 @@ PACKAGE CONTENTS
     n0struct_git
     n0struct_logging
     n0struct_mask
+    n0struct_n0compare
     n0struct_n0dict_
     n0struct_n0dict__
     n0struct_n0list_
     n0struct_n0list_n0dict
     n0struct_random
     n0struct_references
-    n0struct_transform_structure
+    n0struct_transform_dicts
     n0struct_utils
     n0struct_utils_compare
     n0struct_utils_find
@@ -39,6 +40,7 @@ PACKAGE CONTENTS
 CLASSES
     builtins.object
         n0struct.n0struct_git.Git
+        n0struct.n0struct_n0compare.n0compare
         n0struct.n0struct_xml.n0xml
     collections.abc.MutableSet(collections.abc.Set)
         n0struct.n0struct_references.OrderedSet
@@ -534,6 +536,31 @@ CLASSES
      |      A list of the final component's suffixes, if any.
      |
      |      These include the leading periods. For example: ['.tar', '.gz']
+
+    class n0compare(builtins.object)
+     |  n0compare(*args, **kwargs)
+     |
+     |  Class for flexible comparison of nested sctructures dict/list with supporting of composite keys
+     |
+     |  Methods defined here:
+     |
+     |  __init__(self, obj1: Any, obj2: Any, parent_xpath1: Optional[str] = '', parent_xpath2: Optional[str] = '', show_equals: Optional[bool] = False, fuzzy_threshold: Optional[int] = 6, composite_keys: Optional[Dict[re.Pattern, Tuple[str, ...]]] = None)
+     |      Main entry point for comparison: n0compare(dict1, dict2, [optional parameters])
+     |
+     |  ----------------------------------------------------------------------
+     |  Static methods defined here:
+     |
+     |  __new__(cls, *args, **kwargs)
+     |      __new__() will be executed before __init__() and it will allow to return back custom result
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
 
     class n0dict(n0struct.n0struct_n0dict_.n0dict_)
      |  n0dict(*args, **kw)
@@ -1542,6 +1569,9 @@ FUNCTIONS
     merge_dict_first(*kw) -> dict
         # ******************************************************************************
 
+    merge_dicts(dict1: Dict, dict2: Dict) -> Dict
+        Merge dict2 into dict1 with extending of lists and int/float summation
+
     n0debug(var_name: str, alias: str = None, level: str = 'DEBUG', show_object_type: bool = True, indent_size: int = 4, quote: str = '"', pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, show_item_count: bool = True)
         Print value of the variable with name {var_name},
         depends of value in global variable {__debug_level}.
@@ -1786,8 +1816,17 @@ FUNCTIONS
             d = dict(a=1, b=2, c=3, d=[4,5,6,7], e='a string of chars')
             print(total_size(d, verbose=True))
 
-    transform_structure(in_structure, transform_key=<function <lambda>>, transform_value=<function convert_to_native_format>)
+    transform_dict(in_dict, transform_key=<function <lambda>>, transform_value=<function convert_to_native_format>)
         # ******************************************************************************
+
+    transform_dicts(in_dicts, transform_key=<function <lambda>>, transform_value=<function convert_to_native_format>)
+        {}    -> [{}]
+        [{}]  -> [{ transform_key(k1): transform_value(v1), transform_key(k2): transform_value(v2), ... }, ...]
+
+        usefull when required to convert list of dicts (2 level XML) with text data into native python structure with datetime/float
+
+    transform_structure(obj: Any, transform_xpaths: Dict[re.Pattern, List[Callable]], xpath: str = '')
+        Apply transfarmation to structure based on xpaths.
 
     unescape(in_elem: Union[str, list, dict, Any]) -> Union[str, list, dict, Any]
         # ******************************************************************************
@@ -1919,6 +1958,7 @@ FUNCTIONS
             >0 matched
 
 DATA
+    _EXCLUDE_NODE_MARKER = <object object>
     __all__ = ['typing', 'Path', 'sys', 'os', 're', 'split_pair', 'join_tr...
     compiled_regexp_mask_pan = re.compile('(0{3}|)(([456]([0-9]{7}|[0-9]{5...
 

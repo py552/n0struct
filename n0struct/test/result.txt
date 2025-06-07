@@ -2040,3 +2040,153 @@
     )
 ]
  INFO     | __main__:<module>:433 | Mission acomplished
+ INFO     | __main__:test_n0compare:23 | assert1 = {
+    "only_in_1": [  ],
+    "only_in_2": [  ],
+    "diffs": {  }
+}
+ INFO     | __main__:test_n0compare:43 | assert2 = {
+    "only_in_1": [  ],
+    "only_in_2": [  ],
+    "diffs": {
+        "/tranzations[0]/authcode": [
+            "00000001",
+            [
+                "/tranzations[0]/authcode",
+                "10000001"
+            ]
+        ],
+        "/tranzations[1]/authcode": [
+            "00000002",
+            [
+                "/tranzations[1]/authcode",
+                "10000002"
+            ]
+        ],
+        "/tranzations[2]/authcode": [
+            "00000003",
+            [
+                "/tranzations[2]/authcode",
+                "10000003"
+            ]
+        ],
+        "/tranzations[3]/authcode": [
+            "00000004",
+            [
+                "/tranzations[3]/authcode",
+                "10000004"
+            ]
+        ],
+        "/tranzations[4]/authcode": [
+            "00000005",
+            [
+                "/tranzations[4]/authcode",
+                "10000005"
+            ]
+        ]
+    }
+}
+ INFO     | __main__:test_n0compare:59 | assert3 = {
+    "only_in_1": [  ],
+    "only_in_2": [  ],
+    "diffs": {
+        "[0]/authcode": [
+            "00000001",
+            [
+                "[0]/authcode",
+                "10000001"
+            ]
+        ],
+        "[1]/authcode": [
+            "00000002",
+            [
+                "[1]/authcode",
+                "10000002"
+            ]
+        ],
+        "[2]/authcode": [
+            "00000003",
+            [
+                "[2]/authcode",
+                "10000003"
+            ]
+        ],
+        "[3]/authcode": [
+            "00000004",
+            [
+                "[3]/authcode",
+                "10000004"
+            ]
+        ],
+        "[4]/authcode": [
+            "00000005",
+            [
+                "[4]/authcode",
+                "10000005"
+            ]
+        ]
+    }
+}
+ INFO     | __main__:test_n0compare:78 | assert4 = {
+    "only_in_1": [  ],
+    "only_in_2": [  ],
+    "diffs": {  }
+}
+ INFO     | __main__:test_n0compare:93 | assert5 = {
+    "only_in_1": [  ],
+    "only_in_2": [ "/tranzations[5]" ],
+    "diffs": {
+        "/tranzations[1]/date": [
+            "12/01/2025",
+            [
+                "/tranzations[2]/date",
+                "13/01/2025"
+            ]
+        ],
+        "/tranzations[1]/amount": [
+            11,
+            [
+                "/tranzations[2]/amount",
+                12
+            ]
+        ],
+        "/tranzations[1]/authcode": [
+            "00000002",
+            [
+                "/tranzations[2]/authcode",
+                "00000003"
+            ]
+        ],
+        "/tranzations[1]/currency": [
+            "EUR",
+            [
+                "/tranzations[2]/currency",
+                "GBP"
+            ]
+        ],
+        "/tranzations[4]/authcode": [
+            "00000005",
+            [
+                "/tranzations[4]/authcode",
+                "20000005"
+            ]
+        ]
+    }
+}
+ INFO     | __main__:test_n0compare:109 | assert6 = {
+    "only_in_1": [ "/tranzations[1]" ],
+    "only_in_2": [
+        "/tranzations[2]",
+        "/tranzations[5]"
+    ],
+    "diffs": {
+        "/tranzations[4]/authcode": [
+            "00000005",
+            [
+                "/tranzations[4]/authcode",
+                "20000005"
+            ]
+        ]
+    }
+}
+ INFO     | __main__:<module>:127 | Mission acomplished

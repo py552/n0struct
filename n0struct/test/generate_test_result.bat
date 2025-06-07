@@ -19,3 +19,5 @@ python test_n0struct09.py >> result.txt 2>&1
 if ERRORLEVEL 1 exit /b -1
 python test_n0struct10.py >> result.txt 2>&1
 if ERRORLEVEL 1 exit /b -1
+python test_n0struct11.py >> result.txt 2>&1
+if ERRORLEVEL 1 exit /b -1

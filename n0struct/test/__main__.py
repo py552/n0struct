@@ -23,3 +23,5 @@ from test_n0struct09 import main as main9
 main9()
 from test_n0struct10 import main as main10
 main10()
+from test_n0struct11 import main as main10
+main11()

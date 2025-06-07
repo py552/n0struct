@@ -23,15 +23,16 @@ from .n0struct_findall import *
 from .n0struct_git import *
 from .n0struct_logging import *
 from .n0struct_mask import *
+from .n0struct_n0compare import *
 from .n0struct_n0dict_ import *
 from .n0struct_n0dict__ import *
 from .n0struct_n0list_ import *
 from .n0struct_n0list_n0dict import *
 from .n0struct_random import *
 from .n0struct_references import *
-from .n0struct_transform_structure import *
+from .n0struct_transform_dicts import *
 from .n0struct_utils import *
-from .n0struct_utils_compare import *
+from .n0struct_utils_compare import * # obsolete and will be decommissioned
 from .n0struct_utils_find import *
 from .n0struct_xml import *
 
@@ -49,13 +50,14 @@ __all__ = list(
     + n0struct_git.__all__
     + n0struct_logging.__all__
     + n0struct_mask.__all__
+    + n0struct_n0compare.__all__
     # + n0struct_n0dict_.__all__
     # + n0struct_n0dict__.__all__
     # + n0struct_n0list_.__all__
     + n0struct_n0list_n0dict.__all__
     + n0struct_random.__all__
     + n0struct_references.__all__
-    + n0struct_transform_structure.__all__
+    + n0struct_transform_dicts.__all__
     + n0struct_utils.__all__
     + n0struct_utils_compare.__all__
     + n0struct_utils_find.__all__
