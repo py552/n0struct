@@ -14,6 +14,9 @@ import re
 
 from .n0struct_arrays import *
 from .n0struct_comprehensions import *
+from .n0struct_data_to_json import *
+from .n0struct_data_to_xml import *
+from .n0struct_data_to_xpath import *
 from .n0struct_date import *
 from .n0struct_files import *
 from .n0struct_files_csv import *
@@ -42,6 +45,9 @@ __all__ = list(
     ('typing', 'Path', 'sys', 'os', 're')
     + n0struct_arrays.__all__
     + n0struct_comprehensions.__all__
+    + n0struct_data_to_json.__all__
+    + n0struct_data_to_xml.__all__
+    + n0struct_data_to_xpath.__all__
     + n0struct_date.__all__
     + n0struct_files.__all__
     + n0struct_files_csv.__all__

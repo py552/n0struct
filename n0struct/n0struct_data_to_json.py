@@ -11,8 +11,10 @@ def data_to_json(
     sort_keys: bool = False,
     ensure_ascii: bool = False,
     allow_nan: bool = True,
-    escape_special: bool = False,
-    escape_unicode: bool = False,
+    escape_special: bool = True,
+    escape_unicode: bool = True,
+    first_line_indent: bool = False,
+    join_items_into_one_line: bool = True,
 ) -> str:
     """
     Converts data to JSON string with customizable formatting.
@@ -103,7 +105,7 @@ def data_to_json(
                     continue  # Skip empty arrays
                 cleaned[k] = clean_data(v)
             return cleaned
-        elif isinstance(obj, list):
+        elif isinstance(obj, (list, tuple, set, frozenset)):
             return [clean_data(item) for item in obj]
         else:
             return obj
@@ -140,12 +142,12 @@ def data_to_json(
         elif isinstance(obj, str):
             escaped = escape_string(obj)
             return f'"{escaped}"'
-        elif isinstance(obj, list):
+        elif isinstance(obj, (list, tuple, set, frozenset)):
             if len(obj) == 0:
                 return "[]"
 
             # If all list elements are simple and few
-            if len(obj) <= 5 and all(is_simple_value(item) for item in obj):
+            if join_items_into_one_line and len(obj) <= 2 and all(is_simple_value(item) for item in obj):
                 items = [format_json_custom(item, level) for item in obj]
                 return "[" + ", ".join(items) + "]"
 
@@ -155,7 +157,7 @@ def data_to_json(
                 formatted_item = format_json_custom(item, level + 1)
                 items.append(next_indent + formatted_item)
 
-            return current_indent + "[\n" + ",\n".join(items) + "\n" + current_indent + "]"
+            return "[\n" + ",\n".join(items) + "\n" + current_indent + "]"
 
         elif isinstance(obj, dict):
             if len(obj) == 0:
@@ -165,7 +167,7 @@ def data_to_json(
             items_iter = sorted(obj.items()) if sort_keys else obj.items()
 
             # If dictionary is simple and pairs_in_one_line mode is enabled
-            if pairs_in_one_line and is_simple_dict(obj):
+            if join_items_into_one_line and len(obj) <= 2 and pairs_in_one_line and is_simple_dict(obj):
                 items = []
                 for k, v in items_iter:
                     key_str = f'"{escape_string(str(k))}"'
@@ -185,44 +187,59 @@ def data_to_json(
                 else:
                     items.append(f"{next_indent}{key_str}: {value_str}")
 
-            return current_indent + "{\n" + ",\n".join(items) + "\n" + current_indent + "}"
+            return "{\n" + ",\n".join(items) + "\n" + current_indent + "}"
 
         return str(obj)
-
-    # If compression is enabled, use standard JSON without formatting
-    if compress:
-        cleaned = clean_data(data)
-        return json.dumps(cleaned,
-                         ensure_ascii=ensure_ascii,
-                         sort_keys=sort_keys,
-                         allow_nan=allow_nan,
-                         separators=(',', ':'))
 
     # Clean data from empty arrays if needed
     cleaned_data = clean_data(data)
 
+    # If compression is enabled, use standard JSON without formatting
+    if compress:
+        return json.dumps(
+            cleaned_data,
+            ensure_ascii=ensure_ascii,
+            sort_keys=sort_keys,
+            allow_nan=allow_nan,
+            separators=(',', ':'),
+        )
+
     # Apply custom formatting
-    result = format_json_custom(cleaned_data)
+    result_json = format_json_custom(cleaned_data)
 
-    # Add base indent to the result if needed and it's not already there
-    if indent is not None and indent > 0:
-        # Split by lines and add base indent to each line
-        lines = result.split('\n')
-        indented_lines = []
-        for line in lines:
-            if line.strip():  # Only add indent to non-empty lines
-                indented_lines.append((" " * indent) + line)
-            else:
-                indented_lines.append(line)
-        return '\n'.join(indented_lines)
+    # Add base indent to the result_json if needed and it's not already there
+    if indent:
+        # Split by lines and add base indent to each line, except first if first_line_indent is False
+        return '\n'.join(
+            (" " * (indent if i or first_line_indent else 0)) + line
+            for i, line in enumerate(result_json.split('\n'))
+        )
 
-    return result
+    return result_json
 
 
 # Usage examples and tests
 if __name__ == "__main__":
-    # Set UTF-8 encoding for output (helps with Unicode characters)
+    import os
     import sys
+    mydir = os.path.dirname(os.path.realpath(__file__))
+    sys.path.insert(0, mydir)
+    sys.path.insert(0, mydir+"/../")
+    sys.path.insert(0, mydir+"/../../")
+    from n0struct import (
+        n0dict,
+        n0list,
+        n0print,
+        n0debug,
+        n0debug_calc,
+        set__flag_compare_check_different_types,
+        set__flag_compare_return_difference_of_values,
+        init_logger,
+        notemptyitems,
+        split_dict_into_chunks,
+    )
+
+    # Set UTF-8 encoding for output (helps with Unicode characters)
     if sys.stdout.encoding != 'utf-8':
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 

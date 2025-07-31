@@ -1637,6 +1637,41 @@ FUNCTIONS
     convert_to_native_format(value, key=None, exception: set = None, transform_depends_of_key: dict = None)
         # ******************************************************************************
 
+    data_to_json(data: Any, indent: Optional[int] = None, indent_size: int = 4, pairs_in_one_line: bool = True, skip_empty_arrays: bool = False, compress: bool = False, sort_keys: bool = False, ensure_ascii: bool = False, allow_nan: bool = True, escape_special: bool = True, escape_unicode: bool = True, first_line_indent: bool = False, join_items_into_one_line: bool = True) -> str
+        Converts data to JSON string with customizable formatting.
+
+        Args:
+            data: Data to convert to JSON
+            indent: Base indentation for entire JSON (None=no base indent, int=spaces to add to all lines)
+            indent_size: Indentation size for nested levels (default 4)
+            pairs_in_one_line: If True, simple key-value pairs on one line
+            skip_empty_arrays: If True, skips empty arrays
+            compress: If True, maximally compresses JSON (ignores other formatting params)
+            sort_keys: If True, sorts keys in dictionaries
+            ensure_ascii: If True, escapes all non-ASCII characters
+            allow_nan: If True, allows float('nan'), float('inf') and float('-inf')
+            escape_special: If True, escapes special characters (\x00-\x1F)
+            escape_unicode: If True, escapes all Unicode characters (\uXXXX)
+
+        Returns:
+            str: JSON string
+
+    data_to_xml(data: Any, indent: Optional[int] = None, indent_size: int = 4, encoding: str = 'utf-8', quote: str = '"') -> str
+        Converts complex structure (dict/list) to XML string.
+
+        Args:
+            data: Dictionary or list to convert
+            indent: Base indentation for entire XML (default None)
+            indent_size: Indentation size for each nesting level (default 4)
+            encoding: Encoding for XML header (default "utf-8", "" - without encoding, None - without header)
+            quote: Quote type for attribute values (default ")
+
+        Returns:
+            str: XML string
+
+    data_to_xpath(data: Any, indent: Optional[int] = None) -> str
+        Public function: collect elements xpath starts from root and print with indents
+
     date_dash_ddmmyyyy(input_date: Optional[datetime.datetime], day_delta: int = 0, month_delta: int = 0) -> str
         :param input_date:
         :param day_delta:

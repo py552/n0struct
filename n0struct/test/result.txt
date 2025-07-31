@@ -2136,13 +2136,6 @@
     "only_in_1": [  ],
     "only_in_2": [ "/tranzations[5]" ],
     "diffs": {
-        "/tranzations[1]/currency": [
-            "EUR",
-            [
-                "/tranzations[2]/currency",
-                "GBP"
-            ]
-        ],
         "/tranzations[1]/amount": [
             11,
             [
@@ -2162,6 +2155,13 @@
             [
                 "/tranzations[2]/authcode",
                 "00000003"
+            ]
+        ],
+        "/tranzations[1]/currency": [
+            "EUR",
+            [
+                "/tranzations[2]/currency",
+                "GBP"
             ]
         ],
         "/tranzations[4]/authcode": [
@@ -2192,14 +2192,14 @@
  INFO     | __main__:<module>:127 | Mission acomplished
  INFO     | __main__:test_n1dict_n1list:27 | assert1 = [
     {"name": "John", "tags": "admin"},
-        {
+    {
         "name": "Jane",
         "tags": ["user", "active"]
     }
 ]
  INFO     | __main__:test_n1dict_n1list:30 | [
     {"name": "John", "tags": "admin"},
-        {
+    {
         "name": "Jane",
         "tags": ["user", "active"]
     }
@@ -2239,14 +2239,14 @@
     }
 }
  INFO     | __main__:test_n1dict_n1list:90 | {
-    "users":     [
+    "users": [
         {"name": "John", "tags": "admin"},
-                {
+        {
             "name": "Jane",
             "tags": ["user", "active"]
         }
     ],
-    "config":     {
+    "config": {
         "theme": "dark",
         "features": {"notifications": true}
     }
