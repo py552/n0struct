@@ -6,9 +6,8 @@ from loguru import logger
 from logging import StreamHandler
 import typing
 from .n0struct_date import date_timestamp
-# ******************************************************************************
-# ******************************************************************************
 
+# ******************************************************************************
 _debug_show_object_type = True
 def set_debug_show_object_type(debug_show_object_type: bool):
     global _debug_show_object_type
@@ -243,7 +242,8 @@ def n0pretty(
             for i_sub_item, sub_item in enumerate(item):
                 if isinstance(item, dict):
                     key = sub_item
-                    sub_item = item[key]
+                    # sub_item = item[key] # TypeError: <lambda>() missing 1 required positional argument: 'value'
+                    sub_item = item.get(key)
                     sub_item_value = "{.......}"
                 else:
                     sub_item_value = "[.......]"

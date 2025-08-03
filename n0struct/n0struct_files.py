@@ -5,7 +5,7 @@ import typing
 from pathlib import Path
 from .n0struct_utils import n0eval
 from .n0struct_utils import isnumber
-# ******************************************************************************
+
 # ******************************************************************************
 def load_file(
         file_path: str,

@@ -9,7 +9,7 @@ from .n0struct_utils import (
     to_int,
 )
 from .n0struct_files import load_lines
-# ******************************************************************************
+
 # ******************************************************************************
 def load_fwf_format(file_path: str) -> dict:
     # fwf_format file is csv file, contains columns 'name','offset' and 'width' or 'till'

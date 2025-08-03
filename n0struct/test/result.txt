@@ -819,7 +819,7 @@
     "//Root/Nodes[2][0]/value": "VALUE1 from subnode2_0",
     "//Root/Nodes[3][0]/value": "VALUE1 from subnode3_0"
 }
- INFO     | __main__:<module>:548 | Mission acomplished
+ INFO     | __main__:<module>:549 | Mission acomplished
  DEBUG    | __main__:test_deserialization:30 | serialized_list == "1;2;3"
  DEBUG    | __main__:test_deserialization:32 | deserialized_list == <list 3> [
     #0   "1",
@@ -1370,6 +1370,16 @@
     #1   ""
 )
  INFO     | __main__:<module>:95 | Mission acomplished
+ DEBUG    | __main__:test_n0struct_date:23 | result == False
+ DEBUG    | __main__:test_n0struct_date:28 | result == <datetime.datetime> 2001-02-09 00:00:00
+ DEBUG    | __main__:test_n0struct_date:32 | result == <datetime.date> 2001-02-09
+ DEBUG    | __main__:test_n0struct_date:36 | result == False
+ DEBUG    | __main__:test_n0struct_date:40 | result == <datetime.date> 2023-05-02
+ DEBUG    | __main__:test_n0struct_date:44 | result == <datetime.date> 2020-01-29
+ DEBUG    | __main__:test_n0struct_date:48 | result == <datetime.date> 2023-02-05
+ DEBUG    | __main__:test_n0struct_date:52 | result == False
+ DEBUG    | __main__:test_n0struct_date:56 | result == True
+ INFO     | __main__:<module>:67 | Mission acomplished
  DEBUG    | __main__:test_split_with_escape:18 | buffer_str == "AAAA1;BBBB2;CCCC3;DDDD4"
  DEBUG    | __main__:test_split_with_escape:19 | result == <list 4> [
     #0   "AAAA1",
@@ -2143,18 +2153,18 @@
                 12
             ]
         ],
-        "/tranzations[1]/date": [
-            "12/01/2025",
-            [
-                "/tranzations[2]/date",
-                "13/01/2025"
-            ]
-        ],
         "/tranzations[1]/authcode": [
             "00000002",
             [
                 "/tranzations[2]/authcode",
                 "00000003"
+            ]
+        ],
+        "/tranzations[1]/date": [
+            "12/01/2025",
+            [
+                "/tranzations[2]/date",
+                "13/01/2025"
             ]
         ],
         "/tranzations[1]/currency": [

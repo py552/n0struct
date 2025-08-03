@@ -53,7 +53,7 @@ def data_to_xpath(
         # print(f"{left_indent}{xpath_formatted}{padding} = \"{value}\"")
     return (
         '\n'.join(
-            f"{left_indent}{xpath_formatted}{" "* (max_xpath_length - len(xpath_formatted))} = \"{value}\""
+            f"{left_indent}{xpath_formatted}" + " "* (max_xpath_length - len(xpath_formatted)) + f" = \"{value}\""
             for xpath, value in xpath_list
             if (xpath_formatted:=f"['{xpath}']")
         )

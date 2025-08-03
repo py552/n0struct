@@ -543,6 +543,7 @@ def main():
     assert len(found)                                                                               == 4
     assert list(found.values())[2]                                                                  == "VALUE1 from subnode2_0"
 
+# ******************************************************************************
 if __name__ == '__main__':
     main()
     n0print("Mission acomplished")

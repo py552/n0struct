@@ -1,6 +1,7 @@
 import typing
 import datetime
-# ******************************************************************************
+from .n0struct_n0str import n0str
+
 # ******************************************************************************
 def date_today() -> datetime.datetime:
     """
@@ -174,6 +175,7 @@ def to_date(input_date_str: typing.Union[None, datetime.datetime], date_format: 
     elif not isinstance(input_date_str, str):
         raise TypeError(f"input_date_str='{input_date_str}' must be str or datetime")
 
+    # print(f"{date_format=}")
     if not date_format:
         date_format = (
             "%Y-%m-%d",             # 2020-07-16
@@ -196,27 +198,32 @@ def to_date(input_date_str: typing.Union[None, datetime.datetime], date_format: 
     if not isinstance(date_format, (list, tuple)):
         raise TypeError(f"date_format='{date_format}' must be str or list/tuple of str")
 
-    # print(f"{input_date_str=}")
-    # print(f"{date_format=}")
-
     for current_date_format in date_format:
         try:
+            expected_len = len(current_date_format)
+            current_date_format = n0str(current_date_format)
+            if not current_date_format.has_any(("%a", "%A", "%-d", "%-m", "%B", "%-y", "%-H", "%-I", "%-M", "%-S", "%f", "%Z", "%-j", "%c", "%x", "%X")):
+                if counter:=current_date_format.has_count(("%b", "%j")):
+                    expected_len += counter
+                if counter:=current_date_format.has_count(("%Y", "%z")):
+                    expected_len += 2*counter
+                if counter:=current_date_format.has_count(("%w", "%U", "%%")):
+                    expected_len -= counter
+                if len(input_date_str) != expected_len:
+                    raise ValueError()
+
             return_datetime = datetime.datetime.strptime(input_date_str, current_date_format)
-            # print(f"{return_datetime=}")
+
             if "%M" not in current_date_format:
                 return_datetime = return_datetime.date()
-                # print(f"{return_datetime=}")
             return return_datetime
         except (ValueError, TypeError) as ex:
-            # print(f"Exception: {input_date_str=} {current_date_format=}")
             caught_ex = ex
             continue
 
-    # print(f"{raise_exception=}")
     if raise_exception:
         raise caught_ex
     else:
-        # print(f"{return_if_wrong_input=}")
         if return_if_wrong_input is None:
             return input_date_str
         else:

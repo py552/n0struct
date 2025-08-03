@@ -1,6 +1,6 @@
 import typing
 from collections.abc import MutableSet
-# ******************************************************************************
+
 # ******************************************************************************
 # https://stackoverflow.com/questions/1653970/does-python-have-an-ordered-set
 # https://code.activestate.com/recipes/576694/

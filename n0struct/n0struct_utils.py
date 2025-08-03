@@ -1,7 +1,7 @@
 import typing
 import itertools
 from n0struct.n0struct_logging import safe_json
-# ******************************************************************************
+
 # ******************************************************************************
 def to_int(value: str, max_len: typing.Union[int, None] = None, default_value: typing.Any = None) -> typing.Any:
     if isnumber(value, max_len):
@@ -895,7 +895,80 @@ def split_dict_into_chunks(
         chunks.append(chunk_template.format(chunk=chunk))
     return chunks
 # ******************************************************************************
-# ******************************************************************************
+def pairslist_to_dict(pairslist: list, repeatable_keys: dict = {}, add_repeatable_blocks_if_absent = False):
+    """
+        pairslist = [
+            ['key1', "value1"],
+            ['key2', "value21"],
+            ['key4', "value22"],
+            ['key2', "value31"],
+            ['key4', "value32"],
+            ['key5', "value5"]
+        ]
+        repeatable_keys = {
+            'key2,key3,key4': (
+                ( 'key2', 'value.split()' ),    # mandatory first key in the sequence, lambda value:
+                ( 'key3', None            ),    # optional second key in the sequence
+                ( 'key4', None            )     # optional third key in the sequence
+            )
+        }
+
+        dict(pairslist) == pairslist_to_dict(pairslist) == {
+            'key1': "value1",
+            'key2': "value31",
+            'key4': "value32",
+            'key5': "value5"
+        }
+
+        pairslist_to_dict(pairslist, repeatable_keys) == {
+            'key1': "value1",
+            'key2,key3,key4': [
+                {'key2': "value21", 'key4': "value22"},
+                {'key2': "value31", 'key4': "value32"}
+            ],
+            'key5': "value5"
+        }
+    """
+    def find_dst_key() -> typing.Union[typing.Any, None]:
+        for dst_key,keys in repeatable_keys.items():
+            for i in range(first_key_is_found, len(keys)):
+                if isinstance(keys[i], (list, tuple)):
+                    check_key = keys[i][0] if len(keys[i]) > 0 else None
+                    transform = keys[i][1] if len(keys[i]) > 1 else None
+                else:
+                    check_key = keys[i]
+                    transform = None
+                if not callable(transform):
+                    transform = eval('lambda value:' + (transform or 'value'))
+                if src_key == check_key:
+                    return dst_key, transform
+        return None, None
+
+    dst_dict = {}
+    first_key_is_found = 0
+    for src_key,value in pairslist:
+        dst_key, transform = find_dst_key()
+        if not transform and first_key_is_found:
+            first_key_is_found = 0
+            dst_key, transform = find_dst_key()
+        if transform:
+            if first_key_is_found:
+                dst_dict[dst_key][-1][src_key] = transform(value)
+            else:
+                first_key_is_found = 1
+                if not dst_key in dst_dict:
+                    dst_dict[dst_key] = []
+                dst_dict[dst_key].append({src_key: transform(value)})
+        else:
+            dst_dict[src_key] = value
+
+    if add_repeatable_blocks_if_absent:
+        for dst_key in repeatable_keys.keys():
+            if not dst_key in dst_dict:
+                dst_dict[dst_key] = []
+
+    return dst_dict
+
 ################################################################################
 __all__ = (
     'to_int',
@@ -930,5 +1003,6 @@ __all__ = (
     'parse_tlv',
     'generate_tlv',
     'split_dict_into_chunks',
+    'pairslist_to_dict',
 )
 ################################################################################

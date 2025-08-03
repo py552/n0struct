@@ -9,7 +9,6 @@ except NameError:
     __system_random = random.SystemRandom()
 
 # ******************************************************************************
-# ******************************************************************************
 def rnd(till_not_included: int) -> int:
     """
     :param till_not_included:

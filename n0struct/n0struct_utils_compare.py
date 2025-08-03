@@ -1,5 +1,5 @@
 import typing
-# ******************************************************************************
+
 # ******************************************************************************
 __flag_compare_check_different_types = False
 def set__flag_compare_check_different_types(value: bool):
@@ -177,8 +177,7 @@ def generate_composite_keys(
             created_composite_key = str(line)
         composite_keys_for_all_lines.append((created_composite_key, line_i))
     return composite_keys_for_all_lines
-# ******************************************************************************
-# ******************************************************************************
+
 ################################################################################
 __all__ = (
     'set__flag_compare_check_different_types',

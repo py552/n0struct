@@ -4,7 +4,7 @@ from .n0struct_utils_find import split_name_index
 from .n0struct_findall import findall as n0struct_findall__findall
 from .n0struct_findall import findfirst as n0struct_findall__findfirst
 from .n0struct_utils import n0eval
-# ******************************************************************************
+
 # ******************************************************************************
 class n0dict__(dict):
     def findall(self, xpath: str, raise_exception: bool = True):
@@ -240,7 +240,6 @@ class n0dict__(dict):
             else:
                 return ""
     # **************************************************************************
-    # **************************************************************************
     def update_extend(self, other):
         if other is None:
             return self
@@ -269,7 +268,6 @@ class n0dict__(dict):
             raise TypeError("Unexpected type of other: " + str(type(other)))
         return self
     # **************************************************************************
-    # **************************************************************************
     def isExist(self, xpath) -> dict:
         """
         Public function: return empty lists in dict, if self[xpath] exists
@@ -292,7 +290,6 @@ class n0dict__(dict):
         validation_results["other_unique"].append((xpath, None))
         return validation_results
     # **************************************************************************
-    # **************************************************************************
     def is_exist(self, xpath: str) -> bool:
         """
         Public function: return True, if self[xpath] exists
@@ -303,20 +300,17 @@ class n0dict__(dict):
                 return True
         return False
     # **************************************************************************
-    # **************************************************************************
     def has_all(self, tupple_of_keys: typing.Union[tuple, list]) -> bool:
         for key in tupple_of_keys:
             if key not in self or not self[key]:
                 return False
         return True
     # **************************************************************************
-    # **************************************************************************
     def has_any_of(self, tupple_of_keys: typing.Union[tuple, list]) -> bool:
         for key in tupple_of_keys:
             if key in self:
                 return True
         return False
-    # **************************************************************************
     # **************************************************************************
     def isEqual(self, xpath, value):
         """
@@ -333,7 +327,6 @@ class n0dict__(dict):
         validation_results["differences"].append(f"[{xpath}]=='{self[xpath]}' != '{value}'")
         validation_results["not_equal"].append((xpath, (self[xpath], value)))
         return validation_results
-    # **************************************************************************
     # **************************************************************************
     def isTheSame(self, xpath, other_n0dict, other_xpath=None, transformation=lambda x: x):
         """

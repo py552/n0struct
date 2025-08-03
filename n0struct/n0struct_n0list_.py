@@ -8,7 +8,7 @@ from .n0struct_logging import (
     n0error,
     n0pretty,
 )
-# ******************************************************************************
+
 # ******************************************************************************
 class n0list_(list):
     def findall(self, xpath: str, raise_exception: bool = True):

@@ -2,7 +2,6 @@ import typing
 from .n0struct_n0dict__ import n0dict__
 from .n0struct_logging import n0pretty
 
-# **********************************************************************************************************************
 # *****************************************************************************
 # https://www.w3.org/TR/html4/sgml/entities.html#h-24.4.1
 # https://www.htmlhelp.com/reference/html40/entities/special.html

@@ -30,6 +30,7 @@ PACKAGE CONTENTS
     n0struct_n0dict__
     n0struct_n0list_
     n0struct_n0list_n0dict
+    n0struct_n0str
     n0struct_n0xml
     n0struct_n1dict_n1list
     n0struct_random
@@ -65,7 +66,6 @@ CLASSES
      |  Git(repo_root_dir: str, repository_url: str, rsa_key_path: str = '', show_result=False)
      |
      |  # ******************************************************************************
-     |  # ******************************************************************************
      |
      |  Methods defined here:
      |
@@ -93,7 +93,6 @@ CLASSES
     class OrderedSet(collections.abc.MutableSet)
      |  OrderedSet(iterable=None)
      |
-     |  # ******************************************************************************
      |  # ******************************************************************************
      |  # https://stackoverflow.com/questions/1653970/does-python-have-an-ordered-set
      |  # https://code.activestate.com/recipes/576694/
@@ -620,7 +619,6 @@ CLASSES
      |
      |  convert_recursively(node: 'typing.Any', xpath: 'str' = '/', level: 'int' = 0) -> 'typing.Any'
      |      # **************************************************************************
-     |      # **************************************************************************
      |
      |  ----------------------------------------------------------------------
      |  Methods inherited from n0struct.n0struct_n0dict_.n0dict_:
@@ -710,10 +708,8 @@ CLASSES
      |
      |  has_all(self, tupple_of_keys: 'typing.Union[tuple, list]') -> 'bool'
      |      # **************************************************************************
-     |      # **************************************************************************
      |
      |  has_any_of(self, tupple_of_keys: 'typing.Union[tuple, list]') -> 'bool'
-     |      # **************************************************************************
      |      # **************************************************************************
      |
      |  isEqual(self, xpath, value)
@@ -735,7 +731,6 @@ CLASSES
      |      raise a KeyError.
      |
      |  update_extend(self, other)
-     |      # **************************************************************************
      |      # **************************************************************************
      |
      |  valid(self, node_xpath: 'str', validate, expected_result_for_error: 'bool' = False, msg: 'str' = None)
@@ -1791,7 +1786,6 @@ FUNCTIONS
 
     findall(current_node: Union[dict, list], seeked_xpath_str: str, raise_exception=True) -> Optional[dict]
         # ******************************************************************************
-        # ******************************************************************************
 
     findfirst(current_node: Union[dict, list], seeked_xpath_str: str, raise_exception=True) -> tuple
         # ******************************************************************************
@@ -1956,13 +1950,11 @@ FUNCTIONS
 
     load_file(file_path: str, read_mode: str = 't', encoding: Optional[str] = 'utf-8-sig', EOL: str = '\r\n') -> str
         # ******************************************************************************
-        # ******************************************************************************
 
     load_fwf(file_path: str, header_format: dict, body_format: dict = None, footer_format: dict = None, validate: bool = True, EOL: str = '\r\n', return_original_row=None, read_mode='t', encoding: Optional[str] = 'utf-8-sig')
         # ******************************************************************************
 
     load_fwf_format(file_path: str) -> dict
-        # ******************************************************************************
         # ******************************************************************************
 
     load_ini(file_path: str, default_value='', equal_tag: Union[str, Iterable] = '=', comment_tags: Union[str, Iterable] = ('#', '//'), parse_key: Callable = <function <lambda>>, parse_value: Callable = <function default_parse_value>, encoding: Optional[str] = 'utf-8-sig', concatenate_sign: Optional[str] = '\x16') -> dict
@@ -2059,8 +2051,40 @@ FUNCTIONS
         #   Return count of notempty item/subitems.
         # ******************************************************************************
 
+    pairslist_to_dict(pairslist: list, repeatable_keys: dict = {}, add_repeatable_blocks_if_absent=False)
+        pairslist = [
+            ['key1', "value1"],
+            ['key2', "value21"],
+            ['key4', "value22"],
+            ['key2', "value31"],
+            ['key4', "value32"],
+            ['key5', "value5"]
+        ]
+        repeatable_keys = {
+            'key2,key3,key4': (
+                ( 'key2', 'value.split()' ),    # mandatory first key in the sequence, lambda value:
+                ( 'key3', None            ),    # optional second key in the sequence
+                ( 'key4', None            )     # optional third key in the sequence
+            )
+        }
+
+        dict(pairslist) == pairslist_to_dict(pairslist) == {
+            'key1': "value1",
+            'key2': "value31",
+            'key4': "value32",
+            'key5': "value5"
+        }
+
+        pairslist_to_dict(pairslist, repeatable_keys) == {
+            'key1': "value1",
+            'key2,key3,key4': [
+                {'key2': "value21", 'key4': "value22"},
+                {'key2': "value31", 'key4': "value32"}
+            ],
+            'key5': "value5"
+        }
+
     parse_complex_csv_line(line: Union[str, bytes], delimiter: Union[str, bytes] = ',', process_field: <built-in function callable> = <function <lambda>>, EOL: Any = None) -> list
-        # ******************************************************************************
         # ******************************************************************************
 
     parse_fwf_row(incoming_row: str, fwf_format: dict, validate: bool = True) -> Union[dict, tuple]
@@ -2183,7 +2207,6 @@ FUNCTIONS
 
     split_name_index(node_name: str) -> Tuple[str, Union[str, Tuple[str, str, Union[str, bool]]]]
         # ******************************************************************************
-        # ******************************************************************************
 
     split_pair(in_str: str, delimiter: Union[str, Iterable], transform_left: <built-in function callable> = <function <lambda>>, transform_right: <built-in function callable> = <function <lambda>>, default_element: int = 1, default_left: Any = '', default_right: Any = '') -> tuple
         split string into 2 sub strings in any cases:
@@ -2214,7 +2237,6 @@ FUNCTIONS
 
     strip_ns lambda key
         # ******************************************************************************
-        # ******************************************************************************
 
     time_colon_hhmmss(input_date: Optional[datetime.datetime]) -> str
         :param input_date:
@@ -2231,7 +2253,6 @@ FUNCTIONS
         :return: str -> date
 
     to_int(value: str, max_len: Optional[int] = None, default_value: Any = None) -> Any
-        # ******************************************************************************
         # ******************************************************************************
 
     total_size(o, handlers={}, verbose=False)

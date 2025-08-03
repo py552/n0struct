@@ -1,5 +1,5 @@
 from .n0struct_utils import isnumber
-# ******************************************************************************
+
 # ******************************************************************************
 strip_ns = lambda key: key.split(':', 1)[1] if ':' in key else key
 # ******************************************************************************
@@ -53,6 +53,7 @@ def transform_dicts(in_dicts, transform_key = strip_ns, transform_value = conver
         transform_dict(in_dict, transform_key, transform_value)
         for in_dict in in_dicts
     }
+
 ################################################################################
 __all__ = (
     'strip_ns',

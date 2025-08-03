@@ -31,7 +31,6 @@ from .n0struct_n0list_ import n0list_
 from .n0struct_n0dict_ import n0dict_
 
 # ******************************************************************************
-# ******************************************************************************
 class n0list(n0list_):
     """
     Class extended builtins.list(builtins.object) with additional methods:
@@ -649,7 +648,6 @@ class n0dict(n0dict_):
     For Python >= 3.6, dictionary are Sorted by insertion order, so avoid the use of OrderedDict for those python versions.
     """
     # **************************************************************************
-    # **************************************************************************
     @staticmethod
     def convert_recursively(node: typing.Any, xpath: str = "/", level: int = 0) -> typing.Any:
         if isinstance(node, dict):
@@ -663,7 +661,6 @@ class n0dict(n0dict_):
         else:
             return node
 
-    # **************************************************************************
     # **************************************************************************
     def __init__(self, *args, **kw):
         """
