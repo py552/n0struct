@@ -50,6 +50,7 @@ CLASSES
         n0struct.n0struct_git.Git
         n0struct.n0struct_n0compare.n0compare
         n0struct.n0struct_n0xml.n0xml
+        n0struct.n0struct_utils.Call_if_callable
     collections.abc.MutableSet(collections.abc.Set)
         n0struct.n0struct_references.OrderedSet
     n0struct.n0struct_n0dict_.n0dict_(n0struct.n0struct_n0dict__.n0dict__)
@@ -61,6 +62,25 @@ CLASSES
         n0struct.n0struct_n1dict_n1list.n1list(n0struct.n0struct_n1dict_n1list.n0dict_n0list_mixin, builtins.list)
     pathlib.PurePath(builtins.object)
         pathlib.Path
+
+    class Call_if_callable(builtins.object)
+     |  Call_if_callable(_object, *args: Any, **kwargs: Any)
+     |
+     |  Methods defined here:
+     |
+     |  __getattr__(self, name: str) -> Any
+     |
+     |  __init__(self, _object, *args: Any, **kwargs: Any)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |
+     |  __dict__
+     |      dictionary for instance variables
+     |
+     |  __weakref__
+     |      list of weak references to the object
 
     class Git(builtins.object)
      |  Git(repo_root_dir: str, repository_url: str, rsa_key_path: str = '', show_result=False)
@@ -1619,6 +1639,8 @@ FUNCTIONS
     add_colums_into_csv(additional_columns: list, csv_rows: list = None, csv_schema: dict = None, are_required: bool = False)
         # ******************************************************************************
 
+    call_if_callable(variable, *args: Any, **kwargs: Any)
+
     catch_exception(func: <built-in function callable>, result_in_case_of_exception: Any = None, **kw)
         args == tuple, kw == mapping(dictionary)
 
@@ -1792,6 +1814,8 @@ FUNCTIONS
 
     first_day_of_yymm(input_date_str: str) -> Union[NoneType, datetime.datetime, bool]
         # ******************************************************************************
+
+    format_text(text: str, variables: dict) -> str
 
     from_date(input_date_str: str, date_format: str) -> Union[NoneType, datetime.datetime, str]
         LEGACY
@@ -1995,6 +2019,9 @@ FUNCTIONS
 
     merge_dicts(dict1: Dict, dict2: Dict) -> Dict
         Merge dict2 into dict1 with extending of lists and int/float summation
+
+    n0critical(text: str, internal_call: int = 0)
+        # ******************************************************************************
 
     n0debug(var_name: str, alias: str = None, level: str = 'DEBUG', show_object_type: bool = True, indent_size: int = 4, quote: str = '"', pairs_in_one_line: bool = True, json_convention: bool = False, skip_empty_arrays: bool = False, skip_simple_types: bool = True, show_item_count: bool = True)
         Print value of the variable with name {var_name},
@@ -2255,6 +2282,8 @@ FUNCTIONS
     to_int(value: str, max_len: Optional[int] = None, default_value: Any = None) -> Any
         # ******************************************************************************
 
+    toggle_double_curly_brackets(text: str) -> str
+
     total_size(o, handlers={}, verbose=False)
         Returns the approximate memory footprint an object and all of its contents.
 
@@ -2375,6 +2404,16 @@ FUNCTIONS
 
     validate_path(value, default_value: str = '', parse_str=<function <lambda>>) -> str
         value = ""
+        validate_str(value) == ""
+        value = "C:\TMP"
+        validate_str(value) == "C:\TMP"
+        value = ""
+        validate_str(value, default_value = "C:\ETC") == "C:\ETC"
+        value = "."
+        validate_str(value, default_value = "C:\ETC") == ""
+
+    validate_path_exists(value, default_value: str = '', parse_str=<function <lambda>>, parse_path=<function <lambda>>) -> Union[pathlib.Path, Any]
+        value = ""
         validate_path(value) == ""
         value = "C:\TMP"
         validate_path(value) == "C:\TMP"
@@ -2387,11 +2426,11 @@ FUNCTIONS
         value = ""
         validate_str(value) == ""
         value = "C:\TMP"
-        validate_path(value) == "C:\TMP"
+        validate_str(value) == "C:\TMP"
         value = ""
-        validate_path(value, default_value = "C:\ETC") == "C:\ETC"
+        validate_str(value, default_value = "C:\ETC") == "C:\ETC"
         value = "."
-        validate_path(value, default_value = "C:\ETC") == ""
+        validate_str(value, default_value = "C:\ETC") == "."
 
     validate_values(value: str, possible_values_the_last_is_default: Union[list, tuple], return_if_wrong_input: Any = '', raise_if_not_found: Optional[Exception] = None)
         value = "A"
@@ -2417,6 +2456,7 @@ DATA
     _EXCLUDE_NODE_MARKER = <object object>
     __all__ = ['typing', 'Path', 'sys', 'os', 're', 'split_pair', 'join_tr...
     compiled_regexp_mask_pan = re.compile('(0{3}|)(([456]([0-9]{7}|[0-9]{5...
+    logger = <loguru.logger handlers=[(id=0, level=10, sink=<stderr>)]>
 
 FILE
     c:\repo\n0struct\n0struct\__init__.py

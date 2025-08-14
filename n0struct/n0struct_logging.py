@@ -2,9 +2,12 @@ import sys
 import os
 import re
 import inspect
+from pathlib import Path
 from loguru import logger
 from logging import StreamHandler
 import typing
+import traceback
+from types import SimpleNamespace
 from .n0struct_date import date_timestamp
 
 # ******************************************************************************
@@ -24,6 +27,32 @@ def set_debug_show_item_count(debug_show_item_count: bool):
     _debug_show_item_count = debug_show_item_count
 
 
+def n0excepthook(exception_type, exception_value, trace_back):
+    frames = traceback.extract_tb(trace_back)
+    if frames:
+        last_frame = frames[-1]
+        filename = last_frame.filename
+        lineno   = last_frame.lineno
+        funcname = last_frame.name
+        def patch(record):
+            record["file"] = SimpleNamespace(
+                name=Path(filename).name,
+                path=str(filename)
+            )
+            record["function"] = "top_level" if funcname == "<module>" else funcname
+            record["line"] = lineno
+        _logger = logger.patch(patch)
+    else:
+        _logger = logger
+    _logger.critical(str(exception_value))
+
+def patch_record(record):
+    if record["name"] == "__main__":
+        record["name"] = Path(record["file"].path).stem
+    if record["function"] == "<module>":
+        record["function"] = "top_level"
+logger = logger.patch(patch_record)
+
 __main_log_filename = None
 def init_logger(
     debug_level: str             = "TRACE",
@@ -35,10 +64,12 @@ def init_logger(
     debug_logtofile: bool        = False,
     log_file_name: str           = None,
 ):
+    sys.excepthook = n0excepthook
     logger.level("DEBUG", color="<white>")  # Change default color of DEBUG messages from blue into light gray
 
     global __main_log_filename
     if debug_logtofile or log_file_name:
+        debug_logtofile = True
         if log_file_name:
             __main_log_filename = log_file_name
         else:
@@ -57,6 +88,7 @@ def init_logger(
         logger_format += "<green>{time:" + debug_timeformat + "}</green> |"
     logger_format += "<level> {level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> | <level>{message}</level>"
 
+
     handlers = [
         dict(sink = debug_output, level = debug_level, format = logger_format),
     ]
@@ -65,6 +97,7 @@ def init_logger(
             dict(sink = __main_log_filename, enqueue = True, level = debug_level, format = logger_format),
         )
     logger.configure(handlers = handlers)
+
 # ******************************************************************************
 def n0print(
     text: str,
@@ -85,11 +118,14 @@ def n0print(
 def n0info(text: str, internal_call: int = 0):
     n0print(text, level = "INFO", internal_call = internal_call + 1)
 # ******************************************************************************
+def n0warning(text: str, internal_call: int = 0):
+    n0print(text, level = "WARNING", internal_call = internal_call + 1)
+# ******************************************************************************
 def n0error(text: str, internal_call: int = 0):
     n0print(text, level = "ERROR", internal_call = internal_call + 1)
 # ******************************************************************************
-def n0warning(text: str, internal_call: int = 0):
-    n0print(text, level = "WARNING", internal_call = internal_call + 1)
+def n0critical(text: str, internal_call: int = 0):
+    n0print(text, level = "CRITICAL", internal_call = internal_call + 1)
 # ******************************************************************************
 json_control_characters = re.compile(r"[\x00-\x1F\"\\\x7F]")
 python_control_characters = re.compile(r"[\x00-\x09\x0B-\x1F\"\\\x7F]")
@@ -461,10 +497,12 @@ __all__ = (
     'set_debug_show_object_id',
     'set_debug_show_item_count',
     'init_logger',
+    'logger',
     'n0print',
     'n0info',
-    'n0error',
     'n0warning',
+    'n0error',
+    'n0critical',
     'n0pretty',
     'n0debug_calc',
     'n0debug',

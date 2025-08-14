@@ -1,5 +1,7 @@
 import typing
 import itertools
+import re
+from pathlib import Path
 from n0struct.n0struct_logging import safe_json
 
 # ******************************************************************************
@@ -370,11 +372,11 @@ def validate_str(
         value = ""
         validate_str(value) == ""
         value = "C:\\TMP"
-        validate_path(value) == "C:\\TMP"
+        validate_str(value) == "C:\\TMP"
         value = ""
-        validate_path(value, default_value = "C:\\ETC") == "C:\\ETC"
+        validate_str(value, default_value = "C:\\ETC") == "C:\\ETC"
         value = "."
-        validate_path(value, default_value = "C:\\ETC") == ""
+        validate_str(value, default_value = "C:\\ETC") == "."
     '''
     return default_value if not value else parse_str(value)
 # ******************************************************************************
@@ -385,6 +387,26 @@ def validate_path(
 ) -> str:
     '''
         value = ""
+        validate_str(value) == ""
+        value = "C:\\TMP"
+        validate_str(value) == "C:\\TMP"
+        value = ""
+        validate_str(value, default_value = "C:\\ETC") == "C:\\ETC"
+        value = "."
+        validate_str(value, default_value = "C:\\ETC") == ""
+    '''
+    value = validate_str(value, default_value, parse_str)
+    return "" if value == "." else value
+
+# ******************************************************************************
+def validate_path_exists(
+                    value,
+                    default_value: str = "",
+                    parse_str = lambda item: item,
+                    parse_path = lambda item: item,
+) -> typing.Union[Path, typing.Any]:
+    '''
+        value = ""
         validate_path(value) == ""
         value = "C:\\TMP"
         validate_path(value) == "C:\\TMP"
@@ -393,11 +415,11 @@ def validate_path(
         value = "."
         validate_path(value, default_value = "C:\\ETC") == ""
     '''
-    if not value:
-        return default_value
-    if value == ".":
-        return ""
-    return parse_str(value)
+    value = validate_path(value, default_value, parse_str)
+    if (value_path:=Path(value)).exists():
+        return parse_path(value_path.absolute())
+    else:
+        return str(value or "")
 # ******************************************************************************
 def validate_bool(
                     value,
@@ -970,6 +992,65 @@ def pairslist_to_dict(pairslist: list, repeatable_keys: dict = {}, add_repeatabl
     return dst_dict
 
 ################################################################################
+
+def call_if_callable(variable, *args: typing.Any, **kwargs: typing.Any):
+    # n0debug("args")
+    # n0debug("kwargs")
+    if not callable(variable):
+        return variable
+    if not args:
+        if not kwargs:
+            n0print(variable)
+            return variable()
+        return variable(**kwargs)
+    if not kwargs:
+        return variable(*args)
+    return variable(*args, **kwargs)
+
+class Call_if_callable:
+    def __init__(self, _object, *args: typing.Any, **kwargs: typing.Any):
+        self.__object = _object
+        # n0debug("args")
+        # n0debug("kwargs")
+        self.__args = args
+        self.__kwargs = kwargs
+    def __getattr__(self, name: str) -> typing.Any:
+        value = getattr(self.__object, name)
+        # if callable(value):
+            # value = value(self.__object)
+        # if isinstance(value, str) and "{" in value:
+            # value = format_text(value, global_vars)
+        # return value
+        return call_if_callable(value, *self.__args, **self.__kwargs)
+
+def toggle_double_curly_brackets(text: str) -> str:
+    # All '{{' will be replaced into '{' and all single '{' will be replaced into '{{'
+    return text \
+        .replace("{{", "\xDE")  \
+        .replace("}}", "\xFE")  \
+        .replace("{", "{{")     \
+        .replace("}", "}}")     \
+        .replace("\xDE", "{")   \
+        .replace("\xFE", "}")
+
+regexp_curly_brackets_values = re.compile(r"(?:[^\{]||^)\{(\w*)(?:\w*)?\}(?=[^\}]|$)")  # Regular expression for searching contents inside of { }
+def format_text(text: str, variables: dict) -> str:
+    try:
+        used_variables_set = set(regexp_curly_brackets_values.findall(text))
+        used_variables_dict = {
+            used_variable: (
+                variables[used_variable]
+                if used_variable in variables
+                else raise_exception(KeyError(f"Unknown '{used_variable}' in '{text}'"))
+            )
+            for used_variable in used_variables_set
+        }
+        return text.format(**used_variables_dict)
+    except:
+        raise KeyError(f"Issue with format_text('{text}')")
+
+
+################################################################################
 __all__ = (
     'to_int',
     'isnumber',
@@ -987,6 +1068,7 @@ __all__ = (
     'deserialize_fixed_list',
     'validate_str',
     'validate_path',
+    'validate_path_exists',
     'validate_bool',
     'validate_values',
     'raise_exception',
@@ -1004,5 +1086,9 @@ __all__ = (
     'generate_tlv',
     'split_dict_into_chunks',
     'pairslist_to_dict',
+    'call_if_callable',
+    'Call_if_callable',
+    'toggle_double_curly_brackets',
+    'format_text',
 )
 ################################################################################

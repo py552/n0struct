@@ -1,5 +1,5 @@
- INFO     | __main__:main:134 | ================================================================================
- DEBUG    | __main__:main:135 | dict1 == <n0struct..n0dict 1> {
+ INFO     | test_n0struct01:main:134 | ================================================================================
+ DEBUG    | test_n0struct01:main:135 | dict1 == <n0struct..n0dict 1> {
     "C": <n0struct..n0list 3> [
         #0   <n0struct..n0dict 5> {
             "a": 1,
@@ -24,8 +24,8 @@
         }
     ]
 }
- INFO     | __main__:main:136 | ================================================================================
- DEBUG    | __main__:main:137 | dict2 == <n0struct..n0dict 1> {
+ INFO     | test_n0struct01:main:136 | ================================================================================
+ DEBUG    | test_n0struct01:main:137 | dict2 == <n0struct..n0dict 1> {
     "C": <n0struct..n0list 3> [
         #0   <n0struct..n0dict 5> {
             "a": 1,
@@ -50,8 +50,8 @@
         }
     ]
 }
- INFO     | __main__:main:138 | ================================================================================
- DEBUG    | __main__:main:139 | dict3 == <n0struct..n0dict 1> {
+ INFO     | test_n0struct01:main:138 | ================================================================================
+ DEBUG    | test_n0struct01:main:139 | dict3 == <n0struct..n0dict 1> {
     "C": <n0struct..n0list 3> [
         #0   <n0struct..n0dict 5> {
             "a": 1,
@@ -76,24 +76,24 @@
         }
     ]
 }
- INFO     | __main__:test_sorted_lists:56 | ******************************************************************************** 1 = Sorted list in dictionary = direct_compare
- INFO     | __main__:test_sorted_lists:59 | *** differences
- INFO     | __main__:test_sorted_lists:61 | Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99
- INFO     | __main__:test_sorted_lists:59 | *** not_equal
- INFO     | __main__:test_sorted_lists:61 | ('/C[1]/value2', [5, 99, 94.0])
- INFO     | __main__:test_sorted_lists:59 | *** self_unique
- INFO     | __main__:test_sorted_lists:59 | *** other_unique
- INFO     | __main__:test_sorted_lists:59 | *** difftypes
- INFO     | __main__:test_sorted_lists:63 | ******************************************************************************** 2 = Sorted list in dictionary = wise_compare
- INFO     | __main__:test_sorted_lists:69 | *** differences
- INFO     | __main__:test_sorted_lists:71 | Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99
- INFO     | __main__:test_sorted_lists:69 | *** not_equal
- INFO     | __main__:test_sorted_lists:71 | ('/C[1]/value2', [5, 99, 94.0])
- INFO     | __main__:test_sorted_lists:69 | *** self_unique
- INFO     | __main__:test_sorted_lists:69 | *** other_unique
- INFO     | __main__:test_sorted_lists:69 | *** difftypes
- INFO     | __main__:test_sorted_lists:73 | ================================================================================
- DEBUG    | __main__:test_sorted_lists:74 | differences1_direct_compare == <n0struct..n0dict 5> {
+ INFO     | test_n0struct01:test_sorted_lists:56 | ******************************************************************************** 1 = Sorted list in dictionary = direct_compare
+ INFO     | test_n0struct01:test_sorted_lists:59 | *** differences
+ INFO     | test_n0struct01:test_sorted_lists:61 | Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99
+ INFO     | test_n0struct01:test_sorted_lists:59 | *** not_equal
+ INFO     | test_n0struct01:test_sorted_lists:61 | ('/C[1]/value2', [5, 99, 94.0])
+ INFO     | test_n0struct01:test_sorted_lists:59 | *** self_unique
+ INFO     | test_n0struct01:test_sorted_lists:59 | *** other_unique
+ INFO     | test_n0struct01:test_sorted_lists:59 | *** difftypes
+ INFO     | test_n0struct01:test_sorted_lists:63 | ******************************************************************************** 2 = Sorted list in dictionary = wise_compare
+ INFO     | test_n0struct01:test_sorted_lists:69 | *** differences
+ INFO     | test_n0struct01:test_sorted_lists:71 | Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99
+ INFO     | test_n0struct01:test_sorted_lists:69 | *** not_equal
+ INFO     | test_n0struct01:test_sorted_lists:71 | ('/C[1]/value2', [5, 99, 94.0])
+ INFO     | test_n0struct01:test_sorted_lists:69 | *** self_unique
+ INFO     | test_n0struct01:test_sorted_lists:69 | *** other_unique
+ INFO     | test_n0struct01:test_sorted_lists:69 | *** difftypes
+ INFO     | test_n0struct01:test_sorted_lists:73 | ================================================================================
+ DEBUG    | test_n0struct01:test_sorted_lists:74 | differences1_direct_compare == <n0struct..n0dict 5> {
     "differences": <list 1> [ #0   "Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99" ],
     "not_equal": <list 1> [
         #0   <tuple 2> (
@@ -109,10 +109,10 @@
     "other_unique": <list 0> [  ],
     "difftypes": <list 0> [  ]
 }
- DEBUG    | __main__:test_sorted_lists:75 | notemptyitems(differences1_direct_compare["differences"]) == 1
- DEBUG    | __main__:test_sorted_lists:77 | notemptyitems(differences1_direct_compare["not_equal"]) == 4
- INFO     | __main__:test_sorted_lists:83 | ================================================================================
- DEBUG    | __main__:test_sorted_lists:84 | differences2_wise_compare == <n0struct..n0dict 5> {
+ DEBUG    | test_n0struct01:test_sorted_lists:75 | notemptyitems(differences1_direct_compare["differences"]) == 1
+ DEBUG    | test_n0struct01:test_sorted_lists:77 | notemptyitems(differences1_direct_compare["not_equal"]) == 4
+ INFO     | test_n0struct01:test_sorted_lists:83 | ================================================================================
+ DEBUG    | test_n0struct01:test_sorted_lists:84 | differences2_wise_compare == <n0struct..n0dict 5> {
     "differences": <list 1> [ #0   "Values are different: dict1['C'][1]['value2']=5 != dict2['C'][1]['value2']=99" ],
     "not_equal": <list 1> [
         #0   <tuple 2> (
@@ -128,48 +128,48 @@
     "other_unique": <list 0> [  ],
     "difftypes": <list 0> [  ]
 }
- INFO     | __main__:test_unsorted_lists:92 | ******************************************************************************** 3 = Unsorted list in dictionary = direct_compare
- INFO     | __main__:test_unsorted_lists:95 | *** differences
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][0]['a']=1 != dict3['C'][0]['a']=7
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][0]['b']=2 != dict3['C'][0]['b']=8
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][0]['c']=3 != dict3['C'][0]['c']=9
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][0]['value1']=1 != dict3['C'][0]['value1']=3
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][0]['value2']=4 != dict3['C'][0]['value2']=6
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][1]['value2']=5 != dict3['C'][1]['value2']=99
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][2]['a']=7 != dict3['C'][2]['a']=1
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][2]['b']=8 != dict3['C'][2]['b']=2
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][2]['c']=9 != dict3['C'][2]['c']=3
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][2]['value1']=3 != dict3['C'][2]['value1']=1
- INFO     | __main__:test_unsorted_lists:97 | Values are different: dict1['C'][2]['value2']=6 != dict3['C'][2]['value2']=4
- INFO     | __main__:test_unsorted_lists:97 | List dict3['C'] is longer dict1['C']: dict3['C'][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1['C']
- INFO     | __main__:test_unsorted_lists:95 | *** not_equal
- INFO     | __main__:test_unsorted_lists:97 | ('/C[0]/a', [1, 7, 6.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[0]/b', [2, 8, 6.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[0]/c', [3, 9, 6.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[0]/value1', [1, 3, 2.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[0]/value2', [4, 6, 2.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[1]/value2', [5, 99, 94.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[2]/a', [7, 1, -6.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[2]/b', [8, 2, -6.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[2]/c', [9, 3, -6.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[2]/value1', [3, 1, -2.0])
- INFO     | __main__:test_unsorted_lists:97 | ('/C[2]/value2', [6, 4, -2.0])
- INFO     | __main__:test_unsorted_lists:95 | *** self_unique
- INFO     | __main__:test_unsorted_lists:95 | *** other_unique
- INFO     | __main__:test_unsorted_lists:97 | ('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
- INFO     | __main__:test_unsorted_lists:95 | *** difftypes
- INFO     | __main__:test_unsorted_lists:99 | ******************************************************************************** 4 = Unsorted list in dictionary = compare
- INFO     | __main__:test_unsorted_lists:105 | *** differences
- INFO     | __main__:test_unsorted_lists:107 | Values are different: dict1['C'][1]['value2']=5 != dict3['C'][1]['value2']=99
- INFO     | __main__:test_unsorted_lists:107 | Element dict3['C'][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1['C']
- INFO     | __main__:test_unsorted_lists:105 | *** not_equal
- INFO     | __main__:test_unsorted_lists:107 | ('/C[1]/value2', [5, 99, 94.0])
- INFO     | __main__:test_unsorted_lists:105 | *** self_unique
- INFO     | __main__:test_unsorted_lists:105 | *** other_unique
- INFO     | __main__:test_unsorted_lists:107 | ('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
- INFO     | __main__:test_unsorted_lists:105 | *** difftypes
- INFO     | __main__:test_unsorted_lists:109 | ================================================================================
- DEBUG    | __main__:test_unsorted_lists:110 | differences1_direct_compare == <n0struct..n0dict 5> {
+ INFO     | test_n0struct01:test_unsorted_lists:92 | ******************************************************************************** 3 = Unsorted list in dictionary = direct_compare
+ INFO     | test_n0struct01:test_unsorted_lists:95 | *** differences
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][0]['a']=1 != dict3['C'][0]['a']=7
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][0]['b']=2 != dict3['C'][0]['b']=8
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][0]['c']=3 != dict3['C'][0]['c']=9
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][0]['value1']=1 != dict3['C'][0]['value1']=3
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][0]['value2']=4 != dict3['C'][0]['value2']=6
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][1]['value2']=5 != dict3['C'][1]['value2']=99
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][2]['a']=7 != dict3['C'][2]['a']=1
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][2]['b']=8 != dict3['C'][2]['b']=2
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][2]['c']=9 != dict3['C'][2]['c']=3
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][2]['value1']=3 != dict3['C'][2]['value1']=1
+ INFO     | test_n0struct01:test_unsorted_lists:97 | Values are different: dict1['C'][2]['value2']=6 != dict3['C'][2]['value2']=4
+ INFO     | test_n0struct01:test_unsorted_lists:97 | List dict3['C'] is longer dict1['C']: dict3['C'][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1['C']
+ INFO     | test_n0struct01:test_unsorted_lists:95 | *** not_equal
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[0]/a', [1, 7, 6.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[0]/b', [2, 8, 6.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[0]/c', [3, 9, 6.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[0]/value1', [1, 3, 2.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[0]/value2', [4, 6, 2.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[1]/value2', [5, 99, 94.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[2]/a', [7, 1, -6.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[2]/b', [8, 2, -6.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[2]/c', [9, 3, -6.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[2]/value1', [3, 1, -2.0])
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[2]/value2', [6, 4, -2.0])
+ INFO     | test_n0struct01:test_unsorted_lists:95 | *** self_unique
+ INFO     | test_n0struct01:test_unsorted_lists:95 | *** other_unique
+ INFO     | test_n0struct01:test_unsorted_lists:97 | ('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
+ INFO     | test_n0struct01:test_unsorted_lists:95 | *** difftypes
+ INFO     | test_n0struct01:test_unsorted_lists:99 | ******************************************************************************** 4 = Unsorted list in dictionary = compare
+ INFO     | test_n0struct01:test_unsorted_lists:105 | *** differences
+ INFO     | test_n0struct01:test_unsorted_lists:107 | Values are different: dict1['C'][1]['value2']=5 != dict3['C'][1]['value2']=99
+ INFO     | test_n0struct01:test_unsorted_lists:107 | Element dict3['C'][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1['C']
+ INFO     | test_n0struct01:test_unsorted_lists:105 | *** not_equal
+ INFO     | test_n0struct01:test_unsorted_lists:107 | ('/C[1]/value2', [5, 99, 94.0])
+ INFO     | test_n0struct01:test_unsorted_lists:105 | *** self_unique
+ INFO     | test_n0struct01:test_unsorted_lists:105 | *** other_unique
+ INFO     | test_n0struct01:test_unsorted_lists:107 | ('/C[3]', {'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4})
+ INFO     | test_n0struct01:test_unsorted_lists:105 | *** difftypes
+ INFO     | test_n0struct01:test_unsorted_lists:109 | ================================================================================
+ DEBUG    | test_n0struct01:test_unsorted_lists:110 | differences1_direct_compare == <n0struct..n0dict 5> {
     "differences": <list 12> [
         #0   "Values are different: dict1['C'][0]['a']=1 != dict3['C'][0]['a']=7",
         #1   "Values are different: dict1['C'][0]['b']=2 != dict3['C'][0]['b']=8",
@@ -289,12 +289,12 @@
     ],
     "difftypes": <list 0> [  ]
 }
- DEBUG    | __main__:test_unsorted_lists:111 | notemptyitems(differences1_direct_compare["differences"] == 12
- DEBUG    | __main__:test_unsorted_lists:113 | differences1_direct_compare["not_equal"] == 44
- DEBUG    | __main__:test_unsorted_lists:116 | notemptyitems(differences1_direct_compare["other_unique"]) == 6
- DEBUG    | __main__:test_unsorted_lists:118 | notemptyitems(differences1_direct_compare["self_unique"]) == 0
- INFO     | __main__:test_unsorted_lists:121 | ================================================================================
- DEBUG    | __main__:test_unsorted_lists:122 | differences2_wise_compare == <n0struct..n0dict 5> {
+ DEBUG    | test_n0struct01:test_unsorted_lists:111 | notemptyitems(differences1_direct_compare["differences"] == 12
+ DEBUG    | test_n0struct01:test_unsorted_lists:113 | differences1_direct_compare["not_equal"] == 44
+ DEBUG    | test_n0struct01:test_unsorted_lists:116 | notemptyitems(differences1_direct_compare["other_unique"]) == 6
+ DEBUG    | test_n0struct01:test_unsorted_lists:118 | notemptyitems(differences1_direct_compare["self_unique"]) == 0
+ INFO     | test_n0struct01:test_unsorted_lists:121 | ================================================================================
+ DEBUG    | test_n0struct01:test_unsorted_lists:122 | differences2_wise_compare == <n0struct..n0dict 5> {
     "differences": <list 2> [
         #0   "Values are different: dict1['C'][1]['value2']=5 != dict3['C'][1]['value2']=99",
         #1   "Element dict3['C'][3]='{'a': 1, 'b': 2, 'c': 3, 'value1': 1, 'value2': 4}' doesn't exist in dict1['C']"
@@ -324,11 +324,11 @@
     ],
     "difftypes": <list 0> [  ]
 }
- DEBUG    | __main__:test_unsorted_lists:123 | notemptyitems(differences2_wise_compare["differences"] == 2
- DEBUG    | __main__:test_unsorted_lists:125 | differences2_wise_compare["not_equal"] == 4
- DEBUG    | __main__:test_unsorted_lists:128 | notemptyitems(differences2_wise_compare["other_unique"]) == 6
- DEBUG    | __main__:test_unsorted_lists:130 | notemptyitems(differences2_wise_compare["self_unique"]) == 0
- DEBUG    | __main__:main:144 | dict1 == <n0struct..n0dict 1> {
+ DEBUG    | test_n0struct01:test_unsorted_lists:123 | notemptyitems(differences2_wise_compare["differences"] == 2
+ DEBUG    | test_n0struct01:test_unsorted_lists:125 | differences2_wise_compare["not_equal"] == 4
+ DEBUG    | test_n0struct01:test_unsorted_lists:128 | notemptyitems(differences2_wise_compare["other_unique"]) == 6
+ DEBUG    | test_n0struct01:test_unsorted_lists:130 | notemptyitems(differences2_wise_compare["self_unique"]) == 0
+ DEBUG    | test_n0struct01:main:144 | dict1 == <n0struct..n0dict 1> {
     "C": <n0struct..n0list 3> [
         #0   <n0struct..n0dict 5> {
             "a": 1,
@@ -353,7 +353,7 @@
         }
     ]
 }
- DEBUG    | __main__:main:146 | dict1 == <n0struct..n0dict 2> {
+ DEBUG    | test_n0struct01:main:146 | dict1 == <n0struct..n0dict 2> {
     "C": <n0struct..n0list 3> [
         #0   <n0struct..n0dict 5> {
             "a": 1,
@@ -379,7 +379,7 @@
     ],
     "moreone": <n0struct..n0dict 1> { "node": <n0struct..n0list 1> [ #0   <n0struct..n0dict 1> { "value": <n0struct..n0dict 0> {  } } ] }
 }
- DEBUG    | __main__:main:148 | dict1 == <n0struct..n0dict 2> {
+ DEBUG    | test_n0struct01:main:148 | dict1 == <n0struct..n0dict 2> {
     "C": <n0struct..n0list 3> [
         #0   <n0struct..n0dict 5> {
             "a": 1,
@@ -410,7 +410,7 @@
         ]
     }
 }
- DEBUG    | __main__:main:151 | dict1 == <n0struct..n0dict 2> {
+ DEBUG    | test_n0struct01:main:151 | dict1 == <n0struct..n0dict 2> {
     "C": <n0struct..n0list 3> [
         #0   <n0struct..n0dict 5> {
             "a": 1,
@@ -442,7 +442,7 @@
         ]
     }
 }
- DEBUG    | __main__:main:153 | dict1 == <n0struct..n0dict 2> {
+ DEBUG    | test_n0struct01:main:153 | dict1 == <n0struct..n0dict 2> {
     "C": <n0struct..n0list 3> [
         #0   <n0struct..n0dict 5> {
             "a": 1,
@@ -475,7 +475,7 @@
         ]
     }
 }
- INFO     | __main__:main:167 | {
+ INFO     | test_n0struct01:main:167 | {
     "C": [
         {
             "a": 1,
@@ -515,7 +515,7 @@
         ]
     }
 }
- INFO     | __main__:main:168 | <?xml version="1.0" encoding="utf-8"?>
+ INFO     | test_n0struct01:main:168 | <?xml version="1.0" encoding="utf-8"?>
 <C>
     <a>1</a>
     <b>2</b>
@@ -544,7 +544,7 @@
         <code>four</code>
     </node>
 </moreone>
- INFO     | __main__:main:169 | <C>
+ INFO     | test_n0struct01:main:169 | <C>
     <a>1</a>
     <b>2</b>
     <c>3</c>
@@ -572,20 +572,20 @@
         <code>four</code>
     </node>
 </moreone>
- INFO     | __main__:main:179 | ['<![CDATA[[{"key":"CN-BILLING_DAY","value":"27"},{"key":"CN-CARD_TARIFF","value":"PCT_001"}]]]>', '<![CDATA[[{"key":"CN-SALES_BRANCH","value":"Main Office"},{"key":"CN-SALES_CAMPAIGN","value":"New Year"}]]]>', '<![CDATA[[{"key":"CN-SALES_DET_1","value":"New Year Offer"},{"key":"CN-SALES_MG","value":"John Smith"}]]]>']
- INFO     | __main__:main:180 | ['<![CDATA[["CN-BILLING_DAY":"27","CN-CARD_TARIFF":"PCT_001","CN-SALES_BRANCH":"Main Office"]]]>', '<![CDATA[["CN-SALES_CAMPAIGN":"New Year","CN-SALES_DET_1":"New Year Offer","CN-SALES_MG":"John Smith"]]]>']
- INFO     | __main__:main:181 | ['{"CN-BILLING_DAY":"27","CN-CARD_TARIFF":"PCT_001","CN-SALES_BRANCH":"Main Office"}', '{"CN-SALES_CAMPAIGN":"New Year","CN-SALES_DET_1":"New Year Offer","CN-SALES_MG":"John Smith"}']
- INFO     | __main__:main:186 | [{'value': {}}, {'value': None}, {'value': ''}, {'value': 2, 'code': 'two'}, {'value': 4, 'code': 'four'}]
- INFO     | __main__:main:191 | {'node': [{'value': {}}, {'value': None}, {'value': ''}, {'value': 2, 'code': 'two'}, {'value': 4, 'code': 'four'}]}
- INFO     | __main__:main:194 | [4]
- INFO     | __main__:main:199 | [2]
- INFO     | __main__:main:203 | [6]
- INFO     | __main__:main:208 | [6]
- INFO     | __main__:main:213 | 7
- INFO     | __main__:main:216 | 7
- INFO     | __main__:main:219 | 
- INFO     | __main__:main:222 | 
- DEBUG    | __main__:main:254 | dict_from_json_default == <n0struct..n0dict 1> {
+ INFO     | test_n0struct01:main:179 | ['<![CDATA[[{"key":"CN-BILLING_DAY","value":"27"},{"key":"CN-CARD_TARIFF","value":"PCT_001"}]]]>', '<![CDATA[[{"key":"CN-SALES_BRANCH","value":"Main Office"},{"key":"CN-SALES_CAMPAIGN","value":"New Year"}]]]>', '<![CDATA[[{"key":"CN-SALES_DET_1","value":"New Year Offer"},{"key":"CN-SALES_MG","value":"John Smith"}]]]>']
+ INFO     | test_n0struct01:main:180 | ['<![CDATA[["CN-BILLING_DAY":"27","CN-CARD_TARIFF":"PCT_001","CN-SALES_BRANCH":"Main Office"]]]>', '<![CDATA[["CN-SALES_CAMPAIGN":"New Year","CN-SALES_DET_1":"New Year Offer","CN-SALES_MG":"John Smith"]]]>']
+ INFO     | test_n0struct01:main:181 | ['{"CN-BILLING_DAY":"27","CN-CARD_TARIFF":"PCT_001","CN-SALES_BRANCH":"Main Office"}', '{"CN-SALES_CAMPAIGN":"New Year","CN-SALES_DET_1":"New Year Offer","CN-SALES_MG":"John Smith"}']
+ INFO     | test_n0struct01:main:186 | [{'value': {}}, {'value': None}, {'value': ''}, {'value': 2, 'code': 'two'}, {'value': 4, 'code': 'four'}]
+ INFO     | test_n0struct01:main:191 | {'node': [{'value': {}}, {'value': None}, {'value': ''}, {'value': 2, 'code': 'two'}, {'value': 4, 'code': 'four'}]}
+ INFO     | test_n0struct01:main:194 | [4]
+ INFO     | test_n0struct01:main:199 | [2]
+ INFO     | test_n0struct01:main:203 | [6]
+ INFO     | test_n0struct01:main:208 | [6]
+ INFO     | test_n0struct01:main:213 | 7
+ INFO     | test_n0struct01:main:216 | 7
+ INFO     | test_n0struct01:main:219 | 
+ INFO     | test_n0struct01:main:222 | 
+ DEBUG    | test_n0struct01:main:254 | dict_from_json_default == <n0struct..n0dict 1> {
     "root": <n0struct..n0dict 3> {
         "a": 1.0,
         "b": <n0struct..n0dict 2> {
@@ -605,7 +605,7 @@
         ]
     }
 }
- DEBUG    | __main__:main:274 | dict_from_json_force_n0dict == <n0struct..n0dict 2> {
+ DEBUG    | test_n0struct01:main:274 | dict_from_json_force_n0dict == <n0struct..n0dict 2> {
     "root": <n0struct..n0dict 3> {
         "a": 1.0,
         "b": <n0struct..n0dict 2> {
@@ -626,7 +626,7 @@
     },
     "force_n0dict": True
 }
- DEBUG    | __main__:main:294 | dict_from_json_recursevely == <n0struct..n0dict 1> {
+ DEBUG    | test_n0struct01:main:294 | dict_from_json_recursevely == <n0struct..n0dict 1> {
     "root": <n0struct..n0dict 3> {
         "a": 1.0,
         "b": <n0struct..n0dict 2> {
@@ -646,7 +646,7 @@
         ]
     }
 }
- DEBUG    | __main__:main:314 | dict_from_json_recursevely_force_n0dict == <n0struct..n0dict 1> {
+ DEBUG    | test_n0struct01:main:314 | dict_from_json_recursevely_force_n0dict == <n0struct..n0dict 1> {
     "root": <n0struct..n0dict 3> {
         "a": 1.0,
         "b": <n0struct..n0dict 2> {
@@ -666,7 +666,7 @@
         ]
     }
 }
- DEBUG    | __main__:main:358 | dict_from_xml_default == <n0struct..n0dict 1> {
+ DEBUG    | test_n0struct01:main:358 | dict_from_xml_default == <n0struct..n0dict 1> {
     "root": <n0struct..n0dict 3> {
         "a": "1",
         "b": <n0struct..n0dict 2> {
@@ -686,7 +686,7 @@
         ]
     }
 }
- DEBUG    | __main__:main:379 | dict_from_xml_force_n0dict == <n0struct..n0dict 2> {
+ DEBUG    | test_n0struct01:main:379 | dict_from_xml_force_n0dict == <n0struct..n0dict 2> {
     "root": <n0struct..n0dict 3> {
         "a": "1",
         "b": <n0struct..n0dict 2> {
@@ -707,7 +707,7 @@
     },
     "force_n0dict": True
 }
- DEBUG    | __main__:main:399 | dict_from_xml_recursevely == <n0struct..n0dict 1> {
+ DEBUG    | test_n0struct01:main:399 | dict_from_xml_recursevely == <n0struct..n0dict 1> {
     "root": <n0struct..n0dict 3> {
         "a": "1",
         "b": <n0struct..n0dict 2> {
@@ -727,7 +727,7 @@
         ]
     }
 }
- DEBUG    | __main__:main:419 | dict_from_xml_recursevely_force_n0dict == <n0struct..n0dict 1> {
+ DEBUG    | test_n0struct01:main:419 | dict_from_xml_recursevely_force_n0dict == <n0struct..n0dict 1> {
     "root": <n0struct..n0dict 3> {
         "a": "1",
         "b": <n0struct..n0dict 2> {
@@ -747,18 +747,18 @@
         ]
     }
 }
- DEBUG    | __main__:main:440 | dict_from_xml_empty == <n0struct..n0dict 1> { "root": None }
- DEBUG    | __main__:main:456 | dict4 == <n0struct..n0dict 2> {
+ DEBUG    | test_n0struct01:main:440 | dict_from_xml_empty == <n0struct..n0dict 1> { "root": None }
+ DEBUG    | test_n0struct01:main:456 | dict4 == <n0struct..n0dict 2> {
     "a": 1,
     "b": <n0struct..n0dict 2> {
         "c": 2,
         "d": <n0struct..n0dict 1> { "e": 3 }
     }
 }
- DEBUG    | __main__:main:468 | dict4 == <n0struct..n0dict 1> { "a": 1 }
- DEBUG    | __main__:main:481 | dict5 == <n0struct..n0dict 1> { "a": <dict 1> { "b": <dict 1> { "c": <dict 1> { "d": 4 } } } }
- DEBUG    | __main__:main:483 | dict5 == <n0struct..n0dict 1> { "a": <dict 1> { "b": <dict 1> { "c": <dict 0> {  } } } }
- DEBUG    | __main__:main:512 | dict6 == <n0struct..n0dict 1> {
+ DEBUG    | test_n0struct01:main:468 | dict4 == <n0struct..n0dict 1> { "a": 1 }
+ DEBUG    | test_n0struct01:main:481 | dict5 == <n0struct..n0dict 1> { "a": <dict 1> { "b": <dict 1> { "c": <dict 1> { "d": 4 } } } }
+ DEBUG    | test_n0struct01:main:483 | dict5 == <n0struct..n0dict 1> { "a": <dict 1> { "b": <dict 1> { "c": <dict 0> {  } } } }
+ DEBUG    | test_n0struct01:main:512 | dict6 == <n0struct..n0dict 1> {
     "Root": <dict 2> {
         "Node1": <dict 2> {
             "Subnode1_1": <list 2> [
@@ -782,7 +782,7 @@
         }
     }
 }
- DEBUG    | __main__:main:513 | <dict 1> {
+ DEBUG    | test_n0struct01:main:513 | <dict 1> {
     "//Root/Node1": <dict 2> {
         "Subnode1_1": <list 2> [
             {"tag": "PARAM1", "value": "VALUE1 from subn1_1"   },
@@ -794,8 +794,8 @@
         ]
     }
 }
- DEBUG    | __main__:main:514 | <dict 1> { "//Root/Node2/Subnode2_1[0]/value": "VALUE1 from subnode2_1" }
- INFO     | __main__:main:540 | 
+ DEBUG    | test_n0struct01:main:514 | <dict 1> { "//Root/Node2/Subnode2_1[0]/value": "VALUE1 from subnode2_1" }
+ INFO     | test_n0struct01:main:540 | 
 ['//Root/Nodes[0][0]/tag']   = "PARAM1"
 ['//Root/Nodes[0][0]/value'] = "VALUE1 from subnode0_0"
 ['//Root/Nodes[0][1]/tag']   = "PARAM2"
@@ -813,42 +813,42 @@
 ['//Root/Nodes[3][1]/tag']   = "PARAM2"
 ['//Root/Nodes[3][1]/value'] = "VALUE2 from subnode3_1"
 
- DEBUG    | __main__:main:542 | "//Root/Nodes/tag[text()==PARAM1]/../value" == <dict 4> {
+ DEBUG    | test_n0struct01:main:542 | "//Root/Nodes/tag[text()==PARAM1]/../value" == <dict 4> {
     "//Root/Nodes[0][0]/value": "VALUE1 from subnode0_0",
     "//Root/Nodes[1][0]/value": "VALUE1 from subnode1_0",
     "//Root/Nodes[2][0]/value": "VALUE1 from subnode2_0",
     "//Root/Nodes[3][0]/value": "VALUE1 from subnode3_0"
 }
- INFO     | __main__:<module>:549 | Mission acomplished
- DEBUG    | __main__:test_deserialization:30 | serialized_list == "1;2;3"
- DEBUG    | __main__:test_deserialization:32 | deserialized_list == <list 3> [
+ INFO     | test_n0struct01:top_level:549 | Mission acomplished
+ DEBUG    | test_n0struct02:test_deserialization:30 | serialized_list == "1;2;3"
+ DEBUG    | test_n0struct02:test_deserialization:32 | deserialized_list == <list 3> [
     #0   "1",
     #1   "2",
     #2   "3"
 ]
- DEBUG    | __main__:test_deserialization:36 | serialized_list == "1,2,3"
- DEBUG    | __main__:test_deserialization:38 | deserialized_list == <list 3> [
+ DEBUG    | test_n0struct02:test_deserialization:36 | serialized_list == "1,2,3"
+ DEBUG    | test_n0struct02:test_deserialization:38 | deserialized_list == <list 3> [
     #0   "1",
     #1   "2",
     #2   "3"
 ]
- DEBUG    | __main__:test_deserialization:42 | serialized_list == "1;2;3"
- DEBUG    | __main__:test_deserialization:44 | deserialized_list == <list 4> [
+ DEBUG    | test_n0struct02:test_deserialization:42 | serialized_list == "1;2;3"
+ DEBUG    | test_n0struct02:test_deserialization:44 | deserialized_list == <list 4> [
     #0   "1",
     #1   "2",
     #2   "3",
     #3   "444"
 ]
- DEBUG    | __main__:test_deserialization:49 | serialized_dict == "a=1;b=2;c=3"
- DEBUG    | __main__:test_deserialization:51 | deserialized_dict == <dict 3> {
+ DEBUG    | test_n0struct02:test_deserialization:49 | serialized_dict == "a=1;b=2;c=3"
+ DEBUG    | test_n0struct02:test_deserialization:51 | deserialized_dict == <dict 3> {
     "a": "1",
     "b": "2",
     "c": "3"
 }
- DEBUG    | __main__:test_deserialization:54 | serialized_dict == "a=1;b=2;c=3"
- DEBUG    | __main__:test_deserialization:55 | get_value_by_tag("b", serialized_dict) == "2"
- DEBUG    | __main__:test_deserialization:60 | serialized_list_of_lists == "a1,a2,a3;b1,b2,b3;c1,c2,c3"
- DEBUG    | __main__:test_deserialization:62 | deserialized_list_of_lists == <list 3> [
+ DEBUG    | test_n0struct02:test_deserialization:54 | serialized_dict == "a=1;b=2;c=3"
+ DEBUG    | test_n0struct02:test_deserialization:55 | get_value_by_tag("b", serialized_dict) == "2"
+ DEBUG    | test_n0struct02:test_deserialization:60 | serialized_list_of_lists == "a1,a2,a3;b1,b2,b3;c1,c2,c3"
+ DEBUG    | test_n0struct02:test_deserialization:62 | deserialized_list_of_lists == <list 3> [
     #0   <list 3> [
         #0   "a1",
         #1   "a2",
@@ -865,23 +865,23 @@
         #2   "c3"
     ]
 ]
- INFO     | __main__:<module>:72 | Mission acomplished
- DEBUG    | __main__:test_files_processing:23 | test_ini_path == "C:\\REPO\\n0struct\\n0struct\\test\\test.ini"
- DEBUG    | __main__:test_files_processing:26 | test_ini == <dict 2> { "KEY1": "VALUE1", "KEY3": "VALUE3" }
- DEBUG    | __main__:test_files_processing:33 | test_ini(after save) == <dict 2> { "KEY1": "VALUE1", "KEY3": "VALUE3" }
- DEBUG    | __main__:test_files_processing:86 | CRLF                    read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
- DEBUG    | __main__:test_files_processing:87 | CRLF                    read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6\r\n'
- DEBUG    | __main__:test_files_processing:88 | CRLFlines               read_mode='t' == <list 3> [
+ INFO     | test_n0struct02:top_level:72 | Mission acomplished
+ DEBUG    | test_n0struct03:test_files_processing:23 | test_ini_path == "C:\\REPO\\n0struct\\n0struct\\test\\test.ini"
+ DEBUG    | test_n0struct03:test_files_processing:26 | test_ini == <dict 2> { "KEY1": "VALUE1", "KEY3": "VALUE3" }
+ DEBUG    | test_n0struct03:test_files_processing:33 | test_ini(after save) == <dict 2> { "KEY1": "VALUE1", "KEY3": "VALUE3" }
+ DEBUG    | test_n0struct03:test_files_processing:86 | CRLF                    read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
+ DEBUG    | test_n0struct03:test_files_processing:87 | CRLF                    read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6\r\n'
+ DEBUG    | test_n0struct03:test_files_processing:88 | CRLFlines               read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:89 | CRLFlines               read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:89 | CRLFlines               read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:90 | CRLFcsv                 read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:90 | CRLFcsv                 read_mode='t' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
@@ -898,7 +898,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:91 | CRLFcsv                 read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:91 | CRLFcsv                 read_mode='b' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
@@ -915,19 +915,19 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:93 | CRLF(wo last CRLF)      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
- DEBUG    | __main__:test_files_processing:94 | CRLF(wo last CRLF)      read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6'
- DEBUG    | __main__:test_files_processing:95 | CRLF(wo last CRLF)lines read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:93 | CRLF(wo last CRLF)      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
+ DEBUG    | test_n0struct03:test_files_processing:94 | CRLF(wo last CRLF)      read_mode='b' == b'A,B,C\r\n1,2,3\r\n4,5,6'
+ DEBUG    | test_n0struct03:test_files_processing:95 | CRLF(wo last CRLF)lines read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:96 | CRLF(wo last CRLF)lines read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:96 | CRLF(wo last CRLF)lines read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:97 | CRLF(wo last CRLF)csv   read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:97 | CRLF(wo last CRLF)csv   read_mode='t' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
@@ -944,7 +944,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:98 | CRLF(wo last CRLF)csv   read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:98 | CRLF(wo last CRLF)csv   read_mode='b' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
@@ -961,19 +961,19 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:100 | LF                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
- DEBUG    | __main__:test_files_processing:101 | LF                      read_mode='b' == b'A,B,C\n1,2,3\n4,5,6\n'
- DEBUG    | __main__:test_files_processing:102 | LFlines                 read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:100 | LF                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
+ DEBUG    | test_n0struct03:test_files_processing:101 | LF                      read_mode='b' == b'A,B,C\n1,2,3\n4,5,6\n'
+ DEBUG    | test_n0struct03:test_files_processing:102 | LFlines                 read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:103 | LFlines                 read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:103 | LFlines                 read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:104 | LFcsv                   read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:104 | LFcsv                   read_mode='t' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
@@ -990,7 +990,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:105 | LFcsv                   read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:105 | LFcsv                   read_mode='b' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
@@ -1007,19 +1007,19 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:107 | LF(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
- DEBUG    | __main__:test_files_processing:108 | LF(wo last CRLF)        read_mode='b' == b'A,B,C\n1,2,3\n4,5,6'
- DEBUG    | __main__:test_files_processing:109 | LF(wo last CRLF)lines   read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:107 | LF(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
+ DEBUG    | test_n0struct03:test_files_processing:108 | LF(wo last CRLF)        read_mode='b' == b'A,B,C\n1,2,3\n4,5,6'
+ DEBUG    | test_n0struct03:test_files_processing:109 | LF(wo last CRLF)lines   read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:110 | LF(wo last CRLF)lines   read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:110 | LF(wo last CRLF)lines   read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:111 | LF(wo last CRLF)csv     read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:111 | LF(wo last CRLF)csv     read_mode='t' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
@@ -1036,7 +1036,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:112 | LF(wo last CRLF)csv     read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:112 | LF(wo last CRLF)csv     read_mode='b' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
@@ -1053,19 +1053,19 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:114 | CR                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
- DEBUG    | __main__:test_files_processing:115 | CR                      read_mode='b' == b'A,B,C\r1,2,3\r4,5,6\r'
- DEBUG    | __main__:test_files_processing:116 | CRlines                 read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:114 | CR                      read_mode='t' == b'A,B,C\n1,2,3\n4,5,6\n'
+ DEBUG    | test_n0struct03:test_files_processing:115 | CR                      read_mode='b' == b'A,B,C\r1,2,3\r4,5,6\r'
+ DEBUG    | test_n0struct03:test_files_processing:116 | CRlines                 read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:117 | CRlines                 read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:117 | CRlines                 read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:118 | CRcsv                   read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:118 | CRcsv                   read_mode='t' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
@@ -1082,7 +1082,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:119 | CRcsv                   read_mode='b' == <list 1> [
+ DEBUG    | test_n0struct03:test_files_processing:119 | CRcsv                   read_mode='b' == <list 1> [
     #0   <n0struct..n0dict 7> {
         0: b'A',
         1: b'B',
@@ -1093,7 +1093,7 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:120 | CRcsv                   read_mode='b' EOL='\r' == <list 1> [
+ DEBUG    | test_n0struct03:test_files_processing:120 | CRcsv                   read_mode='b' EOL='\r' == <list 1> [
     #0   <n0struct..n0dict 7> {
         0: b'A',
         1: b'B',
@@ -1104,19 +1104,19 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:122 | CR(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
- DEBUG    | __main__:test_files_processing:123 | CR(wo last CRLF)        read_mode='b' == b'A,B,C\r1,2,3\r4,5,6'
- DEBUG    | __main__:test_files_processing:124 | CR(wo last CRLF)lines   read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:122 | CR(wo last CRLF)        read_mode='t' == b'A,B,C\n1,2,3\n4,5,6'
+ DEBUG    | test_n0struct03:test_files_processing:123 | CR(wo last CRLF)        read_mode='b' == b'A,B,C\r1,2,3\r4,5,6'
+ DEBUG    | test_n0struct03:test_files_processing:124 | CR(wo last CRLF)lines   read_mode='t' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:125 | CR(wo last CRLF)lines   read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:125 | CR(wo last CRLF)lines   read_mode='b' == <list 3> [
     #0   "A,B,C",
     #1   "1,2,3",
     #2   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:126 | CR(wo last CRLF)csv     read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:126 | CR(wo last CRLF)csv     read_mode='t' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
@@ -1133,7 +1133,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:127 | CR(wo last CRLF)csv     read_mode='b' == <list 1> [
+ DEBUG    | test_n0struct03:test_files_processing:127 | CR(wo last CRLF)csv     read_mode='b' == <list 1> [
     #0   <n0struct..n0dict 7> {
         0: b'A',
         1: b'B',
@@ -1144,7 +1144,7 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:128 | CR(wo last CRLF)csv     read_mode='b' EOL='\r' == <list 1> [
+ DEBUG    | test_n0struct03:test_files_processing:128 | CR(wo last CRLF)csv     read_mode='b' EOL='\r' == <list 1> [
     #0   <n0struct..n0dict 7> {
         0: b'A',
         1: b'B',
@@ -1155,9 +1155,9 @@
         6: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:130 | LFCR                    read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6\n\n'
- DEBUG    | __main__:test_files_processing:131 | LFCR                    read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6\n\r'
- DEBUG    | __main__:test_files_processing:132 | LFCRlines               read_mode='t' == <list 6> [
+ DEBUG    | test_n0struct03:test_files_processing:130 | LFCR                    read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6\n\n'
+ DEBUG    | test_n0struct03:test_files_processing:131 | LFCR                    read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6\n\r'
+ DEBUG    | test_n0struct03:test_files_processing:132 | LFCRlines               read_mode='t' == <list 6> [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
@@ -1165,7 +1165,7 @@
     #4   "4,5,6",
     #5   ""
 ]
- DEBUG    | __main__:test_files_processing:133 | LFCRlines               read_mode='b' == <list 6> [
+ DEBUG    | test_n0struct03:test_files_processing:133 | LFCRlines               read_mode='b' == <list 6> [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
@@ -1173,7 +1173,7 @@
     #4   "4,5,6",
     #5   ""
 ]
- DEBUG    | __main__:test_files_processing:134 | LFCRcsv                 read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:134 | LFCRcsv                 read_mode='t' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
@@ -1190,7 +1190,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:135 | LFCRcsv                 read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:135 | LFCRcsv                 read_mode='b' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
@@ -1207,7 +1207,7 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:136 | LFCRcsv                 read_mode='b' EOL='\n\r' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:136 | LFCRcsv                 read_mode='b' EOL='\n\r' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
@@ -1224,23 +1224,23 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:138 | LFCR(wo last CRLF)      read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6'
- DEBUG    | __main__:test_files_processing:139 | LFCR(wo last CRLF)      read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6'
- DEBUG    | __main__:test_files_processing:140 | LFCR(wo last CRLF)lines read_mode='t' == <list 5> [
+ DEBUG    | test_n0struct03:test_files_processing:138 | LFCR(wo last CRLF)      read_mode='t' == b'A,B,C\n\n1,2,3\n\n4,5,6'
+ DEBUG    | test_n0struct03:test_files_processing:139 | LFCR(wo last CRLF)      read_mode='b' == b'A,B,C\n\r1,2,3\n\r4,5,6'
+ DEBUG    | test_n0struct03:test_files_processing:140 | LFCR(wo last CRLF)lines read_mode='t' == <list 5> [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
     #3   "",
     #4   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:141 | LFCR(wo last CRLF)lines read_mode='b' == <list 5> [
+ DEBUG    | test_n0struct03:test_files_processing:141 | LFCR(wo last CRLF)lines read_mode='b' == <list 5> [
     #0   "A,B,C",
     #1   "",
     #2   "1,2,3",
     #3   "",
     #4   "4,5,6"
 ]
- DEBUG    | __main__:test_files_processing:142 | LFCR(wo last CRLF)csv   read_mode='t' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:142 | LFCR(wo last CRLF)csv   read_mode='t' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: "A",
         1: "B",
@@ -1257,7 +1257,7 @@
         2: "6"
     }
 ]
- DEBUG    | __main__:test_files_processing:143 | LFCR(wo last CRLF)csv   read_mode='b' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:143 | LFCR(wo last CRLF)csv   read_mode='b' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
@@ -1274,7 +1274,7 @@
         2: b'6'
     }
 ]
- DEBUG    | __main__:test_files_processing:144 | LFCR(wo last CRLF)csv   read_mode='b' EOL='\n\r' == <list 3> [
+ DEBUG    | test_n0struct03:test_files_processing:144 | LFCR(wo last CRLF)csv   read_mode='b' EOL='\n\r' == <list 3> [
     #0   <n0struct..n0dict 3> {
         0: b'A',
         1: b'B',
@@ -1291,8 +1291,8 @@
         2: b'6'
     }
 ]
- INFO     | __main__:<module>:162 | Mission acomplished
- DEBUG    | __main__:test_n0dict:27 | to_xpath_result == """['//C[0]/a']      = \"1\"
+ INFO     | test_n0struct03:top_level:162 | Mission acomplished
+ DEBUG    | test_n0struct04:test_n0dict:27 | to_xpath_result == """['//C[0]/a']      = \"1\"
 ['//C[0]/b']      = \"2\"
 ['//C[0]/c']      = \"3\"
 ['//C[0]/value1'] = \"1\"
@@ -1308,7 +1308,7 @@
 ['//C[2]/value1'] = \"3\"
 ['//C[2]/value2'] = \"6\"
 """
- DEBUG    | __main__:test_n0dict:45 | to_xpath_expected_result == """['//C[0]/a']      = \"1\"
+ DEBUG    | test_n0struct04:test_n0dict:45 | to_xpath_expected_result == """['//C[0]/a']      = \"1\"
 ['//C[0]/b']      = \"2\"
 ['//C[0]/c']      = \"3\"
 ['//C[0]/value1'] = \"1\"
@@ -1324,418 +1324,418 @@
 ['//C[2]/value1'] = \"3\"
 ['//C[2]/value2'] = \"6\"
 """
- INFO     | __main__:<module>:56 | Mission acomplished
- DEBUG    | __main__:test_n0struct_arrays:34 | result == <tuple 2> (
+ INFO     | test_n0struct04:top_level:56 | Mission acomplished
+ DEBUG    | test_n0struct05:test_n0struct_arrays:34 | result == <tuple 2> (
     #0   "",
     #1   ""
 )
- DEBUG    | __main__:test_n0struct_arrays:38 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:38 | result == <tuple 2> (
     #0   "default_left",
     #1   "default_right"
 )
- DEBUG    | __main__:test_n0struct_arrays:42 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:42 | result == <tuple 2> (
     #0   "",
     #1   ""
 )
- DEBUG    | __main__:test_n0struct_arrays:46 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:46 | result == <tuple 2> (
     #0   "tag",
     #1   "value"
 )
- DEBUG    | __main__:test_n0struct_arrays:50 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:50 | result == <tuple 2> (
     #0   "",
     #1   "www.aaa.com"
 )
- DEBUG    | __main__:test_n0struct_arrays:54 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:54 | result == <tuple 2> (
     #0   "https",
     #1   "www.aaa.com"
 )
- DEBUG    | __main__:test_n0struct_arrays:58 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:58 | result == <tuple 2> (
     #0   "",
     #1   "www.aaa.com"
 )
- DEBUG    | __main__:test_n0struct_arrays:62 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:62 | result == <tuple 2> (
     #0   "www.aaa.com",
     #1   ""
 )
- DEBUG    | __main__:test_n0struct_arrays:66 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:66 | result == <tuple 2> (
     #0   "www.aaa.com",
     #1   "path/"
 )
- DEBUG    | __main__:test_n0struct_arrays:81 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:81 | result == <tuple 2> (
     #0   "",
     #1   "tag=value"
 )
- DEBUG    | __main__:test_n0struct_arrays:85 | result == <tuple 2> (
+ DEBUG    | test_n0struct05:test_n0struct_arrays:85 | result == <tuple 2> (
     #0   "tag=value",
     #1   ""
 )
- INFO     | __main__:<module>:95 | Mission acomplished
- DEBUG    | __main__:test_n0struct_date:23 | result == False
- DEBUG    | __main__:test_n0struct_date:28 | result == <datetime.datetime> 2001-02-09 00:00:00
- DEBUG    | __main__:test_n0struct_date:32 | result == <datetime.date> 2001-02-09
- DEBUG    | __main__:test_n0struct_date:36 | result == False
- DEBUG    | __main__:test_n0struct_date:40 | result == <datetime.date> 2023-05-02
- DEBUG    | __main__:test_n0struct_date:44 | result == <datetime.date> 2020-01-29
- DEBUG    | __main__:test_n0struct_date:48 | result == <datetime.date> 2023-02-05
- DEBUG    | __main__:test_n0struct_date:52 | result == False
- DEBUG    | __main__:test_n0struct_date:56 | result == True
- INFO     | __main__:<module>:67 | Mission acomplished
- DEBUG    | __main__:test_split_with_escape:18 | buffer_str == "AAAA1;BBBB2;CCCC3;DDDD4"
- DEBUG    | __main__:test_split_with_escape:19 | result == <list 4> [
+ INFO     | test_n0struct05:top_level:95 | Mission acomplished
+ DEBUG    | test_n0struct06:test_n0struct_date:23 | result == False
+ DEBUG    | test_n0struct06:test_n0struct_date:28 | result == <datetime.datetime> 2001-02-09 00:00:00
+ DEBUG    | test_n0struct06:test_n0struct_date:32 | result == <datetime.date> 2001-02-09
+ DEBUG    | test_n0struct06:test_n0struct_date:36 | result == False
+ DEBUG    | test_n0struct06:test_n0struct_date:40 | result == <datetime.date> 2023-05-02
+ DEBUG    | test_n0struct06:test_n0struct_date:44 | result == <datetime.date> 2020-01-29
+ DEBUG    | test_n0struct06:test_n0struct_date:48 | result == <datetime.date> 2023-02-05
+ DEBUG    | test_n0struct06:test_n0struct_date:52 | result == False
+ DEBUG    | test_n0struct06:test_n0struct_date:56 | result == True
+ INFO     | test_n0struct06:top_level:67 | Mission acomplished
+ DEBUG    | test_n0struct07:test_split_with_escape:18 | buffer_str == "AAAA1;BBBB2;CCCC3;DDDD4"
+ DEBUG    | test_n0struct07:test_split_with_escape:19 | result == <list 4> [
     #0   "AAAA1",
     #1   "BBBB2",
     #2   "CCCC3",
     #3   "DDDD4"
 ]
- DEBUG    | __main__:test_split_with_escape:20 | expected_result == <list 4> [
+ DEBUG    | test_n0struct07:test_split_with_escape:20 | expected_result == <list 4> [
     #0   "AAAA1",
     #1   "BBBB2",
     #2   "CCCC3",
     #3   "DDDD4"
 ]
- DEBUG    | __main__:test_split_with_escape:23 | buffer_str == "\\\\AA\\AA1\\;\\\\BB\\BB2;\\CC\\\\CC3\\\\;DD\\DD4\\\\"
- DEBUG    | __main__:test_split_with_escape:24 | result == <list 3> [
+ DEBUG    | test_n0struct07:test_split_with_escape:23 | buffer_str == "\\\\AA\\AA1\\;\\\\BB\\BB2;\\CC\\\\CC3\\\\;DD\\DD4\\\\"
+ DEBUG    | test_n0struct07:test_split_with_escape:24 | result == <list 3> [
     #0   "\\\\AA\\AA1;\\\\BB\\BB2",
     #1   "\\CC\\\\CC3\\",
     #2   "DD\\DD4\\"
 ]
- DEBUG    | __main__:test_split_with_escape:25 | expected_result == <list 3> [
+ DEBUG    | test_n0struct07:test_split_with_escape:25 | expected_result == <list 3> [
     #0   "\\\\AA\\AA1;\\\\BB\\BB2",
     #1   "\\CC\\\\CC3\\",
     #2   "DD\\DD4\\"
 ]
- DEBUG    | __main__:test_split_with_escape:28 | buffer_str == "\\\\AA\\AA1\\;\\\\BB\\BB2;\\CC\\\\CC3\\\\;DD\\DD4\\\\"
- DEBUG    | __main__:test_split_with_escape:29 | result == <list 3> [
+ DEBUG    | test_n0struct07:test_split_with_escape:28 | buffer_str == "\\\\AA\\AA1\\;\\\\BB\\BB2;\\CC\\\\CC3\\\\;DD\\DD4\\\\"
+ DEBUG    | test_n0struct07:test_split_with_escape:29 | result == <list 3> [
     #0   "\\\\AA\\AA1;\\\\BB\\BB2",
     #1   "\\CC\\\\CC3\\\\",
     #2   "DD\\DD4\\\\"
 ]
- DEBUG    | __main__:test_split_with_escape:30 | expected_result == <list 3> [
+ DEBUG    | test_n0struct07:test_split_with_escape:30 | expected_result == <list 3> [
     #0   "\\\\AA\\AA1;\\\\BB\\BB2",
     #1   "\\CC\\\\CC3\\\\",
     #2   "DD\\DD4\\\\"
 ]
- INFO     | __main__:<module>:41 | Mission acomplished
- INFO     | __main__:test_save_load_file:38 | ******* t OS_DEFAULT
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* t -r-n
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* t -n
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* t -r
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\rB=2\rC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* t -r-n
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* t -n-r
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
- INFO     | __main__:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
- INFO     | __main__:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* t $-n^
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
- INFO     | __main__:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- INFO     | __main__:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* b OS_DEFAULT
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* b -r-n
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* b -n
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* b -r
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\rB=2\rC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* b -r-n
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* b -n-r
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
- INFO     | __main__:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
- INFO     | __main__:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:test_save_load_file:38 | ******* b $-n^
- INFO     | __main__:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:52 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | __main__:test_save_load_file:54 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | __main__:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | __main__:test_save_load_file:64 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
- INFO     | __main__:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | __main__:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:88 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | __main__:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | __main__:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | __main__:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- INFO     | __main__:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | __main__:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:122 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- DEBUG    | __main__:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- INFO     | __main__:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:142 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
- DEBUG    | __main__:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
- INFO     | __main__:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
- DEBUG    | __main__:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | __main__:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | __main__:<module>:178 | Mission acomplished
- INFO     | __main__:test_use_external_libraries:11 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
- DEBUG    | __main__:test_use_external_libraries:12 | <pathlib.WindowsPath> C:\REPO\n0struct\n0struct\test\test_n0struct09.py
- ERROR    | __main__:test_use_external_libraries:13 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
- WARNING  | __main__:test_use_external_libraries:14 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
- INFO     | __main__:test_use_external_libraries:15 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
- INFO     | __main__:<module>:25 | Mission acomplished
- DEBUG    | __main__:test_18_find_return_all_items:174 | item[*]/name[text()="Item 2"] == <list 1> [
+ INFO     | test_n0struct07:top_level:41 | Mission acomplished
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* t OS_DEFAULT
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* t -r-n
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* t -n
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* t -r
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\rB=2\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* t -r-n
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* t -n-r
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'\n\r'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
+ INFO     | test_n0struct08:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'\n\r'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* t $-n^
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
+ INFO     | test_n0struct08:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'$\n^'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ INFO     | test_n0struct08:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'$\n^'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* b OS_DEFAULT
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* b -r-n
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* b -n
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* b -r
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\rB=2\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* b -r-n
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* b -n-r
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'\n\r'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
+ INFO     | test_n0struct08:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'\n\r'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:38 | ******* b $-n^
+ INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
+ INFO     | test_n0struct08:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'$\n^'
+ INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ INFO     | test_n0struct08:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'$\n^'
+ INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:top_level:178 | Mission acomplished
+ INFO     | test_n0struct09:test_use_external_libraries:11 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ DEBUG    | test_n0struct09:test_use_external_libraries:12 | <pathlib.WindowsPath> C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ ERROR    | test_n0struct09:test_use_external_libraries:13 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ WARNING  | test_n0struct09:test_use_external_libraries:14 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ INFO     | test_n0struct09:test_use_external_libraries:15 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
+ INFO     | test_n0struct09:top_level:25 | Mission acomplished
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:174 | item[*]/name[text()="Item 2"] == <list 1> [
     #0   <tuple 2> (
         #0   <list 2> [
             #0   "item[1]",
@@ -1744,8 +1744,8 @@
         #1   "Item 2"
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:178 | item[*]/name[text()="Item 2"][0] == "Item 2"
- DEBUG    | __main__:test_18_find_return_all_items:183 | item[*]/name[text()="Item 2"]/.. == <list 1> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:178 | item[*]/name[text()="Item 2"][0] == "Item 2"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:183 | item[*]/name[text()="Item 2"]/.. == <list 1> [
     #0   <tuple 2> (
         #0   <list 1> [ #0   "item[1]" ],
         #1   <list 1> [
@@ -1759,7 +1759,7 @@
         ]
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:187 | item[*]/name[text()="Item 2"]/..[0] == <list 1> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:187 | item[*]/name[text()="Item 2"]/..[0] == <list 1> [
     #0   <tuple 2> (
         #0   "name",
         #1   <dict 2> {
@@ -1768,7 +1768,7 @@
         }
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:192 | find_first=item[*] == <list 1> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:192 | find_first=item[*] == <list 1> [
     #0   <tuple 2> (
         #0   <list 1> [ #0   "item[0]" ],
         #1   <list 1> [
@@ -1782,8 +1782,8 @@
         ]
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:195 | item[*][0] == "Item 1"
- DEBUG    | __main__:test_18_find_return_all_items:200 | item[*] == <list 2> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:195 | item[*][0] == "Item 1"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:200 | item[*] == <list 2> [
     #0   <tuple 2> (
         #0   <list 1> [ #0   "item[0]" ],
         #1   <list 1> [
@@ -1809,9 +1809,9 @@
         ]
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:203 | item[*][0] == "Item 1"
- DEBUG    | __main__:test_18_find_return_all_items:206 | item[*][1] == "Item 2"
- DEBUG    | __main__:test_18_find_return_all_items:211 | item == <list 2> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:203 | item[*][0] == "Item 1"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:206 | item[*][1] == "Item 2"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:211 | item == <list 2> [
     #0   <tuple 2> (
         #0   <list 1> [ #0   "item" ],
         #1   <list 1> [
@@ -1837,9 +1837,9 @@
         ]
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:215 | item/name[0] == "Item 1"
- DEBUG    | __main__:test_18_find_return_all_items:219 | item[1]/name[1] == "Item 2"
- DEBUG    | __main__:test_18_find_return_all_items:224 | item[0] == <list 1> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:215 | item/name[0] == "Item 1"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:219 | item[1]/name[1] == "Item 2"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:224 | item[0] == <list 1> [
     #0   <tuple 2> (
         #0   <list 1> [ #0   "item" ],
         #1   <list 1> [
@@ -1853,7 +1853,7 @@
         ]
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:227 | item[0] == <list 1> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:227 | item[0] == <list 1> [
     #0   <tuple 2> (
         #0   "name",
         #1   <dict 2> {
@@ -1862,7 +1862,7 @@
         }
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:232 | item[1] == <list 1> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:232 | item[1] == <list 1> [
     #0   <tuple 2> (
         #0   <list 1> [ #0   "item[1]" ],
         #1   <list 1> [
@@ -1876,7 +1876,7 @@
         ]
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:235 | item[1] == <list 1> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:235 | item[1] == <list 1> [
     #0   <tuple 2> (
         #0   "name",
         #1   <dict 2> {
@@ -1885,8 +1885,8 @@
         }
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:240 | item[2] == <list 0> [  ]
- DEBUG    | __main__:test_18_find_return_all_items:245 | ** == <list 3> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:240 | item[2] == <list 0> [  ]
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:245 | ** == <list 3> [
     #0   <tuple 2> (
         #0   <list 2> [
             #0   "item",
@@ -1910,20 +1910,20 @@
         #1   "Item 3"
     )
 ]
- DEBUG    | __main__:test_18_find_return_all_items:247 | item/name[0] == "Item 1"
- DEBUG    | __main__:test_18_find_return_all_items:249 | item[1]/name[1] == "Item 2"
- DEBUG    | __main__:test_18_find_return_all_items:251 | group/item/name[2] == "Item 3"
- DEBUG    | __main__:test_18_find_return_all_items:255 | item/name == "Item 1"
- DEBUG    | __main__:test_18_find_return_all_items:256 | results[0][1] == "Item 1"
- DEBUG    | __main__:test_18_find_return_all_items:260 | item[1]/name == "Item 2"
- DEBUG    | __main__:test_18_find_return_all_items:261 | results[1][1] == "Item 2"
- DEBUG    | __main__:test_18_find_return_all_items:265 | group/item/name == "Item 3"
- DEBUG    | __main__:test_18_find_return_all_items:266 | results[2][1] == "Item 3"
- DEBUG    | __main__:test_21_findall:310 | item[0]/name == "Item 1"
- DEBUG    | __main__:test_21_findall:315 | group/item[0]/name == "Item 3"
- DEBUG    | __main__:test_21_findall:320 | nonexistent == "Not Found"
- DEBUG    | __main__:test_21_findall:324 | nonexistent == None
- DEBUG    | __main__:test_21_findall:360 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == <list 2> [
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:247 | item/name[0] == "Item 1"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:249 | item[1]/name[1] == "Item 2"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:251 | group/item/name[2] == "Item 3"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:255 | item/name == "Item 1"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:256 | results[0][1] == "Item 1"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:260 | item[1]/name == "Item 2"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:261 | results[1][1] == "Item 2"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:265 | group/item/name == "Item 3"
+ DEBUG    | test_n0struct10:test_18_find_return_all_items:266 | results[2][1] == "Item 3"
+ DEBUG    | test_n0struct10:test_21_findall:310 | item[0]/name == "Item 1"
+ DEBUG    | test_n0struct10:test_21_findall:315 | group/item[0]/name == "Item 3"
+ DEBUG    | test_n0struct10:test_21_findall:320 | nonexistent == "Not Found"
+ DEBUG    | test_n0struct10:test_21_findall:324 | nonexistent == None
+ DEBUG    | test_n0struct10:test_21_findall:360 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == <list 2> [
     #0   <tuple 2> (
         #0   <list 3> [
             #0   "ARRAY",
@@ -1941,7 +1941,7 @@
         #1   "3"
     )
 ]
- DEBUG    | __main__:test_21_findall:365 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == <list 1> [
+ DEBUG    | test_n0struct10:test_21_findall:365 | ARRAY/ELEM[*]/KEY[text()=MYNODE]/../VALUE == <list 1> [
     #0   <tuple 2> (
         #0   <list 3> [
             #0   "ARRAY",
@@ -1951,8 +1951,8 @@
         #1   "1"
     )
 ]
- DEBUG    | __main__:test_21_findall:370 | ARRAY/ELEM[1]/KEY[text()=MYNODE]/../VALUE == <list 0> [  ]
- DEBUG    | __main__:test_21_findall:375 | */ELEM[*]/KEY[text()=MYNODE]/../VALUE == <list 2> [
+ DEBUG    | test_n0struct10:test_21_findall:370 | ARRAY/ELEM[1]/KEY[text()=MYNODE]/../VALUE == <list 0> [  ]
+ DEBUG    | test_n0struct10:test_21_findall:375 | */ELEM[*]/KEY[text()=MYNODE]/../VALUE == <list 2> [
     #0   <tuple 2> (
         #0   <list 3> [
             #0   "ARRAY",
@@ -1970,7 +1970,7 @@
         #1   "3"
     )
 ]
- DEBUG    | __main__:test_21_findall:381 | **/KEY[text()=MYNODE]/../VALUE == <list 2> [
+ DEBUG    | test_n0struct10:test_21_findall:381 | **/KEY[text()=MYNODE]/../VALUE == <list 2> [
     #0   <tuple 2> (
         #0   <list 3> [
             #0   "ARRAY",
@@ -1988,8 +1988,8 @@
         #1   "3"
     )
 ]
- DEBUG    | __main__:test_21_findall:382 | to_dict:**/KEY[text()=MYNODE]/../VALUE == <dict 2> { "ARRAY/ELEM/VALUE": "1", "ARRAY/ELEM[2]/VALUE": "3" }
- DEBUG    | __main__:test_21_findall:383 | to_list_of_dict:**/KEY[text()=MYNODE]/../VALUE == <list 2> [
+ DEBUG    | test_n0struct10:test_21_findall:382 | to_dict:**/KEY[text()=MYNODE]/../VALUE == <dict 2> { "ARRAY/ELEM/VALUE": "1", "ARRAY/ELEM[2]/VALUE": "3" }
+ DEBUG    | test_n0struct10:test_21_findall:383 | to_list_of_dict:**/KEY[text()=MYNODE]/../VALUE == <list 2> [
     #0   <tuple 2> (
         #0   "ARRAY/ELEM/VALUE",
         #1   "1"
@@ -1999,7 +1999,7 @@
         #1   "3"
     )
 ]
- DEBUG    | __main__:test_21_findall:389 | ** == <list 6> [
+ DEBUG    | test_n0struct10:test_21_findall:389 | ** == <list 6> [
     #0   <tuple 2> (
         #0   <list 3> [
             #0   "ARRAY",
@@ -2049,13 +2049,13 @@
         #1   "3"
     )
 ]
- INFO     | __main__:<module>:433 | Mission acomplished
- INFO     | __main__:test_n0compare:23 | assert1 = {
+ INFO     | test_n0struct10:top_level:433 | Mission acomplished
+ INFO     | test_n0struct11:test_n0compare:23 | assert1 = {
     "only_in_1": [  ],
     "only_in_2": [  ],
     "diffs": {  }
 }
- INFO     | __main__:test_n0compare:43 | assert2 = {
+ INFO     | test_n0struct11:test_n0compare:43 | assert2 = {
     "only_in_1": [  ],
     "only_in_2": [  ],
     "diffs": {
@@ -2096,7 +2096,7 @@
         ]
     }
 }
- INFO     | __main__:test_n0compare:59 | assert3 = {
+ INFO     | test_n0struct11:test_n0compare:59 | assert3 = {
     "only_in_1": [  ],
     "only_in_2": [  ],
     "diffs": {
@@ -2137,22 +2137,15 @@
         ]
     }
 }
- INFO     | __main__:test_n0compare:78 | assert4 = {
+ INFO     | test_n0struct11:test_n0compare:78 | assert4 = {
     "only_in_1": [  ],
     "only_in_2": [  ],
     "diffs": {  }
 }
- INFO     | __main__:test_n0compare:93 | assert5 = {
+ INFO     | test_n0struct11:test_n0compare:93 | assert5 = {
     "only_in_1": [  ],
     "only_in_2": [ "/tranzations[5]" ],
     "diffs": {
-        "/tranzations[1]/amount": [
-            11,
-            [
-                "/tranzations[2]/amount",
-                12
-            ]
-        ],
         "/tranzations[1]/authcode": [
             "00000002",
             [
@@ -2174,6 +2167,13 @@
                 "GBP"
             ]
         ],
+        "/tranzations[1]/amount": [
+            11,
+            [
+                "/tranzations[2]/amount",
+                12
+            ]
+        ],
         "/tranzations[4]/authcode": [
             "00000005",
             [
@@ -2183,7 +2183,7 @@
         ]
     }
 }
- INFO     | __main__:test_n0compare:109 | assert6 = {
+ INFO     | test_n0struct11:test_n0compare:109 | assert6 = {
     "only_in_1": [ "/tranzations[1]" ],
     "only_in_2": [
         "/tranzations[2]",
@@ -2199,22 +2199,22 @@
         ]
     }
 }
- INFO     | __main__:<module>:127 | Mission acomplished
- INFO     | __main__:test_n1dict_n1list:27 | assert1 = [
+ INFO     | test_n0struct11:top_level:127 | Mission acomplished
+ INFO     | test_n0struct12:test_n1dict_n1list:27 | assert1 = [
     {"name": "John", "tags": "admin"},
     {
         "name": "Jane",
         "tags": ["user", "active"]
     }
 ]
- INFO     | __main__:test_n1dict_n1list:30 | [
+ INFO     | test_n0struct12:test_n1dict_n1list:30 | [
     {"name": "John", "tags": "admin"},
     {
         "name": "Jane",
         "tags": ["user", "active"]
     }
 ]
- INFO     | __main__:test_n1dict_n1list:31 | <?xml version="1.0" encoding="utf-8"?>
+ INFO     | test_n0struct12:test_n1dict_n1list:31 | <?xml version="1.0" encoding="utf-8"?>
 
 <item_0>
     <name>John</name>
@@ -2226,19 +2226,19 @@
     <tags>user</tags>
     <tags>active</tags>
 </item_1>
- INFO     | __main__:test_n1dict_n1list:32 | ['[0]/name']    = "John"
+ INFO     | test_n0struct12:test_n1dict_n1list:32 | ['[0]/name']    = "John"
 ['[0]/tags']    = "admin"
 ['[1]/name']    = "Jane"
 ['[1]/tags[0]'] = "user"
 ['[1]/tags[1]'] = "active"
- INFO     | __main__:test_n1dict_n1list:35 | assert2 = {"name": "John", "tags": "admin"}
- INFO     | __main__:test_n1dict_n1list:40 | assert3 = {"name": "John", "tags": "admin"}
- INFO     | __main__:test_n1dict_n1list:44 | assert4 = "John"
- INFO     | __main__:test_n1dict_n1list:49 | assert5 = "admin"
- INFO     | __main__:test_n1dict_n1list:55 | assert6 = ['user', 'passive1']
- INFO     | __main__:test_n1dict_n1list:61 | assert7 = ['user', 'passive2']
- INFO     | __main__:test_n1dict_n1list:67 | assert8 = ['user', 'passive3']
- DEBUG    | __main__:test_n1dict_n1list:88 | _dict == <n0struct..n1dict 2> {
+ INFO     | test_n0struct12:test_n1dict_n1list:35 | assert2 = {"name": "John", "tags": "admin"}
+ INFO     | test_n0struct12:test_n1dict_n1list:40 | assert3 = {"name": "John", "tags": "admin"}
+ INFO     | test_n0struct12:test_n1dict_n1list:44 | assert4 = "John"
+ INFO     | test_n0struct12:test_n1dict_n1list:49 | assert5 = "admin"
+ INFO     | test_n0struct12:test_n1dict_n1list:55 | assert6 = ['user', 'passive1']
+ INFO     | test_n0struct12:test_n1dict_n1list:61 | assert7 = ['user', 'passive2']
+ INFO     | test_n0struct12:test_n1dict_n1list:67 | assert8 = ['user', 'passive3']
+ DEBUG    | test_n0struct12:test_n1dict_n1list:88 | _dict == <n0struct..n1dict 2> {
     "users": <list 2> [
         {"name": "John", "tags": "admin"             },
         {"name": "Jane", "tags": ['user', 'active']}
@@ -2248,7 +2248,7 @@
         "features": <dict 1> { "notifications": True }
     }
 }
- INFO     | __main__:test_n1dict_n1list:90 | {
+ INFO     | test_n0struct12:test_n1dict_n1list:90 | {
     "users": [
         {"name": "John", "tags": "admin"},
         {
@@ -2261,7 +2261,7 @@
         "features": {"notifications": true}
     }
 }
- INFO     | __main__:test_n1dict_n1list:91 | <?xml version="1.0" encoding="utf-8"?>
+ INFO     | test_n0struct12:test_n1dict_n1list:91 | <?xml version="1.0" encoding="utf-8"?>
 
 <users>
     <name>John</name>
@@ -2279,16 +2279,16 @@
         <notifications>True</notifications>
     </features>
 </config>
- INFO     | __main__:test_n1dict_n1list:92 | ['//users[0]/name']                 = "John"
+ INFO     | test_n0struct12:test_n1dict_n1list:92 | ['//users[0]/name']                 = "John"
 ['//users[0]/tags']                 = "admin"
 ['//users[1]/name']                 = "Jane"
 ['//users[1]/tags[0]']              = "user"
 ['//users[1]/tags[1]']              = "active"
 ['//config/theme']                  = "dark"
 ['//config/features/notifications'] = "True"
- DEBUG    | __main__:test_n1dict_n1list:95 | _dict['/missing_item'] == None
- INFO     | __main__:test_n1dict_n1list:97 | 1. Testing append_to_path:
- DEBUG    | __main__:test_n1dict_n1list:103 | _dict['users[0]/tags'] == <list 6> [
+ DEBUG    | test_n0struct12:test_n1dict_n1list:95 | _dict['/missing_item'] == None
+ INFO     | test_n0struct12:test_n1dict_n1list:97 | 1. Testing append_to_path:
+ DEBUG    | test_n0struct12:test_n1dict_n1list:103 | _dict['users[0]/tags'] == <list 6> [
     #0   "admin",
     #1   "moderator0",
     #2   "moderator1",
@@ -2296,7 +2296,7 @@
     #4   "moderator2",
     #5   "moderator3"
 ]
- DEBUG    | __main__:test_n1dict_n1list:104 | _dict['/users[0]/tags'] == <list 6> [
+ DEBUG    | test_n0struct12:test_n1dict_n1list:104 | _dict['/users[0]/tags'] == <list 6> [
     #0   "admin",
     #1   "moderator0",
     #2   "moderator1",
@@ -2304,7 +2304,7 @@
     #4   "moderator2",
     #5   "moderator3"
 ]
- DEBUG    | __main__:test_n1dict_n1list:105 | _dict['/users/[0]/tags'] == <list 6> [
+ DEBUG    | test_n0struct12:test_n1dict_n1list:105 | _dict['/users/[0]/tags'] == <list 6> [
     #0   "admin",
     #1   "moderator0",
     #2   "moderator1",
@@ -2312,7 +2312,7 @@
     #4   "moderator2",
     #5   "moderator3"
 ]
- DEBUG    | __main__:test_n1dict_n1list:106 | _dict['/users/tags'] == <list 6> [
+ DEBUG    | test_n0struct12:test_n1dict_n1list:106 | _dict['/users/tags'] == <list 6> [
     #0   "admin",
     #1   "moderator0",
     #2   "moderator1",
@@ -2320,51 +2320,51 @@
     #4   "moderator2",
     #5   "moderator3"
 ]
- INFO     | __main__:test_n1dict_n1list:108 | 2. Testing to_list:
- DEBUG    | __main__:test_n1dict_n1list:109 | _dict['/config/theme'] == "dark"
- DEBUG    | __main__:test_n1dict_n1list:111 | _dict['/config/theme'] == <list 1> [ #0   "dark" ]
- DEBUG    | __main__:test_n1dict_n1list:113 | _dict['/nonexistent'] == <list 0> [  ]
- INFO     | __main__:test_n1dict_n1list:115 | 3. Testing to_scalar:
- DEBUG    | __main__:test_n1dict_n1list:116 | None
- DEBUG    | __main__:test_n1dict_n1list:118 | _dict['/single_item'] == <list 1> [ #0   "only_one" ]
- DEBUG    | __main__:test_n1dict_n1list:120 | _dict['/single_item'] == "only_one"
- DEBUG    | __main__:test_n1dict_n1list:122 | _dict['/missing_item'] == None
- INFO     | __main__:test_n1dict_n1list:124 | 4. Testing extend_path:
- DEBUG    | __main__:test_n1dict_n1list:125 | _dict['/config/theme'] == <list 1> [ #0   "dark" ]
- DEBUG    | __main__:test_n1dict_n1list:127 | _dict['/config/theme'] == <list 3> [
+ INFO     | test_n0struct12:test_n1dict_n1list:108 | 2. Testing to_list:
+ DEBUG    | test_n0struct12:test_n1dict_n1list:109 | _dict['/config/theme'] == "dark"
+ DEBUG    | test_n0struct12:test_n1dict_n1list:111 | _dict['/config/theme'] == <list 1> [ #0   "dark" ]
+ DEBUG    | test_n0struct12:test_n1dict_n1list:113 | _dict['/nonexistent'] == <list 0> [  ]
+ INFO     | test_n0struct12:test_n1dict_n1list:115 | 3. Testing to_scalar:
+ DEBUG    | test_n0struct12:test_n1dict_n1list:116 | None
+ DEBUG    | test_n0struct12:test_n1dict_n1list:118 | _dict['/single_item'] == <list 1> [ #0   "only_one" ]
+ DEBUG    | test_n0struct12:test_n1dict_n1list:120 | _dict['/single_item'] == "only_one"
+ DEBUG    | test_n0struct12:test_n1dict_n1list:122 | _dict['/missing_item'] == None
+ INFO     | test_n0struct12:test_n1dict_n1list:124 | 4. Testing extend_path:
+ DEBUG    | test_n0struct12:test_n1dict_n1list:125 | _dict['/config/theme'] == <list 1> [ #0   "dark" ]
+ DEBUG    | test_n0struct12:test_n1dict_n1list:127 | _dict['/config/theme'] == <list 3> [
     #0   "dark",
     #1   "light",
     #2   "auto"
 ]
- DEBUG    | __main__:test_n1dict_n1list:129 | _dict['/config/theme'] == <list 5> [
+ DEBUG    | test_n0struct12:test_n1dict_n1list:129 | _dict['/config/theme'] == <list 5> [
     #0   "dark",
     #1   "light",
     #2   "auto",
     #3   "light2",
     #4   "auto2"
 ]
- INFO     | __main__:test_n1dict_n1list:131 | 5. Testing method chaining:
- DEBUG    | __main__:test_n1dict_n1list:140 | result['/workflow/step1'] == <list 3> [
+ INFO     | test_n0struct12:test_n1dict_n1list:131 | 5. Testing method chaining:
+ DEBUG    | test_n0struct12:test_n1dict_n1list:140 | result['/workflow/step1'] == <list 3> [
     #0   "initial",
     #1   "second",
     #2   "third"
 ]
- INFO     | __main__:test_n1dict_n1list:142 | 6. Complex transformation workflow:
- DEBUG    | __main__:test_n1dict_n1list:144 | workflow_structure['/data'] == "start"
- DEBUG    | __main__:test_n1dict_n1list:146 | workflow_structure['/data'] == <list 2> [
+ INFO     | test_n0struct12:test_n1dict_n1list:142 | 6. Complex transformation workflow:
+ DEBUG    | test_n0struct12:test_n1dict_n1list:144 | workflow_structure['/data'] == "start"
+ DEBUG    | test_n0struct12:test_n1dict_n1list:146 | workflow_structure['/data'] == <list 2> [
     #0   "start",
     #1   "middle"
 ]
- DEBUG    | __main__:test_n1dict_n1list:148 | workflow_structure['/data'] == <list 4> [
+ DEBUG    | test_n0struct12:test_n1dict_n1list:148 | workflow_structure['/data'] == <list 4> [
     #0   "start",
     #1   "middle",
     #2   "end1",
     #3   "end2"
 ]
- DEBUG    | __main__:test_n1dict_n1list:152 | workflow_structure['/single'] == <list 1> [ #0   "lone_item" ]
- DEBUG    | __main__:test_n1dict_n1list:154 | workflow_structure['/single'] == "lone_item"
- INFO     | __main__:test_n1dict_n1list:156 | 7. Final state:
- DEBUG    | __main__:test_n1dict_n1list:157 | _dict == <n0struct..n1dict 6> {
+ DEBUG    | test_n0struct12:test_n1dict_n1list:152 | workflow_structure['/single'] == <list 1> [ #0   "lone_item" ]
+ DEBUG    | test_n0struct12:test_n1dict_n1list:154 | workflow_structure['/single'] == "lone_item"
+ INFO     | test_n0struct12:test_n1dict_n1list:156 | 7. Final state:
+ DEBUG    | test_n0struct12:test_n1dict_n1list:157 | _dict == <n0struct..n1dict 6> {
     "users": <list 2> [
         {"name": "John", "tags": ['admin', 'moderator0', 'moderator1', 'moderator1', 'moderator2', 'moderator3']},
         {"name": "Jane", "tags": ['user', 'active']                                                             }
@@ -2390,4 +2390,4 @@
         ]
     }
 }
- INFO     | __main__:<module>:168 | Mission acomplished
+ INFO     | test_n0struct12:top_level:168 | Mission acomplished
