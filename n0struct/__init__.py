@@ -30,6 +30,7 @@ from .n0struct_n0dict_ import *
 from .n0struct_n0dict__ import *
 from .n0struct_n0list_ import *
 from .n0struct_n0list_n0dict import *
+from .n0struct_n0str import *
 from .n0struct_n0xml import *
 from .n0struct_n1dict_n1list import *
 from .n0struct_random import *
@@ -61,6 +62,7 @@ __all__ = list(
     # + n0struct_n0dict__.__all__
     # + n0struct_n0list_.__all__
     + n0struct_n0list_n0dict.__all__
+    + n0struct_n0str.__all__
     + n0struct_n0xml.__all__
     + n0struct_n1dict_n1list.__all__
     + n0struct_random.__all__
