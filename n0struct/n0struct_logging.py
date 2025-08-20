@@ -44,7 +44,7 @@ def n0excepthook(exception_type, exception_value, trace_back):
         _logger = logger.patch(patch)
     else:
         _logger = logger
-    _logger.critical(str(exception_value))
+    _logger.critical(f"{exception_type.__name__}: {exception_value}")
 
 def patch_record(record):
     if record["name"] == "__main__":

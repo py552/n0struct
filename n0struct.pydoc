@@ -2271,7 +2271,7 @@ FUNCTIONS
         :param input_date_str: YYYY-MM-DD # 2020-07-16
         :return: str -> date
 
-    generate_complex_csv_row(row: list, delimiter: str = ',', EOL: str = '\n') -> str
+    generate_complex_csv_row(row: list, delimiter: str = ',') -> str
         # ******************************************************************************
 
     generate_composite_keys(input_list: list, elements_for_composite_key: tuple, prefix: str = None, transform: List[Tuple[str, Callable[[str], str]]] = []) -> list
@@ -2280,7 +2280,7 @@ FUNCTIONS
         :return:
             [[<composite_key>,[<index of entry>],...}
 
-    generate_csv(root_node: dict, list_xpath: str, mapping_dict: dict = None, save_to: str = None, delimiter: str = ',', show_header: bool = True, EOL: str = '\n', encoding: str = 'utf-8') -> list
+    generate_csv(root_node: dict, list_xpath: str, save_to: str = None, show_header: bool = True, mapping_dict: dict = None, delimiter: str = ',', mode: str = 'wt', encoding: str = 'utf-8', EOL: str = '\n', EOF: str = '\n', convert_EOL: bool = True, generator: str = 'NATIVE') -> list
         Samples:
             response_json = n0dict({
                 "records" : [
@@ -2335,6 +2335,9 @@ FUNCTIONS
         # ******************************************************************************
 
     generate_fwf_row(struct_to_save: dict, fwf_format: dict, filler: str = ' ')
+        # ******************************************************************************
+
+    generate_simple_csv_row(row: list, delimiter: str = ',') -> str
         # ******************************************************************************
 
     generate_tlv(input_dict: dict, tag_fieldlen: int = 2, len_fieldlen: int = 3, tag_padding: str = ' ', len_padding: str = '0') -> str
@@ -2622,10 +2625,10 @@ FUNCTIONS
 
     safe_json(value)
 
-    save_csv(file_path: str, rows: Union[list, tuple, NoneType], header: Union[list, tuple, NoneType] = None, encoding: str = 'utf-8', EOL: str = '\n', delimiter: str = ',')
+    save_csv(file_path: str, rows: Union[list, tuple, NoneType], header: Union[list, tuple, NoneType] = None, delimiter: str = ',', mode: str = 'wt', encoding: str = 'utf-8', EOL: str = '\n', EOF: str = '\n', convert_EOL: bool = True, generator: str = 'NATIVE')
         # ******************************************************************************
 
-    save_file(file_path: str, output_buffer: Union[str, bytes, bytearray, dict, list, tuple, Generator, set, frozenset], mode: str = 'wt', encoding: str = 'utf-8', EOL: str = '\r\n', equal_tag: str = '=', convert_EOL: bool = True)
+    save_file(file_path: str, output_buffer: Union[str, bytes, bytearray, dict, list, tuple, Generator, set, frozenset], equal_tag: str = '=', delimiter: str = '\n', mode: str = 'wt', encoding: str = 'utf-8', EOL: str = '\r\n', EOF: Union[str, bool] = True)
         # ******************************************************************************
 
     serialize_dict(input_dict: str, delimiter: str = ';', equal_tag: str = '=', generate_empty=True, generate_none=True, capitalize_key: int = 0, capitalize_value: int = 0, level: int = 0) -> str

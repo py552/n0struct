@@ -5,7 +5,6 @@ from .n0struct_logging import (
     n0debug,
     n0debug_calc,
 )
-
 # ******************************************************************************
 def findall(current_node: typing.Union[dict, list], seeked_xpath_str: str, raise_exception = True) -> typing.Union[None, dict]:
     if not isinstance(seeked_xpath_str, str):

@@ -9,6 +9,8 @@ from n0struct import (
     save_file,
     load_file,
     n0info,
+    n0warning,
+    n0error,
     n0print,
     n0debug,
     n0debug_calc,
@@ -42,6 +44,11 @@ def test_save_load_file():
                 f"test_dict{linesep_}.tmp"
             )
             n0print(f"* tmp_file='{tmp_file}'")
+
+            n0debug("mode")
+            n0debug_calc(linesep.encode(), "linesep")
+            n0debug("test_dict")
+
             if not optional_linesep:
                 linesep = os.linesep
                 save_file(tmp_file, test_dict, mode=mode)
@@ -72,14 +79,19 @@ def test_save_load_file():
             ########################################################################
 
             tmp_file = f"test_str_list{linesep_}.tmp"
-            
+
             tmp_file = os.path.join(
                 os.environ.get("TEMP", os.environ.get("TMP", "")),
                 f"test_str_list{linesep_}.tmp"
             )
-            n0print(f"* tmp_file='{tmp_file}'")
+            n0warning(f"* tmp_file='{tmp_file}'")
+
+            n0debug("mode")
+            n0debug_calc(linesep.encode(), "linesep")
+            n0debug("test_str_list")
+
             if not optional_linesep:
-                linesep = os.linesep
+                # linesep = os.linesep if 'b' not in mode else '\n'
                 save_file(tmp_file, test_str_list, mode=mode)
             else:
                 save_file(tmp_file, test_str_list, mode=mode, EOL=linesep)
@@ -111,9 +123,9 @@ def test_save_load_file():
                 os.environ.get("TEMP", os.environ.get("TMP", "")),
                 f"test_bin_list{linesep_}.tmp"
             )
-            n0print(f"* tmp_file='{tmp_file}'")
+            n0warning(f"* tmp_file='{tmp_file}'")
             if not optional_linesep:
-                linesep = os.linesep
+                # linesep = os.linesep if 'b' not in mode else '\n'
                 save_file(tmp_file, test_bin_list, mode=mode)
             else:
                 save_file(tmp_file, test_bin_list, mode=mode, EOL=linesep)
@@ -131,9 +143,12 @@ def test_save_load_file():
                 os.environ.get("TEMP", os.environ.get("TMP", "")),
                 f"test_str{linesep_}.tmp"
             )
-            n0print(f"* tmp_file='{tmp_file}'")
+            n0warning(f"* tmp_file='{tmp_file}'")
+            n0debug("linesep")
             if not optional_linesep:
-                linesep = os.linesep
+                # linesep = os.linesep if 'b' not in mode else '\n'
+                # n0debug("linesep")
+                # save_file(tmp_file, test_str, mode=mode, convert_EOL = True if 'b' in mode else False)
                 save_file(tmp_file, test_str, mode=mode)
             else:
                 save_file(tmp_file, test_str, mode=mode, EOL=linesep)
@@ -153,7 +168,7 @@ def test_save_load_file():
             )
             n0print(f"* tmp_file='{tmp_file}'")
             if not optional_linesep:
-                linesep = os.linesep
+                linesep = os.linesep if 'b' not in mode else '\n'
                 save_file(tmp_file, test_bin, mode=mode)
             else:
                 save_file(tmp_file, test_bin, mode=mode, EOL=linesep)

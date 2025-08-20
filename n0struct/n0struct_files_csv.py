@@ -12,7 +12,6 @@ import re
 
 from .n0struct_date import *
 from .n0struct_utils import *
-
 # ******************************************************************************
 def parse_complex_csv_line(
     line: typing.Union[str, bytes],
@@ -375,63 +374,98 @@ def load_simple_csv(
 def generate_complex_csv_row(
     row: list,
     delimiter: str = ',',
-    EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'wt' mode
 ) -> str:
-    generated_csv_row = ""
-    for field_value in row:
-        if field_value is None:
-            field_value = ""
-        elif not isinstance(field_value, str):
-            field_value = str(field_value)
-        if delimiter in field_value or field_value.startswith('"'):
-            if '"' in field_value:
-                field_value = field_value.replace('"', '""')
-            field_value = '"' + field_value + '"'
-        generated_csv_row += field_value + delimiter
-    return generated_csv_row[:-len(delimiter)] + EOL
+    double_quote_1 = '"'
+    double_quote_2 = '""'
+    return delimiter.join((
+        f"\"{field_value_str.replace(double_quote_1, double_quote_2)}\""
+        if delimiter in (field_value_str:=str(field_value_any or '')) or field_value_str.startswith('"')
+        else field_value_str
+        for field_value_any in row
+    ))
+# ******************************************************************************
+def generate_simple_csv_row(
+    row: list,
+    delimiter: str = ',',
+) -> str:
+    return delimiter.join(row)
 # ******************************************************************************
 def save_csv(
-                file_path: str,
-                rows: typing.Union[list, tuple, None],
-                header: typing.Union[list, tuple, None] = None,
-                # mode: str = 't', # binary is not supported by csv module
-                encoding: str = "utf-8",  # without UTF-8 BOM (Byte Order Mark)
-                EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'wt' mode
-                delimiter: str = ',',
+    file_path: str,
+    rows: typing.Union[list, tuple, None],
+    header: typing.Union[list, tuple, None] = None,
+
+    delimiter: str = ',',
+
+    mode: str = 'wt',           # or 'at' for append
+    encoding: str = "utf-8",    # without UTF-8 BOM (Byte Order Mark)
+    EOL: str = '\n',            # '\n' should be universal for Linux and Windows in case of 'wt' mode
+    EOF: str = '\n',            # '\n' should be universal for Linux and Windows in case of 'wt' mode
+    convert_EOL: bool = True,
+    generator: str = "NATIVE",  # NATIVE, COMPLEX, SIMPLE
 ):
     if rows is None:
         return
+
     if not isinstance(rows, (list, tuple, types.GeneratorType)):
         raise TypeError(f"Expected rows as list or tuple or generator, but got ({type(rows)}) {rows}")
-    if isinstance(rows, (list, tuple)) \
-    and not isinstance(rows[0], (list, tuple)) and type(rows[0]) is not {}.values().__class__:
+
+    if isinstance(rows, (list, tuple)) and len(rows) and not isinstance(rows[0], (list, tuple, {}.values().__class__)):
         raise TypeError(f"Expected rows as list/tuples of lists/tuples, but got ({type(rows[0])}) {rows[0]}")
-    if header \
-    and not isinstance(header, (list, tuple, types.GeneratorType)) \
-    and type(header) is not {}.keys().__class__: \
+
+    if header and not isinstance(header, (list, tuple, types.GeneratorType, {}.keys().__class__)):
         raise TypeError(f"Expected header as list or tuple, but got ({type(rows)}) {rows}")
 
+    if mode in ('t', 'b', 't+', 'b+'):
+        mode = f"w{mode}"
+
     Path(file_path).parent.mkdir(parents=True, exist_ok=True)
-    with open(file_path, 'wt', encoding=encoding, newline='') as out_filehandler:
-        csv_writer = csv.writer(
-            out_filehandler,
-            delimiter=delimiter,
-            lineterminator=EOL,
+    if generator == "NATIVE":
+        # EOF is not supported with NATIVE csv generator
+        with open(file_path, mode, encoding=encoding, newline='') as out_filehandler:
+            csv_writer = csv.writer(
+                out_filehandler,
+                delimiter=delimiter,
+                lineterminator=EOL,
+            )
+            if header:
+                csv_writer.writerow(header)
+            csv_writer.writerows(rows)
+    else:
+        if generator == "COMPLEX":
+            generate_csv_row = generate_complex_csv_row
+        else: # SIMPLE
+            generate_csv_row = generate_simple_csv_row
+
+        save_file(
+            file_path,
+            filter(None,(
+                generate_csv_row(header, delimiter) if header else None,
+                *(generate_csv_row(row, delimiter) for row in rows)
+            )),
+            encoding=encoding,
+            mode=mode,
+            EOL=EOL,
+            EOF=EOF,
         )
-        if header:
-            csv_writer.writerow(header)
-        csv_writer.writerows(rows)
+
 
 # ******************************************************************************
 def generate_csv(
     root_node: dict,
     list_xpath: str,
-    mapping_dict: dict = None,
+
     save_to: str = None,
-    delimiter: str = ',',
     show_header: bool = True,
-    EOL: str = '\n',  # '\n' should be universal for Linux and Windows in case of 'wt' mode
-    encoding: str = "utf-8",  # without UTF-8 BOM (Byte Order Mark)
+    mapping_dict: dict = None,
+    delimiter: str = ',',
+
+    mode: str = 'wt',           # or 'at' for append
+    encoding: str = "utf-8",    # without UTF-8 BOM (Byte Order Mark)
+    EOL: str = '\n',            # '\n' should be universal for Linux and Windows in case of 'wt' mode
+    EOF: str = '\n',            # '\n' should be universal for Linux and Windows in case of 'wt' mode
+    convert_EOL: bool = True,
+    generator: str = "NATIVE",  # NATIVE, COMPLEX, SIMPLE
 ) -> list:
     '''
     Samples:
@@ -490,9 +524,6 @@ def generate_csv(
     else:
         list_of_items = root_node.get(list_xpath, tuple())
 
-    ## if save_to:
-    ##     out_filehandler = open(save_to, 'wt')
-
     csv_table = []
     if list_of_items:
         if mapping_dict is None:
@@ -503,9 +534,6 @@ def generate_csv(
             mapping_dict = {column_name: column_name for column_name in header}
         else:
             header = list(mapping_dict.keys())
-
-        ## if save_to and show_header:
-        ##     out_filehandler.write(generate_complex_csv_row(header, delimiter))
 
         for found_item in list_of_items:  # found_item == row in case of CSV list or item node in case of XML structure
             if isinstance(found_item, dict):
@@ -525,12 +553,19 @@ def generate_csv(
                 csv_row.append(found_value)
             csv_table.append(csv_row)
 
-            ## if save_to:
-            ##     out_filehandler.write(generate_complex_csv_row(csv_row, delimiter))
-
     if save_to:
-        save_csv(save_to, csv_table, header if show_header else None, delimiter=delimiter, EOL=EOL, encoding=encoding)
-    ##    out_filehandler.close
+        save_csv(
+            save_to,
+            csv_table,
+            header if show_header else None,
+            delimiter=delimiter,
+            mode=mode,
+            encoding=encoding,
+            EOL=EOL,
+            EOF=EOF,
+            convert_EOL=convert_EOL,
+            generator=generator,
+        )
 
     return csv_table
 # ******************************************************************************
@@ -803,6 +838,7 @@ __all__ = (
     'load_native_csv',
     'load_simple_csv',
     'generate_complex_csv_row',
+    'generate_simple_csv_row',
     'save_csv',
     'generate_csv',
     'remove_colums_in_csv',

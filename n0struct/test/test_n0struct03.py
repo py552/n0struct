@@ -26,7 +26,7 @@ def test_files_processing():
     n0debug("test_ini")
 
     tmp_file = os.path.join(mydir, "test.tmp")
-    save_file(tmp_file, test_ini, mode='wb', EOL='\n')
+    save_file(tmp_file, test_ini, mode='wb', EOL='\r\n')
 
     test_ini = load_ini(tmp_file)
     os.unlink(tmp_file)
