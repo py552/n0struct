@@ -8,7 +8,11 @@ from logging import StreamHandler
 import typing
 import traceback
 from types import SimpleNamespace
-from .n0struct_date import date_timestamp
+import datetime
+from .n0struct_date import (
+    date_timestamp,
+    date_to_format,
+)
 
 # ******************************************************************************
 _debug_show_object_type = True
@@ -31,20 +35,21 @@ def n0excepthook(exception_type, exception_value, trace_back):
     frames = traceback.extract_tb(trace_back)
     if frames:
         last_frame = frames[-1]
-        filename = last_frame.filename
-        lineno   = last_frame.lineno
-        funcname = last_frame.name
-        def patch(record):
-            record["file"] = SimpleNamespace(
+        def patch_record(record):
+            filename = Path(last_frame.filename)
+            record['file'] = SimpleNamespace(
                 name=Path(filename).name,
                 path=str(filename)
             )
-            record["function"] = "top_level" if funcname == "<module>" else funcname
-            record["line"] = lineno
-        _logger = logger.patch(patch)
+            funcname = last_frame.name
+            record['function'] = "top_level" if funcname == "<module>" else funcname
+            record['line'] = last_frame.lineno
+            record['name'] = filename.stem
+        _logger = logger.patch(patch_record)
     else:
         _logger = logger
-    _logger.critical(f"{exception_type.__name__}: {exception_value}")
+    error_messages = ('\n\t').join(str(arg) for arg in exception_value.args)
+    _logger.opt(exception=(exception_type, exception_value, trace_back)).critical(f"{exception_type.__name__}: {error_messages}")
 
 def patch_record(record):
     if record["name"] == "__main__":
@@ -193,8 +198,12 @@ def n0pretty(
         if json_convention:
             if isinstance(value, bool):
                 return "true" if value else "false"
-            if item is None:
+            elif item is None:
                 return "null"  # json.decoder.JSONDecodeError: Expecting value
+            elif isinstance(value, datetime.datetime):
+                value = date_to_format(value, "%Y-%m-%d")
+            elif isinstance(value, datetime.date):
+                value = date_to_format(value, "%Y-%m-%d %H:%M:%S.%f")
         if isinstance(value, str):
             if json_convention:
                 value = not_ascii_characters.sub(replace_not_ascii_characters, json_control_characters.sub(replace_control_characters, value))
