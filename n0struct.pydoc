@@ -2805,7 +2805,7 @@ FUNCTIONS
         value = "UNKNOWN"
         validate_bool(value) == False
 
-    validate_csv_row(row: Union[list, dict], csv_schema: dict, external_variables={}, interrupt_after_first_fail: bool = False, row_i: int = None, rows_count: int = 0, precompile: bool = False) -> tuple
+    validate_csv_row(row: Union[list, dict], csv_schema: dict, context={}, interrupt_after_first_fail: bool = False, row_i: int = None, rows_count: int = 0, precompile: bool = False) -> tuple
         row:
             list: [field_value[0], field_value[1], ... field_value[i]]
             dict: {column_name[0]: field_value[0], column_name[1]: field_value[1], ... column_name[i]: field_value[i]}
@@ -2817,11 +2817,11 @@ FUNCTIONS
                                                    in the lambda function body could be used variables:
                                                         field_value
                                                         row[column_name[0..i]]
-                                                        external_variables
+                                                        context
             //items[0..i]/validations[0..j@i][1] = optional f-str, message in case of validations[0..j@i][0] returned False,
                                                    for example: "expected '{ORG}', but got '{value_ORG}'"
                                                    in the failed message body could be used variables:
-                                                        external_variables.keys()
+                                                        context.keys()
                                                         value_{column_name[0..i]}
             //items[0..i]/validations[0..j@i][2] = action: "SKIP", "NOWAIT", "VALID", "REJECT" (default None == "REJECT")
                                                    if result of validations[0..j@i][0] == False, and  validations[0..j@i][1] == "SKIP", "NOWAIT", "REJECT",
@@ -2837,8 +2837,8 @@ FUNCTIONS
             //minItems                           = optional int, min of columns
             //maxItems                           = optional int, max of columns
             //required[0..k]                     = optional str, mandatory column_name[k]
-        external_variables: dict
-            List of variables with names external_variables.keys() used in failed validation messages (f-str)
+        context: dict
+            List of variables with names context.keys() used in failed validation messages (f-str)
             For example __params__ as {
                 'ORG': "123",
                 'BIN': "456789"

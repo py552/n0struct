@@ -1416,319 +1416,541 @@
     #2   "DD\\DD4\\\\"
 ]
  INFO     | test_n0struct07:top_level:41 | Mission acomplished
- INFO     | test_n0struct08:test_save_load_file:38 | ******* t OS_DEFAULT
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* t -r-n
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* t -n
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* t -r
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\rB=2\rC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* t -r-n
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* t -n-r
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
- INFO     | test_n0struct08:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
- INFO     | test_n0struct08:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* t $-n^
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
- INFO     | test_n0struct08:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- INFO     | test_n0struct08:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* b OS_DEFAULT
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* b -r-n
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* b -n
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* b -r
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\rB=2\rC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* b -r-n
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* b -n-r
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
- INFO     | test_n0struct08:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
- INFO     | test_n0struct08:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'\n\r'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:test_save_load_file:38 | ******* b $-n^
- INFO     | test_n0struct08:test_save_load_file:44 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:52 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | test_n0struct08:test_save_load_file:54 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
- DEBUG    | test_n0struct08:test_save_load_file:58 | expected_txt_result == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
- DEBUG    | test_n0struct08:test_save_load_file:64 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
- INFO     | test_n0struct08:test_save_load_file:66 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | test_n0struct08:test_save_load_file:80 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:88 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | test_n0struct08:test_save_load_file:90 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- DEBUG    | test_n0struct08:test_save_load_file:94 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:97 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
- DEBUG    | test_n0struct08:test_save_load_file:100 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
- INFO     | test_n0struct08:test_save_load_file:102 | Autoconvert is impossible with not standard EOL b'$\n^'
- INFO     | test_n0struct08:test_save_load_file:114 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:122 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- DEBUG    | test_n0struct08:test_save_load_file:124 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
- INFO     | test_n0struct08:test_save_load_file:134 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:142 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
- DEBUG    | test_n0struct08:test_save_load_file:144 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
- INFO     | test_n0struct08:test_save_load_file:154 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
- DEBUG    | test_n0struct08:test_save_load_file:162 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
- DEBUG    | test_n0struct08:test_save_load_file:164 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
- INFO     | test_n0struct08:top_level:178 | Mission acomplished
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* t OS_DEFAULT
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'OS_DEFAULT'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """\r
+"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* t -r-n
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """\r
+"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* t -n
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\n'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\n'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """
+"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* t -r
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\r'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\rB=2\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\r'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == "\r"
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* t -r-n
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """\r
+"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* t -n-r
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:73 | Autoconvert is impossible with not standard EOL b'\n\r'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | Autoconvert is impossible with not standard EOL b'\n\r'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """
+\r"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* t $-n^
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
+ INFO     | test_n0struct08:test_save_load_file:73 | Autoconvert is impossible with not standard EOL b'$\n^'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "t"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ INFO     | test_n0struct08:test_save_load_file:114 | Autoconvert is impossible with not standard EOL b'$\n^'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """$
+^"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* b OS_DEFAULT
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dictOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'OS_DEFAULT'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_listOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_listOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_strOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """\r
+"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_binOS_DEFAULT.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* b -r-n
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """\r
+"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* b -n
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\n'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\n'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """
+"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\nStrLine2\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\nStrLine2\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* b -r
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\r'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\rB=2\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\rB=2\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\r'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\rBinLine2\rBinLine3\r'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\rBinLine2\rBinLine3\r'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == "\r"
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\rStrLine2\rStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\rStrLine2\rStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* b -r-n
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\r\nB=2\r\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\r\nBinLine2\r\nBinLine3\r\n'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """\r
+"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\r\nStrLine2\r\nStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-r-n.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* b -n-r
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1\n\rB=2\n\rC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1\n\nB=2\n\nC=3'
+ INFO     | test_n0struct08:test_save_load_file:73 | Autoconvert is impossible with not standard EOL b'\n\r'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1\n\nStrLine2\n\nStrLine3\n\n'
+ INFO     | test_n0struct08:test_save_load_file:114 | Autoconvert is impossible with not standard EOL b'\n\r'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1\n\rBinLine2\n\rBinLine3\n\r'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """
+\r"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1\n\rStrLine2\n\rStrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin-n-r.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:test_save_load_file:40 | ******* b $-n^
+ INFO     | test_n0struct08:test_save_load_file:46 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_dict$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:48 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:49 | linesep == b'$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:50 | test_dict == <dict 3> {
+    "A": "1",
+    "B": "2",
+    "C": "3"
+}
+ DEBUG    | test_n0struct08:test_save_load_file:59 | expected_bin_result == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | test_n0struct08:test_save_load_file:61 | read_as_bin_result_ == b'A=1$\n^B=2$\n^C=3'
+ DEBUG    | test_n0struct08:test_save_load_file:65 | expected_txt_result == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:68 | read_as_txt_result_ == b'A=1\nB=2\nC=3'
+ DEBUG    | test_n0struct08:test_save_load_file:71 | read_as_txt_result_ == b'A=1$\n^B=2$\n^C=3'
+ INFO     | test_n0struct08:test_save_load_file:73 | Autoconvert is impossible with not standard EOL b'$\n^'
+ WARNING  | test_n0struct08:test_save_load_file:87 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str_list$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:89 | mode == "b"
+ DEBUG    | test_n0struct08:test_save_load_file:90 | linesep == b'$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:91 | test_str_list == <list 3> [
+    #0   "StrLine1",
+    #1   "StrLine2",
+    #2   "StrLine3"
+]
+ DEBUG    | test_n0struct08:test_save_load_file:100 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:102 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:106 | expected_txt_result == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:109 | read_as_txt_result_ == b'StrLine1\nStrLine2\nStrLine3\n'
+ DEBUG    | test_n0struct08:test_save_load_file:112 | read_as_txt_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3$\n^'
+ INFO     | test_n0struct08:test_save_load_file:114 | Autoconvert is impossible with not standard EOL b'$\n^'
+ WARNING  | test_n0struct08:test_save_load_file:126 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin_list$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:134 | expected_bin_result == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ DEBUG    | test_n0struct08:test_save_load_file:136 | read_as_bin_result_ == b'BinLine1$\n^BinLine2$\n^BinLine3$\n^'
+ WARNING  | test_n0struct08:test_save_load_file:146 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_str$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:147 | linesep == """$
+^"""
+ DEBUG    | test_n0struct08:test_save_load_file:157 | expected_bin_result == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:159 | read_as_bin_result_ == b'StrLine1$\n^StrLine2$\n^StrLine3'
+ INFO     | test_n0struct08:test_save_load_file:169 | * tmp_file='C:\Users\lenovo\AppData\Local\Temp\test_bin$-n^.tmp'
+ DEBUG    | test_n0struct08:test_save_load_file:177 | expected_bin_result == b'BinLine1\nBinLine2\nBinLine3'
+ DEBUG    | test_n0struct08:test_save_load_file:179 | read_as_bin_result_ == b'BinLine1\nBinLine2\nBinLine3'
+ INFO     | test_n0struct08:top_level:193 | Mission acomplished
  INFO     | test_n0struct09:test_use_external_libraries:11 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
  DEBUG    | test_n0struct09:test_use_external_libraries:12 | <pathlib.WindowsPath> C:\REPO\n0struct\n0struct\test\test_n0struct09.py
  ERROR    | test_n0struct09:test_use_external_libraries:13 | C:\REPO\n0struct\n0struct\test\test_n0struct09.py
@@ -2146,18 +2368,18 @@
     "only_in_1": [  ],
     "only_in_2": [ "/tranzations[5]" ],
     "diffs": {
-        "/tranzations[1]/authcode": [
-            "00000002",
-            [
-                "/tranzations[2]/authcode",
-                "00000003"
-            ]
-        ],
         "/tranzations[1]/date": [
             "12/01/2025",
             [
                 "/tranzations[2]/date",
                 "13/01/2025"
+            ]
+        ],
+        "/tranzations[1]/amount": [
+            11,
+            [
+                "/tranzations[2]/amount",
+                12
             ]
         ],
         "/tranzations[1]/currency": [
@@ -2167,11 +2389,11 @@
                 "GBP"
             ]
         ],
-        "/tranzations[1]/amount": [
-            11,
+        "/tranzations[1]/authcode": [
+            "00000002",
             [
-                "/tranzations[2]/amount",
-                12
+                "/tranzations[2]/authcode",
+                "00000003"
             ]
         ],
         "/tranzations[4]/authcode": [

@@ -637,7 +637,7 @@ def add_colums_into_csv(additional_columns: list, csv_rows: list = None, csv_sch
 def validate_csv_row(
     row: typing.Union[list, dict],
     csv_schema: dict,
-    external_variables = {},
+    context = {},
     interrupt_after_first_fail: bool = False,
     row_i: int = None,
     rows_count: int = 0,
@@ -655,11 +655,11 @@ def validate_csv_row(
                                                in the lambda function body could be used variables:
                                                     field_value
                                                     row[column_name[0..i]]
-                                                    external_variables
+                                                    context
         //items[0..i]/validations[0..j@i][1] = optional f-str, message in case of validations[0..j@i][0] returned False,
                                                for example: "expected '{ORG}', but got '{value_ORG}'"
                                                in the failed message body could be used variables:
-                                                    external_variables.keys()
+                                                    context.keys()
                                                     value_{column_name[0..i]}
         //items[0..i]/validations[0..j@i][2] = action: "SKIP", "NOWAIT", "VALID", "REJECT" (default None == "REJECT")
                                                if result of validations[0..j@i][0] == False, and  validations[0..j@i][1] == "SKIP", "NOWAIT", "REJECT",
@@ -675,8 +675,8 @@ def validate_csv_row(
         //minItems                           = optional int, min of columns
         //maxItems                           = optional int, max of columns
         //required[0..k]                     = optional str, mandatory column_name[k]
-    external_variables: dict
-        List of variables with names external_variables.keys() used in failed validation messages (f-str)
+    context: dict
+        List of variables with names context.keys() used in failed validation messages (f-str)
         For example __params__ as {
             'ORG': "123",
             'BIN': "456789"
@@ -710,7 +710,7 @@ def validate_csv_row(
     elif interrupt_after_first_fail:
         return failed_validations
 
-    mapped_values = {**external_variables, **{f'value_{column_name}': row[column_name] for column_name in row}}
+    mapped_values = {**context, **{f'value_{column_name}': row[column_name] for column_name in row}}
     validation_result = "VALID"
 
     row_last = rows_count - 1
@@ -739,6 +739,16 @@ def validate_csv_row(
             'row_last': row_last,
             'row': row,
         })
+        column_name = column_name
+        column_value = field_value  # Legacy
+        field_value = field_value
+        column_schema = column_schema
+        row_i = row_i
+        rows_count = rows_count
+        row_last = row_last
+        row = row
+        vars = context.get('vars', dict())
+
 
         for validation_i,validation in enumerate(column_schema.get('validations', ())):
 
@@ -782,7 +792,7 @@ def validate_csv_row(
                         validation[0] = ' '.join(validation[0])
 
                     # for compatibility with python 3.7
-                    lambda_txt = "lambda column_name, field_value, row, row_i, row_last: " + validation[0].format(**mapped_values)
+                    lambda_txt = "lambda column_name, field_value, row, row_i, row_last, context, vars: " + validation[0].format(**mapped_values)
                     validation_lambda = eval(lambda_txt)
                     if len(validation) <= 4:
                         column_schema['validations'][validation_i].append(validation_lambda)
@@ -796,12 +806,12 @@ def validate_csv_row(
             _result = None
             if not validation_msg:
                 try:
-                    _result = is_valid = validation_lambda(column_name, field_value, row, row_i, row_last)
+                    _result = is_valid = validation_lambda(column_name, field_value, row, row_i, row_last, context, vars)
                     if validation_action == "VALID":
                         is_valid = not is_valid
                 except Exception as ex2:
                     validation_result = "REJECT"
-                    validation_msg = f"Incorrect validation rule #{validation_i} for '{column_name}': " + str(ex2)
+                    validation_msg = f"Incorrect compiled validation rule #{validation_i} for '{column_name}': " + str(ex2)
 
                 if not validation_msg and not is_valid:
                     if validation_action == "VALID":
